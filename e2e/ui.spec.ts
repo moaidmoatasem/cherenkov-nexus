@@ -28,7 +28,7 @@ test.describe('CHERENKOV-NEXUS UI Workflows (Phase 3 & 4)', () => {
     }
     
     // Verify Column Headers exist
-    await expect(page.locator('text=Targeted Prospects').first()).toBeVisible();
+    await expect(page.locator('text=Saved Discovery').first()).toBeVisible();
     await expect(page.locator('text=Active Interviews').first()).toBeVisible();
   });
 
@@ -38,10 +38,11 @@ test.describe('CHERENKOV-NEXUS UI Workflows (Phase 3 & 4)', () => {
     await expect(page.locator('text=Learning Sync & Competency Matrix').first()).toBeVisible();
 
     // Verify Add Course form is available
-    await page.click('button:has-text("Log External Certification")');
-    await expect(page.locator('input[placeholder="e.g. Distributed Performance & Stress Testing"]').first()).toBeVisible();
+    const addPathwayBtn = page.locator('button:has-text("Add Custom Pathway")').first();
+    await addPathwayBtn.click({ force: true });
+    await expect(page.locator('input[placeholder*="Advanced Playwright"]').first()).toBeVisible();
     
     // Verify Webhook configuration UI is present
-    await expect(page.locator('text=xAPI Webhook Stream').first()).toBeVisible();
+    await expect(page.locator('text=Continuous xAPI Learning Sync Webhook').first()).toBeVisible();
   });
 });

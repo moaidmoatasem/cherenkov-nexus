@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { MasterProfile, ApplicationCard, AppTheme, TabId, CandidateArchetype } from './types';
 import { INITIAL_MASTER_PROFILE, INITIAL_APPLICATIONS, SAMPLE_JOBS, ARCHETYPE_PRESETS } from './data/initialData';
 import { Header } from './components/Header';

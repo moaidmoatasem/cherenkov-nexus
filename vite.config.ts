@@ -9,7 +9,8 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
-        'framer-motion': path.resolve(__dirname, 'node_modules/framer-motion/dist/es/index.mjs')
+        'motion/react': path.resolve(__dirname, './src/utils/motionShim.tsx'),
+        'framer-motion': path.resolve(__dirname, './src/utils/motionShim.tsx')
       },
     },
     server: {

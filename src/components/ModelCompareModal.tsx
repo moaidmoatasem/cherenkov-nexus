@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { MasterProfile, RoutingConfig } from '../types';
 import { INITIAL_ROUTING_CONFIG } from '../data/initialData';
 import {

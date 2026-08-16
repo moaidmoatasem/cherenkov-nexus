@@ -21,7 +21,7 @@ import {
   Flame,
   Award
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { CandidateArchetype, MasterProfile } from '../types';
 import { ARCHETYPE_PRESETS, ArchetypePreset } from '../data/initialData';
 
