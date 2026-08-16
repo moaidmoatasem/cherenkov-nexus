@@ -2,10 +2,15 @@ import { test, expect } from '@playwright/test';
 
 test.describe('CHERENKOV-NEXUS Comprehensive E2E System & Component Suite', () => {
 
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ context, page }) => {
     // Enable browser console logs to be forwarded to our runner for debugging
     page.on('console', msg => console.log(`[BROWSER CONSOLE] [${msg.type()}] ${msg.text()}`));
     page.on('pageerror', err => console.log(`[BROWSER UNHANDLED ERROR] ${err.message}`));
+
+    // Pre-populate localStorage prior to page load to bypass first-time tour modal
+    await context.addInitScript(() => {
+      localStorage.setItem('cherenkov_tour_completed', 'true');
+    });
 
     // Clean single navigation to app entrypoint
     await page.goto('/');

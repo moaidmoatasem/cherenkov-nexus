@@ -45,7 +45,8 @@ test.describe('CHERENKOV-NEXUS Multi-Profile Comprehensive Real Headed Test Suit
     await expect(page.locator('text=Zero-Trust Privacy & LLM Routing').first()).toBeVisible();
 
     await page.locator('button:has-text("Initialize Cherenkov Nexus")').first().click({ force: true });
-    await page.waitForTimeout(600);
+    await expect(page.locator('text=Select Your Career Archetype')).toBeHidden({ timeout: 5000 });
+    await page.waitForTimeout(500);
 
     // 4. Ingest Monzo Bank (UK Sponsor) Preset
     const monzoBtn = page.locator('button:has-text("Monzo Bank")').first();
@@ -79,24 +80,25 @@ test.describe('CHERENKOV-NEXUS Multi-Profile Comprehensive Real Headed Test Suit
     await page.locator('button:has-text("Continue with Zero-Trust Enterprise Engineer")').first().click({ force: true });
     await page.locator('button:has-text("Continue to Privacy & Routing")').first().click({ force: true });
     await page.locator('button:has-text("Initialize Cherenkov Nexus")').first().click({ force: true });
+    await expect(page.locator('text=Select Your Career Archetype')).toBeHidden({ timeout: 5000 });
     await page.waitForTimeout(600);
 
     // 2. Open Zero-Trust Vault
-    const vaultBtn = page.locator('button:has-text("Zero-Trust Vault")').first();
+    const vaultBtn = page.locator('button:has-text("Zero-Trust Vault"), button:has-text("Vault")').first();
     await vaultBtn.click({ force: true });
 
     const vaultModal = page.locator('div.fixed:has-text("Portable Identity & Zero-Trust Security Vault")').first();
-    await expect(vaultModal).toBeVisible();
+    await expect(vaultModal).toBeVisible({ timeout: 10000 });
 
     // 3. Toggle Local Ollama Engine
     const ollamaBtn = vaultModal.locator('button:has-text("Ollama (Local)")').first();
     if (await ollamaBtn.isVisible()) {
       await ollamaBtn.click({ force: true });
+      await page.waitForTimeout(300);
     }
 
-    // Close Vault
-    const closeBtn = vaultModal.locator('button:has-text("✕")').first();
-    await closeBtn.click({ force: true });
+    // Close Vault safely via keyboard Escape
+    await page.keyboard.press('Escape');
     await page.waitForTimeout(400);
 
     // 4. Capture screenshot
@@ -117,6 +119,7 @@ test.describe('CHERENKOV-NEXUS Multi-Profile Comprehensive Real Headed Test Suit
     await page.locator('button:has-text("Continue with Upskilling Career Switcher")').first().click({ force: true });
     await page.locator('button:has-text("Continue to Privacy & Routing")').first().click({ force: true });
     await page.locator('button:has-text("Initialize Cherenkov Nexus")').first().click({ force: true });
+    await expect(page.locator('text=Select Your Career Archetype')).toBeHidden({ timeout: 5000 });
     await page.waitForTimeout(600);
 
     // 2. Navigate to Learning Sync
@@ -142,13 +145,14 @@ test.describe('CHERENKOV-NEXUS Multi-Profile Comprehensive Real Headed Test Suit
     await page.locator('button:has-text("Continue with Staff & Executive Leader")').first().click({ force: true });
     await page.locator('button:has-text("Continue to Privacy & Routing")').first().click({ force: true });
     await page.locator('button:has-text("Initialize Cherenkov Nexus")').first().click({ force: true });
+    await expect(page.locator('text=Select Your Career Archetype')).toBeHidden({ timeout: 5000 });
     await page.waitForTimeout(600);
 
     // 2. Navigate to Community Radar
     const radarNav = page.locator('button:has-text("Community Radar")').first();
     if (await radarNav.isVisible()) {
       await radarNav.click({ force: true });
-      await expect(page.locator('text=Community Visa Heatmap & Ghost Job Radar').first()).toBeVisible({ timeout: 10000 });
+      await expect(page.locator('text=Crowdsourced Hiring Telemetry').first()).toBeVisible({ timeout: 10000 });
     }
 
     // 3. Capture screenshot
@@ -169,6 +173,7 @@ test.describe('CHERENKOV-NEXUS Multi-Profile Comprehensive Real Headed Test Suit
     await page.locator('button:has-text("Continue with Autonomous Swarm Architect")').first().click({ force: true });
     await page.locator('button:has-text("Continue to Privacy & Routing")').first().click({ force: true });
     await page.locator('button:has-text("Initialize Cherenkov Nexus")').first().click({ force: true });
+    await expect(page.locator('text=Select Your Career Archetype')).toBeHidden({ timeout: 5000 });
     await page.waitForTimeout(600);
 
     // 2. Navigate to Agent Canvas

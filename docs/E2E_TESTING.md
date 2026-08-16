@@ -1,88 +1,64 @@
 # 🎭 End-to-End (E2E) Automation Testing Suite
 
 ## 1. Overview
-**CHERENKOV-NEXUS** utilizes **Playwright** (`@playwright/test`) for comprehensive, deterministic end-to-end browser automation. Every user journey—from keyboard navigation, modal interactions, split-screen generative synthesis, to drag-and-drop Kanban state persistence—is continuously verified.
+**CHERENKOV-NEXUS** utilizes **Playwright** (`@playwright/test`) for comprehensive, deterministic end-to-end browser automation. Every user journey—from keyboard navigation, modal interactions, split-screen generative synthesis, to drag-and-drop Kanban state persistence—is continuously verified across **5 distinct candidate archetypes**.
 
 ---
 
 ## 2. E2E Test Suite Matrix
 
-| Test Suite | File Location | Key Verification Areas |
-|---|---|---|
-| 🧪 **Comprehensive System Suite** | `e2e/comprehensive-system.spec.ts` | Complete multi-hub navigation, Identity Vault toggles, dynamic job presets, synthesis execution, AST diff rendering, and theme engine switching |
-| 🖥️ **UI Workflows & Interactions** | `e2e/ui.spec.ts` | Kanban board column drag-and-drop, Learning Sync metrics, Interview Sandbox QA generation, modal backdrops, and CopyBlock clipboard triggers |
-| ⌨️ **CLI & API Pipeline Suite** | `e2e/cli.spec.ts` | Server health checks, MCP manifest schema, xAPI webhook ingestion, and CLI parameter parsing |
+| Test Suite | File Location | Mode | Key Verification Areas |
+|---|---|---|---|
+| 🧪 **Multi-Profile Headed Suite** | `e2e/multi-profile-headed.spec.ts` | Headed / CLI | All 5 Candidate Archetypes: International Visa Seeker, Zero-Trust Enterprise Engineer, Upskilling Switcher, Staff Executive, and Autonomous Swarm Architect |
+| 🧪 **Comprehensive System Suite** | `e2e/comprehensive-system.spec.ts` | Headless / CLI | Complete multi-hub navigation, Identity Vault toggles, dynamic job presets, synthesis execution, AST diff rendering, and theme engine switching |
+| 🖥️ **UI Workflows & Interactions** | `e2e/ui.spec.ts` | Headless / CLI | Kanban board column drag-and-drop, Learning Sync metrics, Interview Sandbox QA generation, modal backdrops, and CopyBlock clipboard triggers |
+| ⌨️ **CLI & API Pipeline Suite** | `e2e/cli.spec.ts` | Headless / API | Server health checks, MCP manifest schema, xAPI webhook ingestion, and CLI parameter parsing |
 
 ---
 
-## 3. Test Architecture & Fixtures
+## 3. Candidate Archetype Test Personas
 
 ```mermaid
-graph TD
-    Runner["Playwright Test Runner (Chromium / Firefox / WebKit)"]
-    
-    subgraph Test_Lifecycle ["Test Lifecycle Hooks"]
-        BeforeEach["beforeEach: Attach Console & Error Forwarders"]
-        TourBypass["localStorage: 'cherenkov_tour_completed' = 'true'"]
-        Navigate["page.goto('/') with networkidle wait"]
+graph LR
+    subgraph Personas ["5 Evaluated Candidate Personas"]
+        P1["1. Moayed Badawy<br/>(International Visa Seeker)"]
+        P2["2. Alexei Vance<br/>(Zero-Trust Specialist)"]
+        P3["3. Jordan Lee<br/>(Upskilling Switcher)"]
+        P4["4. Marcus Sterling<br/>(Staff Executive)"]
+        P5["5. Tariq Al-Mansoor<br/>(Autonomous Swarm)"]
     end
-    
-    subgraph Execution_Modules ["Comprehensive Test Modules"]
-        Mod1["Module 1: Navigation & Hub Switching"]
-        Mod2["Module 2: Privacy Vault & Inference Toggles"]
-        Mod3["Module 3: Dynamic Job Preset Ingestion"]
-        Mod4["Module 4: Synthesis & AST Diff Verification"]
-        Mod5["Module 5: Cmd+K Command Palette & Theme Engine"]
+
+    subgraph Capabilities ["Verified Capabilities"]
+        C1["UK Home Office Visa Verification<br/>(Monzo / Revolut / Deliveroo)"]
+        C2["Client-Side PII Masking &<br/>Air-Gapped Local Inference"]
+        C3["xAPI Learning Sync Ingestion &<br/>STAR Mock Interview Coaching"]
+        C4["Executive Recruiter Mapping &<br/>DORA Metrics Pitch Generation"]
+        C5["Multi-Agent DAG Canvas &<br/>MCP 2026 Strategy Marketplace"]
     end
-    
-    Runner --> BeforeEach
-    BeforeEach --> TourBypass
-    TourBypass --> Navigate
-    Navigate --> Mod1
-    Mod1 --> Mod2
-    Mod2 --> Mod3
-    Mod3 --> Mod4
-    Mod4 --> Mod5
-```
 
-### 3.1 Browser Console Forwarding Fixture
-To prevent silent JavaScript errors and provide immediate debugging observability, our test runner captures and mirrors all browser logs directly into terminal stdout:
-
-```typescript
-test.beforeEach(async ({ page }) => {
-  page.on('console', msg => console.log(`[BROWSER CONSOLE] [${msg.type()}] ${msg.text()}`));
-  page.on('pageerror', err => console.log(`[BROWSER UNHANDLED ERROR] ${err.message}`));
-
-  // Navigate to initialize origin storage
-  await page.goto('/');
-  
-  // Inject tour completion flag to prevent blocking onboarding modal
-  await page.evaluate(() => {
-    localStorage.setItem('cherenkov_tour_completed', 'true');
-  });
-
-  // Re-navigate to clean state
-  await page.goto('/');
-  await page.waitForLoadState('networkidle');
-});
+    P1 --> C1
+    P2 --> C2
+    P3 --> C3
+    P4 --> C4
+    P5 --> C5
 ```
 
 ---
 
-## 4. Execution Commands (PowerShell)
+## 4. Headed Execution Commands (PowerShell)
 
 ```powershell
-# 1. Run all Playwright tests headlessly
+# 1. Run the comprehensive multi-profile test suite in headed mode (visible browser)
+npx playwright test e2e/multi-profile-headed.spec.ts --headed
+
+# 2. Run all Playwright tests
 npm run test
 
-# 2. Run tests with interactive UI debugger
+# 3. Run with interactive UI debugger
 npx playwright test --ui
 
-# 3. Run only the comprehensive system suite
-npx playwright test e2e/comprehensive-system.spec.ts
-
-# 4. Run tests with browser headed (visible Chromium window)
-npx playwright test --headed
+# 4. Run standalone headed evidence capture runner
+npx tsx scripts/run-headed-profiles.ts
 
 # 5. Generate and view HTML test report
 npx playwright show-report
@@ -90,27 +66,8 @@ npx playwright show-report
 
 ---
 
-## 5. Continuous Integration (CI/CD) Configuration
-
-Playwright is configured in `playwright.config.ts` to automatically boot the Express server before test execution:
-
-```typescript
-import { defineConfig } from '@playwright/test';
-
-export default defineConfig({
-  testDir: './e2e',
-  timeout: 45000,
-  expect: { timeout: 10000 },
-  use: {
-    baseURL: 'http://localhost:3000',
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
-  },
-  webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3000/api/health',
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-  },
-});
-```
+## 5. Visual Evidence & Benchmark Records
+All test runs generate structured visual screenshots and execution metrics:
+- **Visual Screenshots**: `docs/assets/screenshots/profiles/`
+- **Granular Execution Records**: `docs/test-records/USER_PROFILES_TEST_RECORDS.md`
+- **Heuristic UX & System Assessment**: `docs/USER_PROFILES_ASSESSMENT.md`

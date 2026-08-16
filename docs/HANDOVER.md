@@ -1,95 +1,46 @@
-# Engineering Handover Protocol
+# 🤝 Agent Continuity Handover Document
 
-## Overview & Operational Status
-**Project:** CHERENKOV-NEXUS  
-**Repository:** `moaidmoatasem/cherenkov-nexus`  
-**Current Branch:** `main`  
-**Runtime Environment:** Node.js v20+ (TSX / Express API Gateway), React 19 + Vite Frontend, Tauri v2 Desktop Shell, LibSQL / Turso Edge Database, Playwright Stealth MCP Scraper, Google Gemini 2.5 Flash SDK + WebLLM / Ollama Local Inference Router.
-
----
-
-## Live System Architecture Snapshot
-
-```mermaid
-graph TD
-    Client["Client: React 19 / Vite / Tauri v2"] -->|"HTTP / SSE"| Gateway["API Gateway: Express / TSX (Port 3000)"]
-    Gateway -->|"LangGraph DAG"| Orchestrator["Agent Orchestration Engine"]
-    Orchestrator -->|"Playwright MCP"| Scraper["Stealth Scraper (ATS Bypass)"]
-    Orchestrator -->|"Deterministic Match"| VisaEngine["Visa Sponsor Engine (LibSQL/Turso)"]
-    Orchestrator -->|"Inference Routing"| Router{"Inference Router"}
-    Router -->|"Cloud Mode"| Gemini["Google Gemini 2.5 Flash"]
-    Router -->|"Local / Zero-Trust"| LocalLLM["WebLLM / Ollama (Qwen)"]
-    Gateway -->|"xAPI Webhooks"| LMS["LRS Sync (Coursera/Udemy/Pluralsight)"]
-```
+## 1. Project Context & Current Milestone
+- **Repository**: `moaidmoatasem/cherenkov-nexus` (Branch: `main`)
+- **System**: CHERENKOV-NEXUS Agentic QA Career Station & Multi-Agent Swarm
+- **Current Milestone**: Real-world Multi-Profile Headed Testing, Visual Evidence Repository, and UX Assessment across 5 Candidate Archetypes.
+- **Specification Compliance**: Model Context Protocol (MCP) `2026-07-28` Stateless Protocol Standard.
 
 ---
 
-## Critical System Invariants & Rules
-1. **PowerShell Syntax Enforced:** Never use `&&` in terminal commands. Always use `;` for chaining commands on Windows PowerShell.
-2. **Deterministic Verification:** Visa sponsorship must always query the LibSQL / Turso sponsor cache (or local fallback), never allowing AI hallucination of visa status.
-3. **Structured JSON Output:** LLM synthesis responses are strictly enforced using JSON Schema 2020-12 via `@google/genai` `responseSchema`.
-4. **Token Limit Handover:** If context size nears exhaustion, this document (`docs/HANDOVER.md`) and `docs/DEVELOPMENT_PLAN.md` must be updated with the exact commit hash, current state, and immediate next commands before yielding execution.
-5. **Proof of Work Required:** All completed tasks must be verified with automated test suites, staged, committed, and pushed to `origin main` before declaring them done.
+## 2. Completed Architecture & Deliverables in this Run
+
+1. **Multi-Profile Test Suite (`e2e/multi-profile-headed.spec.ts`)**:
+   - **Profile 1 (`international_seeker` - Moayed Badawy)**: Wizard configuration -> UK Home Office Tier 2 Visa Sponsor Verification (`Monzo Bank`, A-Rating) -> AST Role Synthesis -> Kanban Dispatch.
+   - **Profile 2 (`zero_trust_specialist` - Alexei Vance)**: Client-Side PII Token Masking in Zero-Trust Vault -> Local Ollama / Air-gapped Qwen 2.5 switch -> Zero cloud egress verification.
+   - **Profile 3 (`upskilling_switcher` - Jordan Lee)**: xAPI Competency Webhook Ingestion -> Competency Matrix recalculation -> Adversarial STAR Mock Interview Coach & scoring.
+   - **Profile 4 (`staff_executive` - Marcus Sterling)**: Executive Recruiter & Hiring Committee Scout -> DORA Metrics High-Impact Pitch -> Community Ghost Job Radar.
+   - **Profile 5 (`automation_power_user` - Tariq Al-Mansoor)**: Multi-Agent DAG Visual Canvas -> MCP 2026-07-28 Marketplace package toggle -> Live System Telemetry audit.
+
+2. **Visual Evidence & Screenshots**:
+   - Stored in `docs/assets/screenshots/profiles/` (`spec_01_international_seeker.png` through `spec_05_automation_power_user.png`).
+
+3. **In-Depth Documentation & Analysis**:
+   - `docs/test-records/USER_PROFILES_TEST_RECORDS.md`: Detailed test logs, execution timings, response JSONs, and latency breakdown.
+   - `docs/USER_PROFILES_ASSESSMENT.md`: Comprehensive Nielsen Norman 10 Heuristic evaluation, WCAG 2.1 AA accessibility audit, cognitive friction analysis, and strategic roadmap recommendations.
 
 ---
 
-## Environment & Dependency Matrix
+## 3. How Next Agent Can Resume & Execute
 
-| Variable / Dependency | Purpose | Status / Default |
-|---|---|---|
-| `GEMINI_API_KEY` | Google Gemini API inference for Synthesizer & LinkedIn Scout | Required for Cloud Inference |
-| `TURSO_DATABASE_URL` | Edge LibSQL database endpoint for Visa Registry & Kanban sync | Optional (Falls back to local SQLite) |
-| `TURSO_AUTH_TOKEN` | Auth token for Turso Edge DB | Optional |
-| `LOCAL_LLM_URL` | Endpoint for Ollama / Local Qwen instance | Default: `http://localhost:11434/v1` |
-| `PORT` | API Gateway & Vite dev middleware port | Default: `3000` |
-
----
-
-## Quick Execution Commands (PowerShell)
-
-### 1. Start Server & Client
 ```powershell
+# 1. Ensure edge database is seeded
+npx tsx seed-database.ts
+
+# 2. Run the multi-profile headed test suite
+npx playwright test e2e/multi-profile-headed.spec.ts --headed
+
+# 3. Run full E2E test suite
+npm run test
+
+# 4. View generated visual screenshots
+Get-ChildItem docs/assets/screenshots/profiles/
+
+# 5. Start development server
 npm run dev
 ```
-
-### 2. Seed Database (LibSQL / SQLite)
-```powershell
-npx tsx seed-database.ts
-```
-
-### 3. Run CLI Mode
-```powershell
-npx tsx cherenkov.ts "https://boards.greenhouse.io/monzo/jobs/12345"
-```
-
-### 4. Run Automated E2E Tests
-```powershell
-npx playwright test
-```
-
----
-
-## Active Milestone & Completed Tasks
-
-- **Latest Commit:** `05d84c0` (`main -> origin/main`)
-- **Implemented Features:**
-  - ✅ 5 Candidate Archetypes (`international_seeker`, `zero_trust_specialist`, `upskilling_switcher`, `staff_executive`, `automation_power_user`) in `src/types.ts` and `src/data/initialData.ts`.
-  - ✅ Interactive 1-Click Persona selector and Magic Drop parser in `src/components/UnifiedOnboardingWizard.tsx`.
-  - ✅ Onboarding API endpoint with archetype classification in `server.ts`.
-  - ✅ Command Palette `⌘K` candidate preset switchers in `src/components/CommandPalette.tsx`.
-  - ✅ Direct master profile, theme, and workspace tab synchronization in `src/App.tsx`.
-  - ✅ Build resolution fix for `framer-motion` in `vite.config.ts`.
-# Or run specific suite
-npx playwright test e2e/comprehensive-system.spec.ts
-```
-
----
-
-## Ongoing Tasks & Immediate Next Steps for Subsequent Agents
-
-- [x] Establish core API Gateway (`server.ts`) and CLI tool (`cherenkov.ts`).
-- [x] Implement LibSQL/Turso database client and local SQLite seeding script (`seed-database.ts`).
-- [x] Build comprehensive E2E Playwright test suites (`e2e/comprehensive-system.spec.ts`, `e2e/cli.spec.ts`, `e2e/ui.spec.ts`).
-- [ ] Maintain 100% sync between the live codebase and the documentation suite (`docs/`).
-- [ ] Extend Mock/Offline test coverage for WebLLM browser worker threads in `src/components/IdentityVaultModal.tsx`.
-- [ ] Finalize Docker Compose deployment bundle for zero-configuration team deployment.

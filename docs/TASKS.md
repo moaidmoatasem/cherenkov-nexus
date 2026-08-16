@@ -2,7 +2,7 @@
 
 ## 1. Task Management Framework
 All tasks in **CHERENKOV-NEXUS** are organized by functional Epics and assigned strict priority tiers:
-- **P0 (Critical):** Core engine, data integrity, synthesis stability, and security boundaries.
+- **P0 (Critical):** Core engine, data integrity, synthesis stability, security boundaries, and multi-profile E2E testing.
 - **P1 (High):** Major UI hubs, integrations, testing suites, and performance optimizations.
 - **P2 (Medium):** Theme customization, auxiliary tools, and non-blocking enhancements.
 
@@ -51,11 +51,11 @@ All tasks in **CHERENKOV-NEXUS** are organized by functional Epics and assigned 
 | `TSK-503` | Implement LinkedIn & GitHub Repo Scout Modal | P1 | Done | `LinkedInScoutModal.tsx` |
 | `TSK-504` | Build PDF Resume & Cover Letter Export Engine | P2 | Done | `jspdf` Exporter |
 
-### Epic 6: Verification, Testing & Documentation
+### Epic 6: Multi-Profile Headed Verification & Assessment
 | Task ID | Title | Priority | Status | Verification Spec |
 |---|---|---|---|---|
-| `TSK-601` | Author Comprehensive Playwright E2E Test Suite | P0 | Done | `e2e/comprehensive-system.spec.ts` |
-| `TSK-602` | Author Masterclass Local Documentation Suite | P0 | Done | `docs/*` & `README.md` |
-| `TSK-603` | Implement Subagent Handover Continuity Protocol | P0 | Done | `docs/HANDOVER.md` |
-| `TSK-604` | Setup Native Rust Tauri v2 Application Wrapper | P1 | In Progress | `src-tauri/` |
-| `TSK-605` | Build Docker Compose Production Bundle | P2 | Planned | `docker-compose.yml` |
+| `TSK-601` | Build Multi-Profile Headed E2E Suite (5 Personas) | P0 | Done | `e2e/multi-profile-headed.spec.ts` |
+| `TSK-602` | Capture Visual Screenshots for All Archetypes | P0 | Done | `docs/assets/screenshots/profiles/` |
+| `TSK-603` | Compile Granular Test Records & Latency Logs | P0 | Done | `docs/test-records/USER_PROFILES_TEST_RECORDS.md` |
+| `TSK-604` | Conduct Heuristic UX & Zero-Trust Audit Report | P0 | Done | `docs/USER_PROFILES_ASSESSMENT.md` |
+| `TSK-605` | Maintain Subagent Handover Protocol & Proof of Work | P0 | Done | `docs/HANDOVER.md` |
