@@ -8,9 +8,7 @@ export default defineConfig(() => {
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
-        'motion/react': path.resolve(__dirname, './src/utils/motionShim.tsx'),
-        'framer-motion': path.resolve(__dirname, './src/utils/motionShim.tsx')
+        '@': path.resolve(__dirname, '.')
       },
     },
     server: {

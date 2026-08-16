@@ -57,17 +57,9 @@ export default function App() {
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
-  // First-time user tour trigger
+  // System tour initialization
   useEffect(() => {
-    try {
-      const tourDone = localStorage.getItem('cherenkov_tour_completed');
-      if (!tourDone) {
-        const timer = setTimeout(() => {
-          setIsTourOpen(true);
-        }, 750);
-        return () => clearTimeout(timer);
-      }
-    } catch {}
+    // Tour is explicitly user-triggered via Header/Sidebar actions
   }, []);
 
   // Apply theme class to document body
