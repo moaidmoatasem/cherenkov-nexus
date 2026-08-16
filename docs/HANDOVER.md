@@ -59,12 +59,26 @@ npx tsx seed-database.ts
 
 ### 3. Run CLI Mode
 ```powershell
-npx tsx cherenkov.ts --url "https://careers.google.com/jobs/results/12345" --mode cloud
+npx tsx cherenkov.ts "https://boards.greenhouse.io/monzo/jobs/12345"
 ```
 
-### 4. Run E2E Test Suite
+### 4. Run Automated E2E Tests
 ```powershell
-npm run test
+npx playwright test
+```
+
+---
+
+## Active Milestone & Completed Tasks
+
+- **Latest Commit:** `05d84c0` (`main -> origin/main`)
+- **Implemented Features:**
+  - ✅ 5 Candidate Archetypes (`international_seeker`, `zero_trust_specialist`, `upskilling_switcher`, `staff_executive`, `automation_power_user`) in `src/types.ts` and `src/data/initialData.ts`.
+  - ✅ Interactive 1-Click Persona selector and Magic Drop parser in `src/components/UnifiedOnboardingWizard.tsx`.
+  - ✅ Onboarding API endpoint with archetype classification in `server.ts`.
+  - ✅ Command Palette `⌘K` candidate preset switchers in `src/components/CommandPalette.tsx`.
+  - ✅ Direct master profile, theme, and workspace tab synchronization in `src/App.tsx`.
+  - ✅ Build resolution fix for `framer-motion` in `vite.config.ts`.
 # Or run specific suite
 npx playwright test e2e/comprehensive-system.spec.ts
 ```
