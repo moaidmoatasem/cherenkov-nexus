@@ -61,3 +61,13 @@ mindmap
 ### 2.6 Multi-Stage Kanban Pipeline (`KanbanBoard.tsx`)
 - Manages applications across 5 lifecycle stages: `Wishlist`, `Ready to Pitch`, `Applied`, `Interviewing`, and `Offer Extended`.
 - Automatically persists state transitions to the embedded LibSQL / SQLite database.
+
+### 2.7 Multi-Archetype Candidate Calibration (`UnifiedOnboardingWizard.tsx`)
+- **5 Pre-Calibrated Candidate Personas:**
+  1. *International Visa Seeker:* Relocation scoring, Home Office license checks, high-speed Cloud synthesis.
+  2. *Zero-Trust Enterprise Specialist:* Air-gapped local Qwen 2.5 on port 3001, AES-GCM encrypted client vault, zero cloud data egress.
+  3. *Upskilling Career Switcher:* Automatic skill gap detection, xAPI course triggers, STAR mock interview drills.
+  4. *Staff & Executive Leader:* Strategic cold-network graphs, recruiter scouting, company Ghost Job detection radar.
+  5. *Autonomous Swarm Architect:* Multi-agent DAG execution canvas, headless ATS submitters, sub-50ms command palette.
+- **Adaptive Workspace Configuration:** Dynamically configures default tabs, active MCP packages, and prompt tailoring strategies upon profile creation.
+
