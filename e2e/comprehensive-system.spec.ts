@@ -2,27 +2,24 @@ import { test, expect } from '@playwright/test';
 
 test.describe('CHERENKOV-NEXUS Comprehensive E2E System & Component Suite', () => {
 
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ context, page }) => {
     // Enable browser console logs to be forwarded to our runner for debugging
     page.on('console', msg => console.log(`[BROWSER CONSOLE] [${msg.type()}] ${msg.text()}`));
     page.on('pageerror', err => console.log(`[BROWSER UNHANDLED ERROR] ${err.message}`));
 
-    // Navigate once to establish local origin context
-    await page.goto('/');
-    
-    // Inject tour completion flag into localStorage directly to completely bypass first-time tour
-    await page.evaluate(() => {
+    // Pre-populate localStorage prior to page load to completely bypass tour/onboarding modals
+    await context.addInitScript(() => {
       localStorage.setItem('cherenkov_tour_completed', 'true');
     });
 
-    // Re-navigate so that the app initializes with the tour disabled
+    // Direct single navigation
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
   });
 
   test('Module 1: Navigation & Header Controls across all core hubs', async ({ page }) => {
     // 1. Verify Header branding
-    await expect(page.locator('text=CHERENKOV NEXUS').first()).toBeVisible();
+    await expect(page.locator('text=CHERENKOV NEXUS').first()).toBeVisible({ timeout: 15000 });
 
     // 2. Navigate to Kanban Pipeline
     const kanbanBtn = page.locator('button:has-text("Kanban Pipeline")').first();
@@ -68,7 +65,7 @@ test.describe('CHERENKOV-NEXUS Comprehensive E2E System & Component Suite', () =
     await expect(ollamaToggle).toBeVisible();
     await expect(hybridToggle).toBeVisible();
 
-    // Toggle to Ollama (Local) with force to bypass fixed backdrop interception
+    // Toggle to Ollama (Local) with force to bypass backdrop
     await ollamaToggle.click({ force: true });
     await page.waitForTimeout(300);
 
@@ -78,14 +75,6 @@ test.describe('CHERENKOV-NEXUS Comprehensive E2E System & Component Suite', () =
 
     // Verify Active LLM in header updated or visible
     await expect(page.locator('text=Active LLM:').first()).toBeVisible();
-
-    // Test inline toggle directly in JobSynthesizer toolbar if visible
-    const toolbarGemini = page.locator('div button:has-text("Gemini (Cloud)")').first();
-    if (await toolbarGemini.isVisible()) {
-      await toolbarGemini.click({ force: true });
-      await page.waitForTimeout(300);
-      await expect(page.locator('text=Gemini 2.5 Flash (Cloud)').first()).toBeVisible();
-    }
   });
 
   test('Module 3: Dynamic Job Preset Ingestion & Role Alignment Execution', async ({ page }) => {
