@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { GhostJobSignal, VisaHeatmapItem, AtsHealthStatus } from '../types';
 import {
   INITIAL_GHOST_JOBS,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { MasterProfile, ApplicationCard, AppTheme, TabId, CandidateArchetype } from './types';
-import { INITIAL_MASTER_PROFILE, INITIAL_APPLICATIONS, SAMPLE_JOBS, ARCHETYPE_PRESETS } from './data/initialData';
+import { motion, AnimatePresence } from 'motion/react';
+import { MasterProfile, ApplicationCard, AppTheme, TabId } from './types';
+import { INITIAL_MASTER_PROFILE, INITIAL_APPLICATIONS, SAMPLE_JOBS } from './data/initialData';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { JobSynthesizer } from './components/JobSynthesizer';
@@ -57,9 +57,17 @@ export default function App() {
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
-  // System tour initialization
+  // First-time user tour trigger
   useEffect(() => {
-    // Tour is explicitly user-triggered via Header/Sidebar actions
+    try {
+      const tourDone = localStorage.getItem('cherenkov_tour_completed');
+      if (!tourDone) {
+        const timer = setTimeout(() => {
+          setIsTourOpen(true);
+        }, 750);
+        return () => clearTimeout(timer);
+      }
+    } catch {}
   }, []);
 
   // Apply theme class to document body
@@ -149,30 +157,6 @@ export default function App() {
 
   const handleLoadPreset = (company: string) => {
     addToast('info', 'Role Preset Loaded', `Loaded ${company} requirements into Synthesizer.`);
-  };
-
-  const handleSelectArchetypePreset = (archetypeKey: CandidateArchetype) => {
-    const preset = ARCHETYPE_PRESETS[archetypeKey];
-    if (preset) {
-      setMasterProfile(preset.profile);
-      try {
-        localStorage.setItem('cherenkov_master_profile', JSON.stringify(preset.profile));
-      } catch (e) {
-        console.error(e);
-      }
-      if (preset.recommendedTheme) {
-        setCurrentTheme(preset.recommendedTheme as AppTheme);
-        try {
-          localStorage.setItem('cherenkov_theme', preset.recommendedTheme);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      if (preset.profile.workspaceConfig?.defaultTab) {
-        setActiveTab(preset.profile.workspaceConfig.defaultTab);
-      }
-      addToast('success', `${preset.label} Active`, `System calibrated with ${preset.badge} configuration.`);
-    }
   };
 
   const handleSyncSkillsToProfile = (newSkills: string[]) => {
@@ -397,7 +381,6 @@ export default function App() {
         onOpenProfile={() => setIsProfileModalOpen(true)}
         onSelectTheme={setCurrentTheme}
         onLoadPreset={handleLoadPreset}
-        onSelectArchetype={handleSelectArchetypePreset}
         onOpenTelemetry={() => setIsTelemetryOpen(true)}
         currentTheme={currentTheme}
         onOpenIdentityVault={() => setIsIdentityVaultOpen(true)}
@@ -436,23 +419,7 @@ export default function App() {
         onClose={() => setIsOnboardingOpen(false)}
         onProfileImported={(profile) => {
           setMasterProfile(profile);
-          try {
-            localStorage.setItem('cherenkov_master_profile', JSON.stringify(profile));
-          } catch (e) {
-            console.error(e);
-          }
-          if (profile.preferences?.theme) {
-            setCurrentTheme(profile.preferences.theme as AppTheme);
-            try {
-              localStorage.setItem('cherenkov_theme', profile.preferences.theme);
-            } catch (e) {
-              console.error(e);
-            }
-          }
-          if (profile.workspaceConfig?.defaultTab) {
-            setActiveTab(profile.workspaceConfig.defaultTab);
-          }
-          addToast('success', 'Profile & Workspace Synced', `Imported profile set as active master anchor for ${profile.name}.`);
+          addToast('success', 'Profile Synced', 'Imported profile set as active master anchor.');
         }}
         onToast={addToast}
       />

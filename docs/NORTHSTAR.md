@@ -1,48 +1,19 @@
-# 🧭 Northstar, Vision & Strategic Principles
+# Northstar & Vision: Project CHERENKOV-NEXUS
 
-## 1. Core Vision Statement
-To engineer a localized, agentic command center that transforms the international tech career pipeline from an exhaustive, manual submission process into a proactive, deterministically verifiable deployment pipeline.
+## Core Vision
+To engineer a localized, agentic command center that transforms the international tech job search from a passive web-form submission process into a proactive, deterministically verifiable deployment pipeline. The hub specifically empowers Senior QA professionals to target remote and visa-sponsored roles in the UK and EU without wasting CPU cycles or cognitive load on incompatible corporate entities.
 
-**CHERENKOV-NEXUS** empowers Senior QA Engineers, Infrastructure Architects, and Technical Leaders to target high-compensation, visa-sponsored roles across the UK, EU, and Global Remote markets without cognitive fatigue or computational waste.
+## Operational Philosophy
+* **Privacy by Default (Local-First):** PII (passwords, physical addresses, passports) must never hit a cloud LLM. The routing layer must support "Zero-Trust" bare-metal inference (e.g., Qwen running via AnythingLLM).
+* **Deterministic Over Probabilistic:** Visa sponsorship capabilities are verified programmatically against official government datasets, never guessed or hallucinated by an AI model.
+* **Continuous Synchronization:** A resume is not a static PDF; it is a living artifact. The system must autonomously sync with learning platforms (Coursera, Udemy) via xAPI to append newly acquired skills in real-time.
+* **Invariant Observability:** Derived from the `cherenkov-qa` methodology, we treat the job application process like a QA framework. We implement robust invariant checks to catch failing ATS parsers before synthesizing bad data.
 
----
+## Metrics for Success (KPIs)
+1. **Application Velocity:** Reduce the time to tailor a resume, cover letter, and ATS questionnaire from 45 minutes to < 10 seconds.
+2. **Deterministic Hit Rate:** 100% of generated applications must belong to companies legally verified on the UK Home Office Register of Licensed Sponsors.
+3. **Execution Latency:** Generative UI components must stream to the client via Server-Sent Events (SSE) with a Time-To-First-Token (TTFT) of < 800ms.
 
-## 2. Operational Philosophies
-
-```mermaid
-graph TD
-    Philosophy["Core Operational Philosophies"]
-    
-    P1["🔒 Privacy by Default (Local-First)"]
-    P2["⚖️ Deterministic Over Probabilistic"]
-    P3["🔄 Continuous Synchronization (Living Resume)"]
-    P4["🛡️ Invariant QA Observability"]
-    
-    Philosophy --> P1
-    Philosophy --> P2
-    Philosophy --> P3
-    Philosophy --> P4
-```
-
-1. **Privacy by Default (Zero-Trust):** Candidate PII (passports, residential addresses, contact details) must never be transmitted unencrypted to cloud AI services. The platform enables 100% on-device WebGPU inference via `@mlc-ai/web-llm` and local Ollama routing.
-2. **Deterministic Over Probabilistic:** Visa sponsorship eligibility is never hallucinated or guessed by an AI model. It is deterministically validated against official government registers (UK Home Office, IND, BAMF) using LibSQL/Turso database querying.
-3. **Continuous Living Profile:** A career record is not a static PDF file; it is an active Abstract Syntax Tree (AST). It continuously ingests verified competencies via xAPI webhooks as courses and certifications are completed.
-4. **Invariant QA Observability:** Treating job application workflows like automated QA pipelines. Defensive invariant checks catch failing scrapers and malformed schemas before they reach the user.
-
----
-
-## 3. Measurable Success Metrics (KPIs)
-
-| Metric | Target Goal | Impact on Career Velocity |
-|---|---|---|
-| **Application Synthesis Time** | < 10 seconds | Reduces resume tailoring & cover letter drafting time by 90%+ |
-| **Deterministic Visa Accuracy** | 100% | Eliminates wasted effort on non-sponsoring corporate entities |
-| **Generative First Token Latency (TTFT)** | < 800ms | Delivers instant, responsive split-screen UI rendering |
-| **Local Zero-Trust Adoption** | 100% Offline Capability | Guarantees complete data privacy on bare-metal hardware |
-
----
-
-## 4. Architectural Anti-Goals
-* **No Blind Spam Bots:** We do NOT build tools that spam hundreds of job boards with unreviewed submissions. We empower thoughtful, human-in-the-loop technical alignment.
-* **No Cloud Vendor Lock-In:** The AI routing plane conforms to the open Model Context Protocol (MCP), enabling instant swapping between cloud APIs and local GGUF models.
-* **No Unverified Data Assumptions:** If an employer's sponsorship rating cannot be verified, it is clearly flagged as unverified rather than assumed.
+## Anti-Goals
+* **No Fully Autonomous Bots:** We are not building a bot that blindly clicks "Apply" hundreds of times. Enterprise ATS platforms (Workday, Greenhouse) aggressively block these. We are building a "Human-in-the-Loop" Split-Screen solver.
+* **No Cloud Vendor Lock-in:** The AI layer must remain agnostic via the Model Context Protocol (MCP), allowing users to hot-swap cloud endpoints or local models at will.

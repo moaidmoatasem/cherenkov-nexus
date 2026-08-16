@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { McpPackage, McpCategory } from '../types';
 import { INITIAL_MCP_PACKAGES } from '../data/initialData';
 import { GitHubRepoSyncModal } from './GitHubRepoSyncModal';

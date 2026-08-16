@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { AgentNode, AgentEdge, AgentNodeType } from '../types';
 import { INITIAL_AGENT_NODES, INITIAL_AGENT_EDGES } from '../data/initialData';
 import {

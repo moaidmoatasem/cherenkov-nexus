@@ -1,25 +1,7 @@
-export type CandidateArchetype =
-  | 'international_seeker'
-  | 'zero_trust_specialist'
-  | 'upskilling_switcher'
-  | 'staff_executive'
-  | 'automation_power_user';
-
-export interface UserWorkspaceConfig {
-  defaultTab: TabId;
-  enabledTabs: TabId[];
-  enableVisaFiltering: boolean;
-  enableGhostJobDetection: boolean;
-  enableAutomatedSubmitter: boolean;
-  activeMcpPackages: string[];
-}
-
 export interface MasterProfile {
   name: string;
   title: string;
   location: string;
-  archetype?: CandidateArchetype;
-  workspaceConfig?: UserWorkspaceConfig;
   target_roles: string[];
   core_competencies: string[];
   tech_stack: string[];
@@ -250,7 +232,6 @@ export interface VerifiableBadge {
 
 export interface MasterProfilePreferences {
   theme?: string;
-  archetype?: CandidateArchetype;
   localLlmEnabled?: boolean;
   autoSyncLrs?: boolean;
   location: string;
@@ -266,5 +247,4 @@ export interface MasterProfilePreferences {
     enabled: boolean;
     provider: string;
   };
-  workspaceConfig?: UserWorkspaceConfig;
 }

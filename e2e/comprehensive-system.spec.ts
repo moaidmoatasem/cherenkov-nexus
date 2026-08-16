@@ -2,24 +2,27 @@ import { test, expect } from '@playwright/test';
 
 test.describe('CHERENKOV-NEXUS Comprehensive E2E System & Component Suite', () => {
 
-  test.beforeEach(async ({ context, page }) => {
-    // Enable browser console logs to be forwarded to our runner for debugging
+  test.beforeEach(async ({ page }) => {
+    // Enable browser console logs to be forwarded to our runner for absolute debugging clarity
     page.on('console', msg => console.log(`[BROWSER CONSOLE] [${msg.type()}] ${msg.text()}`));
     page.on('pageerror', err => console.log(`[BROWSER UNHANDLED ERROR] ${err.message}`));
 
-    // Pre-populate localStorage prior to page load to bypass first-time tour modal
-    await context.addInitScript(() => {
+    // Navigate once to establish local origin context
+    await page.goto('/');
+    
+    // Inject tour completion flag into localStorage directly to completely bypass first-time tour
+    await page.evaluate(() => {
       localStorage.setItem('cherenkov_tour_completed', 'true');
     });
 
-    // Clean single navigation to app entrypoint
+    // Re-navigate or refresh so that the app initializes with the tour completely disabled
     await page.goto('/');
-    await page.waitForLoadState('domcontentloaded');
+    await page.waitForLoadState('networkidle');
   });
 
   test('Module 1: Navigation & Header Controls across all core hubs', async ({ page }) => {
     // 1. Verify Header branding
-    await expect(page.locator('text=CHERENKOV NEXUS').first()).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('text=CHERENKOV NEXUS').first()).toBeVisible();
 
     // 2. Navigate to Kanban Pipeline
     const kanbanBtn = page.locator('button:has-text("Kanban Pipeline")').first();
@@ -39,7 +42,7 @@ test.describe('CHERENKOV-NEXUS Comprehensive E2E System & Component Suite', () =
     // 5. Navigate to Agent Canvas
     const agentCanvasBtn = page.locator('button:has-text("Agent Canvas")').first();
     await agentCanvasBtn.click({ force: true });
-    await expect(page.locator('text=Visual Multi-Agent Canvas').first()).toBeVisible();
+    await expect(page.locator('text=Visual Workflow Builder').first()).toBeVisible();
 
     // 6. Navigate back to Job Synthesizer
     const synthBtn = page.locator('button:has-text("Job Synthesizer")').first();
@@ -49,11 +52,11 @@ test.describe('CHERENKOV-NEXUS Comprehensive E2E System & Component Suite', () =
 
   test('Module 2: Identity Vault & Inference Routing State-Driven Toggles', async ({ page }) => {
     // Open Identity Vault Modal via Sidebar button
-    const vaultBtn = page.locator('button:has-text("Zero-Trust Vault")').first();
+    const vaultBtn = page.locator('button:has-text("Privacy Settings")').first();
     await vaultBtn.click({ force: true });
 
     // Verify modal container and header are visible
-    const vaultModal = page.locator('div.fixed:has-text("Portable Identity & Zero-Trust Security Vault")').first();
+    const vaultModal = page.locator('div.fixed:has-text("Privacy Settings")').first();
     await expect(vaultModal).toBeVisible();
 
     // Verify toggle buttons exist
@@ -65,16 +68,22 @@ test.describe('CHERENKOV-NEXUS Comprehensive E2E System & Component Suite', () =
     await expect(ollamaToggle).toBeVisible();
     await expect(hybridToggle).toBeVisible();
 
-    // Toggle to Ollama (Local) with force to bypass backdrop
+    // Toggle to Ollama (Local) with force to bypass fixed backdrop interception
     await ollamaToggle.click({ force: true });
     await page.waitForTimeout(300);
 
-    // Close Vault using programmatic click
+    // Close Vault using programmatic click to guarantee success irrespective of scrolling/viewport height
     const closeBtn = vaultModal.locator('button:has-text("✕")').first();
     await closeBtn.evaluate(el => (el as HTMLButtonElement).click());
 
-    // Verify Active LLM in header updated or visible
+    // Verify Active LLM in header updated
     await expect(page.locator('text=Active LLM:').first()).toBeVisible();
+
+    // Test inline toggle directly in JobSynthesizer toolbar
+    const toolbarGemini = page.locator('div button:has-text("Gemini (Cloud)")').first();
+    await toolbarGemini.click({ force: true });
+    await page.waitForTimeout(300);
+    await expect(page.locator('text=Gemini 2.5 Flash (Cloud)').first()).toBeVisible();
   });
 
   test('Module 3: Dynamic Job Preset Ingestion & Role Alignment Execution', async ({ page }) => {
@@ -108,7 +117,7 @@ test.describe('CHERENKOV-NEXUS Comprehensive E2E System & Component Suite', () =
     const compareModal = page.locator('div.fixed:has-text("Dual-Engine Synthesis Benchmark: Cloud vs. Local")').first();
     await expect(compareModal).toBeVisible();
 
-    // Verify both headers/sections are visible
+    // Verify both headers/sections are visible using robust, version-independent structural indicators
     await expect(compareModal.locator('text=Cloud Enterprise Engine').first()).toBeVisible({ timeout: 15000 });
     await expect(compareModal.locator('text=Zero-Egress Air-Gapped Engine').first()).toBeVisible({ timeout: 15000 });
 
@@ -119,20 +128,18 @@ test.describe('CHERENKOV-NEXUS Comprehensive E2E System & Component Suite', () =
 
   test('Module 5: Magic Profile Import & Onboarding Wizard', async ({ page }) => {
     // Open Onboarding Modal via Sidebar
-    const onboardingBtn = page.locator('button:has-text("Magic Import")').first();
+    const onboardingBtn = page.locator('button:has-text("System Config")').first();
     await onboardingBtn.click({ force: true });
 
     // Verify onboarding modal container is visible
-    const onboardingModal = page.locator('div.fixed').first();
+    const onboardingModal = page.locator('div.fixed:has-text("System Configuration")').first();
     await expect(onboardingModal).toBeVisible();
 
-    // Close modal programmatically if close button exists
-    const closeBtn = onboardingModal.locator('button:has-text("✕"), button:has-text("Exit"), button:has-text("Skip")').first();
-    if (await closeBtn.isVisible()) {
-      await closeBtn.evaluate(el => (el as HTMLButtonElement).click());
-    } else {
-      await page.keyboard.press('Escape');
-    }
+    await expect(onboardingModal.locator('text=Location & Readiness').first()).toBeVisible();
+
+    // Close modal programmatically
+    const closeBtn = onboardingModal.locator('button:has-text("✕ Exit")').first();
+    await closeBtn.evaluate(el => (el as HTMLButtonElement).click());
   });
 
   test('Module 6: Command Palette (Cmd+K) & Theme Engine Switcher', async ({ page }) => {

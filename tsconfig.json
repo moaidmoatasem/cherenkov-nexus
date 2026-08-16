@@ -22,14 +22,5 @@
     },
     "allowImportingTsExtensions": true,
     "noEmit": true
-  },
-  "include": [
-    "src/**/*",
-    "server.ts",
-    "cherenkov.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  }
 }
