@@ -1,0 +1,6 @@
+{
+  "name": "Cherenkov Nexus",
+  "description": "Agentic Career Hub and Multi-Agent Pipeline for Senior QA Lead featuring AI Application Synthesis, Split-Screen ATS Solver, Kanban Pipeline, and Learning Sync.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
