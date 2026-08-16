@@ -2,6 +2,7 @@ import { parseArgs } from "util";
 import * as fs from "fs";
 import * as cheerio from "cheerio";
 import { GoogleGenAI } from "@google/genai";
+import { executeServerlessScrape } from "./server/mcp/playwrightScraper";
 
 // Parse Command Line Arguments
 const { values } = parseArgs({
@@ -49,13 +50,13 @@ async function runPipeline() {
     const response = await fetch(values.url);
     const html = await response.text();
     const $ = cheerio.load(html);
-    
-    // Clean noise
-    $("script, style, nav, footer, header, img, svg").remove();
-    jobDescription = $("body").text().replace(/\s+/g, " ").trim();
-    
     companyName = $("title").text().split("-")[0].trim() || companyName;
-    console.log(`[EXTRACTION] ✅ Scraped ${jobDescription.length} characters of raw DOM payload.`);
+
+    console.log(`[EXTRACTION] 🎭 Launching Playwright to bypass ATS protections...`);
+    const tree = await executeServerlessScrape(values.url);
+    jobDescription = JSON.stringify(tree, null, 2);
+    
+    console.log(`[EXTRACTION] ✅ Scraped ${jobDescription.length} characters of accessibility tree payload.`);
   } catch (error) {
     console.error("[EXTRACTION] ❌ Failed to parse DOM:", error);
     process.exit(1);

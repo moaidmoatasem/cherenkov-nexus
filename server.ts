@@ -1,4 +1,5 @@
 import express, { Request, Response } from "express";
+import { EventEmitter } from "events";
 import { createClient } from "@libsql/client";
 import { executeServerlessScrape } from "./server/mcp/playwrightScraper";
 
@@ -6,7 +7,9 @@ import { executeServerlessScrape } from "./server/mcp/playwrightScraper";
 import path from "path";
 import dotenv from "dotenv";
 import * as cheerio from "cheerio";
-import { GoogleGenAI, Type } from "@google/genai";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const { GoogleGenAI, Type } = require("@google/genai");
 
 dotenv.config();
 
@@ -72,9 +75,11 @@ async function checkVisaSponsorship(companyName: string, text: string = "") {
 
   let matchedRecord: any = null;
 
-  if (tursoUrl && tursoAuthToken) {
     try {
-      const db = createClient({ url: tursoUrl, authToken: tursoAuthToken });
+      const dbUrl = (tursoUrl && tursoAuthToken) ? tursoUrl : "file:C:/Users/moaid/.gemini/antigravity/brain/a4923698-19de-46e2-9bf7-9960557bcad1/scratch/nexus.db";
+      const dbArgs = (tursoUrl && tursoAuthToken) ? { url: tursoUrl, authToken: tursoAuthToken } : { url: dbUrl };
+      const db = createClient(dbArgs);
+      
       const result = await db.execute({
         sql: "SELECT * FROM sponsors WHERE LOWER(name) LIKE ? OR LOWER(aliases) LIKE ? LIMIT 1",
         args: [`%${compClean}%`, `%${compClean}%`]
@@ -92,11 +97,10 @@ async function checkVisaSponsorship(companyName: string, text: string = "") {
         };
       }
     } catch (err) {
-      console.warn("Turso Edge Database query failed, falling back to local array:", err);
+      console.warn("Database query failed (Turso/SQLite), falling back to local array:", err);
     }
-  }
 
-  // Fallback to local SPONSORS_DATABASE if Turso fails or is unconfigured
+  // Fallback to local SPONSORS_DATABASE if DB fails
   if (!matchedRecord) {
     matchedRecord = SPONSORS_DATABASE.find((sponsor) => {
       const nameMatch = compClean.includes(sponsor.name.toLowerCase()) || sponsor.name.toLowerCase().includes(compClean);
@@ -224,6 +228,8 @@ app.post("/api/visa-check", async (req: Request, res: Response) => {
   res.json(result);
 });
 
+const xapiEvents = new EventEmitter();
+
 // xAPI (Experience API) Webhook Listener for Continuous Learning Ingestion
 app.post("/api/webhooks/xapi", async (req: Request, res: Response) => {
   try {
@@ -260,16 +266,20 @@ app.post("/api/webhooks/xapi", async (req: Request, res: Response) => {
         }
       }
 
+      const eventData = {
+        actor: actorName,
+        verb: "completed",
+        object: objectName,
+        extractedSkills,
+        timestamp: new Date().toISOString()
+      };
+
+      xapiEvents.emit("completion", eventData);
+
       return res.json({
         success: true,
         message: "xAPI statement processed and queued for Master Profile synchronization.",
-        event: {
-          actor: actorName,
-          verb: "completed",
-          object: objectName,
-          extractedSkills,
-          timestamp: new Date().toISOString()
-        }
+        event: eventData
       });
     }
 
@@ -282,6 +292,23 @@ app.post("/api/webhooks/xapi", async (req: Request, res: Response) => {
     console.error("xAPI Webhook error:", error);
     return res.status(400).json({ error: "Malformed xAPI payload" });
   }
+});
+
+// SSE Endpoint for LearningSync to receive live xAPI events
+app.get("/api/webhooks/xapi/stream", (req: Request, res: Response) => {
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+
+  const listener = (data: any) => {
+    res.write(`data: ${JSON.stringify(data)}\n\n`);
+  };
+
+  xapiEvents.on("completion", listener);
+
+  req.on("close", () => {
+    xapiEvents.off("completion", listener);
+  });
 });
 
 // Scraping endpoint
@@ -1439,8 +1466,9 @@ Target Discipline: ${targetRole || "Extract dynamically from context"}
 
 === HARD CONSTRAINTS ===
 1. ZERO HALLUCINATION: You must only extract skills, tools, and experiences explicitly present in the raw data. Do not invent competencies to make the profile look better.
-2. DOMAIN ADAPTATION: Identify the candidate's exact technical discipline (e.g., SDET, Cloud Architecture, DevOps) and extract the top 15-20 most relevant hard skills for that specific domain into the 'tech_stack' array.
-3. CONCISE IMPACT: The 'experience' field must be a punchy, 2-sentence executive summary focusing on quantifiable metrics and architectural impact.
+2. DOMAIN ADAPTATION: Identify the candidate's exact technical discipline (e.g., SDET, Security, Executive Leadership, Cloud Architecture) and extract the top 15-20 most relevant hard skills for that specific domain into the 'tech_stack' array.
+3. ARCHETYPE CLASSIFICATION: Classify candidate into exactly one of: 'international_seeker' | 'zero_trust_specialist' | 'upskilling_switcher' | 'staff_executive' | 'automation_power_user'.
+4. CONCISE IMPACT: The 'experience' field must be a punchy, 2-sentence executive summary focusing on quantifiable metrics and architectural impact.
 
 === OUTPUT FORMAT ===
 You must return ONLY valid JSON strictly matching this schema. Do not include markdown formatting, backticks, or conversational text.
@@ -1448,6 +1476,7 @@ You must return ONLY valid JSON strictly matching this schema. Do not include ma
   "name": "Full Name",
   "title": "Active Professional Title",
   "location": "Current Location / Relocation Readiness",
+  "archetype": "international_seeker",
   "target_roles": ["Role 1", "Role 2", "Role 3"],
   "core_competencies": ["Strategic Skill 1", "Strategic Skill 2"],
   "tech_stack": ["Tool 1", "Framework 2", "Language 3"],
@@ -1467,6 +1496,7 @@ You must return ONLY valid JSON strictly matching this schema. Do not include ma
 
         const parsed = JSON.parse(aiRes.text || "{}");
         if (parsed.name && parsed.tech_stack) {
+          if (!parsed.archetype) parsed.archetype = "international_seeker";
           return res.json(parsed);
         }
       } catch (aiErr) {
@@ -1479,6 +1509,7 @@ You must return ONLY valid JSON strictly matching this schema. Do not include ma
       name: "Moayed Badawy",
       title: "Senior Quality Assurance Lead & SDET Architect",
       location: "Cairo, Egypt / Prepared for UK/EU Relocation",
+      archetype: "international_seeker",
       target_roles: [
         "Senior QA Lead",
         "Staff SDET",
@@ -1623,6 +1654,84 @@ app.post("/api/onboarding/test-greenhouse-live", async (req: Request, res: Respo
     });
   } catch (err: any) {
     return res.status(500).json({ error: err.message || "Greenhouse test error" });
+  }
+});
+
+// Kanban Board API Endpoints
+app.get("/api/kanban/state", async (req: Request, res: Response) => {
+  try {
+    const db = createClient({ url: "file:C:/Users/moaid/.gemini/antigravity/brain/a4923698-19de-46e2-9bf7-9960557bcad1/scratch/nexus.db" });
+    
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS kanban_tasks (
+        id TEXT PRIMARY KEY,
+        columnId TEXT NOT NULL,
+        company TEXT NOT NULL,
+        jobTitle TEXT NOT NULL,
+        salary TEXT,
+        location TEXT,
+        createdAt TEXT NOT NULL,
+        updatedAt TEXT NOT NULL,
+        matchScore INTEGER NOT NULL,
+        jobDescription TEXT,
+        coldEmail TEXT
+      )
+    `);
+
+    const tasksResult = await db.execute("SELECT * FROM kanban_tasks");
+
+    const applications = tasksResult.rows.map(task => ({
+      id: task.id,
+      column: task.columnId,
+      company: task.company,
+      jobTitle: task.jobTitle,
+      salary: task.salary,
+      location: task.location,
+      createdAt: task.createdAt,
+      updatedAt: task.updatedAt,
+      matchScore: task.matchScore,
+      jobDescription: task.jobDescription,
+      coldEmail: task.coldEmail
+    }));
+
+    res.json(applications);
+  } catch (error: any) {
+    console.error("Failed to fetch kanban state:", error);
+    res.status(500).json({ error: "Failed to fetch kanban state" });
+  }
+});
+
+app.post("/api/kanban/state", async (req: Request, res: Response) => {
+  try {
+    const applications = req.body;
+    const db = createClient({ url: "file:C:/Users/moaid/.gemini/antigravity/brain/a4923698-19de-46e2-9bf7-9960557bcad1/scratch/nexus.db" });
+    
+    // Transactional replace
+    await db.execute("DELETE FROM kanban_tasks");
+
+    for (const app of applications) {
+      await db.execute({
+        sql: "INSERT INTO kanban_tasks (id, columnId, company, jobTitle, salary, location, createdAt, updatedAt, matchScore, jobDescription, coldEmail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        args: [
+          app.id,
+          app.column,
+          app.company,
+          app.jobTitle,
+          app.salary || null,
+          app.location || null,
+          app.createdAt || new Date().toISOString(),
+          app.updatedAt || new Date().toISOString(),
+          app.matchScore || 0,
+          app.jobDescription || null,
+          app.coldEmail || null
+        ]
+      });
+    }
+    
+    res.json({ success: true });
+  } catch (error: any) {
+    console.error("Failed to update kanban state:", error);
+    res.status(500).json({ error: "Failed to update kanban state" });
   }
 });
 

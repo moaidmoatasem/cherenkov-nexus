@@ -22,8 +22,8 @@ import {
   Mic,
   HelpCircle
 } from 'lucide-react';
-import { AppTheme, TabId } from '../types';
-import { SAMPLE_JOBS } from '../data/initialData';
+import { AppTheme, TabId, CandidateArchetype } from '../types';
+import { SAMPLE_JOBS, ARCHETYPE_PRESETS } from '../data/initialData';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -32,6 +32,7 @@ interface CommandPaletteProps {
   onOpenProfile: () => void;
   onSelectTheme: (theme: AppTheme) => void;
   onLoadPreset: (company: string) => void;
+  onSelectArchetype?: (archetype: CandidateArchetype) => void;
   onOpenTelemetry: () => void;
   currentTheme: AppTheme;
   onOpenIdentityVault?: () => void;
@@ -56,6 +57,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   onOpenProfile,
   onSelectTheme,
   onLoadPreset,
+  onSelectArchetype,
   onOpenTelemetry,
   currentTheme,
   onOpenIdentityVault,
@@ -343,7 +345,26 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       }
     },
 
-    // Presets
+    // Candidate Archetype Presets
+    ...((Object.keys(ARCHETYPE_PRESETS) as CandidateArchetype[]).map((key) => {
+      const p = ARCHETYPE_PRESETS[key];
+      return {
+        id: `archetype-${key}`,
+        title: `Switch Profile Archetype: ${p.label}`,
+        category: 'Presets' as const,
+        description: `${p.badge} • ${p.tagline}`,
+        icon: <Sparkles className="w-4 h-4" style={{ color: p.accentColor }} />,
+        badge: p.badge,
+        action: () => {
+          if (onSelectArchetype) {
+            onSelectArchetype(key);
+          }
+          onClose();
+        }
+      };
+    })),
+
+    // Job Presets
     ...SAMPLE_JOBS.map((job) => ({
       id: `preset-${job.company.toLowerCase()}`,
       title: `Load Verified Role Preset: ${job.company} - ${job.title}`,
