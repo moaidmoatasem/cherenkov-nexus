@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MasterProfile, LearningCert } from '../types';
 import {
   GraduationCap,
@@ -84,6 +84,45 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
   const [status, setStatus] = useState<'In Progress' | 'Completed'>('In Progress');
   const [skillsInput, setSkillsInput] = useState('');
   const [credentialUrl, setCredentialUrl] = useState('');
+
+  // Listen to Server-Sent Events (SSE) for live xAPI updates
+  useEffect(() => {
+    const evtSource = new EventSource("/api/webhooks/xapi/stream");
+    
+    evtSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.verb === "completed") {
+          const newCert: LearningCert = {
+            id: `cert-xapi-${Date.now()}`,
+            title: data.object || "External Course",
+            provider: "xAPI Webhook",
+            status: "Completed",
+            dateCompleted: data.timestamp ? data.timestamp.split('T')[0] : new Date().toISOString().split('T')[0],
+            extracted_skills: data.extractedSkills || [],
+            badge_color: 'emerald'
+          };
+          
+          setCourses(prev => {
+            const next = [newCert, ...prev];
+            // To prevent infinite loops we only update if it's a genuine new event
+            onUpdateProfile({ ...masterProfile, learning_certs: next });
+            return next;
+          });
+          onToast('success', 'xAPI Event Received', `Course "${data.object}" completed!`);
+          
+          try {
+            confetti({ particleCount: 70, spread: 60, origin: { y: 0.7 } });
+          } catch {}
+        }
+      } catch (err) {
+        console.error("SSE parse error", err);
+      }
+    };
+    
+    return () => evtSource.close();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Complete course and sync skills into MasterProfile
   const handleToggleComplete = (courseId: string) => {
