@@ -1,0 +1,191 @@
+{
+  "profiles": [
+    {
+      "id": "international_seeker",
+      "name": "Moayed Badawy",
+      "title": "Senior Quality Assurance Lead & SDET Architect",
+      "location": "Cairo, Egypt / Prepared for UK/EU Relocation",
+      "archetype": "international_seeker",
+      "theme": "cyber",
+      "target_roles": [
+        "Senior QA Lead",
+        "Staff SDET",
+        "QA Infrastructure Architect",
+        "Test Automation Lead"
+      ],
+      "core_competencies": [
+        "AI-driven test automation",
+        "UK/EU Visa compliance",
+        "Test infrastructure architecture",
+        "Distributed performance testing",
+        "Security static analysis"
+      ],
+      "tech_stack": [
+        "Playwright",
+        "TypeScript",
+        "k6",
+        "CodeQL",
+        "cherenkov-qa",
+        "Docker",
+        "GitHub Actions",
+        "Kubernetes"
+      ],
+      "experience": "Lead QA engineer with 8+ years experience architecting enterprise automated testing frameworks, integrating AI verification swarms, and orchestrating distributed CI/CD pipelines.",
+      "testTargetJob": {
+        "company": "Monzo Bank",
+        "role": "Lead Quality Assurance Architect",
+        "location": "London, UK (Tier 2 Sponsor)",
+        "expectedSponsorStatus": "Licensed UK Tier 2 Sponsor (A-Rating)"
+      }
+    },
+    {
+      "id": "zero_trust_specialist",
+      "name": "Alexei Vance",
+      "title": "Principal Security & Systems Engineer",
+      "location": "Frankfurt, Germany (Domestic / EU Only)",
+      "archetype": "zero_trust_specialist",
+      "theme": "emerald",
+      "target_roles": [
+        "Principal Security Engineer",
+        "Zero-Trust Architect",
+        "Backend Systems Lead"
+      ],
+      "core_competencies": [
+        "Air-gapped LLM inference",
+        "E2EE cryptographic vaults",
+        "Static code vulnerability scanning",
+        "SOC2/ISO27001 compliance",
+        "Infrastructure as Code"
+      ],
+      "tech_stack": [
+        "Rust",
+        "Go",
+        "Qwen 2.5",
+        "Ollama",
+        "CodeQL",
+        "eBPF",
+        "Terraform",
+        "Vault"
+      ],
+      "experience": "Security architect specializing in zero-trust data protection, air-gapped machine learning deployments, and high-assurance distributed systems.",
+      "testTargetJob": {
+        "company": "Deutsche Bank / Core Systems",
+        "role": "Principal Security & Cryptography Architect",
+        "location": "Frankfurt, Germany",
+        "privacyMode": "Zero-Egress Air-Gapped"
+      }
+    },
+    {
+      "id": "upskilling_switcher",
+      "name": "Jordan Lee",
+      "title": "Junior QA Engineer & Test Automation Specialist",
+      "location": "Manchester, UK",
+      "archetype": "upskilling_switcher",
+      "theme": "solar",
+      "target_roles": [
+        "Junior SDET",
+        "QA Test Automation Engineer",
+        "CI/CD Associate"
+      ],
+      "core_competencies": [
+        "Playwright end-to-end automation",
+        "API testing with Postman/REST",
+        "Continuous Integration pipelines",
+        "Behavior-Driven Development (BDD)",
+        "Agile testing workflows"
+      ],
+      "tech_stack": [
+        "Playwright",
+        "JavaScript",
+        "TypeScript",
+        "Jest",
+        "Postman",
+        "Git",
+        "GitHub Actions"
+      ],
+      "experience": "Passionate QA engineer transitioning into full-stack test automation with hands-on project experience in modern web testing and API verification.",
+      "testTargetJob": {
+        "company": "Deliveroo",
+        "role": "Associate SDET & Automation Engineer",
+        "location": "London / Remote, UK",
+        "xapiStatement": {
+          "actor": "Jordan Lee",
+          "verb": "completed",
+          "object": "Modern Web Testing with Playwright & TypeScript",
+          "score": 0.96
+        }
+      }
+    },
+    {
+      "id": "staff_executive",
+      "name": "Marcus Sterling",
+      "title": "Director of Quality Engineering & Developer Productivity",
+      "location": "London, UK / New York, US",
+      "archetype": "staff_executive",
+      "theme": "synthwave",
+      "target_roles": [
+        "Director of Quality Engineering",
+        "VP of Developer Productivity",
+        "Head of Quality"
+      ],
+      "core_competencies": [
+        "Engineering leadership & headcount planning",
+        "Developer productivity metrics (DORA)",
+        "Enterprise QA transformation",
+        "Budget & vendor governance",
+        "Executive stakeholder management"
+      ],
+      "tech_stack": [
+        "DORA Metrics",
+        "Quality Gate Architecture",
+        "Enterprise CI/CD",
+        "Microservices Governance",
+        "Cost Optimization"
+      ],
+      "experience": "Executive engineering leader with 12+ years scaling QA organizations from 10 to 120+ engineers across tier-1 FinTech and enterprise SaaS companies.",
+      "testTargetJob": {
+        "company": "Wise",
+        "role": "Director of Quality Engineering",
+        "location": "London, UK",
+        "recruiterMapping": "VP of Engineering & Global Head of Talent"
+      }
+    },
+    {
+      "id": "automation_power_user",
+      "name": "Tariq Al-Mansoor",
+      "title": "Lead AI Automation & SDET Swarm Engineer",
+      "location": "Dubai, UAE / Remote",
+      "archetype": "automation_power_user",
+      "theme": "light-executive",
+      "target_roles": [
+        "Lead AI Automation Engineer",
+        "Staff SDET Swarm Architect",
+        "Principal Test Infrastructure"
+      ],
+      "core_competencies": [
+        "Autonomous multi-agent DAG pipelines",
+        "LangGraph orchestration",
+        "Model Context Protocol (MCP) servers",
+        "Headless browser automation at scale",
+        "Real-time telemetry streams"
+      ],
+      "tech_stack": [
+        "LangGraph",
+        "MCP SDK",
+        "TypeScript",
+        "Python",
+        "Playwright Swarm",
+        "Docker",
+        "Redis",
+        "Kafka"
+      ],
+      "experience": "Autonomous systems specialist designing multi-agent DAG execution topologies, localized MCP tooling, and sub-second deterministic QA pipelines.",
+      "testTargetJob": {
+        "company": "Revolut",
+        "role": "Lead SDET & Autonomous Agent Architect",
+        "location": "London / Dubai / Remote",
+        "swarmNodes": ["PlaywrightScout", "AtsParser", "VisaChecker", "PitchCrafter"]
+      }
+    }
+  ]
+}

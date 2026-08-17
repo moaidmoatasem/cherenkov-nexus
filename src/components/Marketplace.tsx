@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { McpPackage, McpCategory } from '../types';
 import { INITIAL_MCP_PACKAGES } from '../data/initialData';
 import { GitHubRepoSyncModal } from './GitHubRepoSyncModal';
@@ -70,6 +70,15 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
       // ignore
     }
   }, [isGitHubModalOpen]);
+
+  const [mcpLive, setMcpLive] = useState<{ ready: boolean; servers: Array<{ name: string; kind: string; connected: boolean; toolNames: string[] }> } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/mcp/status')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => setMcpLive(data))
+      .catch(() => setMcpLive(null));
+  }, []);
 
   // Filter packages
   const filteredPackages = useMemo(() => {
@@ -173,6 +182,45 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
             </button>
           </div>
         </div>
+
+        {/* Live MCP Connector Status */}
+        {(mcpLive || mcpLive === null) && (
+          <div data-testid="mcp-live-status" className="mt-4 p-3.5 rounded-2xl bg-[#07090e]/80 border border-violet-500/25 flex flex-wrap items-center gap-x-5 gap-y-2">
+            <div className="flex items-center gap-2">
+              <Server className="w-4 h-4 text-violet-300" />
+              <span className="text-[10px] font-mono font-bold tracking-widest text-slate-400">
+                LIVE MCP HOST
+              </span>
+            </div>
+            {mcpLive ? (
+              <div className="flex flex-wrap items-center gap-2">
+                {mcpLive.servers.map((s) => (
+                  <div
+                    key={s.name}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-slate-900/80 border border-slate-700 text-slate-300"
+                  >
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full ${
+                        s.connected ? 'bg-emerald-400 animate-pulse' : 'bg-rose-500'
+                      }`}
+                    />
+                    {s.name}
+                    <span className="text-slate-500">({s.toolNames.length} tools)</span>
+                  </div>
+                ))}
+                <span className="text-[10px] font-mono font-bold text-emerald-400 flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" />
+                  HOST {mcpLive.ready ? 'ONLINE' : 'DEGRADED'}
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 text-[10px] font-mono font-bold text-amber-400">
+                <RefreshCw className="w-3 h-3 animate-spin" />
+                CONNECTING…
+              </div>
+            )}
+          </div>
+        )}
 
         {/* GitHub Codebase Alignment Hero Card */}
         <div className="mt-6 p-4 rounded-2xl bg-[#07090e]/80 border border-cyan-500/25 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
