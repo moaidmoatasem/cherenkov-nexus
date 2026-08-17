@@ -23,5 +23,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Run tests and linting
+        run: npm run test:ci
+
       - name: Build application
         run: npm run build

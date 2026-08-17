@@ -11,6 +11,9 @@ import { executeServerlessScrape } from "./server/mcp/playwrightScraper";
 import path from "path";
 import dotenv from "dotenv";
 import * as cheerio from "cheerio";
+import helmet from "helmet";
+import cors from "cors";
+import rateLimit from "express-rate-limit";
 import { createRequire } from "module";
 import net from "node:net";
 import fs from "node:fs";
@@ -21,6 +24,13 @@ dotenv.config();
 
 const app = express();
 const PORT = 3000;
+
+app.use(helmet());
+app.use(cors());
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+}));
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-3.7-flash";
 const GEMINI_DISPLAY_NAME = process.env.GEMINI_MODEL_DISPLAY ?? (GEMINI_MODEL.includes("2.5") ? "Google Gemini 2.5 Flash" : "Google Gemini 3.7 Flash");
