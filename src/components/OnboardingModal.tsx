@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { UnifiedOnboardingWizard } from './UnifiedOnboardingWizard';
 import { MasterProfile } from '../types';
 
@@ -35,8 +35,24 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
           >
             <UnifiedOnboardingWizard 
               onClose={onClose}
-              onComplete={(profile: MasterProfile) => {
-                onProfileImported(profile);
+              onComplete={(profileConfig: any) => {
+                // Map config to MasterProfile structure
+                const newProfile: MasterProfile = {
+                  name: "Moayed Badawy", // Placeholder for actual extracted data
+                  title: "Senior QA Lead",
+                  location: profileConfig.location,
+                  target_roles: profileConfig.target_roles,
+                  core_competencies: ["Test Automation", "CI/CD"],
+                  tech_stack: ["Playwright", "TypeScript", "k6"],
+                  experience: "Over 8 years of experience...",
+                  learning_certs: [],
+                  preferences: {
+                    theme: 'dark',
+                    localLlmEnabled: profileConfig.llm_mode === 'local' || profileConfig.llm_mode === 'hybrid',
+                    autoSyncLrs: !!profileConfig.lrs_endpoint
+                  } as any
+                };
+                onProfileImported(newProfile);
                 onClose();
               }}
             />

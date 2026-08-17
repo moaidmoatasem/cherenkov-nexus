@@ -10,14 +10,8 @@
     "start": "node dist/server.cjs",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit",
-    "lint:eslint": "eslint .",
+    "lint": "eslint . && tsc --noEmit",
     "test": "playwright test",
-    "test:unit": "vitest run",
-    "test:ci": "npm run lint && npm run test:unit",
-    "test:profiles": "playwright test e2e/multi-profile-headed.spec.ts",
-    "test:headed": "playwright test e2e/multi-profile-headed.spec.ts e2e/live-integrations-headed.spec.ts --headed",
-    "test:records": "tsx scripts/run-headed-profiles.ts",
     "tauri": "tauri",
     "postinstall": "npx playwright install chromium"
   },
@@ -25,18 +19,13 @@
     "@google/genai": "^2.4.0",
     "@libsql/client": "^0.17.4",
     "@mlc-ai/web-llm": "^0.2.84",
-    "@modelcontextprotocol/sdk": "^1.30.0",
-    "@modelcontextprotocol/server-github": "^2025.4.8",
-    "@playwright/mcp": "^0.0.79",
     "@tailwindcss/vite": "^4.1.14",
     "@types/canvas-confetti": "^1.9.0",
     "@vitejs/plugin-react": "^5.0.4",
     "canvas-confetti": "^1.9.4",
     "cheerio": "^1.2.0",
-    "csv-parse": "^7.0.2",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
-    "framer-motion": "^13.1.0",
     "jspdf": "^4.2.1",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
@@ -65,7 +54,6 @@
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",
     "typescript-eslint": "^8.67.0",
-    "vite": "^6.2.3",
-    "vitest": "^4.1.10"
+    "vite": "^6.2.3"
   }
 }

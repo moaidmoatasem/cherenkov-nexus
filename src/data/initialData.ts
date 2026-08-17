@@ -1,346 +1,60 @@
-import { MasterProfile, ApplicationCard, LearningCert, CandidateArchetype, UserWorkspaceConfig } from '../types';
+import { MasterProfile, ApplicationCard, LearningCert } from '../types';
 
-export interface ArchetypePreset {
-  id: CandidateArchetype;
-  label: string;
-  badge: string;
-  tagline: string;
-  accentColor: string;
-  recommendedTheme: string;
-  profile: MasterProfile;
-}
-
-export const ARCHETYPE_PRESETS: Record<CandidateArchetype, ArchetypePreset> = {
-  international_seeker: {
-    id: 'international_seeker',
-    label: 'International Visa Seeker',
-    badge: 'Global Relocation',
-    tagline: 'Prioritizes UK/EU sponsor matching, ATS compliance, and high-speed cloud synthesis.',
-    accentColor: '#06b6d4',
-    recommendedTheme: 'cyber',
-    profile: {
-      name: "Moayed Badawy",
-      title: "Senior Quality Assurance Lead & SDET Architect",
-      location: "Cairo, Egypt / Prepared for UK/EU Relocation",
-      archetype: 'international_seeker',
-      target_roles: ["Senior QA Lead", "Staff SDET", "QA Infrastructure Architect", "Test Automation Lead"],
-      core_competencies: [
-        "AI-driven test automation",
-        "UK/EU Visa compliance",
-        "Test infrastructure architecture",
-        "Distributed performance testing",
-        "Security static analysis"
-      ],
-      tech_stack: [
-        "Playwright",
-        "TypeScript",
-        "k6",
-        "CodeQL",
-        "cherenkov-qa",
-        "Docker",
-        "GitHub Actions",
-        "Kubernetes"
-      ],
-      experience: "Lead QA engineer with 8+ years experience architecting enterprise automated testing frameworks, integrating AI verification swarms, and orchestrating distributed CI/CD pipelines.",
-      learning_certs: [
-        {
-          id: "cert-1",
-          title: "Agentic AI in Quality Engineering & LLM Automation",
-          provider: "xAPI / DeepLearning.AI",
-          status: "Completed",
-          dateCompleted: "2026-02-10",
-          extracted_skills: ["AnythingLLM", "Qwen", "Autonomous Test Agents"],
-          badge_color: "emerald"
-        },
-        {
-          id: "cert-2",
-          title: "Distributed Performance & Stress Testing at Scale",
-          provider: "k6 Academy",
-          status: "Completed",
-          dateCompleted: "2026-01-18",
-          extracted_skills: ["k6", "Grafana", "Chaos Engineering"],
-          badge_color: "cyan"
-        }
-      ],
-      workspaceConfig: {
-        defaultTab: 'synthesizer',
-        enabledTabs: ['synthesizer', 'kanban', 'hivemind', 'learning', 'marketplace', 'orchestrator'],
-        enableVisaFiltering: true,
-        enableGhostJobDetection: true,
-        enableAutomatedSubmitter: true,
-        activeMcpPackages: ['mcp-home-office-visa', 'mcp-ats-scraper']
-      },
-      preferences: {
-        theme: 'cyber',
-        archetype: 'international_seeker',
-        localLlmEnabled: false,
-        autoSyncLrs: true,
-        location: 'Cairo, Egypt / Prepared for UK/EU Relocation',
-        readiness: 'Immediate Relocation',
-        target_roles: ['Senior QA Lead', 'Staff SDET'],
-        sponsorship_regions: { UK: true, EU: true, GCC: true, US: false },
-        learning_sync: { enabled: true, provider: 'xAPI' }
-      }
+export const INITIAL_MASTER_PROFILE: MasterProfile = {
+  name: "Moayed Elmoatasembellah Elsayed Mohamed Elsayed Badawy",
+  title: "Senior Quality Assurance Lead",
+  location: "Cairo, Egypt",
+  target_roles: ["Remote", "Visa Sponsorship (UK/EU)"],
+  core_competencies: [
+    "AI-driven testing",
+    "QA frameworks",
+    "Functional test automation",
+    "Test infrastructure architecture",
+    "Security static analysis",
+    "Load & performance engineering"
+  ],
+  tech_stack: [
+    "CodeQL",
+    "Playwright",
+    "k6",
+    "CI/CD",
+    "cherenkov-qa",
+    "AnythingLLM",
+    "Qwen",
+    "TypeScript",
+    "Docker",
+    "GitHub Actions"
+  ],
+  experience: "Lead QA engineer orchestrating robust testing infrastructures, integrating local LLMs, and building the cherenkov-qa framework for advanced automated testing.",
+  learning_certs: [
+    {
+      id: "cert-1",
+      title: "AI in Quality Engineering Agentic AI in Quality Engineering & LLM Automation LLM Automation",
+      provider: "xAPI / DeepLearning.AI",
+      status: "Completed",
+      dateCompleted: "2026-02-10",
+      extracted_skills: ["AnythingLLM", "Qwen", "Autonomous Test Agents"],
+      badge_color: "emerald"
+    },
+    {
+      id: "cert-2",
+      title: "Distributed Performance & Stress Testing at Scale",
+      provider: "k6 Academy",
+      status: "Completed",
+      dateCompleted: "2026-01-18",
+      extracted_skills: ["k6", "Grafana", "Chaos Engineering"],
+      badge_color: "cyan"
+    },
+    {
+      id: "cert-3",
+      title: "AWS Certified Security & Cloud CI/CD Automation",
+      provider: "Coursera",
+      status: "In Progress",
+      extracted_skills: ["AWS Security", "CloudWatch", "IAM Governance"],
+      badge_color: "amber"
     }
-  },
-  zero_trust_specialist: {
-    id: 'zero_trust_specialist',
-    label: 'Zero-Trust Enterprise Engineer',
-    badge: 'Air-Gapped Privacy',
-    tagline: 'Client-side AES-GCM PII encryption, local Qwen inference, zero cloud data egress.',
-    accentColor: '#10b981',
-    recommendedTheme: 'emerald',
-    profile: {
-      name: "Alexei Vance",
-      title: "Principal Security & Systems Engineer",
-      location: "Frankfurt, Germany (Domestic / EU Only)",
-      archetype: 'zero_trust_specialist',
-      target_roles: ["Principal Security Engineer", "Zero-Trust Architect", "Backend Systems Lead"],
-      core_competencies: [
-        "Air-gapped LLM inference",
-        "E2EE cryptographic vaults",
-        "Static code vulnerability scanning",
-        "SOC2/ISO27001 compliance",
-        "Infrastructure as Code"
-      ],
-      tech_stack: [
-        "Rust",
-        "Go",
-        "Qwen 2.5",
-        "Ollama",
-        "CodeQL",
-        "eBPF",
-        "Terraform",
-        "Vault"
-      ],
-      experience: "Security architect specializing in zero-trust data protection, air-gapped machine learning deployments, and high-assurance distributed systems.",
-      learning_certs: [
-        {
-          id: "cert-sec-1",
-          title: "Offensive Security Certified Professional (OSCP)",
-          provider: "OffSec",
-          status: "Completed",
-          dateCompleted: "2025-11-20",
-          extracted_skills: ["Vulnerability Research", "Binary Exploitation", "Network Security"],
-          badge_color: "emerald"
-        }
-      ],
-      workspaceConfig: {
-        defaultTab: 'synthesizer',
-        enabledTabs: ['synthesizer', 'kanban', 'orchestrator', 'learning'],
-        enableVisaFiltering: false,
-        enableGhostJobDetection: true,
-        enableAutomatedSubmitter: false,
-        activeMcpPackages: ['mcp-local-qwen-engine', 'mcp-vault-encryption']
-      },
-      preferences: {
-        theme: 'emerald',
-        archetype: 'zero_trust_specialist',
-        localLlmEnabled: true,
-        autoSyncLrs: false,
-        location: 'Frankfurt, Germany',
-        readiness: 'Domestic Hybrid / Remote',
-        target_roles: ['Principal Security Engineer', 'Zero-Trust Architect'],
-        sponsorship_regions: { UK: false, EU: true, GCC: false, US: false },
-        learning_sync: { enabled: false, provider: 'Local LRS' }
-      }
-    }
-  },
-  upskilling_switcher: {
-    id: 'upskilling_switcher',
-    label: 'Upskilling Career Switcher',
-    badge: 'Fast-Track Growth',
-    tagline: 'Dynamic skill-gap detection, living xAPI course triggers, and STAR mock interview practice.',
-    accentColor: '#f59e0b',
-    recommendedTheme: 'solar',
-    profile: {
-      name: "Jordan Lee",
-      title: "Junior QA Engineer & Test Automation Specialist",
-      location: "Manchester, UK",
-      archetype: 'upskilling_switcher',
-      target_roles: ["Junior SDET", "QA Test Automation Engineer", "CI/CD Associate"],
-      core_competencies: [
-        "Playwright end-to-end automation",
-        "API testing with Postman/REST",
-        "Continuous Integration pipelines",
-        "Behavior-Driven Development (BDD)",
-        "Agile testing workflows"
-      ],
-      tech_stack: [
-        "Playwright",
-        "JavaScript",
-        "TypeScript",
-        "Jest",
-        "Postman",
-        "Git",
-        "GitHub Actions"
-      ],
-      experience: "Passionate QA engineer transitioning into full-stack test automation with hands-on project experience in modern web testing and API verification.",
-      learning_certs: [
-        {
-          id: "cert-up-1",
-          title: "Modern Web Testing with Playwright & TypeScript",
-          provider: "Coursera",
-          status: "Completed",
-          dateCompleted: "2026-01-05",
-          extracted_skills: ["Playwright", "TypeScript", "Page Object Model"],
-          badge_color: "amber"
-        },
-        {
-          id: "cert-up-2",
-          title: "Continuous Testing & CI/CD with GitHub Actions",
-          provider: "Udemy / xAPI",
-          status: "In Progress",
-          extracted_skills: ["CI/CD", "Docker", "GitHub Actions"],
-          badge_color: "cyan"
-        }
-      ],
-      workspaceConfig: {
-        defaultTab: 'learning',
-        enabledTabs: ['learning', 'synthesizer', 'kanban', 'hivemind'],
-        enableVisaFiltering: false,
-        enableGhostJobDetection: true,
-        enableAutomatedSubmitter: false,
-        activeMcpPackages: ['mcp-xapi-listener', 'mcp-interview-coach']
-      },
-      preferences: {
-        theme: 'solar',
-        archetype: 'upskilling_switcher',
-        localLlmEnabled: false,
-        autoSyncLrs: true,
-        location: 'Manchester, UK',
-        readiness: 'Immediate Available',
-        target_roles: ['Junior SDET', 'QA Test Automation Engineer'],
-        sponsorship_regions: { UK: true, EU: false, GCC: false, US: false },
-        learning_sync: { enabled: true, provider: 'Coursera / xAPI' }
-      }
-    }
-  },
-  staff_executive: {
-    id: 'staff_executive',
-    label: 'Staff & Executive Leader',
-    badge: 'High-Impact Outreach',
-    tagline: 'LinkedIn scout mapping, executive recruiter outreach, and company ghost job radar.',
-    accentColor: '#8b5cf6',
-    recommendedTheme: 'synthwave',
-    profile: {
-      name: "Marcus Sterling",
-      title: "Director of Quality Engineering & Developer Productivity",
-      location: "London, UK / New York, US",
-      archetype: 'staff_executive',
-      target_roles: ["Director of Quality Engineering", "VP of Developer Productivity", "Head of Quality"],
-      core_competencies: [
-        "Engineering leadership & headcount planning",
-        "Developer productivity metrics (DORA)",
-        "Enterprise QA transformation",
-        "Budget & vendor governance",
-        "Executive stakeholder management"
-      ],
-      tech_stack: [
-        "DORA Metrics",
-        "Quality Gate Architecture",
-        "Enterprise CI/CD",
-        "Microservices Governance",
-        "Cost Optimization"
-      ],
-      experience: "Executive engineering leader with 12+ years scaling QA organizations from 10 to 120+ engineers across tier-1 FinTech and enterprise SaaS companies.",
-      learning_certs: [
-        {
-          id: "cert-exec-1",
-          title: "Executive Engineering Leadership & Governance",
-          provider: "MIT Sloan / xAPI",
-          status: "Completed",
-          dateCompleted: "2025-08-12",
-          extracted_skills: ["Executive Strategy", "DORA Engineering", "Org Scaling"],
-          badge_color: "violet"
-        }
-      ],
-      workspaceConfig: {
-        defaultTab: 'hivemind',
-        enabledTabs: ['hivemind', 'synthesizer', 'kanban', 'marketplace'],
-        enableVisaFiltering: false,
-        enableGhostJobDetection: true,
-        enableAutomatedSubmitter: false,
-        activeMcpPackages: ['mcp-linkedin-scout', 'mcp-ats-health-radar']
-      },
-      preferences: {
-        theme: 'synthwave',
-        archetype: 'staff_executive',
-        localLlmEnabled: false,
-        autoSyncLrs: true,
-        location: 'London, UK / New York, US',
-        readiness: 'Executive Search',
-        target_roles: ['Director of Quality Engineering', 'VP of Developer Productivity'],
-        sponsorship_regions: { UK: true, EU: true, GCC: true, US: true },
-        learning_sync: { enabled: true, provider: 'MIT / xAPI' }
-      }
-    }
-  },
-  automation_power_user: {
-    id: 'automation_power_user',
-    label: 'Autonomous Swarm Architect',
-    badge: 'Multi-Agent DAG',
-    tagline: 'High-throughput visual agent canvas, headless AST dispatches, and sub-50ms command palette.',
-    accentColor: '#3b82f6',
-    recommendedTheme: 'cyber',
-    profile: {
-      name: "Tariq Al-Mansoor",
-      title: "Lead AI Automation & SDET Swarm Engineer",
-      location: "Dubai, UAE / Remote",
-      archetype: 'automation_power_user',
-      target_roles: ["Lead AI Automation Engineer", "Staff SDET Swarm Architect", "Principal Test Infrastructure"],
-      core_competencies: [
-        "Autonomous multi-agent DAG pipelines",
-        "LangGraph orchestration",
-        "Model Context Protocol (MCP) servers",
-        "Headless browser automation at scale",
-        "Real-time telemetry streams"
-      ],
-      tech_stack: [
-        "LangGraph",
-        "MCP 2026",
-        "Playwright",
-        "TypeScript",
-        "Gemini 3.7 Flash",
-        "k6 Cloud",
-        "Docker Swarm"
-      ],
-      experience: "Architecting autonomous test agents, headless ATS dispatchers, and distributed multi-agent workflows executing over 5,000 automated checks daily.",
-      learning_certs: [
-        {
-          id: "cert-auto-1",
-          title: "Multi-Agent System Architecture & MCP 2026",
-          provider: "Anthropic & DeepLearning.AI",
-          status: "Completed",
-          dateCompleted: "2026-02-01",
-          extracted_skills: ["LangGraph", "Stateless MCP", "Agentic Workflows"],
-          badge_color: "cyan"
-        }
-      ],
-      workspaceConfig: {
-        defaultTab: 'orchestrator',
-        enabledTabs: ['orchestrator', 'synthesizer', 'kanban', 'marketplace', 'hivemind', 'learning'],
-        enableVisaFiltering: true,
-        enableGhostJobDetection: true,
-        enableAutomatedSubmitter: true,
-        activeMcpPackages: ['mcp-ats-scraper', 'mcp-home-office-visa', 'mcp-aria-form-filler']
-      },
-      preferences: {
-        theme: 'cyber',
-        archetype: 'automation_power_user',
-        localLlmEnabled: false,
-        autoSyncLrs: true,
-        location: 'Dubai, UAE / Remote',
-        readiness: 'Global High-Volume',
-        target_roles: ['Lead AI Automation Engineer', 'Staff SDET Swarm Architect'],
-        sponsorship_regions: { UK: true, EU: true, GCC: true, US: true },
-        learning_sync: { enabled: true, provider: 'Agentic LRS' }
-      }
-    }
-  }
+  ]
 };
-
-export const INITIAL_MASTER_PROFILE: MasterProfile = ARCHETYPE_PRESETS.international_seeker.profile;
 
 export const SAMPLE_JOBS = [
   {

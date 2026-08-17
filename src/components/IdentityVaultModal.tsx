@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { RoutingConfig, VerifiableBadge, MasterProfile } from '../types';
 import { INITIAL_ROUTING_CONFIG, INITIAL_VERIFIABLE_BADGES } from '../data/initialData';
 import {

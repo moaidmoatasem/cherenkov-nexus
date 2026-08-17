@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { MasterProfile, LinkedInScoutResult } from '../types';
 import {
   Linkedin,
@@ -97,11 +97,7 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
 
       const data: LinkedInScoutResult = await res.json();
       setScoutResult(data);
-      onToast(
-        'success',
-        'Scout Completed',
-        `Extracted technical dossier for ${data.recruiterName} (${data.recruiter_profile_status === 'live' ? 'LIVE profile' : 'simulated intel'}).`
-      );
+      onToast('success', 'Scout Completed', `Extracted technical dossier for ${data.recruiterName}.`);
     } catch (err: any) {
       console.error('Scout failed:', err);
       onToast('error', 'Scout Failed', 'Could not extract recruiter profile. Retrying with deterministic engine.');
@@ -268,21 +264,6 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
                         <h4 className="text-sm font-bold text-white flex items-center gap-2">
                           {scoutResult.recruiterName}
                           <UserCheck className="w-4 h-4 text-cyan-400" />
-                          {scoutResult.recruiter_profile_status && (
-                            <span
-                              className={`px-2 py-0.5 text-[9px] font-mono font-bold rounded-full border flex items-center gap-1 ${
-                                scoutResult.recruiter_profile_status === 'live'
-                                  ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
-                                  : 'bg-amber-500/15 text-amber-300 border-amber-500/40'
-                              }`}
-                              title={scoutResult.scoutNotes ?? ''}
-                            >
-                              <span
-                                className={`w-1.5 h-1.5 rounded-full ${scoutResult.recruiter_profile_status === 'live' ? 'bg-emerald-400' : 'bg-amber-400'}`}
-                              />
-                              {scoutResult.recruiter_profile_status === 'live' ? 'LIVE' : 'SIMULATED'}
-                            </span>
-                          )}
                         </h4>
                         <p className="text-xs text-slate-300">{scoutResult.recruiterTitle}</p>
                         <p className="text-[11px] text-slate-500 font-mono mt-0.5">{scoutResult.location}</p>

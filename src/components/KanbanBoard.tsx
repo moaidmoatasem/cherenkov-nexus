@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { ApplicationCard, KanbanColumn, SynthesizedResult } from '../types';
 import { KanbanMetrics } from './KanbanMetrics';
 import { PerformanceMetrics } from './PerformanceMetrics';
