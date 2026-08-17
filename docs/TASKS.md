@@ -29,7 +29,7 @@ All tasks in **CHERENKOV-NEXUS** are organized by functional Epics and assigned 
 ### Epic 3: AI Inference & Generative Synthesis
 | Task ID | Title | Priority | Status | Verification Spec |
 |---|---|---|---|---|
-| `TSK-301` | Integrate Gemini 2.5 Flash SDK (`@google/genai`) | P0 | Done | `POST /api/synthesize` |
+| `TSK-301` | Integrate Gemini SDK (`@google/genai`, default `gemini-3.7-flash`) | P0 | Done | `POST /api/synthesize` |
 | `TSK-302` | Enforce JSON Schema 2020-12 `responseSchema` | P0 | Done | `server.ts` |
 | `TSK-303` | Build WebLLM Browser WebGPU Inference Router | P0 | Done | `IdentityVaultModal.tsx` |
 | `TSK-304` | Implement Model Comparison Benchmark View | P2 | Done | `ModelCompareModal.tsx` |

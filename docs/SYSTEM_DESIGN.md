@@ -4,10 +4,10 @@
 1. **Trigger:** User enters URL in Command Palette (`Cmd + K` -> `> New App`).
 2. **Ingestion:** API Gateway triggers LangGraph. Scout Agent utilizes stealth Chromium to bypass ATS protections.
 3. **Telemetry Check:** Invariant check validates that the scraped text contains standard semantic job markers (e.g., "Responsibilities", "Requirements"). If absent, execution halts, protecting the LLM context window from garbage data.
-4. **Validation:** Visa sub-routine executes the Fuse.js search against the cached sponsor registry.
+4. **Validation:** Visa sub-routine executes deterministic LibSQL/SQLite LIKE matching against the cached sponsor registry (with an in-memory array fallback), rather than a probabilistic fuzzy library.
 5. **Synthesis:** Google Gemini generates the structured JSON payload.
 6. **Streaming:** Data is piped via Server-Sent Events (SSE) directly to the React client.
-7. **Persistence:** Once synthesis completes, Firebase Firestore saves the full snapshot, transitioning the Kanban board to `Ready to Apply`.
+7. **Persistence:** Once synthesis completes, the LibSQL/SQLite database (or Turso Edge when configured) persists the full snapshot, transitioning the Kanban board to `Ready to Apply`.
 
 ## Invariant Testing (cherenkov-qa Methodology)
 The system incorporates automated self-testing:
