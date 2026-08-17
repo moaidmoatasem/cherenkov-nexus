@@ -1,4 +1,5 @@
-import { createClient } from "@libsql/client";
+import { getDb } from "./src/server/db";
+import { ensureSponsorSchema } from "./src/server/integrations/visaConnector";
 
 const SPONSORS_DATABASE = [
   { name: "Google", aliases: ["Google UK Ltd", "Alphabet", "Google DeepMind", "DeepMind"], region: "UK", licenseType: "Skilled Worker", rating: "A Rating", minSalaryThresholdGbp: 41700 },
@@ -36,24 +37,12 @@ const SPONSORS_DATABASE = [
 ];
 
 async function seedDatabase() {
-  const db = createClient({
-    url: "file:C:/Users/moaid/.gemini/antigravity/brain/a4923698-19de-46e2-9bf7-9960557bcad1/scratch/nexus.db",
-  });
+  const db = getDb();
 
   console.log("🌱 Initializing local SQLite database 'nexus.db'...");
 
   // Create table
-  await db.execute(`
-    CREATE TABLE IF NOT EXISTS sponsors (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      aliases TEXT NOT NULL,
-      region TEXT NOT NULL,
-      licenseType TEXT NOT NULL,
-      rating TEXT NOT NULL,
-      minSalaryThresholdGbp INTEGER NOT NULL
-    )
-  `);
+  await ensureSponsorSchema(db);
 
   // Clear existing data to prevent duplicates
   await db.execute(`DELETE FROM sponsors`);
@@ -90,12 +79,14 @@ async function seedDatabase() {
       id TEXT PRIMARY KEY,
       columnId TEXT NOT NULL,
       company TEXT NOT NULL,
-      role TEXT NOT NULL,
+      jobTitle TEXT NOT NULL,
       salary TEXT,
       location TEXT,
-      timestamp TEXT NOT NULL,
-      visaStatus TEXT NOT NULL,
-      orderIndex INTEGER NOT NULL
+      createdAt TEXT NOT NULL,
+      updatedAt TEXT NOT NULL,
+      matchScore INTEGER NOT NULL,
+      jobDescription TEXT,
+      coldEmail TEXT
     )
   `);
 

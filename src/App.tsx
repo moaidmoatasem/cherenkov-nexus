@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MasterProfile, ApplicationCard, AppTheme, TabId, CandidateArchetype } from './types';
 import { INITIAL_MASTER_PROFILE, INITIAL_APPLICATIONS, SAMPLE_JOBS, ARCHETYPE_PRESETS } from './data/initialData';
@@ -56,6 +56,8 @@ export default function App() {
   const [isTelemetryOpen, setIsTelemetryOpen] = useState(false);
   const [isTourOpen, setIsTourOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const [kanbanBackend, setKanbanBackend] = useState<'live' | 'local' | 'syncing'>('syncing');
+  const hydratedFromApiRef = useRef(false);
 
   // System tour initialization
   useEffect(() => {
@@ -95,6 +97,80 @@ export default function App() {
     } catch (e) {
       console.error('Failed to persist applications to localStorage:', e);
     }
+  }, [applications]);
+
+  // Hydrate applications from the persistent Kanban backend (SQLite via /api/kanban/state)
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 3000);
+        const res = await fetch('/api/kanban/state', { signal: controller.signal });
+        clearTimeout(timer);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const tasks = await res.json();
+        if (cancelled) return;
+        if (Array.isArray(tasks) && tasks.length > 0) {
+          setApplications(
+            tasks.map((task: any) => ({
+              id: task.id,
+              jobTitle: task.jobTitle ?? '',
+              company: task.company ?? '',
+              location: task.location ?? '',
+              salary: task.salary ?? undefined,
+              column: (task.column ?? 'Saved') as ApplicationCard['column'],
+              createdAt: task.createdAt ?? new Date().toISOString(),
+              updatedAt: task.updatedAt ?? new Date().toISOString(),
+              jobDescription: task.jobDescription ?? '',
+              matchScore: task.matchScore ?? undefined,
+              contactEmail: task.coldEmail ?? undefined,
+            }))
+          );
+        }
+        if (!cancelled) setKanbanBackend('live');
+      } catch {
+        if (!cancelled) setKanbanBackend('local');
+      } finally {
+        hydratedFromApiRef.current = true;
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Persist applications to the persistent Kanban backend (debounced)
+  useEffect(() => {
+    if (!hydratedFromApiRef.current) return;
+    const timer = setTimeout(() => {
+      fetch('/api/kanban/state', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(
+          applications.map((app) => ({
+            id: app.id,
+            column: app.column,
+            company: app.company,
+            jobTitle: app.jobTitle,
+            salary: app.salary,
+            location: app.location,
+            createdAt: app.createdAt,
+            updatedAt: app.updatedAt,
+            matchScore: app.matchScore ?? 0,
+            jobDescription: app.jobDescription,
+            coldEmail: app.contactEmail,
+          }))
+        ),
+      })
+        .then((res) => {
+          if (res.ok) setKanbanBackend('live');
+        })
+        .catch(() => {
+          setKanbanBackend((prev) => (prev === 'live' ? prev : 'local'));
+        });
+    }, 600);
+    return () => clearTimeout(timer);
   }, [applications]);
 
   // Persist theme choice to localStorage
@@ -254,6 +330,11 @@ export default function App() {
             >
               <Kanban className="w-3.5 h-3.5" />
               <span>Kanban ({applications.length})</span>
+              {kanbanBackend === 'live' && (
+                <span className="px-1.5 py-0.5 text-[8px] font-mono font-bold rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  DB
+                </span>
+              )}
             </button>
             <button
               onClick={() => setActiveTab('learning')}

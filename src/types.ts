@@ -117,6 +117,9 @@ export interface LinkedInScoutResult {
     body: string;
     hookReason: string;
   };
+  recruiter_profile_status?: 'live' | 'simulated';
+  live?: boolean;
+  scoutNotes?: string;
 }
 
 export interface InterviewQuestionItem {
