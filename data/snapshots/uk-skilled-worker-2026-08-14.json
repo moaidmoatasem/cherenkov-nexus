@@ -1,0 +1,168 @@
+{
+  "id": "uk-skilled-worker-2026-08-14+a8d94f73543a",
+  "route": "uk-skilled-worker",
+  "effectiveDate": "2026-08-14",
+  "verified": false,
+  "provenance": {
+    "compiledBy": "Oracle V1 bootstrap — NOT a verified rules ingestion",
+    "compiledAt": "2026-08-18T00:00:00Z",
+    "sources": [
+      "https://www.gov.uk/guidance/immigration-rules/immigration-rules-appendix-skilled-occupations",
+      "https://www.gov.uk/guidance/immigration-rules/immigration-rules-appendix-skilled-worker",
+      "https://www.gov.uk/government/publications/register-of-licensed-sponsors-workers"
+    ],
+    "caveats": [
+      "UNVERIFIED. This snapshot exists so the engine, its tests, and the interface can be exercised end to end. It must not be relied on for any real application.",
+      "Occupation rows — codes, titles, RQF levels and going rates — are ILLUSTRATIVE. They have not been read from Appendix Skilled Occupations against a primary source and several are approximations. Replace the entire occupations block before launch.",
+      "The general salary threshold (GBP 41,700), the RQF 6 floor effective 22 July 2025, and the CEFR B2 requirement effective 8 January 2026 are carried from NEXUS_V3.0_FINAL V2, which cites GOV.UK Immigration Rules. They are the most likely fields to be correct, and are still not independently verified here.",
+      "The hourly floor and the 48-hour pro-rating cap are carried from the V1 prototype and are unverified.",
+      "Tradeable-point definitions are structurally correct in shape but their percentages and eligibility bases must be checked against Appendix Skilled Worker before use.",
+      "Per NEXUS_V3.0_FINAL section 2: for anything driving a build decision, require who measured it, when, against what outcome. Nothing in this file meets that bar yet."
+    ]
+  },
+  "generalSalaryThresholdGbp": 41700,
+  "hourlyFloorGbp": 17.13,
+  "goingRateHoursCap": 48,
+  "minRqfLevel": 6,
+  "minEnglishCefr": "B2",
+  "citations": {
+    "generalSalaryThreshold": {
+      "authority": "Appendix Skilled Worker",
+      "paragraph": "SW 14.1"
+    },
+    "hourlyFloor": {
+      "authority": "Appendix Skilled Worker",
+      "paragraph": "SW 14.4"
+    },
+    "skillLevel": {
+      "authority": "Appendix Skilled Occupations",
+      "table": "Table 1"
+    },
+    "english": {
+      "authority": "Appendix Skilled Worker",
+      "paragraph": "SW 6"
+    },
+    "goingRate": {
+      "authority": "Appendix Skilled Worker",
+      "paragraph": "SW 14.2",
+      "table": "Table 1"
+    },
+    "occupationEligibility": {
+      "authority": "Appendix Skilled Occupations",
+      "table": "Table 1"
+    }
+  },
+  "tradeableOptions": [
+    {
+      "id": "new_entrant",
+      "name": "New entrant",
+      "goingRatePercent": 70,
+      "absoluteFloorGbp": 33400,
+      "citation": {
+        "authority": "Appendix Skilled Worker",
+        "paragraph": "Option E"
+      },
+      "basisHint": "Under 26, switching from a Student visa, in a postdoctoral position, or working toward a recognised professional qualification."
+    },
+    {
+      "id": "phd_relevant",
+      "name": "PhD in a subject relevant to the job",
+      "goingRatePercent": 90,
+      "absoluteFloorGbp": 37500,
+      "citation": {
+        "authority": "Appendix Skilled Worker",
+        "paragraph": "Option B"
+      },
+      "basisHint": "A PhD the sponsor confirms is relevant to the occupation."
+    },
+    {
+      "id": "phd_stem",
+      "name": "PhD in a STEM subject relevant to the job",
+      "goingRatePercent": 80,
+      "absoluteFloorGbp": 33400,
+      "citation": {
+        "authority": "Appendix Skilled Worker",
+        "paragraph": "Option C"
+      },
+      "basisHint": "A STEM PhD the sponsor confirms is relevant to the occupation."
+    }
+  ],
+  "occupations": {
+    "2134": {
+      "code": "2134",
+      "title": "Programme managers and project managers, information technology",
+      "rqfLevel": 6,
+      "goingRateGbp": 51000,
+      "goingRateBasisHours": 37.5,
+      "eligible": true,
+      "tableRef": "Table 1"
+    },
+    "2136": {
+      "code": "2136",
+      "title": "Programmers and software development professionals",
+      "rqfLevel": 6,
+      "goingRateGbp": 49400,
+      "goingRateBasisHours": 37.5,
+      "eligible": true,
+      "tableRef": "Table 1"
+    },
+    "2137": {
+      "code": "2137",
+      "title": "Data scientists and data analysts",
+      "rqfLevel": 6,
+      "goingRateGbp": 46200,
+      "goingRateBasisHours": 37.5,
+      "eligible": true,
+      "tableRef": "Table 1"
+    },
+    "2139": {
+      "code": "2139",
+      "title": "Information technology and telecommunications professionals not elsewhere classified",
+      "rqfLevel": 6,
+      "goingRateGbp": 43500,
+      "goingRateBasisHours": 37.5,
+      "eligible": true,
+      "note": "Residual code. Applies where duties span quality, tooling and process without fitting a specific code.",
+      "tableRef": "Table 1"
+    },
+    "2231": {
+      "code": "2231",
+      "title": "Nurses",
+      "rqfLevel": 6,
+      "goingRateGbp": 31200,
+      "goingRateBasisHours": 37.5,
+      "eligible": true,
+      "note": "Health and care occupations are subject to separate salary rules that this snapshot does not yet model. Do not rely on this row.",
+      "tableRef": "Table 1"
+    },
+    "2421": {
+      "code": "2421",
+      "title": "Chartered and certified accountants",
+      "rqfLevel": 6,
+      "goingRateGbp": 47300,
+      "goingRateBasisHours": 37.5,
+      "eligible": true,
+      "tableRef": "Table 1"
+    },
+    "3132": {
+      "code": "3132",
+      "title": "IT operations technicians",
+      "rqfLevel": 3,
+      "goingRateGbp": 29800,
+      "goingRateBasisHours": 37.5,
+      "eligible": true,
+      "note": "Below the RQF 6 floor introduced 22 July 2025. Retained so the skill-level constraint is exercised.",
+      "tableRef": "Table 1"
+    },
+    "6135": {
+      "code": "6135",
+      "title": "Care workers and home carers",
+      "rqfLevel": 2,
+      "goingRateGbp": 25000,
+      "goingRateBasisHours": 37.5,
+      "eligible": false,
+      "note": "Removed from the eligible occupation list. Retained so the occupation-eligibility constraint is exercised.",
+      "tableRef": "Table 1"
+    }
+  }
+}

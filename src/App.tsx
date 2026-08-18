@@ -18,6 +18,7 @@ import { ThemeAuraBackground } from './components/ThemeAuraBackground';
 import { CommandPalette } from './components/CommandPalette';
 import { TelemetryModal } from './components/TelemetryModal';
 import { SystemTour } from './components/SystemTour';
+import { OracleWorkbench } from './components/OracleWorkbench';
 import { Sparkles, Kanban, GraduationCap, User, Layers, Cpu, Radio, ShieldCheck } from 'lucide-react';
 
 export default function App() {
@@ -364,6 +365,15 @@ export default function App() {
               <span>Canvas</span>
             </button>
             <button
+              onClick={() => setActiveTab('oracle')}
+              className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-all whitespace-nowrap ${
+                activeTab === 'oracle' ? 'bg-amber-500/20 text-amber-300 font-bold' : 'text-slate-400'
+              }`}
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Oracle</span>
+            </button>
+            <button
               onClick={() => setActiveTab('hivemind')}
               className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-all whitespace-nowrap ${
                 activeTab === 'hivemind' ? 'bg-red-500/20 text-red-300 font-bold' : 'text-slate-400'
@@ -464,6 +474,18 @@ export default function App() {
                 transition={{ duration: 0.2, ease: 'easeOut' }}
               >
                 <HiveMind onToast={addToast} />
+              </motion.div>
+            )}
+
+            {activeTab === 'oracle' && (
+              <motion.div
+                key="oracle"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+              >
+                <OracleWorkbench />
               </motion.div>
             )}
           </AnimatePresence>

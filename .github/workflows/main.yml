@@ -22,6 +22,17 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+
+      - name: Typecheck
+        run: npm run lint
+
+      - name: Verify rules snapshots are sealed
+        run: npm run oracle:seal:check
+
+      - name: Unit tests
+        run: npm run test:unit
 
       - name: Run tests and linting
         run: npm run test:ci
