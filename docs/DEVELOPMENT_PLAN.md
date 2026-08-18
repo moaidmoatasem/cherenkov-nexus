@@ -13,7 +13,7 @@ gantt
     dateFormat  YYYY-MM-DD
     section Phase 1: Core Engine
     CLI & Playwright Stealth Scraper       :done, p1, 2026-07-01, 14d
-    Gemini 2.5 Structured Schema Binding    :done, p2, after p1, 10d
+    Gemini Structured Schema Binding    :done, p2, after p1, 10d
     section Phase 2: Web & Edge Data
     React 19 & Vite Split-Screen UI        :done, p3, after p2, 14d
     LibSQL/Turso Visa Database Cache       :done, p4, after p3, 10d

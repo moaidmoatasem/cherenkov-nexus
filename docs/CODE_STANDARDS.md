@@ -37,7 +37,7 @@ graph TD
 
 1. **Separation of Concerns:** UI components must never perform direct database queries or raw web scraping. All interactions occur through API Gateway controllers or state hooks.
 2. **Explicit Type Safety:** No implicit `any` types in production code. All payloads across network boundaries must have matching TypeScript interfaces.
-3. **Immutability by Default:** State mutations in Zustand and LangGraph must return fresh object references.
+3. **Immutability by Default:** State mutations in React hooks and the LangGraph pipeline must return fresh object references.
 
 ---
 

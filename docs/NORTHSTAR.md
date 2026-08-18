@@ -4,7 +4,7 @@
 To engineer a localized, agentic command center that transforms the international tech job search from a passive web-form submission process into a proactive, deterministically verifiable deployment pipeline. The hub specifically empowers Senior QA professionals to target remote and visa-sponsored roles in the UK and EU without wasting CPU cycles or cognitive load on incompatible corporate entities.
 
 ## Operational Philosophy
-* **Privacy by Default (Local-First):** PII (passwords, physical addresses, passports) must never hit a cloud LLM. The routing layer must support "Zero-Trust" bare-metal inference (e.g., Qwen running via AnythingLLM).
+* **Privacy by Default (Local-First):** PII (passwords, physical addresses, passports) must never hit a cloud LLM. The routing layer must support "Zero-Trust" bare-metal inference (e.g., Qwen running via a local Ollama endpoint, or in-browser WebGPU via @mlc-ai/web-llm).
 * **Deterministic Over Probabilistic:** Visa sponsorship capabilities are verified programmatically against official government datasets, never guessed or hallucinated by an AI model.
 * **Continuous Synchronization:** A resume is not a static PDF; it is a living artifact. The system must autonomously sync with learning platforms (Coursera, Udemy) via xAPI to append newly acquired skills in real-time.
 * **Invariant Observability:** Derived from the `cherenkov-qa` methodology, we treat the job application process like a QA framework. We implement robust invariant checks to catch failing ATS parsers before synthesizing bad data.

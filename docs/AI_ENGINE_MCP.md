@@ -35,4 +35,4 @@ responseSchema: {
 
 ## Zero-Trust Local Fallback
 
-For scenarios involving un-redacted PII, the AI router intercepts the request before it hits Google's servers. It reroutes the payload over standard REST to a local `AnythingLLM` endpoint running a quantized `Qwen` model, executing the synthesis entirely on the host machine.
+For scenarios involving un-redacted PII, the AI router intercepts the request before it hits Google's servers. It reroutes the payload over a standard OpenAI-compatible REST call (e.g. a local Ollama server, default `qwen2.5-coder:7b-instruct`) or in-browser WebGPU via `@mlc-ai/web-llm`, executing the synthesis entirely on the host machine.

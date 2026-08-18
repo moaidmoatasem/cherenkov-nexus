@@ -19,4 +19,4 @@ interface ApplicationState {
 
 1. **The Scout (Data Ingestion):** Takes the `jobUrl`. Invokes the `mcp-ats-scraper`. Emits `rawDomContent`. If the DOM is too small (e.g., Cloudflare block), it appends to `errors` and halts execution.
 2. **The Visa Validator (Deterministic Node):** Executes fuzzy matching against the Home Office cache. Mutates `visaSponsorVerified`.
-3. **The Synthesizer (Profile Alignment):** The core LLM node. Takes the `sanitizedRequirements` and the local `masterProfile`. Runs the RAG prompt via Gemini 2.5 Flash. Compiles the `tailoredAst`.
+3. **The Synthesizer (Profile Alignment):** The core LLM node. Takes the `sanitizedRequirements` and the local `masterProfile`. Runs the RAG prompt via Gemini (default `gemini-3.7-flash`). Compiles the `tailoredAst`.

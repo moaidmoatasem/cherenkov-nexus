@@ -72,9 +72,9 @@ graph TB
     end
 
     subgraph AI_Engines ["🧠 Inference Engines"]
-        GeminiCloud["Google Gemini 2.5 Flash"]
+        GeminiCloud["Google Gemini (gemini-3.7-flash)"]
         LocalWebLLM["WebLLM (WebGPU / Qwen)"]
-        LocalOllama["Ollama / AnythingLLM"]
+        LocalOllama["Ollama / Local Qwen"]
     end
 
     ReactApp <-->|"REST / JSON-RPC / SSE"| Express
@@ -103,7 +103,7 @@ graph TB
 | 🎙️ **Voice Interview Sandbox** | Adversarial technical interview simulation with real-time scoring | `POST /api/interview/generate-questions` |
 | 🔐 **Identity Vault** | Zero-Trust PII masking & seamless switching between Cloud / Local WebGPU AI | `@mlc-ai/web-llm` / WebGPU |
 | 📋 **Live Kanban Board** | State-persisted multi-stage application pipeline | `GET /api/kanban/state` |
-| ⚖️ **Model Compare Engine** | Real-time benchmarking between Gemini 2.5 Flash, Claude 3.5, and Local Qwen | `POST /api/synthesize/compare` |
+| ⚖️ **Model Compare Engine** | Real-time benchmarking between cloud Gemini and a local Ollama/Qwen model (default qwen2.5-coder:7b-instruct) | `POST /api/synthesize/compare` |
 
 ---
 
