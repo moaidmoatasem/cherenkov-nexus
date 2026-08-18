@@ -91,6 +91,24 @@ describe.skipIf(!HAS_DB)("lookup against the licensed-sponsor register", () => {
   }, 120_000);
 
   /**
+   * SQLite has no `ALTER TABLE ADD COLUMN IF NOT EXISTS`, so two callers racing
+   * on a fresh database both see the column missing and both try to add it. The
+   * loser used to get `duplicate column name: nameCore` and the request 500'd.
+   *
+   * Not a test-only concern — two concurrent requests against a fresh install
+   * race the same way. This is what turned CI red on the first push.
+   */
+  it("survives concurrent migrations without throwing", async () => {
+    const results = await Promise.allSettled([
+      ensureMatchIndex(getDb()),
+      ensureMatchIndex(getDb()),
+      ensureMatchIndex(getDb()),
+    ]);
+    const rejected = results.filter((r) => r.status === "rejected");
+    expect(rejected.map((r) => String((r as PromiseRejectedResult).reason))).toEqual([]);
+  }, 120_000);
+
+  /**
    * The empty-company case. Previously `LIKE '%%'` matched every row and the
    * first one — "Google" — was returned as a verified sponsor for any posting
    * where the user had not typed a company name.

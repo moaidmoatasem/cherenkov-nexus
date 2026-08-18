@@ -132,23 +132,48 @@ export function scoreMatch(query: string, candidate: string): { score: number; b
  * Without it, candidate retrieval over 127k rows means a full scan on every
  * check. With it, the common cases (exact and leading-token) are index hits.
  */
-export async function ensureMatchIndex(db: Client): Promise<void> {
+async function hasNameCoreColumn(db: Client): Promise<boolean> {
   const info = await db.execute("PRAGMA table_info(sponsors)");
-  const columns = new Set(info.rows.map((r) => r.name as string));
+  return info.rows.some((r) => (r.name as string) === "nameCore");
+}
 
-  if (!columns.has("nameCore")) {
-    await db.execute("ALTER TABLE sponsors ADD COLUMN nameCore TEXT");
+function isTransient(err: unknown): boolean {
+  const message = err instanceof Error ? err.message : String(err);
+  return /SQLITE_BUSY|database is locked/i.test(message);
+}
+
+/**
+ * Idempotent and safe to run concurrently.
+ *
+ * `ALTER TABLE ADD COLUMN` has no `IF NOT EXISTS` in SQLite, so two callers
+ * racing on a fresh database both see the column missing and both try to add
+ * it. The loser gets `duplicate column name`. That is the desired end state
+ * reached by another route, not a failure — swallow it once the column is
+ * confirmed present, and let anything else propagate.
+ *
+ * This is not a test-only concern: two concurrent requests against a fresh
+ * install race exactly the same way.
+ */
+export async function ensureMatchIndex(db: Client): Promise<void> {
+  if (!(await hasNameCoreColumn(db))) {
+    try {
+      await db.execute("ALTER TABLE sponsors ADD COLUMN nameCore TEXT");
+    } catch (err) {
+      if (!(await hasNameCoreColumn(db))) throw err;
+    }
   }
   await db.execute("CREATE INDEX IF NOT EXISTS idx_sponsors_name_core ON sponsors(nameCore)");
 
   const pending = await db.execute(
     "SELECT COUNT(*) AS n FROM sponsors WHERE nameCore IS NULL OR nameCore = ''"
   );
-  const outstanding = Number(pending.rows[0]?.n ?? 0);
-  if (outstanding === 0) return;
+  if (Number(pending.rows[0]?.n ?? 0) === 0) return;
 
   // Backfill in chunks. Normalisation lives in TypeScript, not SQL, so the
   // matcher and the index can never disagree about what a name reduces to.
+  //
+  // Concurrent backfills are harmless — two writers compute the same value for
+  // the same row — but they can collide on the write lock, so retry briefly.
   const pageSize = 5000;
   for (;;) {
     const page = await db.execute({
@@ -156,12 +181,23 @@ export async function ensureMatchIndex(db: Client): Promise<void> {
       args: [pageSize],
     });
     if (page.rows.length === 0) break;
-    await db.batch(
-      page.rows.map((row) => ({
-        sql: "UPDATE sponsors SET nameCore = ? WHERE id = ?",
-        args: [coreName(row.name as string), row.id as number],
-      })) as never
-    );
+
+    const statements = page.rows.map((row) => ({
+      sql: "UPDATE sponsors SET nameCore = ? WHERE id = ?",
+      args: [coreName(row.name as string), row.id as number],
+    }));
+
+    let written = false;
+    for (let attempt = 0; attempt < 4 && !written; attempt += 1) {
+      try {
+        await db.batch(statements as never);
+        written = true;
+      } catch (err) {
+        if (!isTransient(err) || attempt === 3) throw err;
+        await new Promise((resolve) => setTimeout(resolve, 100 * 2 ** attempt));
+      }
+    }
+
     if (page.rows.length < pageSize) break;
   }
 }

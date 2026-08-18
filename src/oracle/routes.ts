@@ -249,14 +249,17 @@ export function createOracleRouter(deps: OracleDeps): Router {
     }
 
     try {
-      await ensureIndex();
-
       // A sponsor the user picked from the candidate list wins. Otherwise take
       // an unambiguous automatic match, and nothing else.
+      //
+      // The register index is only built on the branch that actually queries
+      // it — a verdict with a confirmed sponsor needs no lookup, and should not
+      // wait on a 127k-row migration to say so.
       let sponsor: ConfirmedSponsor | null = null;
       if (sponsorCandidate && typeof sponsorCandidate.registeredName === "string") {
         sponsor = confirmSponsor(sponsorCandidate);
       } else {
+        await ensureIndex();
         const lookup = await lookupSponsor(deps.getDb(), posting.company);
         sponsor = lookup.confirmed;
         if (lookup.needsConfirmation && lookup.candidates.length > 0) {
