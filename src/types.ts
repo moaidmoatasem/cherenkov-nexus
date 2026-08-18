@@ -85,7 +85,7 @@ export type AppTheme =
   | 'light-frost'
   | 'light-ceramic';
 
-export type TabId = 'synthesizer' | 'kanban' | 'learning' | 'marketplace' | 'orchestrator' | 'hivemind';
+export type TabId = 'synthesizer' | 'kanban' | 'learning' | 'marketplace' | 'orchestrator' | 'hivemind' | 'oracle';
 
 export interface StageTransition {
   id: string;

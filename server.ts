@@ -6,6 +6,7 @@ import { mcpHost, ensureMcpConnectivity } from "./src/server/mcp/host";
 import { analyzeRepo } from "./src/server/githubAnalysis";
 import { fetchAtsJob } from "./src/server/integrations/atsConnector";
 import { executeServerlessScrape } from "./server/mcp/playwrightScraper";
+import { createOracleRouter } from "./src/oracle/routes";
 
 
 import path from "path";
@@ -26,6 +27,10 @@ const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-3.7-flash";
 const GEMINI_DISPLAY_NAME = process.env.GEMINI_MODEL_DISPLAY ?? (GEMINI_MODEL.includes("2.5") ? "Google Gemini 2.5 Flash" : "Google Gemini 3.7 Flash");
 
 app.use(express.json({ limit: "5mb" }));
+
+// Sponsorship Eligibility Oracle (V1). Self-contained: deterministic verdicts,
+// no LLM reachable from any route below. See src/oracle/.
+app.use("/api/oracle", createOracleRouter({ getDb }));
 
 // Known UK & EU licensed visa sponsors registry with regional accreditation details
 interface SponsorRecord {

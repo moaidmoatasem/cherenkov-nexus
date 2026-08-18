@@ -32,7 +32,7 @@ import {
   Pie
 } from 'recharts';
 
-export type TabId = 'synthesizer' | 'kanban' | 'learning' | 'marketplace' | 'orchestrator' | 'hivemind';
+export type TabId = 'synthesizer' | 'kanban' | 'learning' | 'marketplace' | 'orchestrator' | 'hivemind' | 'oracle';
 
 interface SidebarProps {
   activeTab: TabId;
@@ -96,6 +96,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   const paasTabs = [
+    {
+      id: 'oracle' as TabId,
+      name: 'Sponsorship Oracle',
+      subtitle: 'Deterministic eligibility verdicts',
+      icon: <ShieldCheck className="w-4 h-4" />,
+      badge: 'Rules Engine',
+      badgeClass: 'bg-amber-500/15 text-amber-300 border border-amber-500/30',
+      activeGradient: 'from-amber-950/50 via-yellow-900/20 to-transparent border-amber-500/40 shadow-amber-950/40',
+      iconActiveBg: 'bg-gradient-to-br from-amber-600 to-yellow-700 text-white shadow-amber-600/40',
+      indicatorColor: 'bg-amber-400 shadow-[0_0_10px_#fbbf24]'
+    },
     {
       id: 'marketplace' as TabId,
       name: 'MCP Marketplace',
