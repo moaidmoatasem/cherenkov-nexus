@@ -7,5 +7,6 @@ export { PanelHeader } from './PanelHeader';
 export { Segmented } from './Segmented';
 export { StatTile } from './StatTile';
 export { fieldClass, labelClass, sectionLabelClass } from './field';
+export { chartSeries, chartStatus, chartAxis, stageColor } from './chart';
 export type { Tone } from './tones';
 export { toneChip, toneText, toneTile, toneRail } from './tones';

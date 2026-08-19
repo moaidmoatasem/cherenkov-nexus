@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ApplicationCard, KanbanColumn, SynthesizedResult } from '../types';
+import { chartStatus } from './ui';
 import { KanbanMetrics } from './KanbanMetrics';
 import { PerformanceMetrics } from './PerformanceMetrics';
 import {
@@ -60,7 +61,7 @@ const COLUMNS: {
     badge: 'bg-sunken/80 text-ink-muted border border-line-strong',
     headerBg: 'bg-fill-strong/10 text-ink-muted',
     glow: 'hover:border-line-strong',
-    accentColor: '#94a3b8'
+    accentColor: chartStatus.neutral
   },
   {
     id: 'Upskilling',
@@ -69,7 +70,7 @@ const COLUMNS: {
     badge: 'bg-caution-soft text-caution-ink border border-caution-line',
     headerBg: 'bg-caution-soft text-caution-ink',
     glow: 'hover:border-caution-line',
-    accentColor: '#f59e0b'
+    accentColor: chartStatus.caution
   },
   {
     id: 'Ready to Apply',
@@ -78,7 +79,7 @@ const COLUMNS: {
     badge: 'bg-accent-soft text-accent-ink border border-accent-line',
     headerBg: 'bg-accent-soft text-accent-ink',
     glow: 'hover:border-accent-line',
-    accentColor: '#8b5cf6'
+    accentColor: chartStatus.accent
   },
   {
     id: 'Applied',
@@ -87,7 +88,7 @@ const COLUMNS: {
     badge: 'bg-info-soft text-info-ink border border-info-line',
     headerBg: 'bg-info-soft text-info-ink',
     glow: 'hover:border-info-line',
-    accentColor: '#06b6d4'
+    accentColor: chartStatus.info
   },
   {
     id: 'Interviewing',
@@ -96,7 +97,7 @@ const COLUMNS: {
     badge: 'bg-positive-soft text-positive-ink border border-positive-line',
     headerBg: 'bg-positive-soft text-positive-ink',
     glow: 'hover:border-positive-line',
-    accentColor: '#10b981'
+    accentColor: chartStatus.positive
   }
 ];
 

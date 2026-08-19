@@ -34,28 +34,29 @@ interface ThemeOption {
   name: string;
   tag: string;
   /**
-   * Literal colours on purpose: a swatch previews the palette it switches to,
-   * so it must not follow the palette currently in force.
+   * A literal colour on purpose: the swatch previews the accent it switches
+   * to, so it must not follow the accent currently in force. Themes differ by
+   * accent alone, so one dot tells the whole truth.
    */
-  swatch: [string, string];
+  swatch: string;
 }
 
 const DARK_THEMES: ThemeOption[] = [
-  { id: 'cyber', name: 'Cyber Aurora', tag: 'Obsidian Glow', swatch: ['#8b5cf6', '#22d3ee'] },
-  { id: 'synthwave', name: 'Neon Synthwave', tag: 'Midnight Tokyo', swatch: ['#ec4899', '#22d3ee'] },
-  { id: 'emerald', name: 'Quantum Emerald', tag: 'Forest Titanium', swatch: ['#10b981', '#38bdf8'] },
-  { id: 'solar', name: 'Solar Ember', tag: 'Espresso Bronze', swatch: ['#f59e0b', '#fb7185'] },
-  { id: 'slate', name: 'Executive Slate', tag: 'Carbon Steel', swatch: ['#38bdf8', '#818cf8'] },
+  { id: 'cyber', name: 'Cyber Aurora', tag: 'Obsidian Glow', swatch: '#6e56cf' },
+  { id: 'synthwave', name: 'Neon Synthwave', tag: 'Midnight Tokyo', swatch: '#cf5695' },
+  { id: 'emerald', name: 'Quantum Emerald', tag: 'Forest Titanium', swatch: '#2f9e6e' },
+  { id: 'solar', name: 'Solar Ember', tag: 'Espresso Bronze', swatch: '#c4801f' },
+  { id: 'slate', name: 'Executive Slate', tag: 'Carbon Steel', swatch: '#4189c9' },
 ];
 
 const LIGHT_THEMES: ThemeOption[] = [
-  { id: 'light-executive', name: 'Executive Platinum', tag: 'Crisp Studio Light', swatch: ['#5b53d8', '#0284c7'] },
-  { id: 'light-frost', name: 'Nordic Frost Light', tag: 'Ice Cyan Modern', swatch: ['#0d9488', '#0284c7'] },
-  { id: 'light-ceramic', name: 'Warm Ceramic Light', tag: 'Alabaster Amber', swatch: ['#c2620a', '#be123c'] },
+  { id: 'light-executive', name: 'Executive Platinum', tag: 'Crisp Studio Light', swatch: '#5b53d8' },
+  { id: 'light-frost', name: 'Nordic Frost Light', tag: 'Ice Cyan Modern', swatch: '#0d9488' },
+  { id: 'light-ceramic', name: 'Warm Ceramic Light', tag: 'Alabaster Amber', swatch: '#c2620a' },
 ];
 
-const swatchStyle = ([from, to]: [string, string]): React.CSSProperties => ({
-  backgroundImage: `linear-gradient(135deg, ${from}, ${to})`,
+const swatchStyle = (colour: string): React.CSSProperties => ({
+  backgroundColor: colour,
 });
 
 const ALL_THEMES = [...DARK_THEMES, ...LIGHT_THEMES];

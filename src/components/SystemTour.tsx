@@ -64,7 +64,7 @@ export const TOUR_STEPS: TourStep[] = [
     placement: 'bottom',
     badge: 'Shortcut: ⌘K / Ctrl+K',
     badgeColor: 'violet',
-    accentHex: '#8b5cf6',
+    accentHex: 'var(--color-accent)',
     icon: Command,
     quickActionLabel: 'Open Command Palette'
   },
@@ -78,7 +78,7 @@ export const TOUR_STEPS: TourStep[] = [
     placement: 'bottom',
     badge: 'Zero Cloud Egress',
     badgeColor: 'emerald',
-    accentHex: '#10b981',
+    accentHex: 'var(--color-positive)',
     icon: ShieldCheck,
     quickActionLabel: 'Inspect Zero-Trust Vault'
   },
@@ -92,7 +92,7 @@ export const TOUR_STEPS: TourStep[] = [
     placement: 'bottom',
     badge: 'xAPI Listener Active',
     badgeColor: 'amber',
-    accentHex: '#f59e0b',
+    accentHex: 'var(--color-caution)',
     icon: Webhook,
     quickActionLabel: 'View Webhook Panel'
   },
@@ -106,7 +106,7 @@ export const TOUR_STEPS: TourStep[] = [
     placement: 'bottom',
     badge: '98% ATS Alignment',
     badgeColor: 'cyan',
-    accentHex: '#06b6d4',
+    accentHex: 'var(--color-info)',
     icon: Sparkles
   },
   {
@@ -119,7 +119,7 @@ export const TOUR_STEPS: TourStep[] = [
     placement: 'bottom',
     badge: 'Human-in-the-Loop',
     badgeColor: 'purple',
-    accentHex: '#a855f7',
+    accentHex: 'var(--color-accent-strong)',
     icon: Cpu
   }
 ];
@@ -176,7 +176,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
         }
         50% {
           box-shadow: 0 0 0 6px ${accentColor}ee, 0 0 45px ${accentColor}aa, 0 0 90px ${accentColor}55;
-          border-color: #ffffff !important;
+          border-color: var(--color-ink) !important;
         }
       }
 
@@ -492,7 +492,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
 
           {/* Floating Target Identification Beacon */}
           <div className="absolute -top-7 left-3 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-scrim border text-[10px] font-mono font-bold"
-               style={{ borderColor: `${step.accentHex}88`, color: step.accentHex }}>
+               style={{ borderColor: `color-mix(in srgb, ${step.accentHex} 55%, transparent)`, color: step.accentHex }}>
             <span className="w-1.5 h-1.5 rounded-full animate-ping" style={{ backgroundColor: step.accentHex }} />
             <Target className="w-3 h-3" />
             <span>FEATURE FOCUS #{currentStepIdx + 1}</span>
@@ -521,8 +521,8 @@ export const SystemTour: React.FC<SystemTourProps> = ({
         className="fixed z-[110] bg-surface border rounded-panel p-5 sm:p-6 space-y-4 backdrop-blur-2xl"
         style={{
           ...tooltipStyle,
-          borderColor: `${step.accentHex}66`,
-          boxShadow: `0 25px 70px rgba(0,0,0,0.9), 0 0 30px ${step.accentHex}25`
+          borderColor: `color-mix(in srgb, ${step.accentHex} 40%, transparent)`,
+          boxShadow: 'var(--shadow-pop)'
         }}
       >
         {/* Top Header with Step Counter and Close */}
@@ -552,8 +552,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
           <div
             className="p-2.5 rounded-card text-ink shrink-0"
             style={{
-              background: `linear-gradient(135deg, ${step.accentHex}, #3b82f6)`,
-              boxShadow: `0 0 20px ${step.accentHex}44`
+              background: step.accentHex
             }}
           >
             <StepIcon className="w-5 h-5" />
@@ -625,8 +624,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
               onClick={handleNext}
               className="px-4 py-1.5 rounded-control text-ink text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer"
               style={{
-                background: `linear-gradient(135deg, ${step.accentHex}, #3b82f6)`,
-                boxShadow: `0 4px 15px ${step.accentHex}44`
+                background: step.accentHex
               }}
             >
               <span>{currentStepIdx === TOUR_STEPS.length - 1 ? 'Finish Tour 🎉' : 'Next'}</span>

@@ -17,6 +17,7 @@ import {
   Legend
 } from 'recharts';
 import { ApplicationCard, KanbanColumn } from '../types';
+import { chartAxis, chartStatus } from './ui';
 import {
   TrendingUp,
   Zap,
@@ -40,11 +41,11 @@ export interface PerformanceMetricsProps {
 }
 
 const STAGE_COLORS: Record<KanbanColumn, string> = {
-  'Saved': '#94a3b8',
-  'Upskilling': '#f59e0b',
-  'Ready to Apply': '#8b5cf6',
-  'Applied': '#06b6d4',
-  'Interviewing': '#10b981'
+  'Saved': chartStatus.neutral,
+  'Upskilling': chartStatus.caution,
+  'Ready to Apply': chartStatus.accent,
+  'Applied': chartStatus.info,
+  'Interviewing': chartStatus.positive
 };
 
 const STAGE_ORDER: KanbanColumn[] = [
@@ -117,8 +118,8 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
 
     // Sponsorship & Target Breakdown Data
     const sponsorshipData = [
-      { name: 'Licensed UK Sponsor', value: sponsorCount, color: '#10b981' },
-      { name: 'Standard / High-Match', value: Math.max(0, total - sponsorCount), color: '#8b5cf6' }
+      { name: 'Licensed UK Sponsor', value: sponsorCount, color: chartStatus.positive },
+      { name: 'Standard / High-Match', value: Math.max(0, total - sponsorCount), color: chartStatus.accent }
     ];
 
     const meanCycleTimeDays = 16.5;
@@ -265,13 +266,13 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={stats.funnelData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-                  <XAxis dataKey="stage" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} allowDecimals={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartAxis.grid} vertical={false} />
+                  <XAxis dataKey="stage" stroke={chartAxis.tick} fontSize={11} tickLine={false} />
+                  <YAxis stroke={chartAxis.tick} fontSize={11} tickLine={false} allowDecimals={false} />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#0c101a',
-                      borderColor: '#ffffff20',
+                      backgroundColor: chartAxis.tooltipBg,
+                      borderColor: chartAxis.tooltipBorder,
                       borderRadius: '12px',
                       fontSize: '12px',
                       color: '#fff'
@@ -313,21 +314,21 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
                 <AreaChart data={stats.velocityData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="perfVelocityGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4} />
-                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
+                      <stop offset="5%" stopColor={chartStatus.info} stopOpacity={0.4} />
+                      <stop offset="95%" stopColor={chartStatus.info} stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="perfTargetGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                      <stop offset="5%" stopColor={chartStatus.accent} stopOpacity={0.2} />
+                      <stop offset="95%" stopColor={chartStatus.accent} stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-                  <XAxis dataKey="stage" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} unit="d" />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartAxis.grid} vertical={false} />
+                  <XAxis dataKey="stage" stroke={chartAxis.tick} fontSize={11} tickLine={false} />
+                  <YAxis stroke={chartAxis.tick} fontSize={11} tickLine={false} unit="d" />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#0c101a',
-                      borderColor: '#ffffff20',
+                      backgroundColor: chartAxis.tooltipBg,
+                      borderColor: chartAxis.tooltipBorder,
                       borderRadius: '12px',
                       fontSize: '12px',
                       color: '#fff'
@@ -337,7 +338,7 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
                     type="monotone"
                     dataKey="avgDays"
                     name="Actual Avg Days"
-                    stroke="#06b6d4"
+                    stroke={chartStatus.info}
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#perfVelocityGradient)"
@@ -346,7 +347,7 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
                     type="monotone"
                     dataKey="targetDays"
                     name="Target SLA Days"
-                    stroke="#8b5cf6"
+                    stroke={chartStatus.accent}
                     strokeWidth={2}
                     strokeDasharray="4 4"
                     fillOpacity={1}
@@ -394,8 +395,8 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
                     </Pie>
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: '#0c101a',
-                        borderColor: '#ffffff20',
+                        backgroundColor: chartAxis.tooltipBg,
+                        borderColor: chartAxis.tooltipBorder,
                         borderRadius: '12px',
                         fontSize: '12px',
                         color: '#fff'

@@ -194,7 +194,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[130%] h-48 blur-[110px] pointer-events-none transition-all duration-700"
         style={{
-          backgroundColor: `${ARCHETYPE_PRESETS[selectedArchetype].accentColor}25`
+          backgroundColor: `color-mix(in srgb, ${ARCHETYPE_PRESETS[selectedArchetype].accentColor} 25%, transparent)`
         }}
       />
 
@@ -324,7 +324,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                             <div
                               className="w-7 h-7 rounded-control flex items-center justify-center shrink-0"
                               style={{
-                                backgroundColor: `${preset.accentColor}20`,
+                                backgroundColor: `color-mix(in srgb, ${preset.accentColor} 20%, transparent)`,
                                 color: preset.accentColor
                               }}
                             >
@@ -336,8 +336,8 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                                 className="inline-block text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-chip border uppercase whitespace-nowrap"
                                 style={{
                                   color: preset.accentColor,
-                                  borderColor: `${preset.accentColor}40`,
-                                  backgroundColor: `${preset.accentColor}10`
+                                  borderColor: `color-mix(in srgb, ${preset.accentColor} 40%, transparent)`,
+                                  backgroundColor: `color-mix(in srgb, ${preset.accentColor} 10%, transparent)`
                                 }}
                               >
                                 {preset.badge}

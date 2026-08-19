@@ -676,7 +676,7 @@ ${qa.answer}
                   >
                     <span
                       className="w-2.5 h-2.5 rounded-full"
-                      style={{ backgroundColor: sample.brandColor || '#8b5cf6' }}
+                      style={{ backgroundColor: sample.brandColor || 'var(--color-accent)' }}
                     />
                     <span>{sample.company}</span>
                     <span className="text-[10px] opacity-80 font-mono px-1.5 py-0.2 rounded bg-sunken border border-line">
@@ -1063,10 +1063,8 @@ ${qa.answer}
                     />
                     <defs>
                       <linearGradient id="dialGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#8b5cf6" />
-                        <stop offset="35%" stopColor="#ec4899" />
-                        <stop offset="70%" stopColor="#06b6d4" />
-                        <stop offset="100%" stopColor="#10b981" />
+                        <stop offset="0%" stopColor="var(--color-accent)" />
+                        <stop offset="100%" stopColor="var(--color-accent-strong)" />
                       </linearGradient>
                     </defs>
                   </svg>
