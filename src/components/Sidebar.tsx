@@ -7,6 +7,7 @@ import {
   ShieldCheck,
   Sparkles,
   TrendingUp,
+  X,
 } from 'lucide-react';
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Badge, Button, Card, IconTile, Segmented, cn, sectionLabelClass, toneRail } from './ui';
@@ -14,6 +15,11 @@ import { Badge, Button, Card, IconTile, Segmented, cn, sectionLabelClass, toneRa
 export type { TabId };
 
 interface SidebarProps {
+  /** `rail` is the fixed desktop column; `drawer` is the same nav inside the
+   *  mobile off-canvas panel. */
+  variant?: 'rail' | 'drawer';
+  /** Dismisses the drawer. Only meaningful for `variant="drawer"`. */
+  onCloseDrawer?: () => void;
   activeTab: TabId;
   onSelectTab: (tab: TabId) => void;
   profile: MasterProfile;
@@ -38,6 +44,8 @@ const CHART_TOOLTIP_STYLE: React.CSSProperties = {
 const AXIS_TICK = { fill: 'var(--color-ink-faint)', fontSize: 10 } as const;
 
 export const Sidebar: React.FC<SidebarProps> = ({
+  variant = 'rail',
+  onCloseDrawer,
   activeTab,
   onSelectTab,
   profile,
@@ -131,7 +139,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <aside className="hidden md:flex w-[17rem] shrink-0 flex-col gap-5 overflow-y-auto border-r border-line bg-canvas/70 p-3">
+    <aside
+      data-testid={`sidebar-${variant}`}
+      className={cn(
+        'flex w-[17rem] shrink-0 flex-col gap-5 overflow-y-auto border-r border-line p-3',
+        variant === 'rail' ? 'hidden md:flex bg-canvas/70' : 'bg-canvas animate-slide-right',
+      )}
+    >
+      {variant === 'drawer' && onCloseDrawer && (
+        <div className="flex items-center justify-between pl-3">
+          <p className={sectionLabelClass}>Navigation</p>
+          <button
+            type="button"
+            onClick={onCloseDrawer}
+            aria-label="Close workspace navigation"
+            className="p-2 rounded-control text-ink-muted hover:text-ink hover:bg-fill transition-colors cursor-pointer"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       {/* Workspace navigation ---------------------------------------------- */}
       {WORKSPACE_GROUPS.map((group) => (
         <nav key={group.id} className="space-y-0.5">

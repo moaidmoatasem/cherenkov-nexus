@@ -20,8 +20,8 @@ export interface ModalProps {
   label?: string;
   /** `id` of the visible heading that names this dialog. */
   labelledBy?: string;
-  /** Dialogs sit centred; command-palette style surfaces sit near the top. */
-  align?: 'center' | 'top';
+  /** Centred dialog, top-anchored palette, or a left-edge drawer. */
+  align?: 'center' | 'top' | 'left';
   /** Escape and backdrop clicks are dismissals — off for destructive flows. */
   dismissable?: boolean;
   className?: string;
@@ -128,8 +128,10 @@ export const Modal: React.FC<ModalProps> = ({
         if (e.target === e.currentTarget) close();
       }}
       className={cn(
-        'fixed inset-0 z-50 flex justify-center bg-scrim backdrop-blur-md animate-fade-in',
-        align === 'top' ? 'items-start pt-20 px-4' : 'items-center p-4',
+        'fixed inset-0 z-50 flex bg-scrim backdrop-blur-md animate-fade-in',
+        align === 'top' && 'justify-center items-start pt-20 px-4',
+        align === 'center' && 'justify-center items-center p-4',
+        align === 'left' && 'justify-start items-stretch',
         className,
       )}
       data-testid={`modal-${labelledBy ?? label ?? fallbackId}`}

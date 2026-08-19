@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MasterProfile, AppTheme } from '../types';
 import {
   Activity,
+  Menu,
   Check,
   Command,
   Globe,
@@ -19,6 +20,8 @@ import { Badge, Button, cn } from './ui';
 
 interface HeaderProps {
   profile: MasterProfile;
+  /** Opens the navigation drawer. Only rendered below `md`, where the rail is hidden. */
+  onOpenNav?: () => void;
   onOpenProfile: () => void;
   currentTheme: AppTheme;
   onChangeTheme: (theme: AppTheme) => void;
@@ -73,6 +76,7 @@ const initialsOf = (name: string): string =>
 
 export const Header: React.FC<HeaderProps> = ({
   profile,
+  onOpenNav,
   onOpenProfile,
   currentTheme,
   onChangeTheme,
@@ -153,6 +157,19 @@ export const Header: React.FC<HeaderProps> = ({
         'border-b border-line bg-canvas/85 backdrop-blur-xl'
       )}
     >
+      {/* Below md the sidebar is a drawer, so it needs a way in. */}
+      {onOpenNav && (
+        <button
+          type="button"
+          onClick={onOpenNav}
+          aria-label="Open workspace navigation"
+          data-testid="open-nav"
+          className="md:hidden -ml-1 p-2 rounded-control text-ink-muted hover:text-ink hover:bg-fill transition-colors cursor-pointer"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+      )}
+
       {/* Identity ---------------------------------------------------------- */}
       <div className="flex items-center gap-2.5 shrink-0">
         <span className="relative flex items-center justify-center w-8 h-8 rounded-control bg-accent text-accent-contrast shrink-0">

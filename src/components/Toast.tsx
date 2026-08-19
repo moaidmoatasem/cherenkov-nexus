@@ -35,7 +35,10 @@ const ToastItem: React.FC<{ toast: ToastMessage; onDismiss: (id: string) => void
 }) => {
   const [paused, setPaused] = useState(false);
   const dismiss = useRef(onDismiss);
-  dismiss.current = onDismiss;
+
+  useEffect(() => {
+    dismiss.current = onDismiss;
+  }, [onDismiss]);
 
   useEffect(() => {
     if (paused) return;

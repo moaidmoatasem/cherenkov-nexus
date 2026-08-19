@@ -2,34 +2,26 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Search,
   Sparkles,
-  Kanban,
-  GraduationCap,
-  Palette,
-  Terminal,
   ShieldCheck,
   Zap,
   Globe,
-  Share2,
-  BookOpen,
   ArrowRight,
-  Command,
   Sun,
   Moon,
   Activity,
-  FileCode,
-  Check,
   Linkedin,
   Mic,
   HelpCircle
 } from 'lucide-react';
-import { AppTheme, TabId, CandidateArchetype } from '../types';
+import { AppTheme, CandidateArchetype, TabId } from '../types';
 import { SAMPLE_JOBS, ARCHETYPE_PRESETS } from '../data/initialData';
 import { Modal } from './ui';
+import { WORKSPACES } from '../navigation';
 
 interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectTab: (tab: any) => void;
+  onSelectTab: (tab: TabId) => void;
   onOpenProfile: () => void;
   onSelectTheme: (theme: AppTheme) => void;
   onLoadPreset: (company: string) => void;
@@ -95,79 +87,22 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   }, [isOpen, onClose]);
 
   const commands: CommandItem[] = [
-    // Workspaces
-    {
-      id: 'ws-synth',
-      title: 'Go to Job Synthesizer & Weaponry Arsenal',
+    // Workspaces — generated from the one registry in `navigation.tsx`, so a
+    // module is reachable from the palette the moment it is declared. Hand
+    // maintaining this list is how the Sponsorship Oracle went missing.
+    ...WORKSPACES.map((workspace, index): CommandItem => ({
+      id: `ws-${workspace.id}`,
+      title: `Go to ${workspace.name}`,
       category: 'Workspace',
-      description: 'Ingest JDs, synthesize STAR answers, and tailor pitches',
-      icon: <Sparkles className="w-4 h-4 text-accent-ink" />,
-      badge: 'Tab 1',
+      description: workspace.subtitle,
+      icon: workspace.icon,
+      badge: `Tab ${index + 1}`,
       action: () => {
-        onSelectTab('synthesizer');
+        onSelectTab(workspace.id);
         onClose();
-      }
-    },
-    {
-      id: 'ws-kanban',
-      title: 'Go to Kanban Application Pipeline',
-      category: 'Workspace',
-      description: '5-Stage visual tracking of visa-sponsored job opportunities',
-      icon: <Kanban className="w-4 h-4 text-info-ink" />,
-      badge: 'Tab 2',
-      action: () => {
-        onSelectTab('kanban');
-        onClose();
-      }
-    },
-    {
-      id: 'ws-learning',
-      title: 'Go to Learning Sync Matrix',
-      category: 'Workspace',
-      description: 'Review in-flight courses and auto-propagate acquired skills',
-      icon: <GraduationCap className="w-4 h-4 text-caution-ink" />,
-      badge: 'Tab 3',
-      action: () => {
-        onSelectTab('learning');
-        onClose();
-      }
-    },
-    {
-      id: 'ws-marketplace',
-      title: 'Go to MCP Registry & Strategy Marketplace',
-      category: 'Workspace',
-      description: 'Browse, install, and manage official and community Model Context Protocol packages',
-      icon: <Terminal className="w-4 h-4 text-info-ink" />,
-      badge: 'PaaS',
-      action: () => {
-        onSelectTab('marketplace');
-        onClose();
-      }
-    },
-    {
-      id: 'ws-orchestrator',
-      title: 'Go to Visual Agent Canvas & Swarm Builder',
-      category: 'Workspace',
-      description: 'Design and execute multi-agent workflows with human approval gates',
-      icon: <Zap className="w-4 h-4 text-accent-ink" />,
-      badge: 'Swarm',
-      action: () => {
-        onSelectTab('orchestrator');
-        onClose();
-      }
-    },
-    {
-      id: 'ws-hivemind',
-      title: 'Go to Community Hive-Mind & Ghost Job Radar',
-      category: 'Workspace',
-      description: 'Crowdsourced hiring signals, monthly visa heatmaps, and ATS telemetry',
-      icon: <Activity className="w-4 h-4 text-critical-ink" />,
-      badge: 'Radar',
-      action: () => {
-        onSelectTab('hivemind');
-        onClose();
-      }
-    },
+      },
+    })),
+
 
     // Actions
     {
