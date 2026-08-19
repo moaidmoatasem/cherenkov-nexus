@@ -49,11 +49,11 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="p-8 rounded-panel bg-gradient-to-br from-surface via-sunken to-sunken border border-accent2-line relative overflow-hidden shadow-2xl">
+      <div className="p-8 rounded-panel bg-surface border border-info-line relative overflow-hidden shadow-pop">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent2-soft border border-accent2-line text-accent2-ink text-xs font-mono font-bold">
-              <Radio className="w-3.5 h-3.5 animate-pulse text-accent2-ink" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-info-soft border border-info-line text-info-ink text-xs font-mono font-bold">
+              <Radio className="w-3.5 h-3.5 animate-pulse text-info-ink" />
               <span>COMMUNITY HIVE-MIND RADAR</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-ink tracking-tight">
@@ -73,7 +73,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
               <button
                 onClick={handleToggleOptIn}
                 className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${
-                  isTelemetryOptIn ? 'bg-accent2' : 'bg-fill-strong'
+                  isTelemetryOptIn ? 'bg-info' : 'bg-fill-strong'
                 }`}
               >
                 <span
@@ -109,11 +109,11 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-control bg-accent2-soft text-accent2-ink border border-accent2-line">
+            <div className="p-2.5 rounded-control bg-info-soft text-info-ink border border-info-line">
               <Users className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-xl font-bold text-accent2-ink font-mono">12,400+</div>
+              <div className="text-xl font-bold text-info-ink font-mono">12,400+</div>
               <div className="text-[11px] text-ink-muted">Connected Hubs</div>
             </div>
           </div>
@@ -136,7 +136,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
           onClick={() => setActiveTab('ghost_radar')}
           className={`px-4 py-2 rounded-control text-xs font-bold font-mono transition-all cursor-pointer ${
             activeTab === 'ghost_radar'
-              ? 'bg-gradient-to-r from-critical to-caution text-ink-inverse shadow-md font-black'
+              ? 'bg-critical text-ink-inverse font-black'
               : 'text-ink-muted hover:text-ink'
           }`}
         >
@@ -146,7 +146,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
           onClick={() => setActiveTab('visa_heatmap')}
           className={`px-4 py-2 rounded-control text-xs font-bold font-mono transition-all cursor-pointer ${
             activeTab === 'visa_heatmap'
-              ? 'bg-gradient-to-r from-positive to-accent2 text-ink-inverse shadow-md font-black'
+              ? 'bg-positive text-ink-inverse font-black'
               : 'text-ink-muted hover:text-ink'
           }`}
         >
@@ -156,7 +156,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
           onClick={() => setActiveTab('ats_health')}
           className={`px-4 py-2 rounded-control text-xs font-bold font-mono transition-all cursor-pointer ${
             activeTab === 'ats_health'
-              ? 'bg-gradient-to-r from-accent2 to-info text-ink shadow-md font-black'
+              ? 'bg-info text-ink font-black'
               : 'text-ink-muted hover:text-ink'
           }`}
         >
@@ -166,7 +166,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
 
       {/* TAB 1: GHOST JOB RADAR */}
       {activeTab === 'ghost_radar' && (
-        <div className="p-6 rounded-panel bg-sunken border border-critical-line space-y-4 shadow-xl">
+        <div className="p-6 rounded-panel bg-sunken border border-critical-line space-y-4 shadow-pop">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-bold text-ink uppercase font-mono">
@@ -229,7 +229,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
 
       {/* TAB 2: LIVE VISA HEATMAP */}
       {activeTab === 'visa_heatmap' && (
-        <div className="p-6 rounded-panel bg-sunken border border-positive-line space-y-4 shadow-xl">
+        <div className="p-6 rounded-panel bg-sunken border border-positive-line space-y-4 shadow-pop">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-bold text-ink uppercase font-mono">
@@ -265,7 +265,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
                     Monthly Approvals: <span className="text-positive-ink font-bold">{item.recentApprovalsCount}</span>
                   </div>
                   <div>
-                    Avg Relocation: <span className="text-accent2-ink font-bold">{item.avgRelocationDays} days</span>
+                    Avg Relocation: <span className="text-info-ink font-bold">{item.avgRelocationDays} days</span>
                   </div>
                 </div>
 
@@ -287,7 +287,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
 
       {/* TAB 3: ATS SELECTOR HEALTH */}
       {activeTab === 'ats_health' && (
-        <div className="p-6 rounded-panel bg-sunken border border-accent2-line space-y-4 shadow-xl">
+        <div className="p-6 rounded-panel bg-sunken border border-info-line space-y-4 shadow-pop">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-bold text-ink uppercase font-mono">
@@ -297,7 +297,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
                 Continuous health checks of headless Playwright ADA trees and Direct API endpoints.
               </p>
             </div>
-            <span className="text-[10px] font-mono px-2.5 py-1 rounded bg-accent2-soft text-accent2-ink border border-accent2-line">
+            <span className="text-[10px] font-mono px-2.5 py-1 rounded bg-info-soft text-info-ink border border-info-line">
               Live Probes
             </span>
           </div>
@@ -315,7 +315,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
 
                 <div className="flex items-center gap-6">
                   <div className="text-right">
-                    <div className="text-xs font-bold text-accent2-ink font-mono">{ats.ariaTreeHealth}%</div>
+                    <div className="text-xs font-bold text-info-ink font-mono">{ats.ariaTreeHealth}%</div>
                     <div className="text-[9px] text-ink-faint uppercase">Tree Health</div>
                   </div>
 

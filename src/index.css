@@ -8,6 +8,10 @@
    every descendant picks the new value up automatically. That is why there
    is not a single `!important` override in this file.
 
+   The surface ramp is neutral and shared by every theme. A theme changes the
+   accent, nothing else — surfaces stay the same grey so the interface reads
+   as one product rather than eight skins.
+
    Naming
      canvas / sunken / surface / elevated  → depth, back to front
      line / line-strong                    → hairlines and emphasised edges
@@ -18,373 +22,223 @@
 
 @theme {
   /* Depth ------------------------------------------------------------------ */
-  --color-canvas: #08090d;
-  --color-sunken: #0b0d13;
-  --color-surface: #10131b;
-  --color-surface-hover: #161a24;
-  --color-elevated: #171b26;
-  --color-scrim: rgb(4 5 8 / 0.72);
+  --color-canvas: #09090b;
+  --color-sunken: #0d0d10;
+  --color-surface: #141417;
+  --color-surface-hover: #1b1b1f;
+  --color-elevated: #1f1f24;
+  --color-scrim: rgb(6 6 8 / 0.72);
 
   /* Edges ------------------------------------------------------------------ */
-  --color-line: rgb(255 255 255 / 0.07);
-  --color-line-strong: rgb(255 255 255 / 0.14);
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.145);
 
   /* Translucent fills for chips, tracks and hover states ------------------- */
   --color-fill: rgb(255 255 255 / 0.045);
   --color-fill-strong: rgb(255 255 255 / 0.09);
 
   /* Text ------------------------------------------------------------------- */
-  --color-ink: #f2f5f9;
-  --color-ink-muted: #a5aec0;
-  --color-ink-faint: #78829a;
-  --color-ink-inverse: #08090d;
+  --color-ink: #f4f4f5;
+  --color-ink-muted: #a1a1aa;
+  --color-ink-faint: #71717a;
+  --color-ink-inverse: #09090b;
 
-  /* Accent ----------------------------------------------------------------- */
-  --color-accent: #8b5cf6;
-  --color-accent-strong: #a78bfa;
-  --color-accent-ink: #c4b5fd;
-  --color-accent-soft: rgb(139 92 246 / 0.14);
-  --color-accent-line: rgb(139 92 246 / 0.32);
+  /* Accent — the single interactive colour --------------------------------- */
+  --color-accent: #6e56cf;
+  --color-accent-strong: #7c66dc;
+  --color-accent-ink: #b6a6f5;
+  --color-accent-soft: rgb(110 86 207 / 0.15);
+  --color-accent-line: rgb(110 86 207 / 0.35);
   --color-accent-contrast: #ffffff;
 
-  /* Secondary accent, used sparingly for gradients and charts -------------- */
-  --color-accent2: #22d3ee;
-  --color-accent2-ink: #67e8f9;
-  --color-accent2-soft: rgb(34 211 238 / 0.12);
-  --color-accent2-line: rgb(34 211 238 / 0.3);
+  /* Status — meaning only, never decoration -------------------------------- */
+  --color-positive: #3f9e6b;
+  --color-positive-ink: #74d3a3;
+  --color-positive-soft: rgb(63 158 107 / 0.14);
+  --color-positive-line: rgb(63 158 107 / 0.32);
 
-  /* Status ----------------------------------------------------------------- */
-  --color-positive: #10b981;
-  --color-positive-ink: #6ee7b7;
-  --color-positive-soft: rgb(16 185 129 / 0.13);
-  --color-positive-line: rgb(16 185 129 / 0.3);
+  --color-caution: #c08a2e;
+  --color-caution-ink: #e5bd6e;
+  --color-caution-soft: rgb(192 138 46 / 0.14);
+  --color-caution-line: rgb(192 138 46 / 0.32);
 
-  --color-caution: #f59e0b;
-  --color-caution-ink: #fcd34d;
-  --color-caution-soft: rgb(245 158 11 / 0.13);
-  --color-caution-line: rgb(245 158 11 / 0.3);
+  --color-critical: #cf4f5f;
+  --color-critical-ink: #ef9aa5;
+  --color-critical-soft: rgb(207 79 95 / 0.14);
+  --color-critical-line: rgb(207 79 95 / 0.32);
 
-  --color-critical: #f43f5e;
-  --color-critical-ink: #fda4af;
-  --color-critical-soft: rgb(244 63 94 / 0.13);
-  --color-critical-line: rgb(244 63 94 / 0.3);
+  --color-info: #4a8ec4;
+  --color-info-ink: #92c4e6;
+  --color-info-soft: rgb(74 142 196 / 0.14);
+  --color-info-line: rgb(74 142 196 / 0.32);
 
-  --color-info: #38bdf8;
-  --color-info-ink: #7dd3fc;
-  --color-info-soft: rgb(56 189 248 / 0.13);
-  --color-info-line: rgb(56 189 248 / 0.3);
+  /* Chart series — neutral-first categorical ramp -------------------------- */
+  --color-chart-1: #6e56cf;
+  --color-chart-2: #4a8ec4;
+  --color-chart-3: #3f9e6b;
+  --color-chart-4: #c08a2e;
+  --color-chart-5: #8b8b96;
 
   /* Geometry --------------------------------------------------------------- */
   --radius-chip: 6px;
-  --radius-control: 10px;
-  --radius-card: 14px;
-  --radius-panel: 18px;
+  --radius-control: 8px;
+  --radius-card: 10px;
+  --radius-panel: 12px;
 
-  /* Elevation -------------------------------------------------------------- */
-  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.28), 0 8px 24px -16px rgb(0 0 0 / 0.6);
-  --shadow-pop: 0 12px 32px -8px rgb(0 0 0 / 0.55), 0 2px 8px -2px rgb(0 0 0 / 0.4);
+  /* Elevation — borders carry the weight; shadow is for overlays only ------ */
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.24);
+  --shadow-pop: 0 16px 40px -12px rgb(0 0 0 / 0.6), 0 2px 8px -2px rgb(0 0 0 / 0.4);
 
-  /* Type ------------------------------------------------------------------- */
+  /* Type — 15px body. `xs` is a label size, not a body size. --------------- */
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.125rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.3125rem;
+  --text-base: 0.9375rem;
+  --text-base--line-height: 1.5rem;
+  --text-lg: 1.0625rem;
+  --text-lg--line-height: 1.625rem;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.75rem;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 2rem;
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: 2.25rem;
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: 2.5rem;
+
   --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-
-  /* Aura background, per theme ---------------------------------------------- */
-  --color-aura-1: rgb(139 92 246 / 0.20);
-  --color-aura-2: rgb(79 70 229 / 0.18);
-  --color-aura-3: rgb(34 211 238 / 0.14);
-  --color-grid-line: rgb(139 92 246 / 0.14);
 }
 
 /* ==========================================================================
    THEMES
-   Each block restates the same token contract. Dark themes shift the depth
-   ramp up from near-black; light themes invert it and darken the accent inks
-   so text keeps ~4.5:1 contrast on white surfaces.
+   The surface ramp above is shared. A theme swaps the accent triplet and
+   nothing else; the light themes additionally invert the ramp once, in a
+   single grouped block, rather than restating it three times.
    ========================================================================== */
 
 @layer base {
-  /* 1 — Cyber Aurora (default obsidian) ----------------------------------- */
+  /* --- Dark ---------------------------------------------------------------
+     1 — Cyber Aurora inherits the @theme defaults untouched. */
   body.theme-cyber {
-    /* inherits the @theme defaults above */
     color-scheme: dark;
   }
 
-  /* 2 — Neon Synthwave ----------------------------------------------------- */
+  /* 2 — Neon Synthwave */
   body.theme-synthwave {
     color-scheme: dark;
-    --color-canvas: #0a0713;
-    --color-sunken: #0e0a1a;
-    --color-surface: #151027;
-    --color-surface-hover: #1c1533;
-    --color-elevated: #1e1636;
-    --color-scrim: rgb(6 4 12 / 0.74);
-    --color-line: rgb(236 72 153 / 0.12);
-    --color-line-strong: rgb(236 72 153 / 0.28);
-    --color-fill: rgb(253 244 255 / 0.05);
-    --color-fill-strong: rgb(253 244 255 / 0.1);
-    --color-ink: #fdf4ff;
-    --color-ink-muted: #cdb6e8;
-    --color-ink-faint: #9c85bd;
-    --color-ink-inverse: #0a0713;
-    --color-accent: #ec4899;
-    --color-accent-strong: #f472b6;
-    --color-accent-ink: #f9a8d4;
-    --color-accent-soft: rgb(236 72 153 / 0.15);
-    --color-accent-line: rgb(236 72 153 / 0.34);
-    --color-accent2: #22d3ee;
-    --color-accent2-ink: #67e8f9;
-    --color-accent2-soft: rgb(34 211 238 / 0.12);
-    --color-accent2-line: rgb(34 211 238 / 0.3);
-    --color-aura-1: rgb(236 72 153 / 0.22);
-    --color-aura-2: rgb(168 85 247 / 0.2);
-    --color-aura-3: rgb(34 211 238 / 0.14);
-    --color-grid-line: rgb(236 72 153 / 0.14);
+    --color-accent: #cf5695;
+    --color-accent-strong: #dc66a4;
+    --color-accent-ink: #f0a8ca;
+    --color-accent-soft: rgb(207 86 149 / 0.15);
+    --color-accent-line: rgb(207 86 149 / 0.35);
   }
 
-  /* 3 — Quantum Emerald ---------------------------------------------------- */
+  /* 3 — Quantum Emerald */
   body.theme-emerald {
     color-scheme: dark;
-    --color-canvas: #050d0a;
-    --color-sunken: #071310;
-    --color-surface: #0b1a15;
-    --color-surface-hover: #10241d;
-    --color-elevated: #12271f;
-    --color-scrim: rgb(3 8 6 / 0.74);
-    --color-line: rgb(16 185 129 / 0.13);
-    --color-line-strong: rgb(16 185 129 / 0.28);
-    --color-fill: rgb(236 253 245 / 0.05);
-    --color-fill-strong: rgb(236 253 245 / 0.1);
-    --color-ink: #ecfdf5;
-    --color-ink-muted: #9dc7b4;
-    --color-ink-faint: #6f9c8a;
-    --color-ink-inverse: #050d0a;
-    --color-accent: #10b981;
-    --color-accent-strong: #34d399;
-    --color-accent-ink: #6ee7b7;
-    --color-accent-soft: rgb(16 185 129 / 0.14);
-    --color-accent-line: rgb(16 185 129 / 0.32);
-    --color-accent2: #38bdf8;
-    --color-accent2-ink: #7dd3fc;
-    --color-accent2-soft: rgb(56 189 248 / 0.12);
-    --color-accent2-line: rgb(56 189 248 / 0.3);
-    --color-aura-1: rgb(16 185 129 / 0.2);
-    --color-aura-2: rgb(20 184 166 / 0.18);
-    --color-aura-3: rgb(56 189 248 / 0.12);
-    --color-grid-line: rgb(16 185 129 / 0.13);
+    --color-accent: #2f9e6e;
+    --color-accent-strong: #38ad7b;
+    --color-accent-ink: #7fd6ae;
+    --color-accent-soft: rgb(47 158 110 / 0.15);
+    --color-accent-line: rgb(47 158 110 / 0.35);
   }
 
-  /* 4 — Solar Ember -------------------------------------------------------- */
+  /* 4 — Solar Ember */
   body.theme-solar {
     color-scheme: dark;
-    --color-canvas: #0d0904;
-    --color-sunken: #130d06;
-    --color-surface: #1c1409;
-    --color-surface-hover: #261b0d;
-    --color-elevated: #291e0f;
-    --color-scrim: rgb(8 5 2 / 0.74);
-    --color-line: rgb(245 158 11 / 0.13);
-    --color-line-strong: rgb(245 158 11 / 0.28);
-    --color-fill: rgb(255 251 235 / 0.05);
-    --color-fill-strong: rgb(255 251 235 / 0.1);
-    --color-ink: #fffbeb;
-    --color-ink-muted: #d6bd94;
-    --color-ink-faint: #a8906b;
-    --color-ink-inverse: #0d0904;
-    --color-accent: #f59e0b;
-    --color-accent-strong: #fbbf24;
-    --color-accent-ink: #fcd34d;
-    --color-accent-soft: rgb(245 158 11 / 0.14);
-    --color-accent-line: rgb(245 158 11 / 0.32);
-    --color-accent2: #fb7185;
-    --color-accent2-ink: #fda4af;
-    --color-accent2-soft: rgb(251 113 133 / 0.12);
-    --color-accent2-line: rgb(251 113 133 / 0.3);
-    --color-aura-1: rgb(245 158 11 / 0.2);
-    --color-aura-2: rgb(234 88 12 / 0.18);
-    --color-aura-3: rgb(244 63 94 / 0.13);
-    --color-grid-line: rgb(245 158 11 / 0.13);
+    --color-accent: #c4801f;
+    --color-accent-strong: #d18f2b;
+    --color-accent-ink: #eec27a;
+    --color-accent-soft: rgb(196 128 31 / 0.15);
+    --color-accent-line: rgb(196 128 31 / 0.35);
   }
 
-  /* 5 — Executive Slate ---------------------------------------------------- */
+  /* 5 — Executive Slate */
   body.theme-slate {
     color-scheme: dark;
-    --color-canvas: #0a0e15;
-    --color-sunken: #0d121c;
-    --color-surface: #121926;
-    --color-surface-hover: #182132;
-    --color-elevated: #1a2334;
-    --color-scrim: rgb(5 7 11 / 0.74);
-    --color-line: rgb(148 163 184 / 0.13);
-    --color-line-strong: rgb(148 163 184 / 0.26);
-    --color-fill: rgb(248 250 252 / 0.05);
-    --color-fill-strong: rgb(248 250 252 / 0.1);
-    --color-ink: #f8fafc;
-    --color-ink-muted: #a3b0c2;
-    --color-ink-faint: #74829a;
-    --color-ink-inverse: #0a0e15;
-    --color-accent: #38bdf8;
-    --color-accent-strong: #7dd3fc;
-    --color-accent-ink: #7dd3fc;
-    --color-accent-soft: rgb(56 189 248 / 0.13);
-    --color-accent-line: rgb(56 189 248 / 0.3);
-    --color-accent2: #818cf8;
-    --color-accent2-ink: #a5b4fc;
-    --color-accent2-soft: rgb(129 140 248 / 0.12);
-    --color-accent2-line: rgb(129 140 248 / 0.3);
-    --color-aura-1: rgb(56 189 248 / 0.16);
-    --color-aura-2: rgb(99 102 241 / 0.16);
-    --color-aura-3: rgb(148 163 184 / 0.1);
-    --color-grid-line: rgb(148 163 184 / 0.12);
+    --color-accent: #4189c9;
+    --color-accent-strong: #5199d6;
+    --color-accent-ink: #9cc8ea;
+    --color-accent-soft: rgb(65 137 201 / 0.15);
+    --color-accent-line: rgb(65 137 201 / 0.35);
   }
 
-  /* 6 — Executive Platinum (light) ----------------------------------------- */
-  body.theme-light-executive {
+  /* --- Light --------------------------------------------------------------
+     One inverted ramp for all three light themes. Status inks are darkened
+     so text keeps ~4.5:1 on white surfaces. */
+  body.theme-light-executive,
+  body.theme-light-frost,
+  body.theme-light-ceramic {
     color-scheme: light;
-    --color-canvas: #f6f7fb;
-    --color-sunken: #eef1f7;
+    --color-canvas: #fafafa;
+    --color-sunken: #f4f4f5;
     --color-surface: #ffffff;
-    --color-surface-hover: #f4f6fb;
+    --color-surface-hover: #f7f7f8;
     --color-elevated: #ffffff;
-    --color-scrim: rgb(15 23 42 / 0.5);
-    --color-line: rgb(15 23 42 / 0.09);
-    --color-line-strong: rgb(15 23 42 / 0.18);
-    --color-fill: rgb(15 23 42 / 0.04);
-    --color-fill-strong: rgb(15 23 42 / 0.08);
-    --color-ink: #0f172a;
-    --color-ink-muted: #4a5468;
-    --color-ink-faint: #6b7589;
+    --color-scrim: rgb(9 9 11 / 0.5);
+    --color-line: rgb(9 9 11 / 0.1);
+    --color-line-strong: rgb(9 9 11 / 0.2);
+    --color-fill: rgb(9 9 11 / 0.04);
+    --color-fill-strong: rgb(9 9 11 / 0.08);
+    --color-ink: #18181b;
+    --color-ink-muted: #52525b;
+    --color-ink-faint: #71717a;
     --color-ink-inverse: #ffffff;
+
+    --color-positive: #047857;
+    --color-positive-ink: #047857;
+    --color-positive-soft: rgb(4 120 87 / 0.1);
+    --color-positive-line: rgb(4 120 87 / 0.24);
+    --color-caution: #b45309;
+    --color-caution-ink: #b45309;
+    --color-caution-soft: rgb(180 83 9 / 0.1);
+    --color-caution-line: rgb(180 83 9 / 0.24);
+    --color-critical: #be123c;
+    --color-critical-ink: #be123c;
+    --color-critical-soft: rgb(190 18 60 / 0.1);
+    --color-critical-line: rgb(190 18 60 / 0.24);
+    --color-info: #0369a1;
+    --color-info-ink: #0369a1;
+    --color-info-soft: rgb(3 105 161 / 0.1);
+    --color-info-line: rgb(3 105 161 / 0.24);
+
+    --color-chart-1: #5b53d8;
+    --color-chart-2: #0369a1;
+    --color-chart-3: #047857;
+    --color-chart-4: #b45309;
+    --color-chart-5: #71717a;
+
+    --shadow-card: 0 1px 2px rgb(9 9 11 / 0.06);
+    --shadow-pop: 0 16px 40px -12px rgb(9 9 11 / 0.2), 0 2px 8px -2px rgb(9 9 11 / 0.1);
+  }
+
+  /* 6 — Executive Platinum */
+  body.theme-light-executive {
     --color-accent: #5b53d8;
     --color-accent-strong: #4f46e5;
     --color-accent-ink: #4338ca;
     --color-accent-soft: rgb(91 83 216 / 0.09);
     --color-accent-line: rgb(91 83 216 / 0.24);
-    --color-accent2: #0284c7;
-    --color-accent2-ink: #0369a1;
-    --color-accent2-soft: rgb(2 132 199 / 0.09);
-    --color-accent2-line: rgb(2 132 199 / 0.24);
-    --color-positive: #047857;
-    --color-positive-ink: #047857;
-    --color-positive-soft: rgb(4 120 87 / 0.1);
-    --color-positive-line: rgb(4 120 87 / 0.24);
-    --color-caution: #b45309;
-    --color-caution-ink: #b45309;
-    --color-caution-soft: rgb(180 83 9 / 0.1);
-    --color-caution-line: rgb(180 83 9 / 0.24);
-    --color-critical: #be123c;
-    --color-critical-ink: #be123c;
-    --color-critical-soft: rgb(190 18 60 / 0.1);
-    --color-critical-line: rgb(190 18 60 / 0.24);
-    --color-info: #0369a1;
-    --color-info-ink: #0369a1;
-    --color-info-soft: rgb(3 105 161 / 0.1);
-    --color-info-line: rgb(3 105 161 / 0.24);
-    --shadow-card: 0 1px 2px rgb(15 23 42 / 0.05), 0 8px 24px -18px rgb(15 23 42 / 0.25);
-    --shadow-pop: 0 12px 32px -10px rgb(15 23 42 / 0.18), 0 2px 8px -2px rgb(15 23 42 / 0.1);
-    --color-aura-1: rgb(99 102 241 / 0.12);
-    --color-aura-2: rgb(14 165 233 / 0.1);
-    --color-aura-3: rgb(139 92 246 / 0.08);
-    --color-grid-line: rgb(15 23 42 / 0.05);
   }
 
-  /* 7 — Nordic Frost (light) ------------------------------------------------ */
+  /* 7 — Nordic Frost */
   body.theme-light-frost {
-    color-scheme: light;
-    --color-canvas: #f1fbfa;
-    --color-sunken: #e4f4f4;
-    --color-surface: #ffffff;
-    --color-surface-hover: #eefaf9;
-    --color-elevated: #ffffff;
-    --color-scrim: rgb(4 47 46 / 0.5);
-    --color-line: rgb(13 148 136 / 0.13);
-    --color-line-strong: rgb(13 148 136 / 0.26);
-    --color-fill: rgb(6 46 44 / 0.04);
-    --color-fill-strong: rgb(6 46 44 / 0.08);
-    --color-ink: #062e2c;
-    --color-ink-muted: #37605c;
-    --color-ink-faint: #5a807c;
-    --color-ink-inverse: #ffffff;
     --color-accent: #0d9488;
     --color-accent-strong: #0f766e;
     --color-accent-ink: #0f766e;
     --color-accent-soft: rgb(13 148 136 / 0.1);
     --color-accent-line: rgb(13 148 136 / 0.24);
-    --color-accent2: #0284c7;
-    --color-accent2-ink: #0369a1;
-    --color-accent2-soft: rgb(2 132 199 / 0.09);
-    --color-accent2-line: rgb(2 132 199 / 0.24);
-    --color-positive: #047857;
-    --color-positive-ink: #047857;
-    --color-positive-soft: rgb(4 120 87 / 0.1);
-    --color-positive-line: rgb(4 120 87 / 0.24);
-    --color-caution: #b45309;
-    --color-caution-ink: #b45309;
-    --color-caution-soft: rgb(180 83 9 / 0.1);
-    --color-caution-line: rgb(180 83 9 / 0.24);
-    --color-critical: #be123c;
-    --color-critical-ink: #be123c;
-    --color-critical-soft: rgb(190 18 60 / 0.1);
-    --color-critical-line: rgb(190 18 60 / 0.24);
-    --color-info: #0369a1;
-    --color-info-ink: #0369a1;
-    --color-info-soft: rgb(3 105 161 / 0.1);
-    --color-info-line: rgb(3 105 161 / 0.24);
-    --shadow-card: 0 1px 2px rgb(6 46 44 / 0.05), 0 8px 24px -18px rgb(6 46 44 / 0.22);
-    --shadow-pop: 0 12px 32px -10px rgb(6 46 44 / 0.16), 0 2px 8px -2px rgb(6 46 44 / 0.09);
-    --color-aura-1: rgb(20 184 166 / 0.13);
-    --color-aura-2: rgb(14 165 233 / 0.11);
-    --color-aura-3: rgb(16 185 129 / 0.09);
-    --color-grid-line: rgb(6 46 44 / 0.05);
   }
 
-  /* 8 — Warm Ceramic (light) ------------------------------------------------ */
+  /* 8 — Warm Ceramic */
   body.theme-light-ceramic {
-    color-scheme: light;
-    --color-canvas: #faf7f2;
-    --color-sunken: #f2ebe1;
-    --color-surface: #ffffff;
-    --color-surface-hover: #f8f3ec;
-    --color-elevated: #ffffff;
-    --color-scrim: rgb(41 30 19 / 0.5);
-    --color-line: rgb(120 53 15 / 0.11);
-    --color-line-strong: rgb(120 53 15 / 0.22);
-    --color-fill: rgb(41 30 19 / 0.04);
-    --color-fill-strong: rgb(41 30 19 / 0.08);
-    --color-ink: #2b2015;
-    --color-ink-muted: #5d4a35;
-    --color-ink-faint: #7d6a52;
-    --color-ink-inverse: #ffffff;
     --color-accent: #c2620a;
     --color-accent-strong: #b45309;
     --color-accent-ink: #b45309;
     --color-accent-soft: rgb(194 98 10 / 0.1);
     --color-accent-line: rgb(194 98 10 / 0.24);
-    --color-accent2: #be123c;
-    --color-accent2-ink: #be123c;
-    --color-accent2-soft: rgb(190 18 60 / 0.09);
-    --color-accent2-line: rgb(190 18 60 / 0.22);
-    --color-positive: #047857;
-    --color-positive-ink: #047857;
-    --color-positive-soft: rgb(4 120 87 / 0.1);
-    --color-positive-line: rgb(4 120 87 / 0.24);
-    --color-caution: #b45309;
-    --color-caution-ink: #b45309;
-    --color-caution-soft: rgb(180 83 9 / 0.1);
-    --color-caution-line: rgb(180 83 9 / 0.24);
-    --color-critical: #be123c;
-    --color-critical-ink: #be123c;
-    --color-critical-soft: rgb(190 18 60 / 0.1);
-    --color-critical-line: rgb(190 18 60 / 0.24);
-    --color-info: #0369a1;
-    --color-info-ink: #0369a1;
-    --color-info-soft: rgb(3 105 161 / 0.1);
-    --color-info-line: rgb(3 105 161 / 0.24);
-    --shadow-card: 0 1px 2px rgb(41 30 19 / 0.05), 0 8px 24px -18px rgb(41 30 19 / 0.22);
-    --shadow-pop: 0 12px 32px -10px rgb(41 30 19 / 0.16), 0 2px 8px -2px rgb(41 30 19 / 0.09);
-    --color-aura-1: rgb(217 119 6 / 0.13);
-    --color-aura-2: rgb(234 88 12 / 0.1);
-    --color-aura-3: rgb(225 29 72 / 0.08);
-    --color-grid-line: rgb(41 30 19 / 0.05);
   }
 
   /* Base ------------------------------------------------------------------- */
@@ -396,6 +250,8 @@
     font-family: var(--font-sans);
     background-color: var(--color-canvas);
     color: var(--color-ink);
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
     overflow-x: hidden;
     font-feature-settings: 'cv02', 'cv03', 'cv04';
     -webkit-font-smoothing: antialiased;
@@ -442,13 +298,6 @@
    UTILITIES
    ========================================================================== */
 
-@utility subtle-grid {
-  background-image:
-    linear-gradient(to right, var(--color-grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--color-grid-line) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
 /* Numeric readouts line up column-wise. */
 @utility tabular {
   font-variant-numeric: tabular-nums;
@@ -457,7 +306,7 @@
 /* Single-line label used above dense panels. */
 @utility eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   line-height: 1rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -466,44 +315,71 @@
 
 /* ==========================================================================
    MOTION
+   Four entrance gestures, defined once. These replace the `animate-in` /
+   `fade-in` / `zoom-in-*` / `slide-in-from-*` classes the codebase used to
+   spell out — those come from `tailwindcss-animate`, which was never a
+   dependency, so every one of them emitted nothing.
    ========================================================================== */
 
-@keyframes aurora-flow {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
+@keyframes nx-fade-in {
+  from {
+    opacity: 0;
   }
-  50% {
-    transform: translate3d(-3%, 3%, 0) scale(1.08);
-  }
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
+  to {
+    opacity: 1;
   }
 }
 
-@keyframes pulse-glow {
-  0%,
-  100% {
-    opacity: 0.55;
+@keyframes nx-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
   }
-  50% {
-    opacity: 0.85;
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
-.animate-aurora {
-  animation: aurora-flow 22s ease-in-out infinite alternate;
+@keyframes nx-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-.animate-glow-pulse {
-  animation: pulse-glow 10s ease-in-out infinite alternate;
+@keyframes nx-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility animate-fade-in {
+  animation: nx-fade-in 160ms ease-out both;
+}
+
+@utility animate-pop-in {
+  animation: nx-pop-in 180ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+@utility animate-slide-down {
+  animation: nx-slide-down 160ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+@utility animate-slide-up {
+  animation: nx-slide-up 180ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-aurora,
-  .animate-glow-pulse {
-    animation: none;
-  }
-
   *,
   *::before,
   *::after {

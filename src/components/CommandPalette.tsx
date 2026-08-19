@@ -107,7 +107,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Go to Kanban Application Pipeline',
       category: 'Workspace',
       description: '5-Stage visual tracking of visa-sponsored job opportunities',
-      icon: <Kanban className="w-4 h-4 text-accent2-ink" />,
+      icon: <Kanban className="w-4 h-4 text-info-ink" />,
       badge: 'Tab 2',
       action: () => {
         onSelectTab('kanban');
@@ -131,7 +131,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Go to MCP Registry & Strategy Marketplace',
       category: 'Workspace',
       description: 'Browse, install, and manage official and community Model Context Protocol packages',
-      icon: <Terminal className="w-4 h-4 text-accent2-ink" />,
+      icon: <Terminal className="w-4 h-4 text-info-ink" />,
       badge: 'PaaS',
       action: () => {
         onSelectTab('marketplace');
@@ -169,7 +169,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Run LinkedIn Scout MCP Agent',
       category: 'Action',
       description: 'Extract recruiter profiles and generate hyper-personalized cold outreach',
-      icon: <Linkedin className="w-4 h-4 text-accent2-ink" />,
+      icon: <Linkedin className="w-4 h-4 text-info-ink" />,
       badge: 'MCP 2026',
       action: () => {
         onSelectTab('synthesizer');
@@ -204,7 +204,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Open Zero-Trust Identity Vault & Router',
       category: 'Action',
       description: 'Manage AES-256 E2EE storage, PII isolation, and verifiable crypto badges',
-      icon: <ShieldCheck className="w-4 h-4 text-accent2-ink" />,
+      icon: <ShieldCheck className="w-4 h-4 text-info-ink" />,
       badge: 'AES-256',
       action: () => {
         if (onOpenIdentityVault) onOpenIdentityVault();
@@ -325,7 +325,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Switch to Nordic Frost Theme (Light)',
       category: 'Theme',
       description: 'Pure ice gray canvas with sharp cyan & emerald highlights',
-      icon: <Sun className="w-4 h-4 text-accent2" />,
+      icon: <Sun className="w-4 h-4 text-info" />,
       badge: currentTheme === 'light-frost' ? 'Active' : undefined,
       action: () => {
         onSelectTheme('light-frost');
@@ -370,7 +370,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: `Load Verified Role Preset: ${job.company} - ${job.title}`,
       category: 'Presets' as const,
       description: `UK Skilled Worker Licensed Sponsor • ${job.location}`,
-      icon: <Globe className="w-4 h-4 text-accent2-ink" />,
+      icon: <Globe className="w-4 h-4 text-info-ink" />,
       badge: 'UK Sponsor',
       action: () => {
         onSelectTab('synthesizer');
@@ -405,9 +405,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-scrim backdrop-blur-md animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-scrim backdrop-blur-md animate-fade-in">
       <div
-        className="w-full max-w-2xl bg-surface border border-accent-line rounded-panel shadow-2xl overflow-hidden flex flex-col max-h-[75vh] animate-in zoom-in-95 duration-150"
+        className="w-full max-w-2xl bg-surface border border-accent-line rounded-panel shadow-pop overflow-hidden flex flex-col max-h-[75vh] animate-pop-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input Bar */}
@@ -446,14 +446,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   onMouseEnter={() => setSelectedIndex(idx)}
                   className={`px-3.5 py-2.5 rounded-card flex items-center justify-between gap-3 cursor-pointer transition-all ${
                     isSelected
-                      ? 'bg-gradient-to-r from-accent/25 via-info/20 to-accent2/10 border border-accent-line text-ink shadow-sm'
+                      ? 'bg-accent border border-accent-line text-ink'
                       : 'text-ink-muted hover:bg-fill border border-transparent'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div
                       className={`p-2 rounded-control shrink-0 ${
-                        isSelected ? 'bg-accent/30 text-ink shadow-inner' : 'bg-fill text-ink-muted'
+                        isSelected ? 'bg-accent/30 text-ink' : 'bg-fill text-ink-muted'
                       }`}
                     >
                       {cmd.icon}
@@ -478,7 +478,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                     <span className="text-[9px] font-mono uppercase px-2 py-0.5 rounded bg-fill text-ink-muted border border-line">
                       {cmd.category}
                     </span>
-                    {isSelected && <ArrowRight className="w-3.5 h-3.5 text-accent2-ink animate-pulse" />}
+                    {isSelected && <ArrowRight className="w-3.5 h-3.5 text-info-ink animate-pulse" />}
                   </div>
                 </div>
               );

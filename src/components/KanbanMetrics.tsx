@@ -131,7 +131,7 @@ export const KanbanMetrics: React.FC<KanbanMetricsProps> = ({ applications }) =>
   }, [applications]);
 
   return (
-    <div className="p-6 rounded-panel bg-gradient-to-br from-surface via-sunken to-sunken border border-accent-line shadow-2xl space-y-6">
+    <div className="p-6 rounded-panel bg-surface border border-accent-line shadow-pop space-y-6">
       {/* Top Title & Tab Switcher */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -154,7 +154,7 @@ export const KanbanMetrics: React.FC<KanbanMetricsProps> = ({ applications }) =>
             onClick={() => setActiveMetricTab('conversion')}
             className={`px-3 py-1.5 rounded-control text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
               activeMetricTab === 'conversion'
-                ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md'
+                ? 'bg-accent text-ink'
                 : 'text-ink-muted hover:text-ink'
             }`}
           >
@@ -164,7 +164,7 @@ export const KanbanMetrics: React.FC<KanbanMetricsProps> = ({ applications }) =>
             onClick={() => setActiveMetricTab('velocity')}
             className={`px-3 py-1.5 rounded-control text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
               activeMetricTab === 'velocity'
-                ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md'
+                ? 'bg-accent text-ink'
                 : 'text-ink-muted hover:text-ink'
             }`}
           >
@@ -174,7 +174,7 @@ export const KanbanMetrics: React.FC<KanbanMetricsProps> = ({ applications }) =>
             onClick={() => setActiveMetricTab('sponsorship')}
             className={`px-3 py-1.5 rounded-control text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
               activeMetricTab === 'sponsorship'
-                ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md'
+                ? 'bg-accent text-ink'
                 : 'text-ink-muted hover:text-ink'
             }`}
           >
@@ -200,11 +200,11 @@ export const KanbanMetrics: React.FC<KanbanMetricsProps> = ({ applications }) =>
         <div className="p-4 rounded-card bg-fill border border-line flex flex-col justify-between">
           <div className="flex items-center justify-between text-ink-muted text-xs">
             <span className="font-mono">Applied-to-Interview</span>
-            <Award className="w-4 h-4 text-accent2-ink" />
+            <Award className="w-4 h-4 text-info-ink" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-accent2-ink font-mono">{stats.appliedToInterviewRate}%</span>
-            <span className="text-[10px] text-accent2-ink font-mono">Benchmark: 15%</span>
+            <span className="text-2xl font-black text-info-ink font-mono">{stats.appliedToInterviewRate}%</span>
+            <span className="text-[10px] text-info-ink font-mono">Benchmark: 15%</span>
           </div>
           <span className="text-[10px] text-ink-faint mt-1">Pitch conversion efficiency</span>
         </div>
@@ -293,7 +293,7 @@ export const KanbanMetrics: React.FC<KanbanMetricsProps> = ({ applications }) =>
                   Mean transit latency compared against target SLA benchmarks (fewer days = faster conversion).
                 </p>
               </div>
-              <span className="text-[10px] font-mono px-2.5 py-1 rounded-control bg-accent2-soft text-accent2-ink border border-accent2-line">
+              <span className="text-[10px] font-mono px-2.5 py-1 rounded-control bg-info-soft text-info-ink border border-info-line">
                 Target SLA: &lt; 5 Days
               </span>
             </div>

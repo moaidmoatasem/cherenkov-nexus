@@ -182,7 +182,7 @@ export const Header: React.FC<HeaderProps> = ({
           AI AGENTS ONLINE
         </Badge>
         <span className="flex items-center gap-1.5 font-mono text-[11px] text-ink-faint min-w-0">
-          <Terminal className="w-3.5 h-3.5 text-accent2-ink shrink-0" />
+          <Terminal className="w-3.5 h-3.5 text-info-ink shrink-0" />
           <span className="truncate">cherenkov-qa / Playwright / k6</span>
         </span>
       </div>
@@ -331,7 +331,7 @@ export const Header: React.FC<HeaderProps> = ({
           <span className="hidden md:block text-left min-w-0 max-w-[9.5rem]">
             <span className="flex items-center gap-1 text-xs font-semibold text-ink group-hover:text-accent-ink transition-colors">
               <span className="truncate">{profile.name}</span>
-              <UserCheck className="w-3 h-3 text-accent2-ink shrink-0" />
+              <UserCheck className="w-3 h-3 text-info-ink shrink-0" />
             </span>
             <span className="block text-[10px] font-mono text-ink-faint truncate">{profile.title}</span>
           </span>

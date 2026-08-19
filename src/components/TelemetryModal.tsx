@@ -25,15 +25,15 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md animate-fade-in">
       <div
-        className="w-full max-w-3xl bg-surface border border-accent2-line rounded-panel shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-150"
+        className="w-full max-w-3xl bg-surface border border-info-line rounded-panel shadow-pop overflow-hidden flex flex-col max-h-[85vh] animate-pop-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-5 border-b border-line flex items-center justify-between bg-gradient-to-r from-surface to-sunken">
+        <div className="p-5 border-b border-line flex items-center justify-between bg-surface">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-control bg-accent2-soft text-accent2-ink border border-accent2-line shadow-sm">
+            <div className="p-2.5 rounded-control bg-info-soft text-info-ink border border-info-line">
               <Activity className="w-5 h-5" />
             </div>
             <div>
@@ -71,7 +71,7 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
 
             <div className="p-4 rounded-card bg-sunken border border-line space-y-1">
               <div className="text-[10px] font-mono uppercase text-ink-muted">Average Latency</div>
-              <div className="text-xl font-mono font-black text-accent2-ink">412 ms</div>
+              <div className="text-xl font-mono font-black text-info-ink">412 ms</div>
               <div className="text-[10px] text-ink-faint font-mono">Edge-proxied scraping</div>
             </div>
 
@@ -115,7 +115,7 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
               {/* Agent 2 */}
               <div className="p-3.5 rounded-card bg-sunken border border-line flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-accent2" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-info" />
                   <div>
                     <div className="font-semibold text-ink">Visa Radar & Sponsor Validator</div>
                     <div className="text-[11px] text-ink-muted font-mono">
@@ -123,7 +123,7 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
                     </div>
                   </div>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent2-soft text-accent2-ink border border-accent2-line">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-info-soft text-info-ink border border-info-line">
                   SYNCED
                 </span>
               </div>
@@ -150,7 +150,7 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
           <div className="p-4 rounded-card bg-sunken border border-line space-y-2">
             <div className="text-[11px] font-mono uppercase text-ink-muted font-bold flex items-center justify-between">
               <span>Execution Runtime Configuration</span>
-              <span className="text-accent2-ink">Node.js 22 LTS • React 18</span>
+              <span className="text-info-ink">Node.js 22 LTS • React 18</span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11px] font-mono text-ink-muted">
               <div className="flex items-center gap-1.5">
@@ -184,7 +184,7 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
         {/* Footer */}
         <div className="p-4 border-t border-line bg-sunken flex items-center justify-between text-[11px] font-mono">
           <div className="text-ink-muted">
-            Node Server Port: <span className="text-accent2-ink">3000</span> (Reverse Proxied)
+            Node Server Port: <span className="text-info-ink">3000</span> (Reverse Proxied)
           </div>
           <button
             onClick={onClose}

@@ -96,12 +96,12 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
-        className="relative w-full max-w-4xl bg-gradient-to-b from-surface via-sunken to-sunken border border-accent2-line rounded-panel p-6 sm:p-8 shadow-2xl space-y-6 my-8"
+        className="relative w-full max-w-4xl bg-surface border border-info-line rounded-panel p-6 sm:p-8 shadow-pop space-y-6 my-8"
       >
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-card bg-accent2-soft text-accent2-ink border border-accent2-line">
+            <div className="p-3 rounded-card bg-info-soft text-info-ink border border-info-line">
               <Shield className="w-6 h-6" />
             </div>
             <div>
@@ -109,7 +109,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                 <h2 className="text-xl font-bold text-ink tracking-tight">
                   Portable Identity & Zero-Trust Security Vault
                 </h2>
-                <span className="px-2 py-0.5 rounded-full bg-accent2-soft text-accent2-ink border border-accent2-line text-[10px] font-mono font-bold">
+                <span className="px-2 py-0.5 rounded-full bg-info-soft text-info-ink border border-info-line text-[10px] font-mono font-bold">
                   AES-256-GCM
                 </span>
               </div>
@@ -131,10 +131,10 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
         <div className="p-5 rounded-card bg-sunken border border-line space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-xs font-mono font-bold text-ink">
-              <Key className="w-4 h-4 text-accent2-ink" />
+              <Key className="w-4 h-4 text-info-ink" />
               <span>INFERENCE ROUTING & PII ISOLATION</span>
             </div>
-            <span className="text-[10px] font-mono text-accent2-ink">Zero-Egress Gateway</span>
+            <span className="text-[10px] font-mono text-info-ink">Zero-Egress Gateway</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -143,7 +143,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
               onClick={() => handleToggleMode('cloud_only')}
               className={`p-4 rounded-control border text-left transition-all cursor-pointer ${
                 config.mode === 'cloud_only'
-                  ? 'bg-accent-soft border-accent-line shadow-md ring-1 ring-accent-line'
+                  ? 'bg-accent-soft border-accent-line ring-1 ring-accent-line'
                   : 'bg-fill border-line hover:border-line-strong'
               }`}
             >
@@ -161,7 +161,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
               onClick={() => handleToggleMode('local_only')}
               className={`p-4 rounded-control border text-left transition-all cursor-pointer ${
                 config.mode === 'local_only'
-                  ? 'bg-positive-soft border-positive-line shadow-md ring-1 ring-positive-line'
+                  ? 'bg-positive-soft border-positive-line ring-1 ring-positive-line'
                   : 'bg-fill border-line hover:border-line-strong'
               }`}
             >
@@ -179,13 +179,13 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
               onClick={() => handleToggleMode('hybrid')}
               className={`p-4 rounded-control border text-left transition-all cursor-pointer ${
                 config.mode === 'hybrid'
-                  ? 'bg-accent2-soft border-accent2-line shadow-md ring-1 ring-accent2-line'
+                  ? 'bg-info-soft border-info-line ring-1 ring-info-line'
                   : 'bg-fill border-line hover:border-line-strong'
               }`}
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-ink">Hybrid Smart Router</span>
-                <Sparkles className="w-4 h-4 text-accent2-ink" />
+                <Sparkles className="w-4 h-4 text-info-ink" />
               </div>
               <p className="text-[10px] text-ink-muted mt-1">
                 Routes public JD synthesis to Gemini while isolating private PII to local Ollama.
@@ -217,7 +217,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
 
             <div>
               <label className="block text-[10px] font-mono uppercase text-ink-muted font-bold mb-1 flex items-center gap-1.5">
-                <Cpu className="w-3 h-3 text-accent2-ink" />
+                <Cpu className="w-3 h-3 text-info-ink" />
                 <span>Local Model Name / Tag</span>
               </label>
               <div className="flex gap-2">
@@ -232,7 +232,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                     window.dispatchEvent(new CustomEvent('cherenkov_routing_changed', { detail: updated }));
                   }}
                   placeholder="qwen2.5-coder:14b or llama3.3"
-                  className="flex-1 px-3 py-2 bg-sunken border border-line rounded-control text-xs font-mono text-ink placeholder:text-ink-faint focus:outline-none focus:border-accent2-line"
+                  className="flex-1 px-3 py-2 bg-sunken border border-line rounded-control text-xs font-mono text-ink placeholder:text-ink-faint focus:outline-none focus:border-info-line"
                 />
                 <button
                   type="button"
@@ -262,7 +262,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
               <span>CLIENT-SIDE E2EE MASTER PROFILE VAULT</span>
             </div>
             <span className="text-[10px] font-mono text-ink-muted">
-              Fingerprint: <span className="text-accent2-ink">{config.vaultKeyHash?.slice(0, 16)}...</span>
+              Fingerprint: <span className="text-info-ink">{config.vaultKeyHash?.slice(0, 16)}...</span>
             </span>
           </div>
 
@@ -288,7 +288,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                   value={passphrase}
                   onChange={(e) => setPassphrase(e.target.value)}
                   placeholder="Master Passphrase"
-                  className="px-3 py-2 bg-fill border border-line rounded-control text-xs text-ink placeholder:text-ink-faint focus:outline-none focus:border-accent2-line"
+                  className="px-3 py-2 bg-fill border border-line rounded-control text-xs text-ink placeholder:text-ink-faint focus:outline-none focus:border-info-line"
                 />
               )}
               <button
@@ -347,7 +347,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                   <span className="text-[10px] font-mono text-ink-muted">{b.issueDate}</span>
                   <button
                     onClick={() => handleCopyBadgeSig(b)}
-                    className="text-[10px] font-mono text-accent2-ink hover:text-accent2-ink flex items-center gap-1 cursor-pointer"
+                    className="text-[10px] font-mono text-info-ink hover:text-info-ink flex items-center gap-1 cursor-pointer"
                   >
                     {copiedBadgeId === b.id ? <Check className="w-3 h-3 text-positive-ink" /> : <Copy className="w-3 h-3" />}
                     <span>{copiedBadgeId === b.id ? 'Copied' : 'Copy Proof'}</span>
@@ -362,7 +362,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
         <div className="flex justify-end pt-2">
           <button
             onClick={onClose}
-            className="px-6 py-2.5 rounded-control bg-gradient-to-r from-accent2 to-info hover:from-accent2 hover:to-info text-ink text-xs font-bold font-mono cursor-pointer shadow-md"
+            className="px-6 py-2.5 rounded-control bg-info hover:opacity-90 text-ink text-xs font-bold font-mono cursor-pointer"
           >
             Done & Save Settings
           </button>

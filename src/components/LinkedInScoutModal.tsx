@@ -135,18 +135,18 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.95, opacity: 0, y: 20 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="relative w-full max-w-3xl max-h-[90vh] bg-surface border border-accent2-line rounded-panel shadow-2xl overflow-hidden flex flex-col"
+          className="relative w-full max-w-3xl max-h-[90vh] bg-surface border border-info-line rounded-panel shadow-pop overflow-hidden flex flex-col"
         >
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-line bg-sunken">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-card bg-accent2-soft text-accent2-ink border border-accent2-line flex items-center justify-center shadow-md">
+              <div className="w-10 h-10 rounded-card bg-info-soft text-info-ink border border-info-line flex items-center justify-center">
                 <Linkedin className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-base font-bold text-ink">LinkedIn Scout MCP Agent</h3>
-                  <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-accent2-soft text-accent2-ink border border-accent2-line rounded-full">
+                  <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-info-soft text-info-ink border border-info-line rounded-full">
                     2026-07-28 SPEC
                   </span>
                 </div>
@@ -173,13 +173,13 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
                   Recruiter / Hiring Manager LinkedIn URL or Name
                 </label>
                 <div className="relative">
-                  <Linkedin className="w-4 h-4 absolute left-3.5 top-3.5 text-accent2-ink" />
+                  <Linkedin className="w-4 h-4 absolute left-3.5 top-3.5 text-info-ink" />
                   <input
                     type="text"
                     value={profileUrl}
                     onChange={(e) => setProfileUrl(e.target.value)}
                     placeholder="e.g. https://linkedin.com/in/sarah-jenkins-talent or Sarah Jenkins"
-                    className="w-full pl-10 pr-3 py-2.5 text-xs bg-surface border border-line rounded-control text-ink placeholder:text-ink-faint focus:outline-none focus:border-accent2-line"
+                    className="w-full pl-10 pr-3 py-2.5 text-xs bg-surface border border-line rounded-control text-ink placeholder:text-ink-faint focus:outline-none focus:border-info-line"
                   />
                 </div>
               </div>
@@ -194,7 +194,7 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
                     placeholder="e.g. Monzo Bank, Wise, Revolut"
-                    className="w-full px-3.5 py-2 text-xs bg-surface border border-line rounded-control text-ink focus:outline-none focus:border-accent2-line"
+                    className="w-full px-3.5 py-2 text-xs bg-surface border border-line rounded-control text-ink focus:outline-none focus:border-info-line"
                   />
                 </div>
                 <div>
@@ -206,7 +206,7 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
                     value={targetRole}
                     onChange={(e) => setTargetRole(e.target.value)}
                     placeholder="e.g. Senior QA Lead / SDET Lead"
-                    className="w-full px-3.5 py-2 text-xs bg-surface border border-line rounded-control text-ink focus:outline-none focus:border-accent2-line"
+                    className="w-full px-3.5 py-2 text-xs bg-surface border border-line rounded-control text-ink focus:outline-none focus:border-info-line"
                   />
                 </div>
               </div>
@@ -224,7 +224,7 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
                         setProfileUrl(preset.url);
                         setRecruiterName(preset.name);
                       }}
-                      className="px-2 py-0.5 text-[10px] font-mono bg-fill hover:bg-accent2-soft text-ink-muted hover:text-accent2-ink rounded-control border border-line cursor-pointer"
+                      className="px-2 py-0.5 text-[10px] font-mono bg-fill hover:bg-info-soft text-ink-muted hover:text-info-ink rounded-control border border-line cursor-pointer"
                     >
                       {preset.company}
                     </button>
@@ -234,7 +234,7 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-5 py-2.5 text-xs font-bold text-ink bg-gradient-to-r from-accent2 to-info hover:from-accent2 hover:to-info disabled:opacity-50 rounded-control transition-all shadow-md flex items-center gap-1.5 cursor-pointer ml-auto"
+                  className="px-5 py-2.5 text-xs font-bold text-ink bg-info hover:opacity-90 disabled:opacity-50 rounded-control transition-all flex items-center gap-1.5 cursor-pointer ml-auto"
                 >
                   <Sparkles className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
                   <span>{isLoading ? 'Executing Scout...' : 'Run LinkedIn Scout MCP'}</span>
@@ -243,8 +243,8 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
 
               {/* Step indicator */}
               {isLoading && (
-                <div className="p-3 rounded-control bg-accent2-soft border border-accent2-line text-accent2-ink text-xs font-mono flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-accent2 animate-ping" />
+                <div className="p-3 rounded-control bg-info-soft border border-info-line text-info-ink text-xs font-mono flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-info animate-ping" />
                   <span>{scoutStep}</span>
                 </div>
               )}
@@ -258,16 +258,16 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
                 className="space-y-5"
               >
                 {/* Recruiter Dossier Card */}
-                <div className="p-5 rounded-card bg-sunken border border-accent2-line space-y-4">
+                <div className="p-5 rounded-card bg-sunken border border-info-line space-y-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-card bg-accent2-soft border border-accent2-line text-accent2-ink flex items-center justify-center font-bold text-lg font-mono">
+                      <div className="w-12 h-12 rounded-card bg-info-soft border border-info-line text-info-ink flex items-center justify-center font-bold text-lg font-mono">
                         {scoutResult.recruiterName.charAt(0)}
                       </div>
                       <div>
                         <h4 className="text-sm font-bold text-ink flex items-center gap-2">
                           {scoutResult.recruiterName}
-                          <UserCheck className="w-4 h-4 text-accent2-ink" />
+                          <UserCheck className="w-4 h-4 text-info-ink" />
                           {scoutResult.recruiter_profile_status && (
                             <span
                               className={`px-2 py-0.5 text-[9px] font-mono font-bold rounded-full border flex items-center gap-1 ${
@@ -293,7 +293,7 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
                       href={scoutResult.profileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3 py-1.5 text-xs font-mono text-accent2-ink bg-accent2-soft hover:bg-accent2-soft border border-accent2-line rounded-control flex items-center gap-1 transition-colors"
+                      className="px-3 py-1.5 text-xs font-mono text-info-ink bg-info-soft hover:bg-info-soft border border-info-line rounded-control flex items-center gap-1 transition-colors"
                     >
                       <span>LinkedIn</span>
                       <ExternalLink className="w-3.5 h-3.5" />
@@ -309,7 +309,7 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
                       {scoutResult.technicalFocus.map((tf, i) => (
                         <span
                           key={i}
-                          className="px-2.5 py-1 text-[11px] font-mono font-bold bg-accent2-soft text-accent2-ink border border-accent2-line rounded-control"
+                          className="px-2.5 py-1 text-[11px] font-mono font-bold bg-info-soft text-info-ink border border-info-line rounded-control"
                         >
                           {tf}
                         </span>
@@ -336,11 +336,11 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
                             "{post.snippet}"
                           </p>
                           <div className="flex items-center gap-2 text-[10px] font-mono text-ink-muted">
-                            <span className="px-2 py-0.5 bg-accent2-soft text-accent2-ink rounded">
+                            <span className="px-2 py-0.5 bg-info-soft text-info-ink rounded">
                               Topic: {post.topic}
                             </span>
                             <span className="flex items-center gap-1">
-                              <ThumbsUp className="w-3 h-3 text-accent2-ink" />
+                              <ThumbsUp className="w-3 h-3 text-info-ink" />
                               {post.likes} reactions
                             </span>
                           </div>
@@ -351,7 +351,7 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
                 </div>
 
                 {/* Personalized Outreach Pitch */}
-                <div className="p-5 rounded-card bg-gradient-to-br from-surface via-sunken to-sunken border border-accent-line space-y-3">
+                <div className="p-5 rounded-card bg-surface border border-accent-line space-y-3">
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="text-xs font-bold text-accent-ink uppercase tracking-wider font-mono flex items-center gap-1.5">
@@ -390,7 +390,7 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
                             scoutResult.personalizedOutreach.body
                           )
                         }
-                        className="px-4 py-1.5 text-xs font-bold text-ink bg-gradient-to-r from-accent to-info hover:from-accent hover:to-info rounded-control shadow-md flex items-center gap-1.5 cursor-pointer"
+                        className="px-4 py-1.5 text-xs font-bold text-ink bg-accent hover:bg-accent-strong rounded-control flex items-center gap-1.5 cursor-pointer"
                       >
                         <Mail className="w-3.5 h-3.5" />
                         <span>Launch Mail</span>

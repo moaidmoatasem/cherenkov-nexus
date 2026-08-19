@@ -41,7 +41,7 @@ const PRESET_PATHWAYS = [
     provider: 'k6 Academy',
     skills: ['k6', 'Distributed Load', 'Grafana k6 Cloud', 'SLO Budgeting'],
     badge: 'Performance',
-    color: 'from-caution/20 to-caution/10',
+    color: 'bg-caution-soft',
     borderColor: 'border-caution-line'
   },
   {
@@ -49,15 +49,15 @@ const PRESET_PATHWAYS = [
     provider: 'GitHub Skills',
     skills: ['CodeQL', 'AST Vulnerability Querying', 'SARIF Reports'],
     badge: 'Security',
-    color: 'from-accent2/20 to-info/10',
-    borderColor: 'border-accent2-line'
+    color: 'bg-info-soft',
+    borderColor: 'border-info-line'
   },
   {
     title: 'Autonomous Multi-Agent Systems for QA Automation',
     provider: 'DeepLearning.AI',
     skills: ['Qwen', 'AnythingLLM', 'Self-Healing Test Agents', 'cherenkov-qa'],
     badge: 'AI & Agents',
-    color: 'from-accent/20 to-accent/10',
+    color: 'bg-accent-soft',
     borderColor: 'border-accent-line'
   },
   {
@@ -65,7 +65,7 @@ const PRESET_PATHWAYS = [
     provider: 'Chaos Mesh & CNCF',
     skills: ['Chaos Engineering', 'OpenTelemetry', 'Kubernetes Probes', 'Resilience Matrix'],
     badge: 'Infrastructure',
-    color: 'from-positive/20 to-accent2/10',
+    color: 'bg-positive-soft',
     borderColor: 'border-positive-line'
   }
 ];
@@ -362,12 +362,11 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Banner */}
-      <div className="p-6 rounded-panel bg-gradient-to-br from-surface via-surface to-sunken border border-accent-line relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="absolute -right-10 -top-10 w-96 h-96 bg-gradient-to-br from-accent/15 via-accent2/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="p-6 rounded-panel bg-surface border border-accent-line relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 
         <div className="relative z-10">
           <div className="flex items-center gap-2.5">
-            <span className="p-2.5 rounded-control bg-gradient-to-br from-accent to-info text-ink shadow-md">
+            <span className="p-2.5 rounded-control bg-accent text-ink">
               <GraduationCap className="w-5 h-5" />
             </span>
             <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
@@ -384,7 +383,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
 
         <button
           onClick={() => setIsAddingCourse(true)}
-          className="px-5 py-2.5 text-xs font-bold text-ink bg-gradient-to-r from-accent to-accent2 hover:from-accent hover:to-accent2 rounded-control transition-all shadow-lg flex items-center gap-1.5 shrink-0 cursor-pointer relative z-10"
+          className="px-5 py-2.5 text-xs font-bold text-ink bg-accent hover:bg-accent-strong rounded-control transition-all flex items-center gap-1.5 shrink-0 cursor-pointer relative z-10"
         >
           <Plus className="w-4 h-4" />
           <span>Add Custom Pathway</span>
@@ -393,8 +392,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-5 rounded-card bg-surface border border-positive-line shadow-lg flex items-center gap-4 relative overflow-hidden">
-          <div className="absolute right-0 top-0 w-24 h-24 bg-positive-soft rounded-full blur-2xl pointer-events-none" />
+        <div className="p-5 rounded-card bg-surface border border-positive-line flex items-center gap-4 relative overflow-hidden">
           <div className="p-3 rounded-card bg-positive-soft text-positive-ink border border-positive-line">
             <CheckCircle2 className="w-6 h-6" />
           </div>
@@ -404,8 +402,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
           </div>
         </div>
 
-        <div className="p-5 rounded-card bg-surface border border-caution-line shadow-lg flex items-center gap-4 relative overflow-hidden">
-          <div className="absolute right-0 top-0 w-24 h-24 bg-caution-soft rounded-full blur-2xl pointer-events-none" />
+        <div className="p-5 rounded-card bg-surface border border-caution-line flex items-center gap-4 relative overflow-hidden">
           <div className="p-3 rounded-card bg-caution-soft text-caution-ink border border-caution-line">
             <Clock className="w-6 h-6" />
           </div>
@@ -415,13 +412,12 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
           </div>
         </div>
 
-        <div className="p-5 rounded-card bg-surface border border-accent2-line shadow-lg flex items-center gap-4 relative overflow-hidden">
-          <div className="absolute right-0 top-0 w-24 h-24 bg-accent2-soft rounded-full blur-2xl pointer-events-none" />
-          <div className="p-3 rounded-card bg-accent2-soft text-accent2-ink border border-accent2-line">
+        <div className="p-5 rounded-card bg-surface border border-info-line flex items-center gap-4 relative overflow-hidden">
+          <div className="p-3 rounded-card bg-info-soft text-info-ink border border-info-line">
             <Cpu className="w-6 h-6" />
           </div>
           <div>
-            <div className="text-2xl font-black text-accent2-ink font-mono">+{totalSkillsAcquired}</div>
+            <div className="text-2xl font-black text-info-ink font-mono">+{totalSkillsAcquired}</div>
             <div className="text-xs font-medium text-ink-muted">Competencies Injected into Profile</div>
           </div>
         </div>
@@ -432,7 +428,6 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
         id="tour-sync-webhook"
         className="p-6 rounded-panel bg-surface border border-caution-line relative overflow-hidden space-y-4"
       >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-caution-soft rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
           <div className="flex items-start gap-3">
@@ -470,7 +465,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
             <button
               onClick={handleSimulateWebhook}
               disabled={isSimulatingWebhook}
-              className="px-4 py-2 rounded-control bg-gradient-to-r from-caution to-caution hover:from-caution hover:to-caution text-ink-inverse text-xs font-mono font-bold flex items-center gap-1.5 shadow-lg transition-all cursor-pointer disabled:opacity-50"
+              className="px-4 py-2 rounded-control bg-caution hover:opacity-90 text-ink-inverse text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
             >
               {isSimulatingWebhook ? (
                 <>
@@ -491,10 +486,10 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 relative z-10">
           <div className="p-3.5 rounded-card bg-sunken border border-line flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Terminal className="w-4 h-4 text-accent2-ink" />
+              <Terminal className="w-4 h-4 text-info-ink" />
               <div>
                 <div className="text-[10px] font-mono text-ink-muted uppercase font-bold">Inbound Webhook URI</div>
-                <div className="text-xs font-mono text-accent2-ink font-semibold truncate max-w-[280px]">
+                <div className="text-xs font-mono text-info-ink font-semibold truncate max-w-[280px]">
                   POST /api/webhooks/xapi
                 </div>
               </div>
@@ -522,7 +517,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
       </div>
 
       {/* Fast Preset Upskilling Tracks */}
-      <div className="p-6 rounded-panel bg-surface border border-line shadow-xl space-y-4">
+      <div className="p-6 rounded-panel bg-surface border border-line shadow-pop space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Flame className="w-5 h-5 text-caution-ink" />
@@ -530,18 +525,18 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
               High-Yield QA Lead Upskilling Pathways
             </h3>
           </div>
-          <span className="text-[10px] text-accent2-ink font-mono font-bold">1-Click Fast Enroll</span>
+          <span className="text-[10px] text-info-ink font-mono font-bold">1-Click Fast Enroll</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
           {PRESET_PATHWAYS.map((p, idx) => (
             <div
               key={idx}
-              className={`p-4 rounded-card bg-gradient-to-b ${p.color} bg-sunken border ${p.borderColor} hover:border-line-strong transition-all flex flex-col justify-between gap-3 shadow-md`}
+              className={`p-4 rounded-card ${p.color} border ${p.borderColor} hover:border-line-strong transition-all flex flex-col justify-between gap-3`}
             >
               <div>
                 <div className="flex items-center justify-between text-[10px] font-mono mb-1.5">
-                  <span className="text-accent2-ink font-bold">{p.provider}</span>
+                  <span className="text-info-ink font-bold">{p.provider}</span>
                   <span className="px-2 py-0.5 rounded-chip bg-fill-strong text-ink-muted font-bold">
                     {p.badge}
                   </span>
@@ -560,7 +555,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
 
                 <button
                   onClick={() => handleEnrollPreset(p)}
-                  className="w-full py-2 text-xs font-bold bg-fill-strong hover:bg-accent hover:text-ink text-ink rounded-control transition-all border border-line flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                  className="w-full py-2 text-xs font-bold bg-fill-strong hover:bg-accent hover:text-ink text-ink rounded-control transition-all border border-line flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Enroll in Pathway</span>
@@ -573,7 +568,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
 
       {/* Add Course Form Card */}
       {isAddingCourse && (
-        <div className="p-6 rounded-panel bg-surface border border-accent-line shadow-2xl space-y-4">
+        <div className="p-6 rounded-panel bg-surface border border-accent-line shadow-pop space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-line">
             <h3 className="text-sm font-bold text-ink flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-accent-ink" />
@@ -633,7 +628,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
                   value={skillsInput}
                   onChange={(e) => setSkillsInput(e.target.value)}
                   placeholder="e.g. Kubernetes, Chaos Mesh, Distributed Tracing"
-                  className="w-full px-3.5 py-2.5 text-xs font-mono bg-sunken border border-line rounded-control text-accent2-ink focus:outline-none focus:border-accent-line"
+                  className="w-full px-3.5 py-2.5 text-xs font-mono bg-sunken border border-line rounded-control text-info-ink focus:outline-none focus:border-accent-line"
                 />
               </div>
 
@@ -662,7 +657,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
               </button>
               <button
                 type="submit"
-                className="px-5 py-2.5 text-xs font-bold text-ink bg-gradient-to-r from-accent to-accent2 hover:from-accent hover:to-accent2 rounded-control shadow-md cursor-pointer"
+                className="px-5 py-2.5 text-xs font-bold text-ink bg-accent hover:bg-accent-strong rounded-control cursor-pointer"
               >
                 Save & Track Course
               </button>
@@ -687,7 +682,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
                 onClick={() => setActiveCategoryFilter(tab)}
                 className={`px-3 py-1 text-xs rounded-control transition-all cursor-pointer font-medium ${
                   activeCategoryFilter === tab
-                    ? 'bg-accent text-ink font-bold shadow-sm'
+                    ? 'bg-accent text-ink font-bold'
                     : 'text-ink-muted hover:text-ink'
                 }`}
               >
@@ -703,7 +698,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
             return (
               <div
                 key={course.id}
-                className={`p-5 rounded-panel border transition-all duration-200 flex flex-col justify-between shadow-xl ${
+                className={`p-5 rounded-panel border transition-all duration-200 flex flex-col justify-between shadow-pop ${
                   isDone
                     ? 'bg-surface border-positive-line'
                     : 'bg-surface border-line hover:border-accent-line'
@@ -712,7 +707,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
                 <div className="space-y-3.5">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <span className="text-[11px] font-mono font-bold text-accent2-ink block">
+                      <span className="text-[11px] font-mono font-bold text-info-ink block">
                         {course.provider}
                       </span>
                       <h4 className="text-sm font-bold text-ink mt-0.5">{course.title}</h4>
@@ -723,7 +718,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
                       className={`px-3 py-1.5 text-[11px] font-bold rounded-control transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                         isDone
                           ? 'bg-positive-soft text-positive-ink border border-positive-line hover:bg-positive/30'
-                          : 'bg-fill text-ink-muted hover:bg-gradient-to-r hover:from-accent hover:to-accent2 hover:text-ink border border-line'
+                          : 'bg-fill text-ink-muted hover:bg-accent-strong hover:text-ink border border-line'
                       }`}
                     >
                       {isDone ? (

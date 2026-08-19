@@ -287,11 +287,11 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
       : 0;
 
   return (
-    <div className="p-6 rounded-panel bg-gradient-to-br from-surface via-sunken to-sunken border border-accent2-line shadow-2xl space-y-6 max-w-5xl mx-auto">
+    <div className="p-6 rounded-panel bg-surface border border-info-line shadow-pop space-y-6 max-w-5xl mx-auto">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-line">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-card bg-accent2-soft text-accent2-ink border border-accent2-line flex items-center justify-center shadow-lg">
+          <div className="w-12 h-12 rounded-card bg-info-soft text-info-ink border border-info-line flex items-center justify-center">
             <Mic className="w-6 h-6" />
           </div>
           <div>
@@ -299,12 +299,12 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
               <h2 className="text-lg font-bold text-ink tracking-tight">
                 Voice Interview Sandbox (Web Speech API)
               </h2>
-              <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold bg-accent2-soft border border-accent2-line text-accent2-ink rounded-full">
+              <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold bg-info-soft border border-info-line text-info-ink rounded-full">
                 LIVE INTERACTIVE
               </span>
             </div>
             <p className="text-xs text-ink-muted mt-0.5">
-              Simulates technical interview rounds for <span className="text-accent2-ink font-medium">{targetRole}</span> at <span className="text-ink font-medium">{companyName}</span>.
+              Simulates technical interview rounds for <span className="text-info-ink font-medium">{targetRole}</span> at <span className="text-ink font-medium">{companyName}</span>.
             </p>
           </div>
         </div>
@@ -332,8 +332,8 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
       {/* Loading state */}
       {isLoadingQuestions && (
         <div className="py-16 text-center space-y-3">
-          <Sparkles className="w-8 h-8 text-accent2-ink animate-spin mx-auto" />
-          <p className="text-sm font-mono text-accent2-ink">
+          <Sparkles className="w-8 h-8 text-info-ink animate-spin mx-auto" />
+          <p className="text-sm font-mono text-info-ink">
             Synthesizing technical QA interview questions from extracted stack...
           </p>
         </div>
@@ -348,7 +348,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
               <span className="px-3 py-1 text-xs font-mono font-bold rounded-control bg-accent-soft text-accent-ink border border-accent-line">
                 Question {currentIndex + 1} of {questions.length}
               </span>
-              <span className="px-3 py-1 text-xs font-mono bg-accent2-soft text-accent2-ink border border-accent2-line rounded-control">
+              <span className="px-3 py-1 text-xs font-mono bg-info-soft text-info-ink border border-info-line rounded-control">
                 Topic: {currentQuestion.techTopic}
               </span>
               <span className="px-2.5 py-1 text-[10px] font-mono bg-positive-soft text-positive-ink border border-positive-line rounded-control">
@@ -371,7 +371,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
                 className={`px-3.5 py-1.5 text-xs font-bold rounded-control transition-all flex items-center gap-1.5 cursor-pointer ${
                   isSpeakingQuestion
                     ? 'bg-caution-soft text-caution-ink border border-caution-line animate-pulse'
-                    : 'bg-accent2-soft text-accent2-ink hover:bg-accent2-soft border border-accent2-line'
+                    : 'bg-info-soft text-info-ink hover:bg-info-soft border border-info-line'
                 }`}
               >
                 {isSpeakingQuestion ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
@@ -394,7 +394,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
             {/* Expected STAR Evaluation Focus */}
             <div className="pt-3 border-t border-line flex flex-wrap items-center gap-2 text-xs">
               <span className="text-ink-muted font-mono text-[11px] flex items-center gap-1">
-                <HelpCircle className="w-3.5 h-3.5 text-accent2-ink" />
+                <HelpCircle className="w-3.5 h-3.5 text-info-ink" />
                 Interviewer rubric points:
               </span>
               {currentQuestion.expectedStarPoints.map((pt, i) => (
@@ -426,10 +426,10 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
               {/* Microphone Toggle Button */}
               <button
                 onClick={handleToggleListening}
-                className={`px-4 py-2 text-xs font-bold rounded-control transition-all flex items-center gap-2 cursor-pointer shadow-lg ${
+                className={`px-4 py-2 text-xs font-bold rounded-control transition-all flex items-center gap-2 cursor-pointer ${
                   isListening
                     ? 'bg-critical hover:bg-critical text-ink animate-pulse'
-                    : 'bg-accent2 hover:bg-accent2 text-ink'
+                    : 'bg-info hover:bg-info text-ink'
                 }`}
               >
                 {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
@@ -448,7 +448,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
                     ? 'Listening to microphone... your spoken words will appear here in real-time...'
                     : 'Click "Start Spoken Answer" to speak your answer, or type here directly...'
                 }
-                className="w-full p-4 text-xs font-sans bg-surface border border-line rounded-control text-ink placeholder:text-ink-faint focus:outline-none focus:border-accent2-line leading-relaxed"
+                className="w-full p-4 text-xs font-sans bg-surface border border-line rounded-control text-ink placeholder:text-ink-faint focus:outline-none focus:border-info-line leading-relaxed"
               />
             </div>
 
@@ -470,7 +470,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
                 <button
                   onClick={handleEvaluateAnswer}
                   disabled={isEvaluating || !spokenTranscript.trim()}
-                  className="px-5 py-2 text-xs font-bold text-ink bg-gradient-to-r from-accent to-info hover:from-accent hover:to-info disabled:opacity-50 rounded-control transition-all shadow-md flex items-center gap-1.5 cursor-pointer"
+                  className="px-5 py-2 text-xs font-bold text-ink bg-accent hover:bg-accent-strong disabled:opacity-50 rounded-control transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Sparkles className={`w-3.5 h-3.5 ${isEvaluating ? 'animate-spin' : ''}`} />
                   <span>{isEvaluating ? 'AI Scoring...' : 'Submit Answer for AI Scoring'}</span>
@@ -484,7 +484,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              className="p-6 rounded-card bg-gradient-to-br from-surface via-sunken to-sunken border border-positive-line space-y-4"
+              className="p-6 rounded-card bg-surface border border-positive-line space-y-4"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
@@ -508,7 +508,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                 <div className="p-3.5 rounded-control bg-fill border border-line space-y-1">
-                  <span className="text-[10px] font-mono text-accent2-ink uppercase block font-bold">
+                  <span className="text-[10px] font-mono text-info-ink uppercase block font-bold">
                     Technical Depth
                   </span>
                   <p className="text-ink-muted leading-relaxed text-[11px]">
@@ -561,7 +561,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
             <button
               onClick={handleNext}
               disabled={currentIndex === questions.length - 1}
-              className="px-5 py-2 text-xs font-bold text-ink bg-gradient-to-r from-accent2 to-info hover:from-accent2 hover:to-info disabled:opacity-30 rounded-control transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
+              className="px-5 py-2 text-xs font-bold text-ink bg-info hover:opacity-90 disabled:opacity-30 rounded-control transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <span>Next Question</span>
               <ChevronRight className="w-4 h-4" />

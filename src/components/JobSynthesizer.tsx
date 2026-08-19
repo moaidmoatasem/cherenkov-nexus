@@ -604,9 +604,8 @@ ${qa.answer}
       {/* Top Banner & Fast Preset Ingestion */}
       <div
         id="tour-job-synthesizer"
-        className="p-6 rounded-panel bg-gradient-to-br from-surface via-surface to-sunken border border-accent-line relative overflow-hidden"
+        className="p-6 rounded-panel bg-surface border border-accent-line relative overflow-hidden"
       >
-        <div className="absolute -right-10 -top-10 w-96 h-96 bg-gradient-to-br from-accent/20 via-accent2/15 to-positive/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="space-y-5 relative z-10">
           <PanelHeader
@@ -628,7 +627,7 @@ ${qa.answer}
                         ? 'bg-positive'
                         : activeRouting.mode === 'cloud_only'
                         ? 'bg-accent'
-                        : 'bg-accent2'
+                        : 'bg-info'
                     }`}
                   />
                   <span className="text-ink-muted">Active LLM:</span>
@@ -648,7 +647,7 @@ ${qa.answer}
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between gap-3">
               <span className="eyebrow flex items-center gap-1.5">
-                <Compass className="w-3.5 h-3.5 text-accent2-ink" />
+                <Compass className="w-3.5 h-3.5 text-info-ink" />
                 <span>Verified UK/EU Sponsor Presets:</span>
               </span>
               <button
@@ -656,10 +655,10 @@ ${qa.answer}
                   setSoundEnabled(!soundEnabled);
                   playSynthSound('click');
                 }}
-                className="p-1 rounded-control bg-fill hover:bg-fill-strong text-ink-muted hover:text-accent2-ink transition-colors shrink-0"
+                className="p-1 rounded-control bg-fill hover:bg-fill-strong text-ink-muted hover:text-info-ink transition-colors shrink-0"
                 title={soundEnabled ? 'Mute Sound Effects' : 'Enable Sound Effects'}
               >
-                {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-accent2-ink" /> : <VolumeX className="w-3.5 h-3.5 text-ink-faint" />}
+                {soundEnabled ? <Volume2 className="w-3.5 h-3.5 text-info-ink" /> : <VolumeX className="w-3.5 h-3.5 text-ink-faint" />}
               </button>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -671,12 +670,12 @@ ${qa.answer}
                     onClick={() => handleLoadSample(sample)}
                     className={`px-3 py-1.5 text-xs font-bold rounded-control border transition-all flex items-center gap-2 cursor-pointer ${
                       isSelected
-                        ? 'bg-gradient-to-r from-accent via-info to-accent2 text-ink border-accent-line shadow-md ring-2 ring-accent-line'
+                        ? 'bg-accent text-ink border-accent-line ring-2 ring-accent-line'
                         : 'bg-fill hover:bg-fill-strong border-line text-ink-muted hover:text-ink'
                     }`}
                   >
                     <span
-                      className="w-2.5 h-2.5 rounded-full shadow-sm"
+                      className="w-2.5 h-2.5 rounded-full"
                       style={{ backgroundColor: sample.brandColor || '#8b5cf6' }}
                     />
                     <span>{sample.company}</span>
@@ -693,20 +692,20 @@ ${qa.answer}
         {/* URL Scraper Bar */}
         <div className="mt-5 pt-4 border-t border-line flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 absolute left-3.5 top-3.5 text-accent2-ink" />
+            <Search className="w-4 h-4 absolute left-3.5 top-3.5 text-info-ink" />
             <input
               type="url"
               value={scrapeUrl}
               onChange={(e) => setScrapeUrl(e.target.value)}
               placeholder="Paste live Job URL (e.g. https://monzo.com/careers/... or Greenhouse/Lever link)"
-              className="w-full pl-10 pr-4 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink placeholder:text-ink-faint focus:outline-none focus:border-accent2-line focus:ring-2 focus:ring-accent2-line transition-all font-mono"
+              className="w-full pl-10 pr-4 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink placeholder:text-ink-faint focus:outline-none focus:border-info-line focus:ring-2 focus:ring-info-line transition-all font-mono"
             />
           </div>
 
           <button
             onClick={handleScrape}
             disabled={isScraping}
-            className="px-5 py-2.5 text-xs font-extrabold text-ink bg-gradient-to-r from-accent2 via-info to-info hover:from-accent2 hover:to-info border border-accent2-line rounded-control transition-all flex items-center justify-center gap-2 shrink-0 shadow-lg disabled:opacity-50 cursor-pointer"
+            className="px-5 py-2.5 text-xs font-extrabold text-ink bg-info hover:opacity-90 border border-info-line rounded-control transition-all flex items-center justify-center gap-2 shrink-0 disabled:opacity-50 cursor-pointer"
           >
             {isScraping ? (
               <>
@@ -724,7 +723,7 @@ ${qa.answer}
       </div>
 
       {/* Inputs / Configuration Bar */}
-      <div className="p-6 rounded-panel bg-surface border border-line space-y-4 shadow-xl">
+      <div className="p-6 rounded-panel bg-surface border border-line space-y-4 shadow-pop">
         {/* Auto-Save & Tool Integration Toolbar */}
         <div className="flex flex-wrap items-center justify-between gap-2 p-3 rounded-card bg-sunken border border-line">
           <div className="flex items-center gap-2">
@@ -748,7 +747,7 @@ ${qa.answer}
                 <button
                   type="button"
                   onClick={handleRestoreDraft}
-                  className="px-2.5 py-1 text-[10px] font-mono text-accent2-ink bg-accent2-soft hover:bg-accent2-soft border border-accent2-line rounded-control flex items-center gap-1 cursor-pointer transition-colors"
+                  className="px-2.5 py-1 text-[10px] font-mono text-info-ink bg-info-soft hover:bg-info-soft border border-info-line rounded-control flex items-center gap-1 cursor-pointer transition-colors"
                 >
                   <RotateCcw className="w-3 h-3" />
                   <span>Restore Draft</span>
@@ -777,7 +776,7 @@ ${qa.answer}
                 }}
                 className={`px-2.5 py-1 rounded-control text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                   activeRouting.mode === 'cloud_only'
-                    ? 'bg-accent text-ink shadow-md'
+                    ? 'bg-accent text-ink'
                     : 'text-ink-muted hover:text-ink'
                 }`}
               >
@@ -796,7 +795,7 @@ ${qa.answer}
                 }}
                 className={`px-2.5 py-1 rounded-control text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                   activeRouting.mode === 'local_only'
-                    ? 'bg-positive text-ink shadow-md'
+                    ? 'bg-positive text-ink'
                     : 'text-ink-muted hover:text-ink'
                 }`}
               >
@@ -808,16 +807,16 @@ ${qa.answer}
             <button
               type="button"
               onClick={() => setIsCompareModalOpen(true)}
-              className="px-3 py-1.5 text-xs font-mono font-bold bg-gradient-to-r from-accent/20 to-accent2/20 hover:from-accent/30 hover:to-accent2/30 text-accent2-ink border border-accent2-line rounded-control flex items-center gap-1.5 cursor-pointer shadow-sm transition-all"
+              className="px-3 py-1.5 text-xs font-mono font-bold bg-accent hover:bg-accent-strong text-info-ink border border-info-line rounded-control flex items-center gap-1.5 cursor-pointer transition-all"
             >
-              <GitCompare className="w-3.5 h-3.5 text-accent2-ink" />
+              <GitCompare className="w-3.5 h-3.5 text-info-ink" />
               <span>Compare Models (Cloud vs Local)</span>
             </button>
 
             <button
               type="button"
               onClick={() => setIsLinkedInScoutOpen(true)}
-              className="px-3 py-1.5 text-xs font-mono font-bold bg-accent2-soft hover:bg-accent2-soft text-accent2-ink border border-accent2-line rounded-control flex items-center gap-1.5 cursor-pointer shadow-sm transition-all"
+              className="px-3 py-1.5 text-xs font-mono font-bold bg-info-soft hover:bg-info-soft text-info-ink border border-info-line rounded-control flex items-center gap-1.5 cursor-pointer transition-all"
             >
               <Linkedin className="w-3.5 h-3.5" />
               <span>LinkedIn Scout MCP</span>
@@ -826,7 +825,7 @@ ${qa.answer}
             <button
               type="button"
               onClick={() => setIsVoiceInterviewOpen(true)}
-              className="px-3 py-1.5 text-xs font-mono font-bold bg-accent-soft hover:bg-accent-soft text-accent-ink border border-accent-line rounded-control flex items-center gap-1.5 cursor-pointer shadow-sm transition-all"
+              className="px-3 py-1.5 text-xs font-mono font-bold bg-accent-soft hover:bg-accent-soft text-accent-ink border border-accent-line rounded-control flex items-center gap-1.5 cursor-pointer transition-all"
             >
               <Mic className="w-3.5 h-3.5" />
               <span>Mock Interview</span>
@@ -883,7 +882,7 @@ ${qa.answer}
               <span>Job Description Raw Content</span>
             </label>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono text-accent2-ink font-bold bg-accent2-soft px-2 py-0.5 rounded border border-accent2-line">
+              <span className="text-[10px] font-mono text-info-ink font-bold bg-info-soft px-2 py-0.5 rounded border border-info-line">
                 {jobDescription.length} chars • ~{Math.round(jobDescription.split(/\s+/).length)} words
               </span>
               <button
@@ -914,7 +913,7 @@ ${qa.answer}
             <button
               onClick={handleSynthesize}
               disabled={isSynthesizing || !jobDescription.trim()}
-              className="w-full sm:w-auto px-8 py-3.5 text-xs font-black text-ink bg-gradient-to-r from-accent via-info to-accent2 hover:from-accent hover:to-accent2 rounded-control transition-all shadow-xl flex items-center justify-center gap-2.5 disabled:opacity-50 cursor-pointer tracking-wide uppercase"
+              className="w-full sm:w-auto px-8 py-3.5 text-xs font-black text-ink bg-accent hover:bg-accent-strong rounded-control transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 cursor-pointer tracking-wide uppercase"
             >
               {isSynthesizing ? (
                 <>
@@ -933,7 +932,7 @@ ${qa.answer}
 
           {/* Local LLM Loading Status */}
           {activeRouting.mode === 'local_only' && !isWebLLMReady && !webLLMError && (
-            <div className="text-[10px] font-mono text-accent2-ink/70 text-center animate-pulse mt-2">
+            <div className="text-[10px] font-mono text-info-ink/70 text-center animate-pulse mt-2">
               Initializing WebGPU MLC Engine ({webLLMProgress}%)... PII will remain in-browser.
             </div>
           )}
@@ -945,13 +944,13 @@ ${qa.answer}
           
           {/* Sub-Agent Execution Progress Card */}
           {isSynthesizing && (
-            <div className="p-4 rounded-card bg-sunken border border-accent-line space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="p-4 rounded-card bg-sunken border border-accent-line space-y-2 animate-slide-down">
               <div className="flex items-center justify-between text-xs font-mono">
                 <span className="text-accent-ink font-bold flex items-center gap-2">
-                  <TerminalSquare className="w-4 h-4 text-accent2-ink animate-pulse" />
+                  <TerminalSquare className="w-4 h-4 text-info-ink animate-pulse" />
                   <span>APPLICATION PROCESSING PIPELINE</span>
                 </span>
-                <span className="text-accent2-ink font-bold">Step {synthesisAgentStep + 1} / 4</span>
+                <span className="text-info-ink font-bold">Step {synthesisAgentStep + 1} / 4</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 pt-1">
@@ -970,7 +969,7 @@ ${qa.answer}
                         isDone
                           ? 'bg-positive-soft border-positive-line text-positive-ink'
                           : isCurrent
-                          ? 'bg-accent-soft border-accent-line text-ink shadow-md ring-1 ring-accent-line'
+                          ? 'bg-accent-soft border-accent-line text-ink ring-1 ring-accent-line'
                           : 'bg-fill border-line text-ink-faint opacity-60'
                       }`}
                     >
@@ -999,7 +998,7 @@ ${qa.answer}
         <div className="space-y-6">
           <div className="space-y-6">
           {/* 1. Instant Traffic Light Visa Badge */}
-          <div className={`p-4 rounded-panel border flex items-center justify-between shadow-xl transition-all ${
+          <div className={`p-4 rounded-panel border flex items-center justify-between shadow-pop transition-all ${
             synthesizedData.isLicensedSponsor 
               ? 'bg-positive/30 border-positive-line' 
               : 'bg-critical/30 border-critical-line'
@@ -1029,7 +1028,7 @@ ${qa.answer}
           {/* Left Column (5 cols): Job Intelligence, Visa Check & Gap Analysis */}
           <div className="lg:col-span-5 space-y-4">
             {/* Match Radar Card with Glowing SVG Dial */}
-            <div className="p-5 rounded-panel bg-surface border border-accent-line shadow-xl space-y-4 relative overflow-hidden">
+            <div className="p-5 rounded-panel bg-surface border border-accent-line shadow-pop space-y-4 relative overflow-hidden">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Cpu className="w-4 h-4 text-accent-ink" />
@@ -1073,7 +1072,7 @@ ${qa.answer}
                   </svg>
                   <div className="absolute flex flex-col items-center">
                     <span className="text-sm font-extrabold text-ink font-mono">96%</span>
-                    <span className="text-[8px] font-mono text-accent2-ink font-black uppercase">TOP TIER</span>
+                    <span className="text-[8px] font-mono text-info-ink font-black uppercase">TOP TIER</span>
                   </div>
                 </div>
 
@@ -1096,17 +1095,17 @@ ${qa.answer}
                     <span className="text-positive-ink font-bold">100%</span>
                   </div>
                   <div className="h-2 w-full bg-fill rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-positive to-accent2 rounded-full w-full" />
+                    <div className="h-full bg-positive rounded-full w-full" />
                   </div>
                 </div>
 
                 <div>
                   <div className="flex justify-between text-[11px] mb-1 font-mono">
                     <span className="text-ink-muted">Playwright & k6 Infrastructure</span>
-                    <span className="text-accent2-ink font-bold">98%</span>
+                    <span className="text-info-ink font-bold">98%</span>
                   </div>
                   <div className="h-2 w-full bg-fill rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-accent2 to-info rounded-full w-[98%]" />
+                    <div className="h-full bg-info rounded-full w-[98%]" />
                   </div>
                 </div>
 
@@ -1116,7 +1115,7 @@ ${qa.answer}
                     <span className="text-accent-ink font-bold">95%</span>
                   </div>
                   <div className="h-2 w-full bg-fill rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-accent to-accent rounded-full w-[95%]" />
+                    <div className="h-full bg-accent rounded-full w-[95%]" />
                   </div>
                 </div>
 
@@ -1126,14 +1125,14 @@ ${qa.answer}
                     <span className="text-positive-ink font-bold">100%</span>
                   </div>
                   <div className="h-2 w-full bg-fill rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-positive to-positive rounded-full w-full" />
+                    <div className="h-full bg-positive rounded-full w-full" />
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Visa Sponsorship Status Card */}
-            <div className="p-4 rounded-panel bg-gradient-to-r from-positive/40 via-surface to-sunken border border-positive-line flex items-start gap-3 shadow-lg">
+            <div className="p-4 rounded-panel bg-positive border border-positive-line flex items-start gap-3">
               <div className="p-2.5 rounded-control bg-positive-soft text-positive-ink border border-positive-line shrink-0">
                 <ShieldCheck className="w-5 h-5" />
               </div>
@@ -1153,7 +1152,7 @@ ${qa.answer}
             </div>
 
             {/* Gap Analysis & Actionable Upskilling */}
-            <div className="p-5 rounded-panel bg-gradient-to-br from-caution/35 via-surface to-sunken border border-caution-line space-y-3.5 shadow-xl">
+            <div className="p-5 rounded-panel bg-caution border border-caution-line space-y-3.5 shadow-pop">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-caution-ink">
                   <AlertTriangle className="w-4 h-4" />
@@ -1175,7 +1174,7 @@ ${qa.answer}
                     synthesizedData.identified_skill_gaps.map((gap) => (
                       <span
                         key={gap}
-                        className="px-2.5 py-1 text-xs font-mono bg-caution-soft border border-caution-line text-caution-ink rounded-control font-bold shadow-sm"
+                        className="px-2.5 py-1 text-xs font-mono bg-caution-soft border border-caution-line text-caution-ink rounded-control font-bold"
                       >
                         +{gap}
                       </span>
@@ -1199,8 +1198,8 @@ ${qa.answer}
                   disabled={addedToLearning}
                   className={`w-full mt-2 py-2.5 px-3 text-xs font-black rounded-control transition-all flex items-center justify-center gap-1.5 ${
                     addedToLearning
-                      ? 'bg-positive/90 text-positive-ink border border-positive-line cursor-default shadow-md'
-                      : 'bg-gradient-to-r from-caution via-caution to-caution hover:from-caution hover:to-caution text-ink-inverse font-black shadow-lg cursor-pointer'
+                      ? 'bg-positive/90 text-positive-ink border border-positive-line cursor-default'
+                      : 'bg-caution hover:opacity-90 text-ink-inverse font-black cursor-pointer'
                   }`}
                 >
                   {addedToLearning ? (
@@ -1222,12 +1221,12 @@ ${qa.answer}
           {/* Right Column (7 cols): Tailored Weaponry Arsenal */}
           <div className="lg:col-span-7 space-y-4">
             {/* Segmented Weapons Tabs */}
-            <div className="p-1 rounded-card bg-surface border border-line flex items-center justify-between gap-1 shadow-lg">
+            <div className="p-1 rounded-card bg-surface border border-line flex items-center justify-between gap-1">
               <button
                 onClick={() => setActiveWeaponTab('summary')}
                 className={`flex-1 py-2.5 text-xs font-bold rounded-control transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   activeWeaponTab === 'summary'
-                    ? 'bg-gradient-to-r from-accent to-info text-ink shadow-md'
+                    ? 'bg-accent text-ink'
                     : 'text-ink-muted hover:text-ink hover:bg-fill'
                 }`}
               >
@@ -1239,7 +1238,7 @@ ${qa.answer}
                 onClick={() => setActiveWeaponTab('email')}
                 className={`flex-1 py-2.5 text-xs font-bold rounded-control transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   activeWeaponTab === 'email'
-                    ? 'bg-gradient-to-r from-accent2 to-info text-ink shadow-md'
+                    ? 'bg-info text-ink'
                     : 'text-ink-muted hover:text-ink hover:bg-fill'
                 }`}
               >
@@ -1251,7 +1250,7 @@ ${qa.answer}
                 onClick={() => setActiveWeaponTab('ats')}
                 className={`flex-1 py-2.5 text-xs font-bold rounded-control transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   activeWeaponTab === 'ats'
-                    ? 'bg-gradient-to-r from-accent to-critical text-ink shadow-md'
+                    ? 'bg-accent text-ink'
                     : 'text-ink-muted hover:text-ink hover:bg-fill'
                 }`}
               >
@@ -1263,7 +1262,7 @@ ${qa.answer}
                 onClick={() => setActiveWeaponTab('interview')}
                 className={`flex-1 py-2.5 text-xs font-bold rounded-control transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   activeWeaponTab === 'interview'
-                    ? 'bg-gradient-to-r from-positive to-accent2 text-ink shadow-md'
+                    ? 'bg-positive text-ink'
                     : 'text-ink-muted hover:text-ink hover:bg-fill'
                 }`}
               >
@@ -1275,7 +1274,7 @@ ${qa.answer}
                 onClick={() => setActiveWeaponTab('export')}
                 className={`flex-1 py-2.5 text-xs font-bold rounded-control transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   activeWeaponTab === 'export'
-                    ? 'bg-gradient-to-r from-caution to-caution text-ink shadow-md'
+                    ? 'bg-caution text-ink'
                     : 'text-ink-muted hover:text-ink hover:bg-fill'
                 }`}
               >
@@ -1286,7 +1285,7 @@ ${qa.answer}
 
             {/* TAB 1: 3-Sentence Hook with Visual Diff Toggle */}
             {activeWeaponTab === 'summary' && (
-              <div className="p-6 rounded-panel bg-surface border border-accent-line space-y-4 shadow-xl">
+              <div className="p-6 rounded-panel bg-surface border border-accent-line space-y-4 shadow-pop">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-accent" />
@@ -1312,7 +1311,7 @@ ${qa.answer}
                         onClick={() => setSummaryViewMode('diff')}
                         className={`px-2.5 py-1 text-[10px] font-mono font-bold rounded-control transition-all flex items-center gap-1 cursor-pointer ${
                           summaryViewMode === 'diff'
-                            ? 'bg-accent2-soft text-accent2-ink border border-accent2-line'
+                            ? 'bg-info-soft text-info-ink border border-info-line'
                             : 'text-ink-muted hover:text-ink'
                         }`}
                       >
@@ -1325,7 +1324,7 @@ ${qa.answer}
                       <button
                         onClick={handleGeneratePdfResume}
                         disabled={isGeneratingPdf}
-                        className="px-3 py-1 text-xs bg-gradient-to-r from-accent via-info to-accent2 hover:from-accent hover:to-accent2 text-ink rounded-control font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer disabled:opacity-50"
+                        className="px-3 py-1 text-xs bg-accent hover:bg-accent-strong text-ink rounded-control font-bold flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
                         title="Export clean ATS-friendly PDF Resume"
                       >
                         {isGeneratingPdf ? (
@@ -1364,12 +1363,12 @@ ${qa.answer}
                 </div>
 
                 {summaryViewMode === 'polished' ? (
-                  <div className="p-5 rounded-card bg-sunken border border-line text-xs text-ink leading-relaxed font-sans shadow-inner">
+                  <div className="p-5 rounded-card bg-sunken border border-line text-xs text-ink leading-relaxed font-sans">
                     {synthesizedData.tailored_summary}
                   </div>
                 ) : (
                   /* Visual Git-Diff Comparison Engine */
-                  <div className="p-4 rounded-card bg-sunken border border-accent2-line space-y-3 font-mono text-[11px] shadow-inner">
+                  <div className="p-4 rounded-card bg-sunken border border-info-line space-y-3 font-mono text-[11px]">
                     <div className="flex items-center justify-between text-[10px] text-ink-muted border-b border-line pb-2">
                       <div className="flex items-center gap-2">
                         <span className="px-1.5 py-0.5 rounded bg-critical-soft text-critical-ink border border-critical-line font-bold">
@@ -1379,7 +1378,7 @@ ${qa.answer}
                           + TAILORED JD SYNTHESIS
                         </span>
                       </div>
-                      <span className="text-accent2-ink">Target: {companyName}</span>
+                      <span className="text-info-ink">Target: {companyName}</span>
                     </div>
 
                     <div className="space-y-2 leading-relaxed">
@@ -1403,10 +1402,10 @@ ${qa.answer}
 
             {/* TAB 2: Cold Email Pitch with Tone Customizer */}
             {activeWeaponTab === 'email' && (
-              <div className="p-6 rounded-panel bg-surface border border-accent2-line space-y-4 shadow-xl">
+              <div className="p-6 rounded-panel bg-surface border border-info-line space-y-4 shadow-pop">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-accent2-ink" />
+                    <Mail className="w-4 h-4 text-info-ink" />
                     <h3 className="text-xs font-bold text-ink uppercase font-mono">
                       Tailored Cold Outreach Pitch
                     </h3>
@@ -1417,7 +1416,7 @@ ${qa.answer}
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => setIsLinkedInScoutOpen(true)}
-                        className="px-3.5 py-1.5 text-xs bg-accent2-soft hover:bg-accent2-soft text-accent2-ink rounded-control border border-accent2-line font-bold flex items-center gap-1.5 transition-all cursor-pointer font-mono"
+                        className="px-3.5 py-1.5 text-xs bg-info-soft hover:bg-info-soft text-info-ink rounded-control border border-info-line font-bold flex items-center gap-1.5 transition-all cursor-pointer font-mono"
                       >
                         <Linkedin className="w-3.5 h-3.5" />
                         <span className="hidden sm:inline">Scout</span>
@@ -1463,7 +1462,7 @@ ${qa.answer}
                         onClick={() => handleCopy(getTailoredColdPitch(outreachTone), 'cold-email', 'Cold Email Pitch')}
                         className="px-4 py-2.5 rounded-control bg-fill hover:bg-fill-strong border border-line text-xs font-bold text-ink flex items-center gap-1.5 cursor-pointer transition-all"
                       >
-                        {copiedKeys['cold-email'] ? <Check className="w-3.5 h-3.5 text-positive-ink" /> : <Copy className="w-3.5 h-3.5 text-accent2-ink" />}
+                        {copiedKeys['cold-email'] ? <Check className="w-3.5 h-3.5 text-positive-ink" /> : <Copy className="w-3.5 h-3.5 text-info-ink" />}
                         <span>{copiedKeys['cold-email'] ? 'Copied!' : 'Copy Body'}</span>
                       </button>
                     </div>
@@ -1475,7 +1474,7 @@ ${qa.answer}
                   <span className="text-[10px] font-mono font-bold text-ink-muted px-2 uppercase">Tone:</span>
                   {[
                     { id: 'executive', name: 'Executive QA Leader', color: 'text-accent-ink' },
-                    { id: 'deeptech', name: 'Deep-Tech Automation', color: 'text-accent2-ink' },
+                    { id: 'deeptech', name: 'Deep-Tech Automation', color: 'text-info-ink' },
                     { id: 'security', name: 'CodeQL Security Guard', color: 'text-positive-ink' },
                     { id: 'chaos', name: 'Chaos & SRE Scaler', color: 'text-caution-ink' }
                   ].map((t) => (
@@ -1487,7 +1486,7 @@ ${qa.answer}
                       }}
                       className={`px-2.5 py-1 text-[11px] font-semibold rounded-control transition-all shrink-0 cursor-pointer ${
                         outreachTone === t.id
-                          ? 'bg-fill-strong text-ink shadow-sm border border-line-strong'
+                          ? 'bg-fill-strong text-ink border border-line-strong'
                           : 'text-ink-muted hover:text-ink'
                       }`}
                     >
@@ -1496,7 +1495,7 @@ ${qa.answer}
                   ))}
                 </div>
 
-                <div className="p-5 rounded-card bg-sunken border border-line text-xs font-mono text-ink whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto shadow-inner">
+                <div className="p-5 rounded-card bg-sunken border border-line text-xs font-mono text-ink whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto">
                   {getTailoredColdPitch(outreachTone)}
                 </div>
 
@@ -1509,7 +1508,7 @@ ${qa.answer}
 
             {/* TAB 3: STAR ATS Screening Answers */}
             {activeWeaponTab === 'ats' && (
-              <div className="p-6 rounded-panel bg-surface border border-accent-line space-y-4 shadow-xl">
+              <div className="p-6 rounded-panel bg-surface border border-accent-line space-y-4 shadow-pop">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <HelpCircle className="w-4 h-4 text-accent-ink" />
@@ -1529,7 +1528,7 @@ ${qa.answer}
                   {synthesizedData.ats_answers?.map((qa, index) => (
                     <div
                       key={index}
-                      className="p-5 rounded-card bg-sunken border border-line space-y-3 shadow-md"
+                      className="p-5 rounded-card bg-sunken border border-line space-y-3"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <span className="text-xs font-bold text-ink flex items-center gap-2">
@@ -1563,7 +1562,7 @@ ${qa.answer}
 
             {/* TAB 4: Interactive Mock Interview Practice Arena */}
             {activeWeaponTab === 'interview' && (
-              <div className="p-6 rounded-panel bg-surface border border-positive-line space-y-4 shadow-xl">
+              <div className="p-6 rounded-panel bg-surface border border-positive-line space-y-4 shadow-pop">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <MessageSquare className="w-4 h-4 text-positive-ink" />
@@ -1574,7 +1573,7 @@ ${qa.answer}
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setIsVoiceInterviewOpen(true)}
-                      className="px-3 py-1.5 text-xs font-mono font-bold bg-accent-soft hover:bg-accent/30 text-accent-ink border border-accent-line rounded-control flex items-center gap-1.5 transition-all cursor-pointer shadow-sm"
+                      className="px-3 py-1.5 text-xs font-mono font-bold bg-accent-soft hover:bg-accent/30 text-accent-ink border border-accent-line rounded-control flex items-center gap-1.5 transition-all cursor-pointer"
                     >
                       <Mic className="w-3.5 h-3.5" />
                       <span>Launch Voice Audio Mode</span>
@@ -1597,7 +1596,7 @@ ${qa.answer}
                       }}
                       className={`px-3 py-1.5 rounded-control text-xs font-bold transition-all shrink-0 cursor-pointer ${
                         activeQuestionIdx === i
-                          ? 'bg-gradient-to-r from-positive to-accent2 text-ink shadow-md'
+                          ? 'bg-positive text-ink'
                           : 'bg-fill hover:bg-fill-strong text-ink-muted'
                       }`}
                     >
@@ -1626,7 +1625,7 @@ ${qa.answer}
                           synthesizedData.ats_answers[activeQuestionIdx]?.answer || ''
                         )
                       }
-                      className="text-[10px] text-accent2-ink hover:text-accent2-ink font-mono cursor-pointer"
+                      className="text-[10px] text-info-ink hover:text-info-ink font-mono cursor-pointer"
                     >
                       Fill with Optimal Answer
                     </button>
@@ -1645,7 +1644,7 @@ ${qa.answer}
                   <button
                     onClick={handleEvaluatePractice}
                     disabled={isEvaluatingPractice || !userPracticeAnswer.trim()}
-                    className="px-5 py-2.5 text-xs font-extrabold text-ink bg-gradient-to-r from-positive to-accent2 hover:from-positive hover:to-accent2 rounded-control transition-all shadow-lg flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+                    className="px-5 py-2.5 text-xs font-extrabold text-ink bg-positive hover:opacity-90 rounded-control transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
                   >
                     {isEvaluatingPractice ? (
                       <>
@@ -1663,7 +1662,7 @@ ${qa.answer}
 
                 {/* Evaluation Feedback Panel */}
                 {practiceFeedback && (
-                  <div className="p-4 rounded-card bg-gradient-to-br from-positive/40 via-surface to-sunken border border-positive-line space-y-3 animate-in fade-in duration-200">
+                  <div className="p-4 rounded-card bg-positive border border-positive-line space-y-3 animate-fade-in">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <CheckCircle className="w-4 h-4 text-positive-ink" />
@@ -1699,7 +1698,7 @@ ${qa.answer}
 
             {/* TAB 5: Full Markdown Dossier Export */}
             {activeWeaponTab === 'export' && (
-              <div className="p-6 rounded-panel bg-surface border border-caution-line space-y-4 shadow-xl">
+              <div className="p-6 rounded-panel bg-surface border border-caution-line space-y-4 shadow-pop">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Share2 className="w-4 h-4 text-caution-ink" />
@@ -1712,7 +1711,7 @@ ${qa.answer}
                     <button
                       onClick={handleGeneratePdfResume}
                       disabled={isGeneratingPdf}
-                      className="px-4 py-2 text-xs bg-gradient-to-r from-positive via-accent2 to-accent2 hover:from-positive hover:to-accent2 text-ink rounded-control font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer disabled:opacity-50"
+                      className="px-4 py-2 text-xs bg-positive hover:opacity-90 text-ink rounded-control font-bold flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
                     >
                       {isGeneratingPdf ? (
                         <>
@@ -1731,7 +1730,7 @@ ${qa.answer}
                       onClick={() =>
                         handleCopy(getFullMarkdownDossier(), 'dossier', 'Complete Markdown Dossier')
                       }
-                      className="px-4 py-2 text-xs bg-gradient-to-r from-accent via-info to-accent2 hover:from-accent hover:to-accent2 text-ink rounded-control font-bold flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
+                      className="px-4 py-2 text-xs bg-accent hover:bg-accent-strong text-ink rounded-control font-bold flex items-center gap-1.5 transition-all cursor-pointer"
                     >
                       {copiedKeys['dossier'] ? (
                         <>
@@ -1748,24 +1747,24 @@ ${qa.answer}
                   </div>
                 </div>
 
-                <div className="p-5 rounded-card bg-sunken border border-line text-xs font-mono text-ink-muted whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto shadow-inner">
+                <div className="p-5 rounded-card bg-sunken border border-line text-xs font-mono text-ink-muted whitespace-pre-wrap leading-relaxed max-h-96 overflow-y-auto">
                   {getFullMarkdownDossier()}
                 </div>
               </div>
             )}
 
             {/* Bottom Action Bar */}
-            <div className="p-4 rounded-card bg-gradient-to-r from-accent/40 via-surface to-sunken border border-accent-line flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg">
+            <div className="p-4 rounded-card bg-accent border border-accent-line flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="text-xs text-ink-muted">
                 <span>Application registered in Kanban Pipeline under </span>
-                <span className="text-accent2-ink font-bold font-mono">"Ready to Apply"</span>
+                <span className="text-info-ink font-bold font-mono">"Ready to Apply"</span>
               </div>
 
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleGeneratePdfResume}
                   disabled={isGeneratingPdf}
-                  className="px-4 py-2 text-xs font-bold text-ink bg-gradient-to-r from-positive to-accent2 hover:from-positive hover:to-accent2 border border-positive-line rounded-control flex items-center gap-1.5 transition-all cursor-pointer shrink-0 shadow-md"
+                  className="px-4 py-2 text-xs font-bold text-ink bg-positive hover:opacity-90 border border-positive-line rounded-control flex items-center gap-1.5 transition-all cursor-pointer shrink-0"
                 >
                   <FileDown className="w-3.5 h-3.5 text-ink" />
                   <span>Download PDF Resume</span>
@@ -1776,7 +1775,7 @@ ${qa.answer}
                   className="px-4 py-2 text-xs font-bold text-ink bg-fill-strong hover:bg-fill-strong border border-line rounded-control flex items-center gap-1.5 transition-all cursor-pointer shrink-0"
                 >
                   <span>View in Kanban</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-accent2-ink" />
+                  <ArrowRight className="w-3.5 h-3.5 text-info-ink" />
                 </button>
               </div>
             </div>
@@ -1785,8 +1784,8 @@ ${qa.answer}
         </div>
       ) : (
         /* Empty State / Prompt to Synthesize */
-        <div className="p-12 rounded-panel bg-surface border border-line text-center space-y-4 shadow-xl">
-          <div className="w-14 h-14 rounded-card bg-gradient-to-br from-accent/20 via-accent2/20 to-positive/20 text-accent-ink border border-accent-line flex items-center justify-center mx-auto shadow-lg">
+        <div className="p-12 rounded-panel bg-surface border border-line text-center space-y-4 shadow-pop">
+          <div className="w-14 h-14 rounded-card bg-accent text-accent-ink border border-accent-line flex items-center justify-center mx-auto">
             <Sparkles className="w-7 h-7 text-accent-ink" />
           </div>
           <div>
@@ -1797,7 +1796,7 @@ ${qa.answer}
           </div>
           <button
             onClick={handleSynthesize}
-            className="px-6 py-3 text-xs font-extrabold text-ink bg-gradient-to-r from-accent via-info to-accent2 hover:from-accent hover:to-accent2 rounded-control transition-all shadow-xl inline-flex items-center gap-2 cursor-pointer"
+            className="px-6 py-3 text-xs font-extrabold text-ink bg-accent hover:bg-accent-strong rounded-control transition-all inline-flex items-center gap-2 cursor-pointer"
           >
             <Zap className="w-4 h-4" />
             <span>Synthesize Monzo Preset Now</span>

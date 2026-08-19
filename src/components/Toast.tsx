@@ -48,7 +48,7 @@ const ToastItem: React.FC<{ toast: ToastMessage; onDismiss: (id: string) => void
 
   return (
     <div
-      className={`pointer-events-auto flex items-start gap-3.5 p-4 rounded-card border shadow-2xl backdrop-blur-xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-3 ${
+      className={`pointer-events-auto flex items-start gap-3.5 p-4 rounded-card border shadow-pop backdrop-blur-xl transition-all duration-300 animate-slide-up ${
         borders[toast.type]
       }`}
     >

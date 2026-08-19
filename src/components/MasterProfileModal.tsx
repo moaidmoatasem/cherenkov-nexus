@@ -74,17 +74,17 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md">
-      <div className="relative w-full max-w-4xl max-h-[90vh] bg-surface border border-accent2-line rounded-panel overflow-hidden flex flex-col">
+      <div className="relative w-full max-w-4xl max-h-[90vh] bg-surface border border-info-line rounded-panel overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-line bg-sunken">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-card bg-accent2-soft border border-accent2-line flex items-center justify-center text-accent2-ink shadow-md">
+            <div className="w-10 h-10 rounded-card bg-info-soft border border-info-line flex items-center justify-center text-info-ink">
               <User className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold text-ink">Master Profile Anchor</h3>
-                <span className="px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-wider bg-accent2-soft border border-accent2-line text-accent2-ink rounded-full font-bold">
+                <span className="px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-wider bg-info-soft border border-info-line text-info-ink rounded-full font-bold">
                   GROUND TRUTH
                 </span>
               </div>
@@ -93,11 +93,11 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="flex bg-fill p-1 rounded-card border border-line shadow-inner">
+            <div className="flex bg-fill p-1 rounded-card border border-line">
               <button
                 onClick={() => setActiveTab('view')}
                 className={`px-3 py-1 text-xs font-bold rounded-control transition-all cursor-pointer ${
-                  activeTab === 'view' ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md' : 'text-ink-muted hover:text-ink'
+                  activeTab === 'view' ? 'bg-accent text-ink' : 'text-ink-muted hover:text-ink'
                 }`}
               >
                 Executive View
@@ -113,7 +113,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                   setActiveTab('edit');
                 }}
                 className={`px-3 py-1 text-xs font-bold rounded-control transition-all cursor-pointer ${
-                  activeTab === 'edit' ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md' : 'text-ink-muted hover:text-ink'
+                  activeTab === 'edit' ? 'bg-accent text-ink' : 'text-ink-muted hover:text-ink'
                 }`}
               >
                 Edit
@@ -121,7 +121,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
               <button
                 onClick={handleOpenJson}
                 className={`px-3 py-1 text-xs font-bold rounded-control transition-all cursor-pointer ${
-                  activeTab === 'json' ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md' : 'text-ink-muted hover:text-ink'
+                  activeTab === 'json' ? 'bg-accent text-ink' : 'text-ink-muted hover:text-ink'
                 }`}
               >
                 Raw JSON
@@ -143,18 +143,17 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
           {activeTab === 'view' && (
             <div className="space-y-6">
               {/* Profile Card Banner */}
-              <div className="p-6 rounded-panel bg-gradient-to-br from-surface via-sunken to-sunken border border-accent2-line shadow-xl relative overflow-hidden">
-                <div className="absolute right-0 top-0 w-64 h-64 bg-gradient-to-br from-accent2/10 via-accent/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+              <div className="p-6 rounded-panel bg-surface border border-info-line shadow-pop relative overflow-hidden">
 
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
                   <div>
-                    <span className="text-xs font-mono font-bold text-accent2-ink block mb-1">
+                    <span className="text-xs font-mono font-bold text-info-ink block mb-1">
                       {profile.title}
                     </span>
                     <h2 className="text-xl sm:text-2xl font-extrabold text-ink tracking-tight">{profile.name}</h2>
                     <div className="flex flex-wrap items-center gap-3 mt-2.5 text-xs text-ink-muted">
                       <span className="flex items-center gap-1.5 font-medium">
-                        <MapPin className="w-4 h-4 text-accent2-ink" />
+                        <MapPin className="w-4 h-4 text-info-ink" />
                         {profile.location}
                       </span>
                       <span className="flex items-center gap-1.5 text-positive-ink font-mono font-bold bg-positive-soft border border-positive-line px-2.5 py-1 rounded-control">
@@ -164,16 +163,16 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                     </div>
                   </div>
 
-                  <div className="p-4 rounded-card bg-fill border border-line text-right shadow-inner">
+                  <div className="p-4 rounded-card bg-fill border border-line text-right">
                     <div className="text-[11px] font-mono text-ink-muted uppercase">Verified Tech Skills</div>
-                    <div className="text-2xl font-black text-accent2-ink font-mono mt-0.5">{profile.tech_stack.length}</div>
+                    <div className="text-2xl font-black text-info-ink font-mono mt-0.5">{profile.tech_stack.length}</div>
                   </div>
                 </div>
               </div>
 
               {/* Core Competencies & Tech Stack */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-6 rounded-panel bg-sunken border border-line space-y-3.5 shadow-lg">
+                <div className="p-6 rounded-panel bg-sunken border border-line space-y-3.5">
                   <h4 className="text-xs font-bold text-ink uppercase font-mono flex items-center gap-2">
                     <Award className="w-4 h-4 text-accent-ink" />
                     <span>Core QA Competencies</span>
@@ -188,16 +187,16 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                   </ul>
                 </div>
 
-                <div className="p-6 rounded-panel bg-sunken border border-line space-y-3.5 shadow-lg">
+                <div className="p-6 rounded-panel bg-sunken border border-line space-y-3.5">
                   <h4 className="text-xs font-bold text-ink uppercase font-mono flex items-center gap-2">
-                    <Cpu className="w-4 h-4 text-accent2-ink" />
+                    <Cpu className="w-4 h-4 text-info-ink" />
                     <span>Technical Stack</span>
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {profile.tech_stack.map((tech) => (
                       <span
                         key={tech}
-                        className="px-3 py-1.5 text-xs font-mono font-bold bg-accent2-soft border border-accent2-line text-accent2-ink rounded-control shadow-sm"
+                        className="px-3 py-1.5 text-xs font-mono font-bold bg-info-soft border border-info-line text-info-ink rounded-control"
                       >
                         {tech}
                       </span>
@@ -207,7 +206,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
               </div>
 
               {/* Experience Statement */}
-              <div className="p-6 rounded-panel bg-sunken border border-line space-y-2.5 shadow-lg">
+              <div className="p-6 rounded-panel bg-sunken border border-line space-y-2.5">
                 <h4 className="text-xs font-bold text-ink uppercase font-mono">
                   Executive Experience Summary
                 </h4>
@@ -217,7 +216,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
               </div>
 
               {/* Synced Certifications */}
-              <div className="p-6 rounded-panel bg-sunken border border-line space-y-4 shadow-lg">
+              <div className="p-6 rounded-panel bg-sunken border border-line space-y-4">
                 <div className="flex items-center justify-between">
                   <h4 className="text-xs font-bold text-ink uppercase font-mono">
                     Active & Completed Certifications ({profile.learning_certs?.length || 0})
@@ -228,10 +227,10 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                   {profile.learning_certs?.map((cert) => (
                     <div
                       key={cert.id}
-                      className="p-4 rounded-card bg-fill border border-line flex items-start justify-between gap-2 shadow-sm"
+                      className="p-4 rounded-card bg-fill border border-line flex items-start justify-between gap-2"
                     >
                       <div>
-                        <span className="text-[10px] font-mono text-accent2-ink font-bold block">
+                        <span className="text-[10px] font-mono text-info-ink font-bold block">
                           {cert.provider}
                         </span>
                         <div className="text-xs font-bold text-ink mt-0.5">{cert.title}</div>
@@ -263,7 +262,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                     type="text"
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent2-line"
+                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-info-line"
                     required
                   />
                 </div>
@@ -273,7 +272,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                     type="text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent2-line"
+                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-info-line"
                     required
                   />
                 </div>
@@ -285,7 +284,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                   type="text"
                   value={editLocation}
                   onChange={(e) => setEditLocation(e.target.value)}
-                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent2-line"
+                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-info-line"
                   required
                 />
               </div>
@@ -298,7 +297,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                   rows={2}
                   value={editCompetencies}
                   onChange={(e) => setEditCompetencies(e.target.value)}
-                  className="w-full p-3 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent2-line"
+                  className="w-full p-3 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-info-line"
                 />
               </div>
 
@@ -310,7 +309,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                   rows={2}
                   value={editTechStack}
                   onChange={(e) => setEditTechStack(e.target.value)}
-                  className="w-full p-3 text-xs font-mono bg-sunken border border-line rounded-control text-accent2-ink focus:outline-none focus:border-accent2-line"
+                  className="w-full p-3 text-xs font-mono bg-sunken border border-line rounded-control text-info-ink focus:outline-none focus:border-info-line"
                 />
               </div>
 
@@ -322,7 +321,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                   rows={3}
                   value={editExperience}
                   onChange={(e) => setEditExperience(e.target.value)}
-                  className="w-full p-3 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent2-line leading-relaxed"
+                  className="w-full p-3 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-info-line leading-relaxed"
                 />
               </div>
 
@@ -336,7 +335,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 text-xs font-extrabold text-ink bg-gradient-to-r from-accent to-accent2 hover:from-accent hover:to-accent2 rounded-control shadow-md cursor-pointer"
+                  className="px-5 py-2.5 text-xs font-extrabold text-ink bg-accent hover:bg-accent-strong rounded-control cursor-pointer"
                 >
                   Save Profile Changes
                 </button>
@@ -356,7 +355,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                 rows={16}
                 value={jsonText}
                 onChange={(e) => setJsonText(e.target.value)}
-                className="w-full p-4 text-xs font-mono bg-sunken border border-line rounded-card text-accent2-ink focus:outline-none focus:border-accent2-line leading-relaxed shadow-inner"
+                className="w-full p-4 text-xs font-mono bg-sunken border border-line rounded-card text-info-ink focus:outline-none focus:border-info-line leading-relaxed"
               />
               <div className="flex justify-end gap-2">
                 <button
@@ -367,7 +366,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                 </button>
                 <button
                   onClick={handleSaveJson}
-                  className="px-5 py-2.5 text-xs font-extrabold text-ink bg-gradient-to-r from-accent to-accent2 hover:from-accent hover:to-accent2 rounded-control shadow-md cursor-pointer"
+                  className="px-5 py-2.5 text-xs font-extrabold text-ink bg-accent hover:bg-accent-strong rounded-control cursor-pointer"
                 >
                   Save JSON
                 </button>

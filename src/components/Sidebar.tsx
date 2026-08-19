@@ -57,7 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { name: 'Saved', count: countIn('Saved'), fill: 'var(--color-ink-faint)' },
     { name: 'Upskill', count: countIn('Upskilling'), fill: 'var(--color-caution)' },
     { name: 'Ready', count: countIn('Ready to Apply'), fill: 'var(--color-accent)' },
-    { name: 'Sent', count: countIn('Applied'), fill: 'var(--color-accent2)' },
+    { name: 'Sent', count: countIn('Applied'), fill: 'var(--color-info)' },
     { name: 'Interv.', count: countIn('Interviewing'), fill: 'var(--color-positive)' },
   ];
 
@@ -73,7 +73,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       count: certs.filter((cert) => cert.status === 'In Progress').length,
       fill: 'var(--color-caution)',
     },
-    { name: 'Total Stack', count: profile.tech_stack.length, fill: 'var(--color-accent2)' },
+    { name: 'Total Stack', count: profile.tech_stack.length, fill: 'var(--color-info)' },
   ];
 
   /** Counts only appear where the number is the point of the row. */
@@ -147,7 +147,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           variant="secondary"
           size="sm"
           onClick={onOpenIdentityVault}
-          icon={<ShieldCheck className="w-3.5 h-3.5 text-accent2-ink" />}
+          icon={<ShieldCheck className="w-3.5 h-3.5 text-info-ink" />}
           className="justify-start"
         >
           Zero-Trust Vault
@@ -168,7 +168,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <Card padding="sm" className="space-y-3">
         <div className="space-y-2">
           <span className="flex items-center gap-1.5">
-            <TrendingUp className="w-3.5 h-3.5 text-accent2-ink shrink-0" />
+            <TrendingUp className="w-3.5 h-3.5 text-info-ink shrink-0" />
             <span className={sectionLabelClass}>Live Analytics</span>
           </span>
           <Segmented

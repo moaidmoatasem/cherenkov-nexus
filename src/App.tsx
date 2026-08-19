@@ -14,7 +14,6 @@ import { IdentityVaultModal } from './components/IdentityVaultModal';
 import { OnboardingModal } from './components/OnboardingModal';
 import { MasterProfileModal } from './components/MasterProfileModal';
 import { ToastContainer, ToastMessage } from './components/Toast';
-import { ThemeAuraBackground } from './components/ThemeAuraBackground';
 import { CommandPalette } from './components/CommandPalette';
 import { TelemetryModal } from './components/TelemetryModal';
 import { SystemTour } from './components/SystemTour';
@@ -276,9 +275,7 @@ export default function App() {
   };
 
   return (
-    <div className="h-dvh min-h-[40rem] flex flex-col bg-canvas text-ink font-sans subtle-grid relative overflow-hidden">
-      {/* Dynamic Animated Ambient Theme Aura */}
-      <ThemeAuraBackground theme={currentTheme} />
+    <div className="h-dvh min-h-[40rem] flex flex-col bg-canvas text-ink font-sans relative overflow-hidden">
 
       {/* Top Application Header */}
       <Header
