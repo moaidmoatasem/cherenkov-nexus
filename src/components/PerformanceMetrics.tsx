@@ -141,51 +141,51 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
   }, [applications]);
 
   return (
-    <div className={`p-6 rounded-3xl bg-gradient-to-br from-[#0c101a] via-[#090d16] to-[#06080e] border border-violet-500/25 shadow-2xl space-y-6 ${className}`}>
+    <div className={`p-6 rounded-panel bg-gradient-to-br from-surface via-sunken to-sunken border border-accent-line shadow-2xl space-y-6 ${className}`}>
       {/* Top Title & Tab Switcher */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2.5">
-            <span className="p-2 rounded-xl bg-violet-500/15 text-violet-400 border border-violet-500/30">
+            <span className="p-2 rounded-control bg-accent-soft text-accent-ink border border-accent-line">
               <Activity className="w-5 h-5" />
             </span>
-            <h2 className="text-lg font-bold text-white tracking-tight">
+            <h2 className="text-lg font-bold text-ink tracking-tight">
               Performance Metrics & Pipeline Velocity
             </h2>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-ink-muted mt-1">
             Real-time transition velocity and stage conversion rate metrics for Moayed's applications.
           </p>
         </div>
 
         {/* Metric Mode Switcher */}
-        <div className="p-1 rounded-2xl bg-white/[0.04] border border-white/[0.08] flex items-center gap-1">
+        <div className="p-1 rounded-card bg-fill border border-line flex flex-wrap items-center gap-1 shrink-0">
           <button
             onClick={() => setActiveMetricTab('conversion')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-control text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
               activeMetricTab === 'conversion'
-                ? 'bg-gradient-to-r from-violet-600 to-cyan-500 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md'
+                : 'text-ink-muted hover:text-ink'
             }`}
           >
             Success & Conversion Rate
           </button>
           <button
             onClick={() => setActiveMetricTab('velocity')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-control text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
               activeMetricTab === 'velocity'
-                ? 'bg-gradient-to-r from-violet-600 to-cyan-500 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md'
+                : 'text-ink-muted hover:text-ink'
             }`}
           >
             Pipeline Velocity (Days/Stage)
           </button>
           <button
             onClick={() => setActiveMetricTab('sponsorship')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-control text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
               activeMetricTab === 'sponsorship'
-                ? 'bg-gradient-to-r from-violet-600 to-cyan-500 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md'
+                : 'text-ink-muted hover:text-ink'
             }`}
           >
             Visa Distribution
@@ -195,69 +195,69 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
 
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex flex-col justify-between">
-          <div className="flex items-center justify-between text-slate-400 text-xs">
+        <div className="p-4 rounded-card bg-fill border border-line flex flex-col justify-between">
+          <div className="flex items-center justify-between text-ink-muted text-xs">
             <span className="font-mono">Interview Conversion</span>
-            <TrendingUp className="w-4 h-4 text-emerald-400" />
+            <TrendingUp className="w-4 h-4 text-positive-ink" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-white font-mono">{stats.successRateToInterview}%</span>
-            <span className="text-[10px] text-emerald-400 font-mono">({stats.stageCounts['Interviewing']} active)</span>
+            <span className="text-2xl font-black text-ink font-mono">{stats.successRateToInterview}%</span>
+            <span className="text-[10px] text-positive-ink font-mono">({stats.stageCounts['Interviewing']} active)</span>
           </div>
-          <span className="text-[10px] text-slate-500 mt-1">Saved &rarr; Interview rate</span>
+          <span className="text-[10px] text-ink-faint mt-1">Saved &rarr; Interview rate</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex flex-col justify-between">
-          <div className="flex items-center justify-between text-slate-400 text-xs">
+        <div className="p-4 rounded-card bg-fill border border-line flex flex-col justify-between">
+          <div className="flex items-center justify-between text-ink-muted text-xs">
             <span className="font-mono">Applied-to-Interview</span>
-            <Award className="w-4 h-4 text-cyan-400" />
+            <Award className="w-4 h-4 text-accent2-ink" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-cyan-400 font-mono">{stats.appliedToInterviewRate}%</span>
-            <span className="text-[10px] text-cyan-300 font-mono">Benchmark: 15%</span>
+            <span className="text-2xl font-black text-accent2-ink font-mono">{stats.appliedToInterviewRate}%</span>
+            <span className="text-[10px] text-accent2-ink font-mono">Benchmark: 15%</span>
           </div>
-          <span className="text-[10px] text-slate-500 mt-1">Pitch conversion efficiency</span>
+          <span className="text-[10px] text-ink-faint mt-1">Pitch conversion efficiency</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex flex-col justify-between">
-          <div className="flex items-center justify-between text-slate-400 text-xs">
+        <div className="p-4 rounded-card bg-fill border border-line flex flex-col justify-between">
+          <div className="flex items-center justify-between text-ink-muted text-xs">
             <span className="font-mono">Mean Stage Velocity</span>
-            <Clock className="w-4 h-4 text-amber-400" />
+            <Clock className="w-4 h-4 text-caution-ink" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-amber-400 font-mono">3.2</span>
-            <span className="text-[10px] text-slate-400 font-mono">Days / Stage</span>
+            <span className="text-2xl font-black text-caution-ink font-mono">3.2</span>
+            <span className="text-[10px] text-ink-muted font-mono">Days / Stage</span>
           </div>
-          <span className="text-[10px] text-slate-500 mt-1">Throughput turnaround</span>
+          <span className="text-[10px] text-ink-faint mt-1">Throughput turnaround</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex flex-col justify-between">
-          <div className="flex items-center justify-between text-slate-400 text-xs">
+        <div className="p-4 rounded-card bg-fill border border-line flex flex-col justify-between">
+          <div className="flex items-center justify-between text-ink-muted text-xs">
             <span className="font-mono">UK Sponsor Verification</span>
-            <ShieldCheck className="w-4 h-4 text-violet-400" />
+            <ShieldCheck className="w-4 h-4 text-accent-ink" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-violet-300 font-mono">{stats.sponsorRate}%</span>
-            <span className="text-[10px] text-violet-400 font-mono">({stats.sponsorCount} verified)</span>
+            <span className="text-2xl font-black text-accent-ink font-mono">{stats.sponsorRate}%</span>
+            <span className="text-[10px] text-accent-ink font-mono">({stats.sponsorCount} verified)</span>
           </div>
-          <span className="text-[10px] text-slate-500 mt-1">Deterministic Home Office check</span>
+          <span className="text-[10px] text-ink-faint mt-1">Deterministic Home Office check</span>
         </div>
       </div>
 
       {/* Chart Visualizer */}
-      <div className="p-5 rounded-2xl bg-[#080b12] border border-white/[0.06]">
+      <div className="p-5 rounded-card bg-sunken border border-line">
         {activeMetricTab === 'conversion' && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
+                <h4 className="text-xs font-bold text-ink uppercase tracking-wider font-mono">
                   Stage Distribution & Cumulative Conversion Funnel
                 </h4>
-                <p className="text-[11px] text-slate-400">
+                <p className="text-[11px] text-ink-muted">
                   Visual breakdown of target applications progressing through the 5 QA career stages.
                 </p>
               </div>
-              <span className="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-violet-500/10 text-violet-300 border border-violet-500/20">
+              <span className="text-[10px] font-mono px-2.5 py-1 rounded-control bg-accent-soft text-accent-ink border border-accent-line">
                 Total Tracked: {stats.total}
               </span>
             </div>
@@ -296,14 +296,14 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
+                <h4 className="text-xs font-bold text-ink uppercase tracking-wider font-mono">
                   Pipeline Transition Velocity (Average Days in Stage)
                 </h4>
-                <p className="text-[11px] text-slate-400">
+                <p className="text-[11px] text-ink-muted">
                   Mean transit latency compared against target SLA benchmarks (fewer days = faster conversion).
                 </p>
               </div>
-              <span className="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+              <span className="text-[10px] font-mono px-2.5 py-1 rounded-control bg-accent2-soft text-accent2-ink border border-accent2-line">
                 Target SLA: &lt; 5 Days
               </span>
             </div>
@@ -362,14 +362,14 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
+                <h4 className="text-xs font-bold text-ink uppercase tracking-wider font-mono">
                   UK Home Office Sponsorship Distribution
                 </h4>
-                <p className="text-[11px] text-slate-400">
+                <p className="text-[11px] text-ink-muted">
                   Deterministic alignment against licensed Skilled Worker employers.
                 </p>
               </div>
-              <span className="text-[10px] font-mono px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+              <span className="text-[10px] font-mono px-2.5 py-1 rounded-control bg-positive-soft text-positive-ink border border-positive-line">
                 100% Deterministic Check
               </span>
             </div>
@@ -406,20 +406,20 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
               </div>
 
               <div className="space-y-3">
-                <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-between">
+                <div className="p-3.5 rounded-control bg-positive-soft border border-positive-line flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-emerald-400" />
-                    <span className="text-xs font-bold text-emerald-300">Licensed UK Sponsors</span>
+                    <span className="w-3 h-3 rounded-full bg-positive" />
+                    <span className="text-xs font-bold text-positive-ink">Licensed UK Sponsors</span>
                   </div>
-                  <span className="text-sm font-black text-white font-mono">{stats.sponsorCount} ({stats.sponsorRate}%)</span>
+                  <span className="text-sm font-black text-ink font-mono">{stats.sponsorCount} ({stats.sponsorRate}%)</span>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-between">
+                <div className="p-3.5 rounded-control bg-accent-soft border border-accent-line flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-violet-400" />
-                    <span className="text-xs font-bold text-violet-300">Standard / High-Match Roles</span>
+                    <span className="w-3 h-3 rounded-full bg-accent" />
+                    <span className="text-xs font-bold text-accent-ink">Standard / High-Match Roles</span>
                   </div>
-                  <span className="text-sm font-black text-white font-mono">
+                  <span className="text-sm font-black text-ink font-mono">
                     {Math.max(0, stats.total - stats.sponsorCount)} ({100 - stats.sponsorRate}%)
                   </span>
                 </div>

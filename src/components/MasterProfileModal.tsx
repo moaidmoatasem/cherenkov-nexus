@@ -73,31 +73,31 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-      <div className="relative w-full max-w-4xl max-h-[90vh] bg-[#0c101a] border border-cyan-500/30 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md">
+      <div className="relative w-full max-w-4xl max-h-[90vh] bg-surface border border-accent2-line rounded-panel overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.08] bg-[#07090e]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-line bg-sunken">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-md">
+            <div className="w-10 h-10 rounded-card bg-accent2-soft border border-accent2-line flex items-center justify-center text-accent2-ink shadow-md">
               <User className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-white">Master Profile Anchor</h3>
-                <span className="px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-wider bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 rounded-full font-bold">
+                <h3 className="text-base font-bold text-ink">Master Profile Anchor</h3>
+                <span className="px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-wider bg-accent2-soft border border-accent2-line text-accent2-ink rounded-full font-bold">
                   GROUND TRUTH
                 </span>
               </div>
-              <p className="text-xs text-slate-400">Root candidate identity injected into Gemini agent synthesis pipeline</p>
+              <p className="text-xs text-ink-muted">Root candidate identity injected into Gemini agent synthesis pipeline</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="flex bg-white/[0.04] p-1 rounded-2xl border border-white/[0.08] shadow-inner">
+            <div className="flex bg-fill p-1 rounded-card border border-line shadow-inner">
               <button
                 onClick={() => setActiveTab('view')}
-                className={`px-3 py-1 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                  activeTab === 'view' ? 'bg-gradient-to-r from-violet-600 to-cyan-500 text-white shadow-md' : 'text-slate-400 hover:text-white'
+                className={`px-3 py-1 text-xs font-bold rounded-control transition-all cursor-pointer ${
+                  activeTab === 'view' ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md' : 'text-ink-muted hover:text-ink'
                 }`}
               >
                 Executive View
@@ -112,16 +112,16 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                   setEditCompetencies(profile.core_competencies.join(', '));
                   setActiveTab('edit');
                 }}
-                className={`px-3 py-1 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                  activeTab === 'edit' ? 'bg-gradient-to-r from-violet-600 to-cyan-500 text-white shadow-md' : 'text-slate-400 hover:text-white'
+                className={`px-3 py-1 text-xs font-bold rounded-control transition-all cursor-pointer ${
+                  activeTab === 'edit' ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md' : 'text-ink-muted hover:text-ink'
                 }`}
               >
                 Edit
               </button>
               <button
                 onClick={handleOpenJson}
-                className={`px-3 py-1 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                  activeTab === 'json' ? 'bg-gradient-to-r from-violet-600 to-cyan-500 text-white shadow-md' : 'text-slate-400 hover:text-white'
+                className={`px-3 py-1 text-xs font-bold rounded-control transition-all cursor-pointer ${
+                  activeTab === 'json' ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md' : 'text-ink-muted hover:text-ink'
                 }`}
               >
                 Raw JSON
@@ -130,7 +130,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
 
             <button
               onClick={onClose}
-              className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors cursor-pointer"
+              className="p-2 text-ink-muted hover:text-ink rounded-control hover:bg-fill-strong transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -143,61 +143,61 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
           {activeTab === 'view' && (
             <div className="space-y-6">
               {/* Profile Card Banner */}
-              <div className="p-6 rounded-3xl bg-gradient-to-br from-[#0e1324] via-[#090c15] to-[#07090e] border border-cyan-500/20 shadow-xl relative overflow-hidden">
-                <div className="absolute right-0 top-0 w-64 h-64 bg-gradient-to-br from-cyan-500/10 via-violet-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+              <div className="p-6 rounded-panel bg-gradient-to-br from-surface via-sunken to-sunken border border-accent2-line shadow-xl relative overflow-hidden">
+                <div className="absolute right-0 top-0 w-64 h-64 bg-gradient-to-br from-accent2/10 via-accent/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
                   <div>
-                    <span className="text-xs font-mono font-bold text-cyan-400 block mb-1">
+                    <span className="text-xs font-mono font-bold text-accent2-ink block mb-1">
                       {profile.title}
                     </span>
-                    <h2 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight">{profile.name}</h2>
-                    <div className="flex flex-wrap items-center gap-3 mt-2.5 text-xs text-slate-300">
+                    <h2 className="text-xl sm:text-2xl font-extrabold text-ink tracking-tight">{profile.name}</h2>
+                    <div className="flex flex-wrap items-center gap-3 mt-2.5 text-xs text-ink-muted">
                       <span className="flex items-center gap-1.5 font-medium">
-                        <MapPin className="w-4 h-4 text-cyan-400" />
+                        <MapPin className="w-4 h-4 text-accent2-ink" />
                         {profile.location}
                       </span>
-                      <span className="flex items-center gap-1.5 text-emerald-400 font-mono font-bold bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-lg">
+                      <span className="flex items-center gap-1.5 text-positive-ink font-mono font-bold bg-positive-soft border border-positive-line px-2.5 py-1 rounded-control">
                         <ShieldCheck className="w-3.5 h-3.5" />
                         Target: Remote & UK/EU Visa Sponsorship
                       </span>
                     </div>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-right shadow-inner">
-                    <div className="text-[11px] font-mono text-slate-400 uppercase">Verified Tech Skills</div>
-                    <div className="text-2xl font-black text-cyan-300 font-mono mt-0.5">{profile.tech_stack.length}</div>
+                  <div className="p-4 rounded-card bg-fill border border-line text-right shadow-inner">
+                    <div className="text-[11px] font-mono text-ink-muted uppercase">Verified Tech Skills</div>
+                    <div className="text-2xl font-black text-accent2-ink font-mono mt-0.5">{profile.tech_stack.length}</div>
                   </div>
                 </div>
               </div>
 
               {/* Core Competencies & Tech Stack */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-6 rounded-3xl bg-[#07090e] border border-white/[0.08] space-y-3.5 shadow-lg">
-                  <h4 className="text-xs font-bold text-slate-200 uppercase font-mono flex items-center gap-2">
-                    <Award className="w-4 h-4 text-violet-400" />
+                <div className="p-6 rounded-panel bg-sunken border border-line space-y-3.5 shadow-lg">
+                  <h4 className="text-xs font-bold text-ink uppercase font-mono flex items-center gap-2">
+                    <Award className="w-4 h-4 text-accent-ink" />
                     <span>Core QA Competencies</span>
                   </h4>
-                  <ul className="space-y-2 text-xs text-slate-300">
+                  <ul className="space-y-2 text-xs text-ink-muted">
                     {profile.core_competencies.map((comp) => (
-                      <li key={comp} className="flex items-center gap-2.5 bg-white/[0.02] p-2.5 rounded-xl border border-white/[0.04]">
-                        <span className="w-2 h-2 rounded-full bg-violet-400 shadow-[0_0_8px_rgba(139,92,246,0.5)] shrink-0" />
-                        <span className="font-medium text-slate-200">{comp}</span>
+                      <li key={comp} className="flex items-center gap-2.5 bg-fill p-2.5 rounded-control border border-line">
+                        <span className="w-2 h-2 rounded-full bg-accent shrink-0" />
+                        <span className="font-medium text-ink">{comp}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="p-6 rounded-3xl bg-[#07090e] border border-white/[0.08] space-y-3.5 shadow-lg">
-                  <h4 className="text-xs font-bold text-slate-200 uppercase font-mono flex items-center gap-2">
-                    <Cpu className="w-4 h-4 text-cyan-400" />
+                <div className="p-6 rounded-panel bg-sunken border border-line space-y-3.5 shadow-lg">
+                  <h4 className="text-xs font-bold text-ink uppercase font-mono flex items-center gap-2">
+                    <Cpu className="w-4 h-4 text-accent2-ink" />
                     <span>Technical Stack</span>
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {profile.tech_stack.map((tech) => (
                       <span
                         key={tech}
-                        className="px-3 py-1.5 text-xs font-mono font-bold bg-cyan-500/10 border border-cyan-500/25 text-cyan-300 rounded-xl shadow-sm"
+                        className="px-3 py-1.5 text-xs font-mono font-bold bg-accent2-soft border border-accent2-line text-accent2-ink rounded-control shadow-sm"
                       >
                         {tech}
                       </span>
@@ -207,43 +207,43 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
               </div>
 
               {/* Experience Statement */}
-              <div className="p-6 rounded-3xl bg-[#07090e] border border-white/[0.08] space-y-2.5 shadow-lg">
-                <h4 className="text-xs font-bold text-slate-200 uppercase font-mono">
+              <div className="p-6 rounded-panel bg-sunken border border-line space-y-2.5 shadow-lg">
+                <h4 className="text-xs font-bold text-ink uppercase font-mono">
                   Executive Experience Summary
                 </h4>
-                <p className="text-xs text-slate-300 leading-relaxed font-sans bg-white/[0.02] p-4 rounded-2xl border border-white/[0.04]">
+                <p className="text-xs text-ink-muted leading-relaxed font-sans bg-fill p-4 rounded-card border border-line">
                   {profile.experience}
                 </p>
               </div>
 
               {/* Synced Certifications */}
-              <div className="p-6 rounded-3xl bg-[#07090e] border border-white/[0.08] space-y-4 shadow-lg">
+              <div className="p-6 rounded-panel bg-sunken border border-line space-y-4 shadow-lg">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-bold text-slate-200 uppercase font-mono">
+                  <h4 className="text-xs font-bold text-ink uppercase font-mono">
                     Active & Completed Certifications ({profile.learning_certs?.length || 0})
                   </h4>
-                  <span className="text-[11px] text-emerald-400 font-mono font-bold">Auto-Synced into AI Prompt</span>
+                  <span className="text-[11px] text-positive-ink font-mono font-bold">Auto-Synced into AI Prompt</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {profile.learning_certs?.map((cert) => (
                     <div
                       key={cert.id}
-                      className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-start justify-between gap-2 shadow-sm"
+                      className="p-4 rounded-card bg-fill border border-line flex items-start justify-between gap-2 shadow-sm"
                     >
                       <div>
-                        <span className="text-[10px] font-mono text-cyan-400 font-bold block">
+                        <span className="text-[10px] font-mono text-accent2-ink font-bold block">
                           {cert.provider}
                         </span>
-                        <div className="text-xs font-bold text-slate-100 mt-0.5">{cert.title}</div>
+                        <div className="text-xs font-bold text-ink mt-0.5">{cert.title}</div>
                         <div className="flex flex-wrap gap-1 mt-2">
                           {cert.extracted_skills.map((s) => (
-                            <span key={s} className="px-2 py-0.5 text-[9px] font-mono bg-white/[0.04] text-slate-300 rounded">
+                            <span key={s} className="px-2 py-0.5 text-[9px] font-mono bg-fill text-ink-muted rounded">
                               +{s}
                             </span>
                           ))}
                         </div>
                       </div>
-                      <span className={`px-2.5 py-1 text-[10px] font-mono font-bold rounded-lg ${cert.status === 'Completed' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'}`}>
+                      <span className={`px-2.5 py-1 text-[10px] font-mono font-bold rounded-control ${cert.status === 'Completed' ? 'bg-positive-soft text-positive-ink border border-positive-line' : 'bg-caution-soft text-caution-ink border border-caution-line'}`}>
                         {cert.status}
                       </span>
                     </div>
@@ -258,71 +258,71 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
             <form onSubmit={handleSaveForm} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-300 mb-1 font-mono uppercase">Full Name</label>
+                  <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">Full Name</label>
                   <input
                     type="text"
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs bg-[#07090e] border border-white/[0.08] rounded-xl text-slate-100 focus:outline-none focus:border-cyan-500"
+                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent2-line"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-300 mb-1 font-mono uppercase">Executive Title</label>
+                  <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">Executive Title</label>
                   <input
                     type="text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs bg-[#07090e] border border-white/[0.08] rounded-xl text-slate-100 focus:outline-none focus:border-cyan-500"
+                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent2-line"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1 font-mono uppercase">Location / Visa Status</label>
+                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">Location / Visa Status</label>
                 <input
                   type="text"
                   value={editLocation}
                   onChange={(e) => setEditLocation(e.target.value)}
-                  className="w-full px-3.5 py-2.5 text-xs bg-[#07090e] border border-white/[0.08] rounded-xl text-slate-100 focus:outline-none focus:border-cyan-500"
+                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent2-line"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1 font-mono uppercase">
+                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Core Competencies (comma-separated)
                 </label>
                 <textarea
                   rows={2}
                   value={editCompetencies}
                   onChange={(e) => setEditCompetencies(e.target.value)}
-                  className="w-full p-3 text-xs bg-[#07090e] border border-white/[0.08] rounded-xl text-slate-100 focus:outline-none focus:border-cyan-500"
+                  className="w-full p-3 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent2-line"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1 font-mono uppercase">
+                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Tech Stack (comma-separated)
                 </label>
                 <textarea
                   rows={2}
                   value={editTechStack}
                   onChange={(e) => setEditTechStack(e.target.value)}
-                  className="w-full p-3 text-xs font-mono bg-[#07090e] border border-white/[0.08] rounded-xl text-cyan-300 focus:outline-none focus:border-cyan-500"
+                  className="w-full p-3 text-xs font-mono bg-sunken border border-line rounded-control text-accent2-ink focus:outline-none focus:border-accent2-line"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1 font-mono uppercase">
+                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Executive Experience Summary
                 </label>
                 <textarea
                   rows={3}
                   value={editExperience}
                   onChange={(e) => setEditExperience(e.target.value)}
-                  className="w-full p-3 text-xs bg-[#07090e] border border-white/[0.08] rounded-xl text-slate-100 focus:outline-none focus:border-cyan-500 leading-relaxed"
+                  className="w-full p-3 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent2-line leading-relaxed"
                 />
               </div>
 
@@ -330,13 +330,13 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveTab('view')}
-                  className="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white cursor-pointer"
+                  className="px-4 py-2 text-xs font-medium text-ink-muted hover:text-ink cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 text-xs font-extrabold text-white bg-gradient-to-r from-violet-600 to-cyan-500 hover:from-violet-500 hover:to-cyan-400 rounded-xl shadow-md shadow-violet-600/30 cursor-pointer"
+                  className="px-5 py-2.5 text-xs font-extrabold text-ink bg-gradient-to-r from-accent to-accent2 hover:from-accent hover:to-accent2 rounded-control shadow-md cursor-pointer"
                 >
                   Save Profile Changes
                 </button>
@@ -348,7 +348,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
           {activeTab === 'json' && (
             <div className="space-y-4">
               {jsonError && (
-                <div className="p-3.5 rounded-xl bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs font-mono">
+                <div className="p-3.5 rounded-control bg-critical/60 border border-critical-line text-critical-ink text-xs font-mono">
                   {jsonError}
                 </div>
               )}
@@ -356,18 +356,18 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                 rows={16}
                 value={jsonText}
                 onChange={(e) => setJsonText(e.target.value)}
-                className="w-full p-4 text-xs font-mono bg-[#07090e] border border-white/[0.08] rounded-2xl text-cyan-300 focus:outline-none focus:border-cyan-500 leading-relaxed shadow-inner"
+                className="w-full p-4 text-xs font-mono bg-sunken border border-line rounded-card text-accent2-ink focus:outline-none focus:border-accent2-line leading-relaxed shadow-inner"
               />
               <div className="flex justify-end gap-2">
                 <button
                   onClick={() => setActiveTab('view')}
-                  className="px-4 py-2 text-xs font-medium text-slate-400 hover:text-white cursor-pointer"
+                  className="px-4 py-2 text-xs font-medium text-ink-muted hover:text-ink cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSaveJson}
-                  className="px-5 py-2.5 text-xs font-extrabold text-white bg-gradient-to-r from-violet-600 to-cyan-500 hover:from-violet-500 hover:to-cyan-400 rounded-xl shadow-md shadow-violet-600/30 cursor-pointer"
+                  className="px-5 py-2.5 text-xs font-extrabold text-ink bg-gradient-to-r from-accent to-accent2 hover:from-accent hover:to-accent2 rounded-control shadow-md cursor-pointer"
                 >
                   Save JSON
                 </button>

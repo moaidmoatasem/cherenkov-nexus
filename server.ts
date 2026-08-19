@@ -26,9 +26,21 @@ dotenv.config();
 const app = express();
 const PORT = 3000;
 
-app.use(helmet());
+// Helmet's default CSP (`script-src 'self'`) blocks the inline React-refresh
+// preamble that Vite injects in middleware mode, and the HMR websocket, which
+// leaves the dev server rendering a blank page. Production keeps the full
+// default policy; development drops only the CSP header.
+app.use(
+  helmet({
+    contentSecurityPolicy: process.env.NODE_ENV === "production" ? undefined : false,
+  })
+);
 app.use(cors());
-app.use(rateLimit({
+// Scoped to the API surface on purpose. Mounted app-wide it also counted every
+// asset request — a single page load pulls hundreds of modules through the Vite
+// middleware — so the budget was exhausted before the UI finished booting and
+// the rest of the app came back 429.
+app.use("/api", rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100
 }));

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MasterProfile, ApplicationCard, AppTheme, TabId, CandidateArchetype } from './types';
-import { INITIAL_MASTER_PROFILE, INITIAL_APPLICATIONS, SAMPLE_JOBS, ARCHETYPE_PRESETS } from './data/initialData';
+import { INITIAL_MASTER_PROFILE, INITIAL_APPLICATIONS, ARCHETYPE_PRESETS } from './data/initialData';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { JobSynthesizer } from './components/JobSynthesizer';
@@ -19,7 +19,8 @@ import { CommandPalette } from './components/CommandPalette';
 import { TelemetryModal } from './components/TelemetryModal';
 import { SystemTour } from './components/SystemTour';
 import { OracleWorkbench } from './components/OracleWorkbench';
-import { Sparkles, Kanban, GraduationCap, User, Layers, Cpu, Radio, ShieldCheck } from 'lucide-react';
+import { WORKSPACES } from './navigation';
+import { cn } from './components/ui';
 
 export default function App() {
   const [masterProfile, setMasterProfile] = useState<MasterProfile>(() => {
@@ -275,7 +276,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--theme-bg)] text-[var(--text-main)] flex flex-col font-sans selection:bg-violet-500 selection:text-white subtle-grid relative overflow-x-hidden">
+    <div className="h-dvh min-h-[40rem] flex flex-col bg-canvas text-ink font-sans subtle-grid relative overflow-hidden">
       {/* Dynamic Animated Ambient Theme Aura */}
       <ThemeAuraBackground theme={currentTheme} />
 
@@ -283,9 +284,6 @@ export default function App() {
       <Header
         profile={masterProfile}
         onOpenProfile={() => setIsProfileModalOpen(true)}
-        applicationsCount={applications.length}
-        activeTab={activeTab}
-        onSelectTab={setActiveTab}
         currentTheme={currentTheme}
         onChangeTheme={setCurrentTheme}
         onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
@@ -296,7 +294,7 @@ export default function App() {
       />
 
       {/* Main App Container */}
-      <div className="flex-1 flex overflow-hidden relative z-10">
+      <div className="flex-1 min-h-0 flex relative z-10">
         {/* Desktop Technical Sidebar with live Recharts Dashboard */}
         <Sidebar
           activeTab={activeTab}
@@ -311,77 +309,35 @@ export default function App() {
         />
 
         {/* Dynamic Workspace Body */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
-          {/* Mobile Tab Selector */}
-          <div className="md:hidden flex items-center gap-1 overflow-x-auto bg-[#0e111a] border border-white/[0.08] rounded-xl p-1 mb-4">
-            <button
-              onClick={() => setActiveTab('synthesizer')}
-              className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-all whitespace-nowrap ${
-                activeTab === 'synthesizer' ? 'bg-gradient-to-r from-violet-600 to-cyan-500 text-white font-bold' : 'text-slate-400'
-              }`}
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Solver</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('kanban')}
-              className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-all whitespace-nowrap ${
-                activeTab === 'kanban' ? 'bg-gradient-to-r from-cyan-600 to-blue-500 text-white font-bold' : 'text-slate-400'
-              }`}
-            >
-              <Kanban className="w-3.5 h-3.5" />
-              <span>Kanban ({applications.length})</span>
-              {kanbanBackend === 'live' && (
-                <span className="px-1.5 py-0.5 text-[8px] font-mono font-bold rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                  DB
-                </span>
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab('learning')}
-              className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-all whitespace-nowrap ${
-                activeTab === 'learning' ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold' : 'text-slate-400'
-              }`}
-            >
-              <GraduationCap className="w-3.5 h-3.5" />
-              <span>Learning</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('marketplace')}
-              className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-all whitespace-nowrap ${
-                activeTab === 'marketplace' ? 'bg-cyan-500/20 text-cyan-300 font-bold' : 'text-slate-400'
-              }`}
-            >
-              <Layers className="w-3.5 h-3.5" />
-              <span>MCP</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('orchestrator')}
-              className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-all whitespace-nowrap ${
-                activeTab === 'orchestrator' ? 'bg-violet-500/20 text-violet-300 font-bold' : 'text-slate-400'
-              }`}
-            >
-              <Cpu className="w-3.5 h-3.5" />
-              <span>Canvas</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('oracle')}
-              className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-all whitespace-nowrap ${
-                activeTab === 'oracle' ? 'bg-amber-500/20 text-amber-300 font-bold' : 'text-slate-400'
-              }`}
-            >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Oracle</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('hivemind')}
-              className={`px-3 py-2 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-all whitespace-nowrap ${
-                activeTab === 'hivemind' ? 'bg-red-500/20 text-red-300 font-bold' : 'text-slate-400'
-              }`}
-            >
-              <Radio className="w-3.5 h-3.5" />
-              <span>Radar</span>
-            </button>
+        <main className="flex-1 min-w-0 overflow-y-auto p-4 md:p-6 lg:p-8">
+          {/* Mobile Tab Selector — same workspace registry as the sidebar */}
+          <div className="md:hidden flex items-center gap-1 overflow-x-auto rounded-control border border-line bg-surface p-1 mb-4">
+            {WORKSPACES.map((workspace) => {
+              const isActive = activeTab === workspace.id;
+              return (
+                <button
+                  key={workspace.id}
+                  onClick={() => setActiveTab(workspace.id)}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={cn(
+                    'flex items-center gap-1.5 px-3 py-2 rounded-chip text-xs font-semibold whitespace-nowrap',
+                    'transition-colors duration-150 cursor-pointer',
+                    isActive ? 'bg-accent text-accent-contrast' : 'text-ink-muted hover:bg-fill hover:text-ink'
+                  )}
+                >
+                  {workspace.icon}
+                  <span>{workspace.shortName}</span>
+                  {workspace.id === 'kanban' && (
+                    <span className="font-mono tabular">({applications.length})</span>
+                  )}
+                  {workspace.id === 'kanban' && kanbanBackend === 'live' && (
+                    <span className="px-1 rounded-chip bg-positive-soft text-positive-ink border border-positive-line font-mono text-[9px] font-bold">
+                      DB
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
           {/* Module Transitions with Framer Motion */}
