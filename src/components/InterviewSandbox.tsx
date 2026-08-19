@@ -361,7 +361,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
               <button
                 onClick={() => setSpeechRate((prev) => (prev === 1.0 ? 1.25 : prev === 1.25 ? 0.9 : 1.0))}
                 className="px-2.5 py-1 text-[10px] font-mono bg-fill text-ink-muted rounded-control hover:bg-fill-strong cursor-pointer"
-                title="Toggle Voice Playback Speed"
+                title="Toggle Voice Playback Speed" aria-label="Toggle Voice Playback Speed"
               >
                 Speed: {speechRate}x
               </button>
@@ -448,7 +448,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
                     ? 'Listening to microphone... your spoken words will appear here in real-time...'
                     : 'Click "Start Spoken Answer" to speak your answer, or type here directly...'
                 }
-                className="w-full p-4 text-xs font-sans bg-surface border border-line rounded-control text-ink placeholder:text-ink-faint focus:outline-none focus:border-info-line leading-relaxed"
+                className="w-full p-4 text-xs font-sans bg-surface border border-line rounded-control text-ink placeholder:text-ink-faint focus:border-info-line leading-relaxed"
               />
             </div>
 

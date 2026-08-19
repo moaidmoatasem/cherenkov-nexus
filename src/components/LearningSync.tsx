@@ -585,27 +585,27 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
           <form onSubmit={handleAddCourse} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                <label htmlFor="learning-sync-course-or-certification-title" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Course or Certification Title
                 </label>
-                <input
+                <input id="learning-sync-course-or-certification-title"
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. AWS Certified DevOps or Advanced Playwright Architecture"
-                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                <label htmlFor="learning-sync-provider-platform" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Provider Platform
                 </label>
-                <select
+                <select id="learning-sync-provider-platform"
                   value={provider}
                   onChange={(e) => setProvider(e.target.value)}
-                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                 >
                   <option value="Coursera">Coursera</option>
                   <option value="Udemy">Udemy</option>
@@ -620,26 +620,26 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                <label htmlFor="learning-sync-extracted-tech-skills-comma-separated" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Extracted Tech Skills (comma-separated)
                 </label>
-                <input
+                <input id="learning-sync-extracted-tech-skills-comma-separated"
                   type="text"
                   value={skillsInput}
                   onChange={(e) => setSkillsInput(e.target.value)}
                   placeholder="e.g. Kubernetes, Chaos Mesh, Distributed Tracing"
-                  className="w-full px-3.5 py-2.5 text-xs font-mono bg-sunken border border-line rounded-control text-info-ink focus:outline-none focus:border-accent-line"
+                  className="w-full px-3.5 py-2.5 text-xs font-mono bg-sunken border border-line rounded-control text-info-ink focus:border-accent-line"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                <label htmlFor="learning-sync-initial-status" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Initial Status
                 </label>
-                <select
+                <select id="learning-sync-initial-status"
                   value={status}
                   onChange={(e) => setStatus(e.target.value as any)}
-                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                 >
                   <option value="In Progress">In Progress</option>
                   <option value="Completed">Completed (Auto-syncs into Master Profile)</option>
@@ -775,7 +775,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
                   <button
                     onClick={() => handleDeleteCourse(course.id)}
                     className="p-1.5 text-ink-faint hover:text-critical-ink transition-colors cursor-pointer"
-                    title="Remove course"
+                    title="Remove course" aria-label="Remove course"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>

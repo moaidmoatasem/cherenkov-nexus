@@ -5,7 +5,7 @@
 export const fieldClass =
   'w-full rounded-control border border-line bg-sunken px-3 py-2 text-sm text-ink ' +
   'placeholder:text-ink-faint transition-colors duration-150 ' +
-  'hover:border-line-strong focus:border-accent-line focus:outline-none ' +
+  'hover:border-line-strong focus:border-accent-line ' +
   'focus:ring-2 focus:ring-accent/25';
 
 /** Label sitting directly above a field. */

@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { AppTheme, TabId, CandidateArchetype } from '../types';
 import { SAMPLE_JOBS, ARCHETYPE_PRESETS } from '../data/initialData';
+import { Modal } from './ui';
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -67,6 +68,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const selectedRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    selectedRef.current?.scrollIntoView({ block: 'nearest' });
+  }, [selectedIndex]);
 
   useEffect(() => {
     if (isOpen) {
@@ -405,7 +411,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-scrim backdrop-blur-md animate-fade-in">
+    <Modal open={isOpen} onClose={onClose} align="top" label="Command palette">
       <div
         className="w-full max-w-2xl bg-surface border border-accent-line rounded-panel shadow-pop overflow-hidden flex flex-col max-h-[75vh] animate-pop-in"
         onClick={(e) => e.stopPropagation()}
@@ -422,8 +428,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
               setSelectedIndex(0);
             }}
             onKeyDown={handleKeyDown}
+            role="combobox"
+            aria-expanded
+            aria-controls="command-palette-results"
+            aria-activedescendant={
+              filteredCommands[selectedIndex] ? `command-${filteredCommands[selectedIndex].id}` : undefined
+            }
             placeholder="Type a command, search role preset, change theme, or jump to workspace..."
-            className="w-full bg-transparent text-sm text-ink placeholder:text-ink-faint focus:outline-none font-medium"
+            className="w-full bg-transparent text-sm text-ink placeholder:text-ink-faint font-medium"
           />
           <kbd className="px-2 py-1 text-[10px] font-mono bg-fill-strong text-ink-muted border border-line rounded-control">
             ESC
@@ -431,7 +443,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         </div>
 
         {/* Command Results List */}
-        <div className="overflow-y-auto p-2 space-y-1 divide-y divide-line">
+        <div
+          id="command-palette-results"
+          role="listbox"
+          aria-label="Commands"
+          className="overflow-y-auto p-2 space-y-1 divide-y divide-line"
+        >
           {filteredCommands.length === 0 ? (
             <div className="p-8 text-center text-xs text-ink-muted font-mono">
               No matching commands or actions found for "{query}".
@@ -440,11 +457,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             filteredCommands.map((cmd, idx) => {
               const isSelected = idx === selectedIndex;
               return (
-                <div
+                <button
                   key={cmd.id}
+                  id={`command-${cmd.id}`}
+                  type="button"
+                  role="option"
+                  aria-selected={isSelected}
+                  ref={isSelected ? selectedRef : undefined}
                   onClick={() => cmd.action()}
                   onMouseEnter={() => setSelectedIndex(idx)}
-                  className={`px-3.5 py-2.5 rounded-card flex items-center justify-between gap-3 cursor-pointer transition-all ${
+                  className={`w-full text-left px-3.5 py-2.5 rounded-card flex items-center justify-between gap-3 cursor-pointer transition-all ${
                     isSelected
                       ? 'bg-accent border border-accent-line text-ink'
                       : 'text-ink-muted hover:bg-fill border border-transparent'
@@ -463,7 +485,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                       <div className="text-xs font-semibold truncate flex items-center gap-2">
                         <span>{cmd.title}</span>
                         {cmd.badge && (
-                          <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-accent-soft text-accent-ink border border-accent-line font-bold">
+                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-accent-soft text-accent-ink border border-accent-line font-bold">
                             {cmd.badge}
                           </span>
                         )}
@@ -480,7 +502,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                     </span>
                     {isSelected && <ArrowRight className="w-3.5 h-3.5 text-info-ink animate-pulse" />}
                   </div>
-                </div>
+                </button>
               );
             })
           )}
@@ -499,6 +521,6 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 };

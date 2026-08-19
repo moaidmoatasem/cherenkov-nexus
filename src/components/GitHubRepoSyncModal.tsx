@@ -23,6 +23,7 @@ import {
   Play
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { Modal } from './ui';
 
 interface GitHubRepoSyncModalProps {
   isOpen: boolean;
@@ -162,7 +163,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md overflow-y-auto">
+    <Modal open={isOpen} onClose={onClose} label="GitHub repository sync" className="overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -200,10 +201,10 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
 
         {/* Preset Repositories Quick Selector */}
         <div className="space-y-2">
-          <label className="text-[11px] font-mono text-ink-muted uppercase font-bold flex items-center gap-1.5">
+          <span className="text-[11px] font-mono text-ink-muted uppercase font-bold flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-info-ink" />
             <span>Select Candidate Repository Preset:</span>
-          </label>
+          </span>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             {PRESET_REPOS.map((preset) => {
               const isSelected = repoInput === preset.name;
@@ -244,7 +245,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
               value={repoInput}
               onChange={(e) => setRepoInput(e.target.value)}
               placeholder="e.g. username/repository or https://github.com/..."
-              className="w-full pl-10 pr-4 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink placeholder:text-ink-faint focus:outline-none focus:border-info-line font-mono"
+              className="w-full pl-10 pr-4 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink placeholder:text-ink-faint focus:border-info-line font-mono"
             />
           </div>
 
@@ -256,7 +257,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
                 value={branch}
                 onChange={(e) => setBranch(e.target.value)}
                 placeholder="branch"
-                className="w-full pl-8 pr-3 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink font-mono focus:outline-none focus:border-info-line"
+                className="w-full pl-8 pr-3 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink font-mono focus:border-info-line"
               />
             </div>
 
@@ -400,7 +401,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
                       <button
                         onClick={() => handleCopySnippet(proof.snippet, `proof-${idx}`)}
                         className="absolute right-2 top-2 p-1.5 rounded-control bg-fill-strong hover:bg-fill-strong text-ink-muted hover:text-ink transition-colors cursor-pointer"
-                        title="Copy code proof"
+                        title="Copy code proof" aria-label="Copy code proof"
                       >
                         {copiedSnippet === `proof-${idx}` ? (
                           <Check className="w-3 h-3 text-positive-ink" />
@@ -463,6 +464,6 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
           </div>
         )}
       </motion.div>
-    </div>
+    </Modal>
   );
 };

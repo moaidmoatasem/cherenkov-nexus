@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MasterProfile } from '../types';
 import { User, Sparkles, MapPin, Globe, Cpu, Award, X, Code, Check, Edit2, ShieldCheck, Download, Copy, Braces } from 'lucide-react';
+import { Modal } from './ui';
 
 interface MasterProfileModalProps {
   isOpen: boolean;
@@ -73,7 +74,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md">
+    <Modal open={isOpen} onClose={onClose} label="Master profile anchor">
       <div className="relative w-full max-w-4xl max-h-[90vh] bg-surface border border-info-line rounded-panel overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-line bg-sunken">
@@ -257,71 +258,71 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
             <form onSubmit={handleSaveForm} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">Full Name</label>
-                  <input
+                  <label htmlFor="master-profile-modal-full-name" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">Full Name</label>
+                  <input id="master-profile-modal-full-name"
                     type="text"
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-info-line"
+                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-info-line"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">Executive Title</label>
-                  <input
+                  <label htmlFor="master-profile-modal-executive-title" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">Executive Title</label>
+                  <input id="master-profile-modal-executive-title"
                     type="text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-info-line"
+                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-info-line"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">Location / Visa Status</label>
-                <input
+                <label htmlFor="master-profile-modal-location-visa-status" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">Location / Visa Status</label>
+                <input id="master-profile-modal-location-visa-status"
                   type="text"
                   value={editLocation}
                   onChange={(e) => setEditLocation(e.target.value)}
-                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-info-line"
+                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-info-line"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                <label htmlFor="master-profile-modal-core-competencies-comma-separated" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Core Competencies (comma-separated)
                 </label>
-                <textarea
+                <textarea id="master-profile-modal-core-competencies-comma-separated"
                   rows={2}
                   value={editCompetencies}
                   onChange={(e) => setEditCompetencies(e.target.value)}
-                  className="w-full p-3 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-info-line"
+                  className="w-full p-3 text-xs bg-sunken border border-line rounded-control text-ink focus:border-info-line"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                <label htmlFor="master-profile-modal-tech-stack-comma-separated" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Tech Stack (comma-separated)
                 </label>
-                <textarea
+                <textarea id="master-profile-modal-tech-stack-comma-separated"
                   rows={2}
                   value={editTechStack}
                   onChange={(e) => setEditTechStack(e.target.value)}
-                  className="w-full p-3 text-xs font-mono bg-sunken border border-line rounded-control text-info-ink focus:outline-none focus:border-info-line"
+                  className="w-full p-3 text-xs font-mono bg-sunken border border-line rounded-control text-info-ink focus:border-info-line"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                <label htmlFor="master-profile-modal-executive-experience-summary" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Executive Experience Summary
                 </label>
-                <textarea
+                <textarea id="master-profile-modal-executive-experience-summary"
                   rows={3}
                   value={editExperience}
                   onChange={(e) => setEditExperience(e.target.value)}
-                  className="w-full p-3 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-info-line leading-relaxed"
+                  className="w-full p-3 text-xs bg-sunken border border-line rounded-control text-ink focus:border-info-line leading-relaxed"
                 />
               </div>
 
@@ -355,7 +356,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                 rows={16}
                 value={jsonText}
                 onChange={(e) => setJsonText(e.target.value)}
-                className="w-full p-4 text-xs font-mono bg-sunken border border-line rounded-card text-info-ink focus:outline-none focus:border-info-line leading-relaxed"
+                className="w-full p-4 text-xs font-mono bg-sunken border border-line rounded-card text-info-ink focus:border-info-line leading-relaxed"
               />
               <div className="flex justify-end gap-2">
                 <button
@@ -375,6 +376,6 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
           )}
         </div>
       </div>
-    </div>
+    </Modal>
   );
 };

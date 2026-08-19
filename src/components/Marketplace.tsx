@@ -29,6 +29,7 @@ import {
   FileCode,
   Check
 } from 'lucide-react';
+import { Modal } from './ui';
 
 export interface MarketplaceProps {
   onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
@@ -339,7 +340,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search MCPs by name, tag, tech..."
-            className="w-full pl-9 pr-4 py-2 bg-fill border border-line rounded-control text-xs text-ink placeholder:text-ink-faint focus:outline-none focus:border-info-line"
+            className="w-full pl-9 pr-4 py-2 bg-fill border border-line rounded-control text-xs text-ink placeholder:text-ink-faint focus:border-info-line"
           />
         </div>
       </div>
@@ -466,7 +467,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
 
       {/* Package Inspector Modal */}
       {selectedPackage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md">
+        <Modal open onClose={() => setSelectedPackage(null)} label="MCP package details">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -543,12 +544,12 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
               </div>
             </div>
           </motion.div>
-        </div>
+        </Modal>
       )}
 
       {/* Publish MCP Modal */}
       {isPublishModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md">
+        <Modal open onClose={() => setIsPublishModalOpen(false)} label="Register community MCP server">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -570,26 +571,26 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
 
             <div className="space-y-3">
               <div>
-                <label className="text-[11px] font-mono text-ink-muted">Package Name</label>
-                <input
+                <label htmlFor="marketplace-package-name" className="text-[11px] font-mono text-ink-muted">Package Name</label>
+                <input id="marketplace-package-name"
                   type="text"
                   placeholder="e.g. Canada Express Entry MCP"
-                  className="w-full px-3 py-2 mt-1 rounded-control bg-fill border border-line text-xs text-ink focus:outline-none focus:border-info-line"
+                  className="w-full px-3 py-2 mt-1 rounded-control bg-fill border border-line text-xs text-ink focus:border-info-line"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-mono text-ink-muted">Command / Stdio Endpoint</label>
-                <input
+                <label htmlFor="marketplace-command-stdio-endpoint" className="text-[11px] font-mono text-ink-muted">Command / Stdio Endpoint</label>
+                <input id="marketplace-command-stdio-endpoint"
                   type="text"
                   placeholder="npx -y @my-org/mcp-server@latest"
-                  className="w-full px-3 py-2 mt-1 rounded-control bg-fill border border-line text-xs text-ink focus:outline-none focus:border-info-line font-mono"
+                  className="w-full px-3 py-2 mt-1 rounded-control bg-fill border border-line text-xs text-ink focus:border-info-line font-mono"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-mono text-ink-muted">Category</label>
-                <select className="w-full px-3 py-2 mt-1 rounded-control bg-sunken border border-line text-xs text-ink focus:outline-none focus:border-info-line">
+                <label htmlFor="marketplace-category" className="text-[11px] font-mono text-ink-muted">Category</label>
+                <select id="marketplace-category" className="w-full px-3 py-2 mt-1 rounded-control bg-sunken border border-line text-xs text-ink focus:border-info-line">
                   <option value="visa">Regional Visa Validator</option>
                   <option value="ats">ATS Direct Connector</option>
                   <option value="strategy">Strategy Swarm Pack</option>
@@ -616,7 +617,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
               </button>
             </div>
           </motion.div>
-        </div>
+        </Modal>
       )}
 
       {/* GitHub Repository Sync Modal */}

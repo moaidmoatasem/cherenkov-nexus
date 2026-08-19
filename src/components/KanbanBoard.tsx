@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ApplicationCard, KanbanColumn, SynthesizedResult } from '../types';
-import { chartStatus } from './ui';
+import { Modal, chartStatus } from './ui';
 import { KanbanMetrics } from './KanbanMetrics';
 import { PerformanceMetrics } from './PerformanceMetrics';
 import {
@@ -239,7 +239,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                     ? 'bg-accent text-ink'
                     : 'text-ink-muted hover:text-ink'
                 }`}
-                title="Board View"
+                title="Board View" aria-label="Board View"
               >
                 <LayoutGrid className="w-4 h-4" />
               </button>
@@ -250,7 +250,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                     ? 'bg-accent text-ink'
                     : 'text-ink-muted hover:text-ink'
                 }`}
-                title="List View"
+                title="List View" aria-label="List View"
               >
                 <List className="w-4 h-4" />
               </button>
@@ -276,7 +276,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Filter by company, role, tech..."
-                className="w-full pl-10 pr-3 py-2 text-xs bg-sunken border border-line rounded-control text-ink placeholder:text-ink-faint focus:outline-none focus:border-info-line"
+                className="w-full pl-10 pr-3 py-2 text-xs bg-sunken border border-line rounded-control text-ink placeholder:text-ink-faint focus:border-info-line"
               />
             </div>
 
@@ -465,7 +465,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                             <select
                               value={app.column}
                               onChange={(e) => handleMoveColumn(app, e.target.value as KanbanColumn)}
-                              className="text-[10px] font-mono bg-sunken border border-line text-ink-muted rounded-control px-2 py-1 focus:outline-none focus:border-accent-line"
+                              className="text-[10px] font-mono bg-sunken border border-line text-ink-muted rounded-control px-2 py-1 focus:border-accent-line"
                             >
                               {COLUMNS.map((c) => (
                                 <option key={c.id} value={c.id}>
@@ -477,7 +477,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                             <button
                               onClick={() => onDeleteApplication(app.id)}
                               className="p-1 text-ink-faint hover:text-critical-ink transition-colors cursor-pointer"
-                              title="Delete card"
+                              title="Delete card" aria-label="Delete card"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -573,12 +573,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
       {/* Synthesis Detail Modal */}
       <AnimatePresence>
         {activeModalApp && activeModalApp.synthesis && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md"
-          >
+          <Modal open onClose={() => setActiveModalApp(null)} label="Application details">
             <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -702,19 +697,14 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                 )}
               </div>
             </motion.div>
-          </motion.div>
+          </Modal>
         )}
       </AnimatePresence>
 
       {/* Add New Application Modal */}
       <AnimatePresence>
         {isAddModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md"
-          >
+          <Modal open onClose={() => setIsAddModalOpen(false)} label="Add a custom role">
             <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -737,53 +727,53 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
               <form onSubmit={handleCreateApp} className="p-6 space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                  <label htmlFor="kanban-board-target-company-name" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                     Target Company Name
                   </label>
-                  <input
+                  <input id="kanban-board-target-company-name"
                     type="text"
                     value={newCompany}
                     onChange={(e) => setNewCompany(e.target.value)}
                     placeholder="e.g. Wise, Stripe, Arm, BBC"
-                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                  <label htmlFor="kanban-board-target-job-title" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                     Target Job Title
                   </label>
-                  <input
+                  <input id="kanban-board-target-job-title"
                     type="text"
                     value={newTitle}
                     onChange={(e) => setNewTitle(e.target.value)}
                     placeholder="e.g. Senior QA Engineer / SDET Lead"
-                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                     required
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                    <label htmlFor="kanban-board-location" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                       Location
                     </label>
-                    <input
+                    <input id="kanban-board-location"
                       type="text"
                       value={newLocation}
                       onChange={(e) => setNewLocation(e.target.value)}
-                      className="w-full px-3.5 py-2 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                      className="w-full px-3.5 py-2 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                    <label htmlFor="kanban-board-initial-stage" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                       Initial Stage
                     </label>
-                    <select
+                    <select id="kanban-board-initial-stage"
                       value={newColumn}
                       onChange={(e) => setNewColumn(e.target.value as KanbanColumn)}
-                      className="w-full px-3.5 py-2 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                      className="w-full px-3.5 py-2 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                     >
                       {COLUMNS.map((c) => (
                         <option key={c.id} value={c.id}>
@@ -795,15 +785,15 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                  <label htmlFor="kanban-board-job-description-snippet-notes" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                     Job Description Snippet / Notes
                   </label>
-                  <textarea
+                  <textarea id="kanban-board-job-description-snippet-notes"
                     rows={3}
                     value={newJd}
                     onChange={(e) => setNewJd(e.target.value)}
                     placeholder="Paste snippet or brief notes..."
-                    className="w-full p-3 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                    className="w-full p-3 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                   />
                 </div>
 
@@ -824,7 +814,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                 </div>
               </form>
             </motion.div>
-          </motion.div>
+          </Modal>
         )}
       </AnimatePresence>
     </div>

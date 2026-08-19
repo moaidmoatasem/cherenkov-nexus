@@ -208,8 +208,8 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
       )}
 
       {/* Playwright Test Target Anchors */}
-      <div className="opacity-0 absolute pointer-events-none text-[1px]">System Configuration</div>
-      <div className="opacity-0 absolute pointer-events-none text-[1px]">Location & Readiness</div>
+      <div className="sr-only">System Configuration</div>
+      <div className="sr-only">Location & Readiness</div>
 
       {/* Wizard Header & Progress Bar */}
       <div className="mb-6 relative z-10">
@@ -415,7 +415,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                     placeholder="https://www.linkedin.com/in/username"
                     value={linkedInUrl}
                     onChange={(e) => setLinkedInUrl(e.target.value)}
-                    className="flex-1 bg-surface border border-line-strong rounded-control px-4 py-2.5 text-xs text-ink placeholder:text-ink-faint focus:outline-none focus:border-info-line"
+                    className="flex-1 bg-surface border border-line-strong rounded-control px-4 py-2.5 text-xs text-ink placeholder:text-ink-faint focus:border-info-line"
                   />
                   <button
                     onClick={handleLinkedInExtract}
@@ -451,9 +451,9 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
 
             {/* Target Roles */}
             <div className="space-y-2">
-              <label className="text-[11px] font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
+              <span className="text-[11px] font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
                 <Briefcase className="w-3.5 h-3.5 text-info-ink" /> Target Roles & Disciplines
-              </label>
+              </span>
               <div className="flex flex-wrap gap-2">
                 {activeProfile.target_roles.map((role) => (
                   <span
@@ -481,7 +481,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                       value={newRoleInput}
                       onChange={(e) => setNewRoleInput(e.target.value)}
                       placeholder="e.g. Staff SDET"
-                      className="bg-surface border border-info-line rounded-control px-2.5 py-1 text-xs text-ink focus:outline-none"
+                      className="bg-surface border border-info-line rounded-control px-2.5 py-1 text-xs text-ink"
                       onKeyDown={(e) => e.key === 'Enter' && handleAddCustomRole()}
                     />
                     <button
@@ -504,9 +504,9 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
 
             {/* Immigration & Visa Sponsorship Regions */}
             <div className="space-y-2">
-              <label className="text-[11px] font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
+              <span className="text-[11px] font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
                 <Globe className="w-3.5 h-3.5 text-info-ink" /> Immigration & Sponsorship Verification Regions
-              </label>
+              </span>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 {(['UK', 'EU', 'GCC', 'US'] as const).map((region) => (
                   <button
@@ -538,9 +538,9 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
 
             {/* Work Model */}
             <div className="space-y-2">
-              <label className="text-[11px] font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
+              <span className="text-[11px] font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
                 <Building2 className="w-3.5 h-3.5 text-info-ink" /> Work Preference
-              </label>
+              </span>
               <div className="flex bg-surface rounded-control p-1 border border-line-strong">
                 {['Remote', 'Hybrid', 'On-Site'].map((model) => (
                   <button
@@ -611,7 +611,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                 <div>
                   <div className="font-bold text-sm text-ink flex items-center gap-2">
                     <span>High-Speed Cloud Inference</span>
-                    <span className="text-[10px] font-mono px-2 py-0.2 rounded bg-accent-soft text-accent-ink">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent-soft text-accent-ink">
                       Gemini 3.7 Flash
                     </span>
                   </div>
@@ -640,7 +640,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                 <div>
                   <div className="font-bold text-sm text-ink flex items-center gap-2">
                     <span>Air-Gapped Zero-Trust (Local Only)</span>
-                    <span className="text-[10px] font-mono px-2 py-0.2 rounded bg-positive-soft text-positive-ink">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-positive-soft text-positive-ink">
                       Qwen 2.5 / Port 3001
                     </span>
                   </div>

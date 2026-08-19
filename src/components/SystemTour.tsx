@@ -541,7 +541,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
           <button
             onClick={() => handleFinishTour(false)}
             className="text-ink-muted hover:text-ink p-1 rounded-control hover:bg-fill-strong transition-colors cursor-pointer"
-            title="Skip Tour (Esc)"
+            title="Skip Tour (Esc)" aria-label="Skip Tour (Esc)"
           >
             <X className="w-4 h-4" />
           </button>
@@ -603,7 +603,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
                     : 'w-2 bg-fill-strong hover:bg-fill-strong'
                 }`}
                 style={idx === currentStepIdx ? { backgroundColor: step.accentHex, color: step.accentHex } : {}}
-                title={`Jump to Step ${idx + 1}: ${s.title}`}
+                title={`Jump to Step ${idx + 1}: ${s.title}`} aria-label={`Jump to Step ${idx + 1}: ${s.title}`}
               />
             ))}
           </div>

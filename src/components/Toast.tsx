@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CheckCircle2, AlertCircle, Info, X } from 'lucide-react';
 
 export interface ToastMessage {
@@ -15,7 +15,13 @@ interface ToastProps {
 
 export const ToastContainer: React.FC<ToastProps> = ({ toasts, onDismiss }) => {
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 pointer-events-none max-w-md w-full px-4">
+    <div
+      role="status"
+      aria-live="polite"
+      aria-relevant="additions text"
+      data-testid="toast-container"
+      className="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 pointer-events-none max-w-md w-full px-4"
+    >
       {toasts.map((toast) => (
         <ToastItem key={toast.id} toast={toast} onDismiss={onDismiss} />
       ))}
@@ -27,12 +33,15 @@ const ToastItem: React.FC<{ toast: ToastMessage; onDismiss: (id: string) => void
   toast,
   onDismiss,
 }) => {
+  const [paused, setPaused] = useState(false);
+  const dismiss = useRef(onDismiss);
+  dismiss.current = onDismiss;
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      onDismiss(toast.id);
-    }, 4500);
+    if (paused) return;
+    const timer = setTimeout(() => dismiss.current(toast.id), 4500);
     return () => clearTimeout(timer);
-  }, [toast.id, onDismiss]);
+  }, [toast.id, paused]);
 
   const icons = {
     success: <CheckCircle2 className="w-5 h-5 text-positive-ink shrink-0 mt-0.5" />,
@@ -48,6 +57,10 @@ const ToastItem: React.FC<{ toast: ToastMessage; onDismiss: (id: string) => void
 
   return (
     <div
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={() => setPaused(false)}
       className={`pointer-events-auto flex items-start gap-3.5 p-4 rounded-card border shadow-pop backdrop-blur-xl transition-all duration-300 animate-slide-up ${
         borders[toast.type]
       }`}
@@ -59,6 +72,7 @@ const ToastItem: React.FC<{ toast: ToastMessage; onDismiss: (id: string) => void
       </div>
       <button
         onClick={() => onDismiss(toast.id)}
+        aria-label={`Dismiss notification: ${toast.title}`}
         className="text-ink-muted hover:text-ink transition-colors p-1 rounded-control hover:bg-fill-strong"
       >
         <X className="w-4 h-4" />

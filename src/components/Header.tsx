@@ -195,7 +195,7 @@ export const Header: React.FC<HeaderProps> = ({
             id="tour-command-palette"
             type="button"
             onClick={onOpenCommandPalette}
-            title="Open Command Palette (Cmd+K)"
+            title="Open Command Palette (Cmd+K)" aria-label="Open Command Palette (Cmd+K)"
             className={cn(
               'hidden sm:flex items-center gap-2 h-8 pl-2.5 pr-1.5 rounded-control cursor-pointer',
               'border border-line bg-fill text-ink-muted transition-colors duration-150',
@@ -216,7 +216,7 @@ export const Header: React.FC<HeaderProps> = ({
               variant="outline"
               onClick={onOpenOnboarding}
               icon={<Sparkles className="w-3.5 h-3.5" />}
-              title="Zero-Friction Agentic Onboarding (Terminal Handshake, Magic Ingest, Visa Seeding & Live ATS Test)"
+              title="Zero-Friction Agentic Onboarding (Terminal Handshake, Magic Ingest, Visa Seeding & Live ATS Test)" aria-label="Zero-Friction Agentic Onboarding (Terminal Handshake, Magic Ingest, Visa Seeding & Live ATS Test)"
             >
               Agentic Onboard
             </Button>
@@ -231,7 +231,7 @@ export const Header: React.FC<HeaderProps> = ({
               variant="ghost"
               onClick={onOpenIdentityVault}
               icon={<ShieldCheck className="w-3.5 h-3.5" />}
-              title="Zero-Trust Identity Vault & Inference Router"
+              title="Zero-Trust Identity Vault & Inference Router" aria-label="Zero-Trust Identity Vault & Inference Router"
             >
               <span className="hidden 2xl:inline">Vault</span>
             </Button>
@@ -244,7 +244,7 @@ export const Header: React.FC<HeaderProps> = ({
             variant="ghost"
             onClick={onStartTour}
             icon={<HelpCircle className="w-3.5 h-3.5" />}
-            title="Start Guided System Tour"
+            title="Start Guided System Tour" aria-label="Start Guided System Tour"
           >
             <span className="hidden 2xl:inline">Tour</span>
           </Button>
@@ -257,7 +257,7 @@ export const Header: React.FC<HeaderProps> = ({
               variant="ghost"
               onClick={onOpenTelemetry}
               icon={<Activity className="w-3.5 h-3.5" />}
-              title="System Telemetry & Scraper Health"
+              title="System Telemetry & Scraper Health" aria-label="System Telemetry & Scraper Health"
             >
               <span className="hidden 2xl:inline">Metrics</span>
             </Button>
@@ -269,7 +269,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={() => setShowThemePicker((open) => !open)}
-            title="Switch Visual Theme Palette & Mode"
+            title="Switch Visual Theme Palette & Mode" aria-label="Switch Visual Theme Palette & Mode"
             aria-haspopup="menu"
             aria-expanded={showThemePicker}
             className={cn(
@@ -319,7 +319,7 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           type="button"
           onClick={onOpenProfile}
-          title={`${profile.name} — ${profile.title}`}
+          title={`${profile.name} — ${profile.title}`} aria-label={`${profile.name} — ${profile.title}`}
           className={cn(
             'flex items-center gap-2.5 h-9 pl-1 pr-1 sm:pr-2.5 rounded-control cursor-pointer',
             'border border-line bg-fill transition-colors duration-150',

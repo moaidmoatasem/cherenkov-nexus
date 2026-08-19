@@ -21,6 +21,7 @@ import {
   Sparkles,
   QrCode
 } from 'lucide-react';
+import { Modal } from './ui';
 
 export interface IdentityVaultModalProps {
   isOpen: boolean;
@@ -91,7 +92,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md overflow-y-auto">
+    <Modal open={isOpen} onClose={onClose} label="Zero-trust identity vault" className="overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -196,11 +197,11 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
           {/* Endpoint & Local Model Configuration */}
           <div className="pt-3 border-t border-line grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[10px] font-mono uppercase text-ink-muted font-bold mb-1 flex items-center gap-1.5">
+              <label htmlFor="identity-vault-modal-local-endpoint-ollama-anythingllm" className="block text-[10px] font-mono uppercase text-ink-muted font-bold mb-1 flex items-center gap-1.5">
                 <Server className="w-3 h-3 text-positive-ink" />
                 <span>Local Endpoint (Ollama / AnythingLLM)</span>
               </label>
-              <input
+              <input id="identity-vault-modal-local-endpoint-ollama-anythingllm"
                 type="text"
                 value={config.localEndpoint}
                 onChange={(e) => {
@@ -211,17 +212,17 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                   window.dispatchEvent(new CustomEvent('cherenkov_routing_changed', { detail: updated }));
                 }}
                 placeholder="http://localhost:11434/v1"
-                className="w-full px-3 py-2 bg-sunken border border-line rounded-control text-xs font-mono text-ink placeholder:text-ink-faint focus:outline-none focus:border-positive-line"
+                className="w-full px-3 py-2 bg-sunken border border-line rounded-control text-xs font-mono text-ink placeholder:text-ink-faint focus:border-positive-line"
               />
             </div>
 
             <div>
-              <label className="block text-[10px] font-mono uppercase text-ink-muted font-bold mb-1 flex items-center gap-1.5">
+              <label htmlFor="identity-vault-modal-local-model-name-tag" className="block text-[10px] font-mono uppercase text-ink-muted font-bold mb-1 flex items-center gap-1.5">
                 <Cpu className="w-3 h-3 text-info-ink" />
                 <span>Local Model Name / Tag</span>
               </label>
               <div className="flex gap-2">
-                <input
+                <input id="identity-vault-modal-local-model-name-tag"
                   type="text"
                   value={config.localModel}
                   onChange={(e) => {
@@ -232,7 +233,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                     window.dispatchEvent(new CustomEvent('cherenkov_routing_changed', { detail: updated }));
                   }}
                   placeholder="qwen2.5-coder:14b or llama3.3"
-                  className="flex-1 px-3 py-2 bg-sunken border border-line rounded-control text-xs font-mono text-ink placeholder:text-ink-faint focus:outline-none focus:border-info-line"
+                  className="flex-1 px-3 py-2 bg-sunken border border-line rounded-control text-xs font-mono text-ink placeholder:text-ink-faint focus:border-info-line"
                 />
                 <button
                   type="button"
@@ -245,7 +246,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                     onToast('info', 'Defaults Reset', 'Restored Qwen 2.5 & Ollama defaults.');
                   }}
                   className="px-2.5 py-1.5 rounded-control bg-fill hover:bg-fill-strong text-[10px] font-mono text-ink-muted hover:text-ink border border-line cursor-pointer"
-                  title="Reset to Qwen defaults"
+                  title="Reset to Qwen defaults" aria-label="Reset to Qwen defaults"
                 >
                   Reset
                 </button>
@@ -288,7 +289,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                   value={passphrase}
                   onChange={(e) => setPassphrase(e.target.value)}
                   placeholder="Master Passphrase"
-                  className="px-3 py-2 bg-fill border border-line rounded-control text-xs text-ink placeholder:text-ink-faint focus:outline-none focus:border-info-line"
+                  className="px-3 py-2 bg-fill border border-line rounded-control text-xs text-ink placeholder:text-ink-faint focus:border-info-line"
                 />
               )}
               <button
@@ -368,6 +369,6 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
           </button>
         </div>
       </motion.div>
-    </div>
+    </Modal>
   );
 };

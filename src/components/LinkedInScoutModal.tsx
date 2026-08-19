@@ -19,6 +19,7 @@ import {
   ArrowRight,
   ShieldCheck
 } from 'lucide-react';
+import { Modal } from './ui';
 
 interface LinkedInScoutModalProps {
   isOpen: boolean;
@@ -129,7 +130,7 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md">
+      <Modal open={isOpen} onClose={onClose} label="LinkedIn Scout MCP agent">
         <motion.div
           initial={{ scale: 0.95, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -169,44 +170,44 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
             {/* Input Form */}
             <form onSubmit={handleRunScout} className="p-5 rounded-card bg-sunken border border-line space-y-4">
               <div>
-                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                <label htmlFor="linked-in-scout-modal-recruiter-hiring-manager-linkedin-url-or-name" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Recruiter / Hiring Manager LinkedIn URL or Name
                 </label>
                 <div className="relative">
                   <Linkedin className="w-4 h-4 absolute left-3.5 top-3.5 text-info-ink" />
-                  <input
+                  <input id="linked-in-scout-modal-recruiter-hiring-manager-linkedin-url-or-name"
                     type="text"
                     value={profileUrl}
                     onChange={(e) => setProfileUrl(e.target.value)}
                     placeholder="e.g. https://linkedin.com/in/sarah-jenkins-talent or Sarah Jenkins"
-                    className="w-full pl-10 pr-3 py-2.5 text-xs bg-surface border border-line rounded-control text-ink placeholder:text-ink-faint focus:outline-none focus:border-info-line"
+                    className="w-full pl-10 pr-3 py-2.5 text-xs bg-surface border border-line rounded-control text-ink placeholder:text-ink-faint focus:border-info-line"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                  <label htmlFor="linked-in-scout-modal-target-company" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                     Target Company
                   </label>
-                  <input
+                  <input id="linked-in-scout-modal-target-company"
                     type="text"
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
                     placeholder="e.g. Monzo Bank, Wise, Revolut"
-                    className="w-full px-3.5 py-2 text-xs bg-surface border border-line rounded-control text-ink focus:outline-none focus:border-info-line"
+                    className="w-full px-3.5 py-2 text-xs bg-surface border border-line rounded-control text-ink focus:border-info-line"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                  <label htmlFor="linked-in-scout-modal-target-role" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                     Target Role
                   </label>
-                  <input
+                  <input id="linked-in-scout-modal-target-role"
                     type="text"
                     value={targetRole}
                     onChange={(e) => setTargetRole(e.target.value)}
                     placeholder="e.g. Senior QA Lead / SDET Lead"
-                    className="w-full px-3.5 py-2 text-xs bg-surface border border-line rounded-control text-ink focus:outline-none focus:border-info-line"
+                    className="w-full px-3.5 py-2 text-xs bg-surface border border-line rounded-control text-ink focus:border-info-line"
                   />
                 </div>
               </div>
@@ -409,7 +410,7 @@ export const LinkedInScoutModal: React.FC<LinkedInScoutModalProps> = ({
             )}
           </div>
         </motion.div>
-      </div>
+      </Modal>
     </AnimatePresence>
   );
 };

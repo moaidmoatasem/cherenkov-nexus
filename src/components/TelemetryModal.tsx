@@ -15,6 +15,7 @@ import {
   Server,
   ArrowUpRight
 } from 'lucide-react';
+import { Modal } from './ui';
 
 interface TelemetryModalProps {
   isOpen: boolean;
@@ -25,7 +26,7 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md animate-fade-in">
+    <Modal open={isOpen} onClose={onClose} label="Telemetry & observability">
       <div
         className="w-full max-w-3xl bg-surface border border-info-line rounded-panel shadow-pop overflow-hidden flex flex-col max-h-[85vh] animate-pop-in"
         onClick={(e) => e.stopPropagation()}
@@ -194,6 +195,6 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
           </button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 };

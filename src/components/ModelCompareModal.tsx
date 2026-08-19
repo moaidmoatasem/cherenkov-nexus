@@ -19,6 +19,7 @@ import {
   ArrowRight,
   ShieldCheck
 } from 'lucide-react';
+import { Modal } from './ui';
 
 interface ModelComparisonResult {
   model: string;
@@ -124,7 +125,7 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
   const config = getRoutingConfig();
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md overflow-y-auto">
+    <Modal open={isOpen} onClose={onClose} label="Dual-engine synthesis benchmark" className="overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 15 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -229,27 +230,27 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
                 {/* Content */}
                 <div className="mt-4 space-y-3">
                   <div>
-                    <label className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
+                    <span className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
                       3-Sentence Executive Summary:
-                    </label>
+                    </span>
                     <p className="text-xs text-ink leading-relaxed p-3 rounded-control bg-sunken border border-line">
                       {geminiResult?.tailored_summary}
                     </p>
                   </div>
 
                   <div>
-                    <label className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
+                    <span className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
                       Cold Email Opening Hook:
-                    </label>
+                    </span>
                     <p className="text-xs text-ink-muted font-mono p-3 rounded-control bg-sunken border border-line italic">
                       "{geminiResult?.cold_email_hook}"
                     </p>
                   </div>
 
                   <div>
-                    <label className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
+                    <span className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
                       Identified Tech Skill Gaps:
-                    </label>
+                    </span>
                     <div className="flex flex-wrap gap-1.5">
                       {geminiResult?.identified_gaps?.map((gap, i) => (
                         <span
@@ -320,27 +321,27 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
                 {/* Content */}
                 <div className="mt-4 space-y-3">
                   <div>
-                    <label className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
+                    <span className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
                       3-Sentence Executive Summary:
-                    </label>
+                    </span>
                     <p className="text-xs text-ink leading-relaxed p-3 rounded-control bg-sunken border border-line">
                       {localResult?.tailored_summary}
                     </p>
                   </div>
 
                   <div>
-                    <label className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
+                    <span className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
                       Cold Email Opening Hook:
-                    </label>
+                    </span>
                     <p className="text-xs text-ink-muted font-mono p-3 rounded-control bg-sunken border border-line italic">
                       "{localResult?.cold_email_hook}"
                     </p>
                   </div>
 
                   <div>
-                    <label className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
+                    <span className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
                       Identified Tech Skill Gaps:
-                    </label>
+                    </span>
                     <div className="flex flex-wrap gap-1.5">
                       {localResult?.identified_gaps?.map((gap, i) => (
                         <span
@@ -400,6 +401,6 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
           </button>
         </div>
       </motion.div>
-    </div>
+    </Modal>
   );
 };

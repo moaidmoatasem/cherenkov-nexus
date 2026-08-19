@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { UnifiedOnboardingWizard } from './UnifiedOnboardingWizard';
 import { MasterProfile } from '../types';
+import { Modal } from './ui';
 
 export interface OnboardingModalProps {
   isOpen: boolean;
@@ -19,14 +20,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="absolute inset-0 bg-sunken/80 backdrop-blur-sm"
-          />
+        <Modal open onClose={onClose} label="Agentic onboarding" className="sm:p-6">
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -41,7 +35,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
               }}
             />
           </motion.div>
-        </div>
+        </Modal>
       )}
     </AnimatePresence>
   );

@@ -6,7 +6,7 @@ import { useWebLLM } from '../hooks/useWebLLM';
 import { LinkedInScoutModal } from './LinkedInScoutModal';
 import { InterviewSandbox } from './InterviewSandbox';
 import { ModelCompareModal } from './ModelCompareModal';
-import { Badge, PanelHeader } from './ui';
+import { Badge, Modal, PanelHeader } from './ui';
 import { downloadAtsPdfResume } from '../utils/pdfGenerator';
 import {
   Sparkles,
@@ -611,7 +611,7 @@ ${qa.answer}
           <PanelHeader
             icon={<Sparkles className="w-5 h-5" />}
             tone="accent"
-            title="Job Synthesizer & Weaponry Arsenal"
+            title="Job Synthesizer & Weaponry Arsenal" aria-label="Job Synthesizer & Weaponry Arsenal"
             description="Ingest live Job Descriptions via automated web scraper or direct text input. Automatically validates UK/EU visa sponsorship, conducts skill gap analysis, and synthesizes STAR interview answers and tailored pitches."
             meta={
               <>
@@ -679,7 +679,7 @@ ${qa.answer}
                       style={{ backgroundColor: sample.brandColor || 'var(--color-accent)' }}
                     />
                     <span>{sample.company}</span>
-                    <span className="text-[10px] opacity-80 font-mono px-1.5 py-0.2 rounded bg-sunken border border-line">
+                    <span className="text-[10px] opacity-80 font-mono px-1.5 py-0.5 rounded bg-sunken border border-line">
                       UK
                     </span>
                   </button>
@@ -698,7 +698,7 @@ ${qa.answer}
               value={scrapeUrl}
               onChange={(e) => setScrapeUrl(e.target.value)}
               placeholder="Paste live Job URL (e.g. https://monzo.com/careers/... or Greenhouse/Lever link)"
-              className="w-full pl-10 pr-4 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink placeholder:text-ink-faint focus:outline-none focus:border-info-line focus:ring-2 focus:ring-info-line transition-all font-mono"
+              className="w-full pl-10 pr-4 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink placeholder:text-ink-faint focus:border-info-line focus:ring-2 focus:ring-info-line transition-all font-mono"
             />
           </div>
 
@@ -835,41 +835,41 @@ ${qa.answer}
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label className="block text-[11px] font-mono uppercase text-ink-muted mb-1 font-bold">
+            <label htmlFor="job-synthesizer-target-company" className="block text-[11px] font-mono uppercase text-ink-muted mb-1 font-bold">
               Target Company
             </label>
-            <input
+            <input id="job-synthesizer-target-company"
               type="text"
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
               placeholder="e.g. Monzo, Revolut, Deliveroo"
-              className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line font-medium"
+              className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line font-medium"
             />
           </div>
 
           <div>
-            <label className="block text-[11px] font-mono uppercase text-ink-muted mb-1 font-bold">
+            <label htmlFor="job-synthesizer-target-role-title" className="block text-[11px] font-mono uppercase text-ink-muted mb-1 font-bold">
               Target Role Title
             </label>
-            <input
+            <input id="job-synthesizer-target-role-title"
               type="text"
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
               placeholder="e.g. Lead QA Infrastructure Engineer"
-              className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line font-medium"
+              className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line font-medium"
             />
           </div>
 
           <div>
-            <label className="block text-[11px] font-mono uppercase text-ink-muted mb-1 font-bold">
+            <label htmlFor="job-synthesizer-recruiter-talent-email" className="block text-[11px] font-mono uppercase text-ink-muted mb-1 font-bold">
               Recruiter / Talent Email
             </label>
-            <input
+            <input id="job-synthesizer-recruiter-talent-email"
               type="email"
               value={targetEmail}
               onChange={(e) => setTargetEmail(e.target.value)}
               placeholder="e.g. talent@monzo.com"
-              className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line font-mono"
+              className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line font-mono"
             />
           </div>
         </div>
@@ -877,10 +877,10 @@ ${qa.answer}
         {/* Job Description Text Area */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label className="text-[11px] font-mono uppercase text-ink-muted font-bold flex items-center gap-1.5">
+            <span className="text-[11px] font-mono uppercase text-ink-muted font-bold flex items-center gap-1.5">
               <FileText className="w-3.5 h-3.5 text-accent-ink" />
               <span>Job Description Raw Content</span>
-            </label>
+            </span>
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-mono text-info-ink font-bold bg-info-soft px-2 py-0.5 rounded border border-info-line">
                 {jobDescription.length} chars • ~{Math.round(jobDescription.split(/\s+/).length)} words
@@ -898,7 +898,7 @@ ${qa.answer}
             value={jobDescription}
             onChange={(e) => setJobDescription(e.target.value)}
             placeholder="Paste entire job specification text here..."
-            className="w-full p-3.5 text-xs font-mono bg-sunken border border-line rounded-control text-ink-muted placeholder:text-ink-faint focus:outline-none focus:border-accent-line leading-relaxed"
+            className="w-full p-3.5 text-xs font-mono bg-sunken border border-line rounded-control text-ink-muted placeholder:text-ink-faint focus:border-accent-line leading-relaxed"
           />
         </div>
 
@@ -1323,7 +1323,7 @@ ${qa.answer}
                         onClick={handleGeneratePdfResume}
                         disabled={isGeneratingPdf}
                         className="px-3 py-1 text-xs bg-accent hover:bg-accent-strong text-ink rounded-control font-bold flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
-                        title="Export clean ATS-friendly PDF Resume"
+                        title="Export clean ATS-friendly PDF Resume" aria-label="Export clean ATS-friendly PDF Resume"
                       >
                         {isGeneratingPdf ? (
                           <>
@@ -1450,7 +1450,7 @@ ${qa.answer}
                       <a
                         href={generateEmailLink('native')}
                         className="hidden sm:flex px-3 py-2.5 rounded-control bg-fill hover:bg-fill-strong text-ink-muted text-xs font-bold transition-all cursor-pointer"
-                        title="Open default system mail client"
+                        title="Open default system mail client" aria-label="Open default system mail client"
                       >
                         Native Mail
                       </a>
@@ -1615,8 +1615,8 @@ ${qa.answer}
 
                 {/* Candidate Practice Input */}
                 <div className="space-y-2">
-                  <label className="text-[11px] font-mono uppercase text-ink-muted font-bold flex items-center justify-between">
-                    <span>Your Practice STAR Answer:</span>
+                  <div className="text-[11px] font-mono uppercase text-ink-muted font-bold flex items-center justify-between">
+                    <label htmlFor="job-synthesizer-practice-star-answer">Your Practice STAR Answer:</label>
                     <button
                       onClick={() =>
                         setUserPracticeAnswer(
@@ -1627,13 +1627,14 @@ ${qa.answer}
                     >
                       Fill with Optimal Answer
                     </button>
-                  </label>
+                  </div>
                   <textarea
+                    id="job-synthesizer-practice-star-answer"
                     rows={4}
                     value={userPracticeAnswer}
                     onChange={(e) => setUserPracticeAnswer(e.target.value)}
                     placeholder="Type or dictate your answer using the STAR (Situation, Task, Action, Result) methodology..."
-                    className="w-full p-3.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-positive-line font-sans"
+                    className="w-full p-3.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-positive-line font-sans"
                   />
                 </div>
 
@@ -1837,7 +1838,7 @@ ${qa.answer}
 
       {/* Voice Interview Sandbox Modal */}
       {isVoiceInterviewOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md overflow-y-auto">
+        <Modal open onClose={() => setIsVoiceInterviewOpen(false)} label="Voice interview sandbox" className="overflow-y-auto">
           <div className="relative w-full max-w-4xl my-8">
             <InterviewSandbox
               isOpen={isVoiceInterviewOpen}
@@ -1849,7 +1850,7 @@ ${qa.answer}
               onToast={onToast}
             />
           </div>
-        </div>
+        </Modal>
       )}
     </div>
   );
