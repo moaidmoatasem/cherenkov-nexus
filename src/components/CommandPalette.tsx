@@ -95,7 +95,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Go to Job Synthesizer & Weaponry Arsenal',
       category: 'Workspace',
       description: 'Ingest JDs, synthesize STAR answers, and tailor pitches',
-      icon: <Sparkles className="w-4 h-4 text-violet-400" />,
+      icon: <Sparkles className="w-4 h-4 text-accent-ink" />,
       badge: 'Tab 1',
       action: () => {
         onSelectTab('synthesizer');
@@ -107,7 +107,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Go to Kanban Application Pipeline',
       category: 'Workspace',
       description: '5-Stage visual tracking of visa-sponsored job opportunities',
-      icon: <Kanban className="w-4 h-4 text-cyan-400" />,
+      icon: <Kanban className="w-4 h-4 text-accent2-ink" />,
       badge: 'Tab 2',
       action: () => {
         onSelectTab('kanban');
@@ -119,7 +119,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Go to Learning Sync Matrix',
       category: 'Workspace',
       description: 'Review in-flight courses and auto-propagate acquired skills',
-      icon: <GraduationCap className="w-4 h-4 text-amber-400" />,
+      icon: <GraduationCap className="w-4 h-4 text-caution-ink" />,
       badge: 'Tab 3',
       action: () => {
         onSelectTab('learning');
@@ -131,7 +131,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Go to MCP Registry & Strategy Marketplace',
       category: 'Workspace',
       description: 'Browse, install, and manage official and community Model Context Protocol packages',
-      icon: <Terminal className="w-4 h-4 text-cyan-400" />,
+      icon: <Terminal className="w-4 h-4 text-accent2-ink" />,
       badge: 'PaaS',
       action: () => {
         onSelectTab('marketplace');
@@ -143,7 +143,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Go to Visual Agent Canvas & Swarm Builder',
       category: 'Workspace',
       description: 'Design and execute multi-agent workflows with human approval gates',
-      icon: <Zap className="w-4 h-4 text-violet-400" />,
+      icon: <Zap className="w-4 h-4 text-accent-ink" />,
       badge: 'Swarm',
       action: () => {
         onSelectTab('orchestrator');
@@ -155,7 +155,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Go to Community Hive-Mind & Ghost Job Radar',
       category: 'Workspace',
       description: 'Crowdsourced hiring signals, monthly visa heatmaps, and ATS telemetry',
-      icon: <Activity className="w-4 h-4 text-red-400" />,
+      icon: <Activity className="w-4 h-4 text-critical-ink" />,
       badge: 'Radar',
       action: () => {
         onSelectTab('hivemind');
@@ -169,7 +169,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Run LinkedIn Scout MCP Agent',
       category: 'Action',
       description: 'Extract recruiter profiles and generate hyper-personalized cold outreach',
-      icon: <Linkedin className="w-4 h-4 text-cyan-400" />,
+      icon: <Linkedin className="w-4 h-4 text-accent2-ink" />,
       badge: 'MCP 2026',
       action: () => {
         onSelectTab('synthesizer');
@@ -181,7 +181,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Launch Voice Mock Interview Sandbox',
       category: 'Action',
       description: 'Interactive technical Q&A drill powered by Web Speech API & AI Evaluator',
-      icon: <Mic className="w-4 h-4 text-violet-400" />,
+      icon: <Mic className="w-4 h-4 text-accent-ink" />,
       badge: 'Voice TTS',
       action: () => {
         onSelectTab('synthesizer');
@@ -193,7 +193,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Edit Master Profile & Skills Ground Truth',
       category: 'Action',
       description: 'Update Playwright/k6/cherenkov-qa anchor experience',
-      icon: <ShieldCheck className="w-4 h-4 text-emerald-400" />,
+      icon: <ShieldCheck className="w-4 h-4 text-positive-ink" />,
       action: () => {
         onOpenProfile();
         onClose();
@@ -204,7 +204,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Open Zero-Trust Identity Vault & Router',
       category: 'Action',
       description: 'Manage AES-256 E2EE storage, PII isolation, and verifiable crypto badges',
-      icon: <ShieldCheck className="w-4 h-4 text-cyan-400" />,
+      icon: <ShieldCheck className="w-4 h-4 text-accent2-ink" />,
       badge: 'AES-256',
       action: () => {
         if (onOpenIdentityVault) onOpenIdentityVault();
@@ -216,7 +216,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Magic Profile Import & 1-Click Cloud Deploy',
       category: 'Action',
       description: 'Instant parsing of public profile URL and one-click cloud self-host scripts',
-      icon: <Zap className="w-4 h-4 text-amber-400" />,
+      icon: <Zap className="w-4 h-4 text-caution-ink" />,
       badge: '10-Sec',
       action: () => {
         if (onOpenOnboarding) onOpenOnboarding();
@@ -228,7 +228,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Start Interactive Guided Feature Tour',
       category: 'System',
       description: 'Explore Command Palette, xAPI Sync Webhook, Identity Vault, and Agent Swarm',
-      icon: <HelpCircle className="w-4 h-4 text-violet-400" />,
+      icon: <HelpCircle className="w-4 h-4 text-accent-ink" />,
       badge: 'Interactive Tour',
       action: () => {
         if (onStartTour) onStartTour();
@@ -240,7 +240,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Inspect Scraper Health & Telemetry Metrics',
       category: 'System',
       description: 'View Playwright latency, UK Sponsor registry stats, and AST validation',
-      icon: <Activity className="w-4 h-4 text-emerald-400" />,
+      icon: <Activity className="w-4 h-4 text-positive-ink" />,
       action: () => {
         onOpenTelemetry();
         onClose();
@@ -253,7 +253,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Switch to Cyber Aurora Theme (Dark)',
       category: 'Theme',
       description: 'Deep obsidian canvas with radiant violet/cyan aurora',
-      icon: <Moon className="w-4 h-4 text-violet-400" />,
+      icon: <Moon className="w-4 h-4 text-accent-ink" />,
       badge: currentTheme === 'cyber' ? 'Active' : undefined,
       action: () => {
         onSelectTheme('cyber');
@@ -265,7 +265,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Switch to Tokyo Neon Synthwave (Dark)',
       category: 'Theme',
       description: 'Midnight indigo with vibrant fuchsia & electric cyan',
-      icon: <Moon className="w-4 h-4 text-pink-400" />,
+      icon: <Moon className="w-4 h-4 text-critical-ink" />,
       badge: currentTheme === 'synthwave' ? 'Active' : undefined,
       action: () => {
         onSelectTheme('synthwave');
@@ -277,7 +277,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Switch to Quantum Emerald Theme (Dark)',
       category: 'Theme',
       description: 'Forest titanium with radiant emerald and teal accents',
-      icon: <Moon className="w-4 h-4 text-emerald-400" />,
+      icon: <Moon className="w-4 h-4 text-positive-ink" />,
       badge: currentTheme === 'emerald' ? 'Active' : undefined,
       action: () => {
         onSelectTheme('emerald');
@@ -289,7 +289,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Switch to Solar Ember Theme (Dark)',
       category: 'Theme',
       description: 'Dark espresso bronze with molten amber glow',
-      icon: <Moon className="w-4 h-4 text-amber-400" />,
+      icon: <Moon className="w-4 h-4 text-caution-ink" />,
       badge: currentTheme === 'solar' ? 'Active' : undefined,
       action: () => {
         onSelectTheme('solar');
@@ -301,7 +301,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Switch to Executive Slate Theme (Dark)',
       category: 'Theme',
       description: 'Deep carbon titanium with cool steel blue aura',
-      icon: <Moon className="w-4 h-4 text-sky-400" />,
+      icon: <Moon className="w-4 h-4 text-info-ink" />,
       badge: currentTheme === 'slate' ? 'Active' : undefined,
       action: () => {
         onSelectTheme('slate');
@@ -313,7 +313,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Switch to Executive Platinum Theme (Light)',
       category: 'Theme',
       description: 'Crisp studio light mode with cobalt accents & crystal cards',
-      icon: <Sun className="w-4 h-4 text-indigo-500" />,
+      icon: <Sun className="w-4 h-4 text-info" />,
       badge: currentTheme === 'light-executive' ? 'Active' : undefined,
       action: () => {
         onSelectTheme('light-executive');
@@ -325,7 +325,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Switch to Nordic Frost Theme (Light)',
       category: 'Theme',
       description: 'Pure ice gray canvas with sharp cyan & emerald highlights',
-      icon: <Sun className="w-4 h-4 text-teal-500" />,
+      icon: <Sun className="w-4 h-4 text-accent2" />,
       badge: currentTheme === 'light-frost' ? 'Active' : undefined,
       action: () => {
         onSelectTheme('light-frost');
@@ -337,7 +337,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: 'Switch to Warm Ceramic Theme (Light)',
       category: 'Theme',
       description: 'Alabaster warmth with terracotta & bronze accents',
-      icon: <Sun className="w-4 h-4 text-amber-600" />,
+      icon: <Sun className="w-4 h-4 text-caution" />,
       badge: currentTheme === 'light-ceramic' ? 'Active' : undefined,
       action: () => {
         onSelectTheme('light-ceramic');
@@ -370,7 +370,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       title: `Load Verified Role Preset: ${job.company} - ${job.title}`,
       category: 'Presets' as const,
       description: `UK Skilled Worker Licensed Sponsor • ${job.location}`,
-      icon: <Globe className="w-4 h-4 text-cyan-400" />,
+      icon: <Globe className="w-4 h-4 text-accent2-ink" />,
       badge: 'UK Sponsor',
       action: () => {
         onSelectTab('synthesizer');
@@ -405,14 +405,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-scrim backdrop-blur-md animate-in fade-in duration-150">
       <div
-        className="w-full max-w-2xl bg-[#0c101a] border border-violet-500/30 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[75vh] animate-in zoom-in-95 duration-150"
+        className="w-full max-w-2xl bg-surface border border-accent-line rounded-panel shadow-2xl overflow-hidden flex flex-col max-h-[75vh] animate-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input Bar */}
-        <div className="p-4 border-b border-white/[0.08] flex items-center gap-3 bg-[#090c15]">
-          <Search className="w-5 h-5 text-violet-400 shrink-0" />
+        <div className="p-4 border-b border-line flex items-center gap-3 bg-sunken">
+          <Search className="w-5 h-5 text-accent-ink shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -423,17 +423,17 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             }}
             onKeyDown={handleKeyDown}
             placeholder="Type a command, search role preset, change theme, or jump to workspace..."
-            className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 focus:outline-none font-medium"
+            className="w-full bg-transparent text-sm text-ink placeholder:text-ink-faint focus:outline-none font-medium"
           />
-          <kbd className="px-2 py-1 text-[10px] font-mono bg-white/[0.06] text-slate-400 border border-white/[0.1] rounded-lg">
+          <kbd className="px-2 py-1 text-[10px] font-mono bg-fill-strong text-ink-muted border border-line rounded-control">
             ESC
           </kbd>
         </div>
 
         {/* Command Results List */}
-        <div className="overflow-y-auto p-2 space-y-1 divide-y divide-white/[0.04]">
+        <div className="overflow-y-auto p-2 space-y-1 divide-y divide-line">
           {filteredCommands.length === 0 ? (
-            <div className="p-8 text-center text-xs text-slate-400 font-mono">
+            <div className="p-8 text-center text-xs text-ink-muted font-mono">
               No matching commands or actions found for "{query}".
             </div>
           ) : (
@@ -444,16 +444,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   key={cmd.id}
                   onClick={() => cmd.action()}
                   onMouseEnter={() => setSelectedIndex(idx)}
-                  className={`px-3.5 py-2.5 rounded-2xl flex items-center justify-between gap-3 cursor-pointer transition-all ${
+                  className={`px-3.5 py-2.5 rounded-card flex items-center justify-between gap-3 cursor-pointer transition-all ${
                     isSelected
-                      ? 'bg-gradient-to-r from-violet-600/25 via-indigo-600/20 to-cyan-600/10 border border-violet-500/30 text-white shadow-sm'
-                      : 'text-slate-300 hover:bg-white/[0.03] border border-transparent'
+                      ? 'bg-gradient-to-r from-accent/25 via-info/20 to-accent2/10 border border-accent-line text-ink shadow-sm'
+                      : 'text-ink-muted hover:bg-fill border border-transparent'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div
-                      className={`p-2 rounded-xl shrink-0 ${
-                        isSelected ? 'bg-violet-600/30 text-white shadow-inner' : 'bg-white/[0.04] text-slate-400'
+                      className={`p-2 rounded-control shrink-0 ${
+                        isSelected ? 'bg-accent/30 text-ink shadow-inner' : 'bg-fill text-ink-muted'
                       }`}
                     >
                       {cmd.icon}
@@ -463,22 +463,22 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                       <div className="text-xs font-semibold truncate flex items-center gap-2">
                         <span>{cmd.title}</span>
                         {cmd.badge && (
-                          <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-violet-500/20 text-violet-300 border border-violet-500/30 font-bold">
+                          <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-accent-soft text-accent-ink border border-accent-line font-bold">
                             {cmd.badge}
                           </span>
                         )}
                       </div>
-                      <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                      <p className="text-[11px] text-ink-muted truncate mt-0.5">
                         {cmd.description}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-[9px] font-mono uppercase px-2 py-0.5 rounded bg-white/[0.04] text-slate-400 border border-white/[0.06]">
+                    <span className="text-[9px] font-mono uppercase px-2 py-0.5 rounded bg-fill text-ink-muted border border-line">
                       {cmd.category}
                     </span>
-                    {isSelected && <ArrowRight className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />}
+                    {isSelected && <ArrowRight className="w-3.5 h-3.5 text-accent2-ink animate-pulse" />}
                   </div>
                 </div>
               );
@@ -487,14 +487,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         </div>
 
         {/* Footer Navigation Hints */}
-        <div className="p-3 border-t border-white/[0.08] bg-[#090c15] flex items-center justify-between text-[11px] font-mono text-slate-400">
+        <div className="p-3 border-t border-line bg-sunken flex items-center justify-between text-[11px] font-mono text-ink-muted">
           <div className="flex items-center gap-3">
             <span>↑↓ Navigate</span>
             <span>↵ Select</span>
             <span>ESC Dismiss</span>
           </div>
-          <div className="flex items-center gap-1.5 text-violet-300">
-            <Zap className="w-3.5 h-3.5 text-violet-400" />
+          <div className="flex items-center gap-1.5 text-accent-ink">
+            <Zap className="w-3.5 h-3.5 text-accent-ink" />
             <span>CHERENKOV COMMAND PALETTE</span>
           </div>
         </div>

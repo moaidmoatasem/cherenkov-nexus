@@ -1,182 +1,473 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   CHERENKOV NEXUS — DESIGN TOKENS
+   --------------------------------------------------------------------------
+   Every colour in the product resolves through a semantic token. Themes
+   redefine the tokens on `body.theme-*`; because custom properties inherit,
+   every descendant picks the new value up automatically. That is why there
+   is not a single `!important` override in this file.
+
+   Naming
+     canvas / sunken / surface / elevated  → depth, back to front
+     line / line-strong                    → hairlines and emphasised edges
+     ink / ink-muted / ink-faint           → text hierarchy
+     accent                                → the one interactive colour
+     positive / caution / critical / info  → reserved for status, never decor
+   ========================================================================== */
+
+@theme {
+  /* Depth ------------------------------------------------------------------ */
+  --color-canvas: #08090d;
+  --color-sunken: #0b0d13;
+  --color-surface: #10131b;
+  --color-surface-hover: #161a24;
+  --color-elevated: #171b26;
+  --color-scrim: rgb(4 5 8 / 0.72);
+
+  /* Edges ------------------------------------------------------------------ */
+  --color-line: rgb(255 255 255 / 0.07);
+  --color-line-strong: rgb(255 255 255 / 0.14);
+
+  /* Translucent fills for chips, tracks and hover states ------------------- */
+  --color-fill: rgb(255 255 255 / 0.045);
+  --color-fill-strong: rgb(255 255 255 / 0.09);
+
+  /* Text ------------------------------------------------------------------- */
+  --color-ink: #f2f5f9;
+  --color-ink-muted: #a5aec0;
+  --color-ink-faint: #78829a;
+  --color-ink-inverse: #08090d;
+
+  /* Accent ----------------------------------------------------------------- */
+  --color-accent: #8b5cf6;
+  --color-accent-strong: #a78bfa;
+  --color-accent-ink: #c4b5fd;
+  --color-accent-soft: rgb(139 92 246 / 0.14);
+  --color-accent-line: rgb(139 92 246 / 0.32);
+  --color-accent-contrast: #ffffff;
+
+  /* Secondary accent, used sparingly for gradients and charts -------------- */
+  --color-accent2: #22d3ee;
+  --color-accent2-ink: #67e8f9;
+  --color-accent2-soft: rgb(34 211 238 / 0.12);
+  --color-accent2-line: rgb(34 211 238 / 0.3);
+
+  /* Status ----------------------------------------------------------------- */
+  --color-positive: #10b981;
+  --color-positive-ink: #6ee7b7;
+  --color-positive-soft: rgb(16 185 129 / 0.13);
+  --color-positive-line: rgb(16 185 129 / 0.3);
+
+  --color-caution: #f59e0b;
+  --color-caution-ink: #fcd34d;
+  --color-caution-soft: rgb(245 158 11 / 0.13);
+  --color-caution-line: rgb(245 158 11 / 0.3);
+
+  --color-critical: #f43f5e;
+  --color-critical-ink: #fda4af;
+  --color-critical-soft: rgb(244 63 94 / 0.13);
+  --color-critical-line: rgb(244 63 94 / 0.3);
+
+  --color-info: #38bdf8;
+  --color-info-ink: #7dd3fc;
+  --color-info-soft: rgb(56 189 248 / 0.13);
+  --color-info-line: rgb(56 189 248 / 0.3);
+
+  /* Geometry --------------------------------------------------------------- */
+  --radius-chip: 6px;
+  --radius-control: 10px;
+  --radius-card: 14px;
+  --radius-panel: 18px;
+
+  /* Elevation -------------------------------------------------------------- */
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.28), 0 8px 24px -16px rgb(0 0 0 / 0.6);
+  --shadow-pop: 0 12px 32px -8px rgb(0 0 0 / 0.55), 0 2px 8px -2px rgb(0 0 0 / 0.4);
+
+  /* Type ------------------------------------------------------------------- */
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Aura background, per theme ---------------------------------------------- */
+  --color-aura-1: rgb(139 92 246 / 0.20);
+  --color-aura-2: rgb(79 70 229 / 0.18);
+  --color-aura-3: rgb(34 211 238 / 0.14);
+  --color-grid-line: rgb(139 92 246 / 0.14);
+}
+
+/* ==========================================================================
+   THEMES
+   Each block restates the same token contract. Dark themes shift the depth
+   ramp up from near-black; light themes invert it and darken the accent inks
+   so text keeps ~4.5:1 contrast on white surfaces.
+   ========================================================================== */
+
 @layer base {
-  :root {
-    --bg-main: #07090e;
-    --bg-card: #0c101a;
-    --bg-card-hover: #121827;
-    --bg-surface: #0a0e18;
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-hover: rgba(139, 92, 246, 0.35);
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --text-dim: #64748b;
-    --accent-glow: rgba(139, 92, 246, 0.25);
-    --theme-bg: #07090e;
-    --theme-primary: #8b5cf6;
-    --theme-secondary: #06b6d4;
-    --theme-accent: #10b981;
-    --theme-glow: 139, 92, 246;
-  }
-
-  /* 1. Cyber Aurora (Default Obsidian Dark) */
+  /* 1 — Cyber Aurora (default obsidian) ----------------------------------- */
   body.theme-cyber {
-    --bg-main: #07090e;
-    --bg-card: #0c101a;
-    --bg-card-hover: #111728;
-    --bg-surface: #090c15;
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-hover: rgba(139, 92, 246, 0.4);
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --text-dim: #64748b;
-    --theme-bg: #07090e;
-    --theme-primary: #8b5cf6;
-    --theme-secondary: #06b6d4;
-    --theme-accent: #10b981;
-    --theme-glow: 139, 92, 246;
+    /* inherits the @theme defaults above */
+    color-scheme: dark;
   }
 
-  /* 2. Neon Synthwave (Midnight Indigo Dark) */
+  /* 2 — Neon Synthwave ----------------------------------------------------- */
   body.theme-synthwave {
-    --bg-main: #0b0714;
-    --bg-card: #130c22;
-    --bg-card-hover: #1c1232;
-    --bg-surface: #0e091a;
-    --border-subtle: rgba(236, 72, 153, 0.15);
-    --border-hover: rgba(236, 72, 153, 0.45);
-    --text-main: #fdf2f8;
-    --text-muted: #d8b4fe;
-    --text-dim: #a855f7;
-    --theme-bg: #0b0714;
-    --theme-primary: #ec4899;
-    --theme-secondary: #06b6d4;
-    --theme-accent: #a855f7;
-    --theme-glow: 236, 72, 153;
+    color-scheme: dark;
+    --color-canvas: #0a0713;
+    --color-sunken: #0e0a1a;
+    --color-surface: #151027;
+    --color-surface-hover: #1c1533;
+    --color-elevated: #1e1636;
+    --color-scrim: rgb(6 4 12 / 0.74);
+    --color-line: rgb(236 72 153 / 0.12);
+    --color-line-strong: rgb(236 72 153 / 0.28);
+    --color-fill: rgb(253 244 255 / 0.05);
+    --color-fill-strong: rgb(253 244 255 / 0.1);
+    --color-ink: #fdf4ff;
+    --color-ink-muted: #cdb6e8;
+    --color-ink-faint: #9c85bd;
+    --color-ink-inverse: #0a0713;
+    --color-accent: #ec4899;
+    --color-accent-strong: #f472b6;
+    --color-accent-ink: #f9a8d4;
+    --color-accent-soft: rgb(236 72 153 / 0.15);
+    --color-accent-line: rgb(236 72 153 / 0.34);
+    --color-accent2: #22d3ee;
+    --color-accent2-ink: #67e8f9;
+    --color-accent2-soft: rgb(34 211 238 / 0.12);
+    --color-accent2-line: rgb(34 211 238 / 0.3);
+    --color-aura-1: rgb(236 72 153 / 0.22);
+    --color-aura-2: rgb(168 85 247 / 0.2);
+    --color-aura-3: rgb(34 211 238 / 0.14);
+    --color-grid-line: rgb(236 72 153 / 0.14);
   }
 
-  /* 3. Quantum Emerald (Deep Forest Titanium) */
+  /* 3 — Quantum Emerald ---------------------------------------------------- */
   body.theme-emerald {
-    --bg-main: #040d0a;
-    --bg-card: #081712;
-    --bg-card-hover: #0d221b;
-    --bg-surface: #06120e;
-    --border-subtle: rgba(16, 185, 129, 0.15);
-    --border-hover: rgba(16, 185, 129, 0.45);
-    --text-main: #f0fdf4;
-    --text-muted: #86efac;
-    --text-dim: #4ade80;
-    --theme-bg: #040d0a;
-    --theme-primary: #10b981;
-    --theme-secondary: #06b6d4;
-    --theme-accent: #3b82f6;
-    --theme-glow: 16, 185, 129;
+    color-scheme: dark;
+    --color-canvas: #050d0a;
+    --color-sunken: #071310;
+    --color-surface: #0b1a15;
+    --color-surface-hover: #10241d;
+    --color-elevated: #12271f;
+    --color-scrim: rgb(3 8 6 / 0.74);
+    --color-line: rgb(16 185 129 / 0.13);
+    --color-line-strong: rgb(16 185 129 / 0.28);
+    --color-fill: rgb(236 253 245 / 0.05);
+    --color-fill-strong: rgb(236 253 245 / 0.1);
+    --color-ink: #ecfdf5;
+    --color-ink-muted: #9dc7b4;
+    --color-ink-faint: #6f9c8a;
+    --color-ink-inverse: #050d0a;
+    --color-accent: #10b981;
+    --color-accent-strong: #34d399;
+    --color-accent-ink: #6ee7b7;
+    --color-accent-soft: rgb(16 185 129 / 0.14);
+    --color-accent-line: rgb(16 185 129 / 0.32);
+    --color-accent2: #38bdf8;
+    --color-accent2-ink: #7dd3fc;
+    --color-accent2-soft: rgb(56 189 248 / 0.12);
+    --color-accent2-line: rgb(56 189 248 / 0.3);
+    --color-aura-1: rgb(16 185 129 / 0.2);
+    --color-aura-2: rgb(20 184 166 / 0.18);
+    --color-aura-3: rgb(56 189 248 / 0.12);
+    --color-grid-line: rgb(16 185 129 / 0.13);
   }
 
-  /* 4. Solar Ember (Dark Espresso Bronze) */
+  /* 4 — Solar Ember -------------------------------------------------------- */
   body.theme-solar {
-    --bg-main: #0d0905;
-    --bg-card: #181109;
-    --bg-card-hover: #24190c;
-    --bg-surface: #110c07;
-    --border-subtle: rgba(245, 158, 11, 0.15);
-    --border-hover: rgba(245, 158, 11, 0.45);
-    --text-main: #fffbeb;
-    --text-muted: #fcd34d;
-    --text-dim: #f59e0b;
-    --theme-bg: #0d0905;
-    --theme-primary: #f59e0b;
-    --theme-secondary: #f43f5e;
-    --theme-accent: #8b5cf6;
-    --theme-glow: 245, 158, 11;
+    color-scheme: dark;
+    --color-canvas: #0d0904;
+    --color-sunken: #130d06;
+    --color-surface: #1c1409;
+    --color-surface-hover: #261b0d;
+    --color-elevated: #291e0f;
+    --color-scrim: rgb(8 5 2 / 0.74);
+    --color-line: rgb(245 158 11 / 0.13);
+    --color-line-strong: rgb(245 158 11 / 0.28);
+    --color-fill: rgb(255 251 235 / 0.05);
+    --color-fill-strong: rgb(255 251 235 / 0.1);
+    --color-ink: #fffbeb;
+    --color-ink-muted: #d6bd94;
+    --color-ink-faint: #a8906b;
+    --color-ink-inverse: #0d0904;
+    --color-accent: #f59e0b;
+    --color-accent-strong: #fbbf24;
+    --color-accent-ink: #fcd34d;
+    --color-accent-soft: rgb(245 158 11 / 0.14);
+    --color-accent-line: rgb(245 158 11 / 0.32);
+    --color-accent2: #fb7185;
+    --color-accent2-ink: #fda4af;
+    --color-accent2-soft: rgb(251 113 133 / 0.12);
+    --color-accent2-line: rgb(251 113 133 / 0.3);
+    --color-aura-1: rgb(245 158 11 / 0.2);
+    --color-aura-2: rgb(234 88 12 / 0.18);
+    --color-aura-3: rgb(244 63 94 / 0.13);
+    --color-grid-line: rgb(245 158 11 / 0.13);
   }
 
-  /* 5. Executive Slate (Deep Carbon Titanium) */
+  /* 5 — Executive Slate ---------------------------------------------------- */
   body.theme-slate {
-    --bg-main: #090d14;
-    --bg-card: #0f1724;
-    --bg-card-hover: #172235;
-    --bg-surface: #0b111a;
-    --border-subtle: rgba(148, 163, 184, 0.15);
-    --border-hover: rgba(56, 189, 248, 0.45);
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --text-dim: #64748b;
-    --theme-bg: #090d14;
-    --theme-primary: #38bdf8;
-    --theme-secondary: #6366f1;
-    --theme-accent: #10b981;
-    --theme-glow: 56, 189, 248;
+    color-scheme: dark;
+    --color-canvas: #0a0e15;
+    --color-sunken: #0d121c;
+    --color-surface: #121926;
+    --color-surface-hover: #182132;
+    --color-elevated: #1a2334;
+    --color-scrim: rgb(5 7 11 / 0.74);
+    --color-line: rgb(148 163 184 / 0.13);
+    --color-line-strong: rgb(148 163 184 / 0.26);
+    --color-fill: rgb(248 250 252 / 0.05);
+    --color-fill-strong: rgb(248 250 252 / 0.1);
+    --color-ink: #f8fafc;
+    --color-ink-muted: #a3b0c2;
+    --color-ink-faint: #74829a;
+    --color-ink-inverse: #0a0e15;
+    --color-accent: #38bdf8;
+    --color-accent-strong: #7dd3fc;
+    --color-accent-ink: #7dd3fc;
+    --color-accent-soft: rgb(56 189 248 / 0.13);
+    --color-accent-line: rgb(56 189 248 / 0.3);
+    --color-accent2: #818cf8;
+    --color-accent2-ink: #a5b4fc;
+    --color-accent2-soft: rgb(129 140 248 / 0.12);
+    --color-accent2-line: rgb(129 140 248 / 0.3);
+    --color-aura-1: rgb(56 189 248 / 0.16);
+    --color-aura-2: rgb(99 102 241 / 0.16);
+    --color-aura-3: rgb(148 163 184 / 0.1);
+    --color-grid-line: rgb(148 163 184 / 0.12);
   }
 
-  /* 6. Executive Light / Platinum Studio (Crisp Slate/White) */
+  /* 6 — Executive Platinum (light) ----------------------------------------- */
   body.theme-light-executive {
-    --bg-main: #f8fafc;
-    --bg-card: #ffffff;
-    --bg-card-hover: #f1f5f9;
-    --bg-surface: #f1f5f9;
-    --border-subtle: rgba(15, 23, 42, 0.1);
-    --border-hover: rgba(99, 102, 241, 0.45);
-    --text-main: #0f172a;
-    --text-muted: #475569;
-    --text-dim: #64748b;
-    --theme-bg: #f8fafc;
-    --theme-primary: #6366f1;
-    --theme-secondary: #0284c7;
-    --theme-accent: #059669;
-    --theme-glow: 99, 102, 241;
+    color-scheme: light;
+    --color-canvas: #f6f7fb;
+    --color-sunken: #eef1f7;
+    --color-surface: #ffffff;
+    --color-surface-hover: #f4f6fb;
+    --color-elevated: #ffffff;
+    --color-scrim: rgb(15 23 42 / 0.5);
+    --color-line: rgb(15 23 42 / 0.09);
+    --color-line-strong: rgb(15 23 42 / 0.18);
+    --color-fill: rgb(15 23 42 / 0.04);
+    --color-fill-strong: rgb(15 23 42 / 0.08);
+    --color-ink: #0f172a;
+    --color-ink-muted: #4a5468;
+    --color-ink-faint: #6b7589;
+    --color-ink-inverse: #ffffff;
+    --color-accent: #5b53d8;
+    --color-accent-strong: #4f46e5;
+    --color-accent-ink: #4338ca;
+    --color-accent-soft: rgb(91 83 216 / 0.09);
+    --color-accent-line: rgb(91 83 216 / 0.24);
+    --color-accent2: #0284c7;
+    --color-accent2-ink: #0369a1;
+    --color-accent2-soft: rgb(2 132 199 / 0.09);
+    --color-accent2-line: rgb(2 132 199 / 0.24);
+    --color-positive: #047857;
+    --color-positive-ink: #047857;
+    --color-positive-soft: rgb(4 120 87 / 0.1);
+    --color-positive-line: rgb(4 120 87 / 0.24);
+    --color-caution: #b45309;
+    --color-caution-ink: #b45309;
+    --color-caution-soft: rgb(180 83 9 / 0.1);
+    --color-caution-line: rgb(180 83 9 / 0.24);
+    --color-critical: #be123c;
+    --color-critical-ink: #be123c;
+    --color-critical-soft: rgb(190 18 60 / 0.1);
+    --color-critical-line: rgb(190 18 60 / 0.24);
+    --color-info: #0369a1;
+    --color-info-ink: #0369a1;
+    --color-info-soft: rgb(3 105 161 / 0.1);
+    --color-info-line: rgb(3 105 161 / 0.24);
+    --shadow-card: 0 1px 2px rgb(15 23 42 / 0.05), 0 8px 24px -18px rgb(15 23 42 / 0.25);
+    --shadow-pop: 0 12px 32px -10px rgb(15 23 42 / 0.18), 0 2px 8px -2px rgb(15 23 42 / 0.1);
+    --color-aura-1: rgb(99 102 241 / 0.12);
+    --color-aura-2: rgb(14 165 233 / 0.1);
+    --color-aura-3: rgb(139 92 246 / 0.08);
+    --color-grid-line: rgb(15 23 42 / 0.05);
   }
 
-  /* 7. Nordic Frost Light (Pure Ice Gray) */
+  /* 7 — Nordic Frost (light) ------------------------------------------------ */
   body.theme-light-frost {
-    --bg-main: #f0fdfa;
-    --bg-card: #ffffff;
-    --bg-card-hover: #e6fffa;
-    --bg-surface: #e0f2fe;
-    --border-subtle: rgba(13, 148, 136, 0.14);
-    --border-hover: rgba(14, 165, 233, 0.5);
-    --text-main: #042f2e;
-    --text-muted: #115e59;
-    --text-dim: #0f766e;
-    --theme-bg: #f0fdfa;
-    --theme-primary: #0d9488;
-    --theme-secondary: #0284c7;
-    --theme-accent: #16a34a;
-    --theme-glow: 13, 148, 136;
+    color-scheme: light;
+    --color-canvas: #f1fbfa;
+    --color-sunken: #e4f4f4;
+    --color-surface: #ffffff;
+    --color-surface-hover: #eefaf9;
+    --color-elevated: #ffffff;
+    --color-scrim: rgb(4 47 46 / 0.5);
+    --color-line: rgb(13 148 136 / 0.13);
+    --color-line-strong: rgb(13 148 136 / 0.26);
+    --color-fill: rgb(6 46 44 / 0.04);
+    --color-fill-strong: rgb(6 46 44 / 0.08);
+    --color-ink: #062e2c;
+    --color-ink-muted: #37605c;
+    --color-ink-faint: #5a807c;
+    --color-ink-inverse: #ffffff;
+    --color-accent: #0d9488;
+    --color-accent-strong: #0f766e;
+    --color-accent-ink: #0f766e;
+    --color-accent-soft: rgb(13 148 136 / 0.1);
+    --color-accent-line: rgb(13 148 136 / 0.24);
+    --color-accent2: #0284c7;
+    --color-accent2-ink: #0369a1;
+    --color-accent2-soft: rgb(2 132 199 / 0.09);
+    --color-accent2-line: rgb(2 132 199 / 0.24);
+    --color-positive: #047857;
+    --color-positive-ink: #047857;
+    --color-positive-soft: rgb(4 120 87 / 0.1);
+    --color-positive-line: rgb(4 120 87 / 0.24);
+    --color-caution: #b45309;
+    --color-caution-ink: #b45309;
+    --color-caution-soft: rgb(180 83 9 / 0.1);
+    --color-caution-line: rgb(180 83 9 / 0.24);
+    --color-critical: #be123c;
+    --color-critical-ink: #be123c;
+    --color-critical-soft: rgb(190 18 60 / 0.1);
+    --color-critical-line: rgb(190 18 60 / 0.24);
+    --color-info: #0369a1;
+    --color-info-ink: #0369a1;
+    --color-info-soft: rgb(3 105 161 / 0.1);
+    --color-info-line: rgb(3 105 161 / 0.24);
+    --shadow-card: 0 1px 2px rgb(6 46 44 / 0.05), 0 8px 24px -18px rgb(6 46 44 / 0.22);
+    --shadow-pop: 0 12px 32px -10px rgb(6 46 44 / 0.16), 0 2px 8px -2px rgb(6 46 44 / 0.09);
+    --color-aura-1: rgb(20 184 166 / 0.13);
+    --color-aura-2: rgb(14 165 233 / 0.11);
+    --color-aura-3: rgb(16 185 129 / 0.09);
+    --color-grid-line: rgb(6 46 44 / 0.05);
   }
 
-  /* 8. Warm Ceramic Light (Alabaster Bronze) */
+  /* 8 — Warm Ceramic (light) ------------------------------------------------ */
   body.theme-light-ceramic {
-    --bg-main: #faf8f5;
-    --bg-card: #ffffff;
-    --bg-card-hover: #f5f0eb;
-    --bg-surface: #f2ece4;
-    --border-subtle: rgba(180, 83, 9, 0.12);
-    --border-hover: rgba(217, 119, 6, 0.45);
-    --text-main: #291e13;
-    --text-muted: #78350f;
-    --text-dim: #92400e;
-    --theme-bg: #faf8f5;
-    --theme-primary: #d97706;
-    --theme-secondary: #e11d48;
-    --theme-accent: #059669;
-    --theme-glow: 217, 119, 6;
+    color-scheme: light;
+    --color-canvas: #faf7f2;
+    --color-sunken: #f2ebe1;
+    --color-surface: #ffffff;
+    --color-surface-hover: #f8f3ec;
+    --color-elevated: #ffffff;
+    --color-scrim: rgb(41 30 19 / 0.5);
+    --color-line: rgb(120 53 15 / 0.11);
+    --color-line-strong: rgb(120 53 15 / 0.22);
+    --color-fill: rgb(41 30 19 / 0.04);
+    --color-fill-strong: rgb(41 30 19 / 0.08);
+    --color-ink: #2b2015;
+    --color-ink-muted: #5d4a35;
+    --color-ink-faint: #7d6a52;
+    --color-ink-inverse: #ffffff;
+    --color-accent: #c2620a;
+    --color-accent-strong: #b45309;
+    --color-accent-ink: #b45309;
+    --color-accent-soft: rgb(194 98 10 / 0.1);
+    --color-accent-line: rgb(194 98 10 / 0.24);
+    --color-accent2: #be123c;
+    --color-accent2-ink: #be123c;
+    --color-accent2-soft: rgb(190 18 60 / 0.09);
+    --color-accent2-line: rgb(190 18 60 / 0.22);
+    --color-positive: #047857;
+    --color-positive-ink: #047857;
+    --color-positive-soft: rgb(4 120 87 / 0.1);
+    --color-positive-line: rgb(4 120 87 / 0.24);
+    --color-caution: #b45309;
+    --color-caution-ink: #b45309;
+    --color-caution-soft: rgb(180 83 9 / 0.1);
+    --color-caution-line: rgb(180 83 9 / 0.24);
+    --color-critical: #be123c;
+    --color-critical-ink: #be123c;
+    --color-critical-soft: rgb(190 18 60 / 0.1);
+    --color-critical-line: rgb(190 18 60 / 0.24);
+    --color-info: #0369a1;
+    --color-info-ink: #0369a1;
+    --color-info-soft: rgb(3 105 161 / 0.1);
+    --color-info-line: rgb(3 105 161 / 0.24);
+    --shadow-card: 0 1px 2px rgb(41 30 19 / 0.05), 0 8px 24px -18px rgb(41 30 19 / 0.22);
+    --shadow-pop: 0 12px 32px -10px rgb(41 30 19 / 0.16), 0 2px 8px -2px rgb(41 30 19 / 0.09);
+    --color-aura-1: rgb(217 119 6 / 0.13);
+    --color-aura-2: rgb(234 88 12 / 0.1);
+    --color-aura-3: rgb(225 29 72 / 0.08);
+    --color-grid-line: rgb(41 30 19 / 0.05);
+  }
+
+  /* Base ------------------------------------------------------------------- */
+  html {
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    background-color: var(--bg-main);
-    color: var(--text-main);
+    font-family: var(--font-sans);
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
     overflow-x: hidden;
-    transition: background-color 0.25s ease, color 0.25s ease;
+    font-feature-settings: 'cv02', 'cv03', 'cv04';
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 200ms ease, color 200ms ease;
   }
 
-  code, pre, kbd, samp {
-    font-family: 'JetBrains Mono', monospace;
+  code,
+  pre,
+  kbd,
+  samp {
+    font-family: var(--font-mono);
+    font-feature-settings: normal;
+  }
+
+  /* One focus treatment for the whole product. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+
+  ::placeholder {
+    color: var(--color-ink-faint);
+  }
+
+  /* Form controls inherit the theme instead of the user agent's dark mode. */
+  input,
+  textarea,
+  select {
+    color: var(--color-ink);
+  }
+
+  hr {
+    border-color: var(--color-line);
   }
 }
 
-/* Radiant Ambient Aurora Backgrounds with subtle organic flow */
+/* ==========================================================================
+   UTILITIES
+   ========================================================================== */
+
+@utility subtle-grid {
+  background-image:
+    linear-gradient(to right, var(--color-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Numeric readouts line up column-wise. */
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Single-line label used above dense panels. */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+
+/* ==========================================================================
+   MOTION
+   ========================================================================== */
+
 @keyframes aurora-flow {
   0% {
     transform: translate3d(0, 0, 0) scale(1);
@@ -190,319 +481,69 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
-    opacity: 0.6;
-    filter: blur(80px);
+  0%,
+  100% {
+    opacity: 0.55;
   }
   50% {
-    opacity: 0.9;
-    filter: blur(100px);
+    opacity: 0.85;
   }
 }
 
 .animate-aurora {
-  animation: aurora-flow 18s ease-in-out infinite alternate;
+  animation: aurora-flow 22s ease-in-out infinite alternate;
 }
 
 .animate-glow-pulse {
-  animation: pulse-glow 8s ease-in-out infinite alternate;
+  animation: pulse-glow 10s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-aurora,
+  .animate-glow-pulse {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ==========================================================================
-   COMPREHENSIVE HIGH-CONTRAST LIGHT THEME ENGINE (FIX WHITE THEME ISSUE)
+   SCROLLBARS
    ========================================================================== */
 
-body[class*="theme-light-"] {
-  background-color: var(--bg-main) !important;
-  color: var(--text-main) !important;
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
 }
 
-/* Root canvas & wrappers */
-body[class*="theme-light-"] .min-h-screen {
-  background-color: var(--bg-main) !important;
-  color: var(--text-main) !important;
-}
-
-/* Catch ALL hardcoded dark backgrounds and map them to the light theme card color */
-body[class*="theme-light-"] [class*="bg-[#0"],
-body[class*="theme-light-"] [class*="bg-[#1"] {
-  background-color: var(--bg-card) !important;
-  border-color: rgba(15, 23, 42, 0.08) !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
-}
-
-/* Semi-transparent dark headers & overlays */
-body[class*="theme-light-"] .bg-\[\#07090e\]\/90,
-body[class*="theme-light-"] .bg-\[\#07090e\]\/95,
-body[class*="theme-light-"] .bg-\[\#07090e\]\/80,
-body[class*="theme-light-"] .bg-\[\#0c101a\]\/90,
-body[class*="theme-light-"] .bg-\[\#0c101a\]\/95 {
-  background-color: rgba(255, 255, 255, 0.92) !important;
-  backdrop-filter: blur(16px);
-}
-
-/* Modal and dialog wrappers */
-body[class*="theme-light-"] .bg-black\/85,
-body[class*="theme-light-"] .bg-black\/80 {
-  background-color: rgba(15, 23, 42, 0.65) !important;
-  backdrop-filter: blur(12px);
-}
-
-/* Neutralize all hardcoded dark gradients */
-body[class*="theme-light-"] [class*="from-[#0c"],
-body[class*="theme-light-"] [class*="from-[#0d"],
-body[class*="theme-light-"] [class*="from-[#0e"],
-body[class*="theme-light-"] [class*="from-[#0f"],
-body[class*="theme-light-"] [class*="via-[#0c"],
-body[class*="theme-light-"] [class*="via-[#0d"],
-body[class*="theme-light-"] [class*="via-[#0e"],
-body[class*="theme-light-"] [class*="via-[#0f"],
-body[class*="theme-light-"] [class*="to-[#0c"],
-body[class*="theme-light-"] [class*="to-[#0d"],
-body[class*="theme-light-"] [class*="to-[#0e"],
-body[class*="theme-light-"] [class*="to-[#0f"],
-body[class*="theme-light-"] [class*="from-emerald-950"],
-body[class*="theme-light-"] [class*="from-violet-950"],
-body[class*="theme-light-"] [class*="via-[#09"] {
-  background: var(--bg-card) !important;
-  border-color: rgba(15, 23, 42, 0.08) !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04) !important;
-}
-
-
-body[class*="theme-light-"] .text-slate-100,
-body[class*="theme-light-"] .text-slate-200 {
-  color: #1e293b !important;
-}
-
-body[class*="theme-light-"] .text-slate-300,
-body[class*="theme-light-"] .text-slate-400 {
-  color: #475569 !important;
-}
-
-body[class*="theme-light-"] .text-slate-500 {
-  color: #64748b !important;
-}
-
-/* Borders in Light Themes */
-body[class*="theme-light-"] .border-white\/\[0\.08\],
-body[class*="theme-light-"] .border-white\/\[0\.06\],
-body[class*="theme-light-"] .border-white\/\[0\.05\],
-body[class*="theme-light-"] .border-white\/\[0\.1\],
-body[class*="theme-light-"] .border-white\/\[0\.12\],
-body[class*="theme-light-"] .border-white\/\[0\.15\],
-body[class*="theme-light-"] .border-white\/\[0\.2\] {
-  border-color: rgba(15, 23, 42, 0.08) !important;
-}
-
-/* Subtle background pills & chips */
-body[class*="theme-light-"] .bg-white\/\[0\.04\],
-body[class*="theme-light-"] .bg-white\/\[0\.03\],
-body[class*="theme-light-"] .bg-white\/\[0\.02\],
-body[class*="theme-light-"] .bg-white\/\[0\.05\],
-body[class*="theme-light-"] .bg-white\/\[0\.06\],
-body[class*="theme-light-"] .bg-white\/\[0\.08\],
-body[class*="theme-light-"] .bg-white\/\[0\.1\] {
-  background-color: rgba(15, 23, 42, 0.04) !important;
-}
-
-body[class*="theme-light-"] .hover\:bg-white\/\[0\.08\]:hover,
-body[class*="theme-light-"] .hover\:bg-white\/\[0\.12\]:hover,
-body[class*="theme-light-"] .hover\:bg-white\/\[0\.05\]:hover {
-  background-color: rgba(15, 23, 42, 0.08) !important;
-}
-
-/* Form Inputs & Textareas */
-body[class*="theme-light-"] input:not([type="checkbox"]):not([type="radio"]),
-body[class*="theme-light-"] textarea,
-body[class*="theme-light-"] select {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-  border-color: rgba(15, 23, 42, 0.15) !important;
-}
-
-body[class*="theme-light-"] input::placeholder,
-body[class*="theme-light-"] textarea::placeholder {
-  color: #94a3b8 !important;
-}
-
-/* Preformatted code blocks & terminals */
-body[class*="theme-light-"] pre,
-body[class*="theme-light-"] .bg-black\/60,
-body[class*="theme-light-"] .bg-black\/50 {
-  background-color: #0f172a !important;
-  color: #f1f5f9 !important;
-  border-color: rgba(15, 23, 42, 0.2) !important;
-}
-
-/* Light Theme overrides for targeted layout elements & toggles */
-body[class*="theme-light-"] .bg-black\/40 {
-  background-color: rgba(15, 23, 42, 0.05) !important;
-  border-color: rgba(15, 23, 42, 0.08) !important;
-}
-
-body[class*="theme-light-"] #tour-job-synthesizer {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(139, 92, 246, 0.04), #ffffff) !important;
-  border-color: rgba(139, 92, 246, 0.18) !important;
-  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05) !important;
-}
-
-body[class*="theme-light-"] .bg-gradient-to-b.from-\[\#0c101c\].to-\[\#07090e\] {
-  background: var(--bg-card) !important;
-  border-color: rgba(15, 23, 42, 0.08) !important;
-}
-
-body[class*="theme-light-"] .bg-\[\#0b0e17\] {
-  background-color: var(--bg-surface) !important;
-  border-color: rgba(15, 23, 42, 0.08) !important;
-}
-
-body[class*="theme-light-"] pre .text-slate-300,
-body[class*="theme-light-"] pre .text-slate-200,
-body[class*="theme-light-"] pre .text-slate-400 {
-  color: #e2e8f0 !important;
-}
-
-/* High-tech matrix background in light mode */
-body[class*="theme-light-"] .subtle-grid {
-  background-image: radial-gradient(rgba(15, 23, 42, 0.07) 1px, transparent 0) !important;
-  background-size: 24px 24px !important;
-}
-
-/* Custom technical scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-main);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.25);
+  background: var(--color-line-strong);
+  border: 3px solid transparent;
+  background-clip: content-box;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--theme-primary);
+  background: var(--color-ink-faint);
+  background-clip: content-box;
 }
 
-
-
-/* Fix faint colored text and borders in light mode */
-body[class*="theme-light-"] [class*="text-cyan-300"],
-body[class*="theme-light-"] [class*="text-cyan-400"] {
-  color: #0369a1 !important; /* sky-700 */
-}
-body[class*="theme-light-"] [class*="text-violet-300"],
-body[class*="theme-light-"] [class*="text-violet-400"] {
-  color: #6d28d9 !important; /* violet-700 */
-}
-body[class*="theme-light-"] [class*="text-emerald-300"],
-body[class*="theme-light-"] [class*="text-emerald-400"],
-body[class*="theme-light-"] [class*="text-emerald-200"] {
-  color: #047857 !important; /* emerald-700 */
-}
-body[class*="theme-light-"] [class*="text-amber-300"],
-body[class*="theme-light-"] [class*="text-amber-400"] {
-  color: #b45309 !important; /* amber-700 */
-}
-body[class*="theme-light-"] [class*="text-rose-300"],
-body[class*="theme-light-"] [class*="text-rose-400"] {
-  color: #be123c !important; /* rose-700 */
-}
-body[class*="theme-light-"] [class*="text-purple-300"],
-body[class*="theme-light-"] [class*="text-purple-400"] {
-  color: #7e22ce !important; /* purple-700 */
-}
-
-/* Fix faint colored borders in light mode */
-body[class*="theme-light-"] [class*="border-cyan-5"],
-body[class*="theme-light-"] [class*="border-cyan-4"] {
-  border-color: rgba(3, 105, 161, 0.3) !important;
-}
-body[class*="theme-light-"] [class*="border-violet-5"],
-body[class*="theme-light-"] [class*="border-violet-4"] {
-  border-color: rgba(109, 40, 217, 0.3) !important;
-}
-body[class*="theme-light-"] [class*="border-emerald-5"],
-body[class*="theme-light-"] [class*="border-emerald-4"] {
-  border-color: rgba(4, 120, 87, 0.3) !important;
-}
-body[class*="theme-light-"] [class*="border-amber-5"],
-body[class*="theme-light-"] [class*="border-amber-4"] {
-  border-color: rgba(180, 83, 9, 0.3) !important;
-}
-body[class*="theme-light-"] [class*="border-purple-5"],
-body[class*="theme-light-"] [class*="border-purple-4"] {
-  border-color: rgba(126, 34, 206, 0.3) !important;
-}
-
-/* Fix faint colored backgrounds (like badges) */
-body[class*="theme-light-"] [class*="bg-cyan-500/1"],
-body[class*="theme-light-"] [class*="bg-cyan-500/2"] {
-  background-color: rgba(3, 105, 161, 0.1) !important;
-}
-body[class*="theme-light-"] [class*="bg-violet-500/1"],
-body[class*="theme-light-"] [class*="bg-violet-500/2"] {
-  background-color: rgba(109, 40, 217, 0.1) !important;
-}
-body[class*="theme-light-"] [class*="bg-emerald-500/1"],
-body[class*="theme-light-"] [class*="bg-emerald-500/2"] {
-  background-color: rgba(4, 120, 87, 0.1) !important;
-}
-body[class*="theme-light-"] [class*="bg-amber-500/1"],
-body[class*="theme-light-"] [class*="bg-amber-500/2"] {
-  background-color: rgba(180, 83, 9, 0.1) !important;
-}
-body[class*="theme-light-"] [class*="bg-purple-500/1"],
-body[class*="theme-light-"] [class*="bg-purple-500/2"] {
-  background-color: rgba(126, 34, 206, 0.1) !important;
-}
-
-/* Protect text-white inside colored buttons and gradients */
-body[class*="theme-light-"] .text-white {
-  color: #0f172a; /* Remove !important so utilities can override */
-}
-body[class*="theme-light-"] [class*="bg-gradient"] .text-white,
-body[class*="theme-light-"] [class*="bg-violet"] .text-white,
-body[class*="theme-light-"] [class*="bg-cyan"] .text-white,
-body[class*="theme-light-"] [class*="bg-emerald"] .text-white,
-body[class*="theme-light-"] [class*="bg-blue"] .text-white,
-body[class*="theme-light-"] [class*="bg-purple"] .text-white,
-body[class*="theme-light-"] [class*="bg-rose"] .text-white,
-body[class*="theme-light-"] [class*="bg-amber"] .text-white {
-  color: #ffffff !important;
-}
-
-
-/* Fix subtle grid in light mode */
-body[class*="theme-light-"] .subtle-grid {
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px) !important;
-}
-
-/* Restore visual hierarchy for nested containers in light mode */
-/* Outer cards (lighter in dark mode, so white in light mode) */
-body[class*="theme-light-"] [class*="bg-[#0c101a]"],
-body[class*="theme-light-"] [class*="bg-[#0e1322]"] {
-  background-color: var(--bg-card) !important;
-}
-
-/* Inner sunken areas (darker in dark mode, so slightly gray in light mode) */
-body[class*="theme-light-"] [class*="bg-[#07090e]"],
-body[class*="theme-light-"] [class*="bg-[#080b12]"],
-body[class*="theme-light-"] [class*="bg-[#06080e]"],
-body[class*="theme-light-"] [class*="bg-[#0a0e17]"],
-body[class*="theme-light-"] [class*="bg-[#0b0e17]"] {
-  background-color: rgba(15, 23, 42, 0.03) !important;
-  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02) !important;
-}
-
-/* Very dark or pitch black areas */
-body[class*="theme-light-"] [class*="bg-[#05070c]"],
-body[class*="theme-light-"] [class*="bg-[#000000]"] {
-  background-color: rgba(15, 23, 42, 0.05) !important;
-  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.03) !important;
+::-webkit-scrollbar-corner {
+  background: transparent;
 }

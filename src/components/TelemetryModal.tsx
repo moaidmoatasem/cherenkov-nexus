@@ -25,27 +25,27 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md animate-in fade-in duration-150">
       <div
-        className="w-full max-w-3xl bg-[#0c101a] border border-cyan-500/30 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-150"
+        className="w-full max-w-3xl bg-surface border border-accent2-line rounded-panel shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-5 border-b border-white/[0.08] flex items-center justify-between bg-gradient-to-r from-[#0e1424] to-[#0a0d16]">
+        <div className="p-5 border-b border-line flex items-center justify-between bg-gradient-to-r from-surface to-sunken">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 shadow-sm shadow-cyan-500/20">
+            <div className="p-2.5 rounded-control bg-accent2-soft text-accent2-ink border border-accent2-line shadow-sm">
               <Activity className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base font-extrabold text-white">
+                <h2 className="text-base font-extrabold text-ink">
                   System Telemetry & Multi-Agent Health
                 </h2>
-                <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 rounded-full">
+                <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-positive-soft border border-positive-line text-positive-ink rounded-full">
                   ALL SYSTEMS OPERATIONAL
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-ink-muted">
                 Observability metrics for Playwright scraping, Home Office register indexing, and Gemini 2.5 Flash AST generation.
               </p>
             </div>
@@ -53,93 +53,93 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer"
+            className="p-2 rounded-control text-ink-muted hover:text-ink hover:bg-fill-strong transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Content Body */}
-        <div className="overflow-y-auto p-6 space-y-6 text-slate-300 text-xs">
+        <div className="overflow-y-auto p-6 space-y-6 text-ink-muted text-xs">
           {/* Key Metrics Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="p-4 rounded-2xl bg-[#07090e] border border-white/[0.08] space-y-1">
-              <div className="text-[10px] font-mono uppercase text-slate-400">Scraper Success Rate</div>
-              <div className="text-xl font-mono font-black text-emerald-400">99.8%</div>
-              <div className="text-[10px] text-slate-500 font-mono">Cheerio + Playwright fallback</div>
+            <div className="p-4 rounded-card bg-sunken border border-line space-y-1">
+              <div className="text-[10px] font-mono uppercase text-ink-muted">Scraper Success Rate</div>
+              <div className="text-xl font-mono font-black text-positive-ink">99.8%</div>
+              <div className="text-[10px] text-ink-faint font-mono">Cheerio + Playwright fallback</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#07090e] border border-white/[0.08] space-y-1">
-              <div className="text-[10px] font-mono uppercase text-slate-400">Average Latency</div>
-              <div className="text-xl font-mono font-black text-cyan-400">412 ms</div>
-              <div className="text-[10px] text-slate-500 font-mono">Edge-proxied scraping</div>
+            <div className="p-4 rounded-card bg-sunken border border-line space-y-1">
+              <div className="text-[10px] font-mono uppercase text-ink-muted">Average Latency</div>
+              <div className="text-xl font-mono font-black text-accent2-ink">412 ms</div>
+              <div className="text-[10px] text-ink-faint font-mono">Edge-proxied scraping</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#07090e] border border-white/[0.08] space-y-1">
-              <div className="text-[10px] font-mono uppercase text-slate-400">UK Sponsors Indexed</div>
-              <div className="text-xl font-mono font-black text-violet-400">114,820</div>
-              <div className="text-[10px] text-slate-500 font-mono">Live Home Office DB</div>
+            <div className="p-4 rounded-card bg-sunken border border-line space-y-1">
+              <div className="text-[10px] font-mono uppercase text-ink-muted">UK Sponsors Indexed</div>
+              <div className="text-xl font-mono font-black text-accent-ink">114,820</div>
+              <div className="text-[10px] text-ink-faint font-mono">Live Home Office DB</div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#07090e] border border-white/[0.08] space-y-1">
-              <div className="text-[10px] font-mono uppercase text-slate-400">AST Schema Integrity</div>
-              <div className="text-xl font-mono font-black text-amber-400">100%</div>
-              <div className="text-[10px] text-slate-500 font-mono">JSON strict invariants</div>
+            <div className="p-4 rounded-card bg-sunken border border-line space-y-1">
+              <div className="text-[10px] font-mono uppercase text-ink-muted">AST Schema Integrity</div>
+              <div className="text-xl font-mono font-black text-caution-ink">100%</div>
+              <div className="text-[10px] text-ink-faint font-mono">JSON strict invariants</div>
             </div>
           </div>
 
           {/* Sub-Agent Pipeline Topology */}
           <div className="space-y-3">
-            <div className="text-xs font-mono uppercase font-bold text-slate-200 flex items-center gap-2">
-              <Layers className="w-4 h-4 text-violet-400" />
+            <div className="text-xs font-mono uppercase font-bold text-ink flex items-center gap-2">
+              <Layers className="w-4 h-4 text-accent-ink" />
               <span>Multi-Agent Architectural Topology</span>
             </div>
 
             <div className="space-y-2">
               {/* Agent 1 */}
-              <div className="p-3.5 rounded-2xl bg-[#07090e] border border-white/[0.08] flex items-center justify-between">
+              <div className="p-3.5 rounded-card bg-sunken border border-line flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-positive" />
                   <div>
-                    <div className="font-semibold text-slate-200">Scout & Ingestion Agent</div>
-                    <div className="text-[11px] text-slate-400 font-mono">
+                    <div className="font-semibold text-ink">Scout & Ingestion Agent</div>
+                    <div className="text-[11px] text-ink-muted font-mono">
                       Playwright Headless + Cheerio DOM parsing + noise stripper (nav/footer)
                     </div>
                   </div>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-positive-soft text-positive-ink border border-positive-line">
                   HEALTHY
                 </span>
               </div>
 
               {/* Agent 2 */}
-              <div className="p-3.5 rounded-2xl bg-[#07090e] border border-white/[0.08] flex items-center justify-between">
+              <div className="p-3.5 rounded-card bg-sunken border border-line flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-accent2" />
                   <div>
-                    <div className="font-semibold text-slate-200">Visa Radar & Sponsor Validator</div>
-                    <div className="text-[11px] text-slate-400 font-mono">
+                    <div className="font-semibold text-ink">Visa Radar & Sponsor Validator</div>
+                    <div className="text-[11px] text-ink-muted font-mono">
                       UK Home Office Register + Fuzzy company name matcher (Levenshtein + alias check)
                     </div>
                   </div>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent2-soft text-accent2-ink border border-accent2-line">
                   SYNCED
                 </span>
               </div>
 
               {/* Agent 3 */}
-              <div className="p-3.5 rounded-2xl bg-[#07090e] border border-white/[0.08] flex items-center justify-between">
+              <div className="p-3.5 rounded-card bg-sunken border border-line flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-violet-400 shadow-[0_0_8px_#a78bfa]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-accent" />
                   <div>
-                    <div className="font-semibold text-slate-200">STAR Synthesis & Pitch Generator</div>
-                    <div className="text-[11px] text-slate-400 font-mono">
+                    <div className="font-semibold text-ink">STAR Synthesis & Pitch Generator</div>
+                    <div className="text-[11px] text-ink-muted font-mono">
                       Gemini 2.5 Flash / Local LLM fallback (Qwen-2.5) with Master Profile constraints
                     </div>
                   </div>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-violet-500/10 text-violet-400 border border-violet-500/20">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent-soft text-accent-ink border border-accent-line">
                   RESONATING
                 </span>
               </div>
@@ -147,34 +147,34 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
           </div>
 
           {/* Engine Runtime Stack */}
-          <div className="p-4 rounded-2xl bg-[#07090e] border border-white/[0.08] space-y-2">
-            <div className="text-[11px] font-mono uppercase text-slate-400 font-bold flex items-center justify-between">
+          <div className="p-4 rounded-card bg-sunken border border-line space-y-2">
+            <div className="text-[11px] font-mono uppercase text-ink-muted font-bold flex items-center justify-between">
               <span>Execution Runtime Configuration</span>
-              <span className="text-cyan-400">Node.js 22 LTS • React 18</span>
+              <span className="text-accent2-ink">Node.js 22 LTS • React 18</span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11px] font-mono text-slate-400">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11px] font-mono text-ink-muted">
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-positive-ink" />
                 <span>Playwright v1.42</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-positive-ink" />
                 <span>@google/genai SDK</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-positive-ink" />
                 <span>Express API Routes</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-positive-ink" />
                 <span>LocalStorage Sync</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-positive-ink" />
                 <span>Framer Motion 12</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-positive-ink" />
                 <span>Recharts v2.12</span>
               </div>
             </div>
@@ -182,13 +182,13 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-white/[0.08] bg-[#090c15] flex items-center justify-between text-[11px] font-mono">
-          <div className="text-slate-400">
-            Node Server Port: <span className="text-cyan-400">3000</span> (Reverse Proxied)
+        <div className="p-4 border-t border-line bg-sunken flex items-center justify-between text-[11px] font-mono">
+          <div className="text-ink-muted">
+            Node Server Port: <span className="text-accent2-ink">3000</span> (Reverse Proxied)
           </div>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.12] text-white font-medium transition-all cursor-pointer"
+            className="px-4 py-1.5 rounded-control bg-fill-strong hover:bg-fill-strong text-ink font-medium transition-all cursor-pointer"
           >
             Close Inspector
           </button>

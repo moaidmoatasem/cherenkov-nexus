@@ -207,13 +207,15 @@ cherenkov-nexus/
 │   └── mcp/
 │       └── playwrightScraper.ts # Stealth ATS DOM & Accessibility Tree Extractor
 ├── src/                        # React 19 Frontend Source
-│   ├── components/             # 23 Generative & Interactive UI Components
+│   ├── components/             # Generative & Interactive UI Components
+│   │   └── ui/                 # Shared design-system primitives (Button, Card, Badge...)
 │   ├── data/                   # Default Master Profile & System Presets
 │   ├── hooks/                  # Custom React Hooks (Theme, Hotkeys, SSE)
 │   ├── utils/                  # AST Renderers & PDF Exporters
 │   ├── App.tsx                 # Main Application Layout & State Router
-│   ├── index.css               # Tailwind v4 Aesthetic Tokens & Theme Auro
+│   ├── index.css               # Semantic design tokens & the 8 theme palettes
 │   ├── main.tsx                # React DOM Mount Entrypoint
+│   ├── navigation.tsx          # Workspace registry shared by sidebar, tabs & palette
 │   └── types.ts                # Strict TypeScript Type Definitions
 ├── src-tauri/                  # Rust Native Backend Shell
 ├── cherenkov.ts                # Standalone CLI Ingestion & Synthesis Engine

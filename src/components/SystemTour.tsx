@@ -419,11 +419,11 @@ export const SystemTour: React.FC<SystemTourProps> = ({
   }
 
   const badgeColorMap = {
-    violet: 'bg-violet-500/20 text-violet-300 border-violet-500/40',
-    cyan: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
-    emerald: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
-    amber: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
-    purple: 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+    violet: 'bg-accent-soft text-accent-ink border-accent-line',
+    cyan: 'bg-accent2-soft text-accent2-ink border-accent2-line',
+    emerald: 'bg-positive-soft text-positive-ink border-positive-line',
+    amber: 'bg-caution-soft text-caution-ink border-caution-line',
+    purple: 'bg-accent-soft text-accent-ink border-accent-line'
   };
 
   return (
@@ -463,7 +463,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
         <motion.div
           layoutId="tour-highlight-box"
           transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-          className="absolute rounded-2xl border-2 pointer-events-none shadow-[0_0_35px_rgba(6,182,212,0.5)] ring-4 ring-cyan-500/20"
+          className="absolute rounded-card border-2 pointer-events-none ring-4 ring-accent2-line"
           style={{
             left: `${highlightBox.x}px`,
             top: `${highlightBox.y}px`,
@@ -491,7 +491,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
           />
 
           {/* Floating Target Identification Beacon */}
-          <div className="absolute -top-7 left-3 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-black/90 border text-[10px] font-mono font-bold shadow-lg"
+          <div className="absolute -top-7 left-3 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-scrim border text-[10px] font-mono font-bold shadow-lg"
                style={{ borderColor: `${step.accentHex}88`, color: step.accentHex }}>
             <span className="w-1.5 h-1.5 rounded-full animate-ping" style={{ backgroundColor: step.accentHex }} />
             <Target className="w-3 h-3" />
@@ -499,9 +499,9 @@ export const SystemTour: React.FC<SystemTourProps> = ({
           </div>
 
           {/* Animated Laser Sweep Line across target */}
-          <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
+          <div className="absolute inset-0 overflow-hidden rounded-card pointer-events-none">
             <div
-              className="w-full h-1 opacity-60 shadow-[0_0_12px_#fff]"
+              className="w-full h-1 opacity-60"
               style={{
                 backgroundColor: step.accentHex,
                 animation: 'tour-scan-sweep 3.5s infinite linear'
@@ -518,7 +518,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.94, y: 10 }}
         transition={{ duration: 0.25 }}
-        className="fixed z-[110] bg-gradient-to-b from-[#0f1424] via-[#090d16] to-[#06080e] border rounded-3xl p-5 sm:p-6 space-y-4 backdrop-blur-2xl"
+        className="fixed z-[110] bg-gradient-to-b from-surface via-sunken to-sunken border rounded-panel p-5 sm:p-6 space-y-4 backdrop-blur-2xl"
         style={{
           ...tooltipStyle,
           borderColor: `${step.accentHex}66`,
@@ -528,7 +528,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
         {/* Top Header with Step Counter and Close */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-white/[0.08] text-slate-200 border border-white/[0.1]">
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-fill-strong text-ink border border-line">
               STEP {currentStepIdx + 1} OF {TOUR_STEPS.length}
             </span>
             <span
@@ -540,7 +540,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
 
           <button
             onClick={() => handleFinishTour(false)}
-            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/[0.08] transition-colors cursor-pointer"
+            className="text-ink-muted hover:text-ink p-1 rounded-control hover:bg-fill-strong transition-colors cursor-pointer"
             title="Skip Tour (Esc)"
           >
             <X className="w-4 h-4" />
@@ -550,7 +550,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
         {/* Step Title & Icon */}
         <div className="flex items-start gap-3">
           <div
-            className="p-2.5 rounded-2xl text-white shadow-md shrink-0"
+            className="p-2.5 rounded-card text-ink shadow-md shrink-0"
             style={{
               background: `linear-gradient(135deg, ${step.accentHex}, #3b82f6)`,
               boxShadow: `0 0 20px ${step.accentHex}44`
@@ -559,7 +559,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
             <StepIcon className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-white tracking-tight leading-snug">
+            <h3 className="text-base font-bold text-ink tracking-tight leading-snug">
               {step.title}
             </h3>
             <p className="text-[11px] font-mono font-semibold mt-0.5" style={{ color: step.accentHex }}>
@@ -569,7 +569,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
         </div>
 
         {/* Description */}
-        <p className="text-xs text-slate-300 leading-relaxed font-sans">
+        <p className="text-xs text-ink-muted leading-relaxed font-sans">
           {step.description}
         </p>
 
@@ -578,7 +578,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
           <div className="pt-1">
             <button
               onClick={handleQuickAction}
-              className="w-full py-2 px-3 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.1] text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="w-full py-2 px-3 rounded-control bg-fill hover:bg-fill-strong border border-line text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
               style={{ color: step.accentHex }}
             >
               <Zap className="w-3.5 h-3.5" style={{ color: step.accentHex }} />
@@ -589,7 +589,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
         )}
 
         {/* Step Progress Dots & Navigation Controls */}
-        <div className="pt-3 border-t border-white/[0.08] flex items-center justify-between gap-3">
+        <div className="pt-3 border-t border-line flex items-center justify-between gap-3">
           {/* Progress Dots */}
           <div className="flex items-center gap-1.5">
             {TOUR_STEPS.map((s, idx) => (
@@ -598,10 +598,10 @@ export const SystemTour: React.FC<SystemTourProps> = ({
                 onClick={() => setCurrentStepIdx(idx)}
                 className={`h-2 rounded-full transition-all cursor-pointer ${
                   idx === currentStepIdx
-                    ? 'w-6 shadow-[0_0_10px_currentColor]'
+                    ? 'w-6'
                     : idx < currentStepIdx
-                    ? 'w-2 bg-emerald-400'
-                    : 'w-2 bg-white/20 hover:bg-white/40'
+                    ? 'w-2 bg-positive'
+                    : 'w-2 bg-fill-strong hover:bg-fill-strong'
                 }`}
                 style={idx === currentStepIdx ? { backgroundColor: step.accentHex, color: step.accentHex } : {}}
                 title={`Jump to Step ${idx + 1}: ${s.title}`}
@@ -614,7 +614,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
             {currentStepIdx > 0 && (
               <button
                 onClick={handlePrev}
-                className="px-3 py-1.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-xs font-mono text-slate-300 hover:text-white transition-all flex items-center gap-1 cursor-pointer"
+                className="px-3 py-1.5 rounded-control bg-fill hover:bg-fill-strong text-xs font-mono text-ink-muted hover:text-ink transition-all flex items-center gap-1 cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Back</span>
@@ -623,7 +623,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
 
             <button
               onClick={handleNext}
-              className="px-4 py-1.5 rounded-xl text-white text-xs font-mono font-bold flex items-center gap-1.5 shadow-lg transition-all cursor-pointer"
+              className="px-4 py-1.5 rounded-control text-ink text-xs font-mono font-bold flex items-center gap-1.5 shadow-lg transition-all cursor-pointer"
               style={{
                 background: `linear-gradient(135deg, ${step.accentHex}, #3b82f6)`,
                 boxShadow: `0 4px 15px ${step.accentHex}44`

@@ -25,7 +25,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-[#030407]/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-sunken/80 backdrop-blur-sm"
           />
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}

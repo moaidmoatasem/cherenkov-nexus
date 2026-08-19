@@ -665,10 +665,15 @@ export const OracleWorkbench: React.FC = () => {
 
 const ORACLE_CSS = `
 .oracle{
-  --ink:#0E1318; --ink-2:#151B22; --ink-3:#1D242C;
-  --rule:#28313A; --rule-soft:#1B222A;
-  --paper:#E9E4DA; --paper-2:#A39C8E; --paper-3:#6E6961;
-  --fail:#B0392F; --fail-deep:#7A2820; --pass:#4F8A6D; --cond:#BE8A2B;
+  /* The Oracle keeps its own typographic identity — Spectral headings, Plex
+     body, hairline rules — but its palette is bound to the app's theme
+     tokens, so the dossier inverts correctly in the light themes. */
+  --ink:var(--color-surface); --ink-2:var(--color-sunken); --ink-3:var(--color-surface-hover);
+  --rule:var(--color-line-strong); --rule-soft:var(--color-line);
+  --paper:var(--color-ink); --paper-2:var(--color-ink-muted); --paper-3:var(--color-ink-faint);
+  --fail:var(--color-critical); --fail-deep:var(--color-critical);
+  --pass:var(--color-positive); --cond:var(--color-caution);
+  --wash-fail:var(--color-critical-soft); --wash-cond:var(--color-caution-soft);
   --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   --sans:'IBM Plex Sans',system-ui,sans-serif;
   --serif:'Spectral',Georgia,serif;
@@ -687,11 +692,11 @@ const ORACLE_CSS = `
 .o-flag{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--cond);
   border:1px solid var(--cond);padding:2px 6px;border-radius:2px}
 
-.o-warn-strip{padding:11px 22px;background:rgba(190,138,43,.09);
+.o-warn-strip{padding:11px 22px;background:var(--wash-cond);
   border-bottom:1px solid var(--rule);font-size:13px;line-height:1.55;color:var(--paper-2)}
 .o-warn-strip b{color:var(--cond);font-weight:600}
-.o-warn-strip.o-stale{background:rgba(176,57,47,.08)}
-.o-error{padding:11px 22px;background:rgba(176,57,47,.12);border-bottom:1px solid var(--fail);
+.o-warn-strip.o-stale{background:var(--wash-fail)}
+.o-error{padding:11px 22px;background:var(--wash-fail);border-bottom:1px solid var(--fail);
   font-size:13px;color:var(--paper)}
 
 .o-shell{display:grid;grid-template-columns:minmax(0,38fr) minmax(0,62fr)}
@@ -741,7 +746,7 @@ const ORACLE_CSS = `
 .o-act{font-family:var(--mono);font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;
   background:var(--paper);color:var(--ink);border:0;padding:11px 18px;border-radius:2px;
   cursor:pointer;margin-top:20px;font-weight:500}
-.o-act:hover:not(:disabled){background:#fff}
+.o-act:hover:not(:disabled){opacity:.88}
 .o-act:disabled{opacity:.42;cursor:not-allowed}
 .o-ghost{background:transparent;color:var(--paper-2);border:1px solid var(--rule)}
 .o-ghost:hover:not(:disabled){background:var(--ink-2);color:var(--paper)}
@@ -758,7 +763,7 @@ const ORACLE_CSS = `
 .o-soc-conf{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--paper-3);
   white-space:nowrap;text-transform:uppercase}
 
-.o-warnbox{border-left:2px solid var(--cond);background:rgba(190,138,43,.06);padding:12px 14px;
+.o-warnbox{border-left:2px solid var(--cond);background:var(--wash-cond);padding:12px 14px;
   font-size:12.5px;line-height:1.6;color:var(--paper-2);margin:18px 0 4px}
 .o-warnbox b{color:var(--cond);font-weight:500;display:block;font-family:var(--mono);font-size:10.5px;
   letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
@@ -786,7 +791,7 @@ const ORACLE_CSS = `
 .o-lrow{display:grid;grid-template-columns:22px 1fr auto;gap:13px;padding:12px 0;
   border-bottom:1px solid var(--rule-soft);align-items:baseline}
 .o-lrow.o-na{opacity:.45}
-.o-lrow.o-bind{background:rgba(176,57,47,.055);box-shadow:inset 2px 0 0 var(--fail);
+.o-lrow.o-bind{background:var(--wash-fail);box-shadow:inset 2px 0 0 var(--fail);
   padding-left:13px;margin-left:-13px}
 .o-glyph{font-family:var(--mono);font-size:13px;line-height:1.35}
 .o-glyph.o-p{color:var(--pass)} .o-glyph.o-f{color:var(--fail)} .o-glyph.o-n{color:var(--paper-3)}
