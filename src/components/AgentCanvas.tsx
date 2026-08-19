@@ -155,7 +155,7 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
           <div className="flex items-center gap-3">
             <button
               onClick={handleResetWorkflow}
-              className="px-4 py-2.5 rounded-card bg-fill hover:bg-fill-strong text-ink-muted text-xs font-mono font-bold flex items-center gap-2 border border-line cursor-pointer transition-all"
+              className="px-4 py-2.5 rounded-card bg-fill hover:bg-fill-strong text-ink-muted text-xs font-bold flex items-center gap-2 border border-line cursor-pointer transition-all"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset Graph</span>
@@ -164,7 +164,7 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
             {pausedAtApproval ? (
               <button
                 onClick={handleApproveAndProceed}
-                className="px-5 py-2.5 rounded-card bg-caution hover:opacity-90 text-ink-inverse text-xs font-mono font-black flex items-center gap-2 cursor-pointer animate-pulse"
+                className="px-5 py-2.5 rounded-card bg-caution hover:opacity-90 text-ink-inverse text-xs font-black flex items-center gap-2 cursor-pointer animate-pulse"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Approve & Dispatch ATS</span>
@@ -176,7 +176,7 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
                 className={`px-5 py-2.5 rounded-card text-xs font-mono font-black flex items-center gap-2 transition-all cursor-pointer ${
                   isRunning
                     ? 'bg-accent/50 text-accent-ink cursor-not-allowed'
-                    : 'bg-accent hover:bg-accent-strong text-ink hover:scale-[1.02]'
+                    : 'bg-accent hover:bg-accent-strong text-accent-contrast hover:scale-[1.02]'
                 }`}
               >
                 <Play className="w-4 h-4 fill-white" />
@@ -196,7 +196,7 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-fill text-ink-muted border border-line">
+            <span className="text-xs font-mono px-2 py-0.5 rounded bg-fill text-ink-muted border border-line">
               Stdio MCP Transport Active
             </span>
           </div>
@@ -232,22 +232,22 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
 
                   <div>
                     {node.status === 'idle' && (
-                      <span className="text-[10px] font-mono text-ink-faint px-2 py-0.5 rounded bg-fill">
+                      <span className="text-2xs font-mono text-ink-faint px-2 py-0.5 rounded bg-fill">
                         STANDBY
                       </span>
                     )}
                     {node.status === 'running' && (
-                      <span className="text-[10px] font-mono text-info-ink font-bold px-2 py-0.5 rounded bg-info-soft border border-info-line animate-pulse">
+                      <span className="text-2xs font-mono text-info-ink font-bold px-2 py-0.5 rounded bg-info-soft border border-info-line animate-pulse">
                         RUNNING
                       </span>
                     )}
                     {node.status === 'paused_approval' && (
-                      <span className="text-[10px] font-mono text-caution-ink font-bold px-2 py-0.5 rounded bg-caution-soft border border-caution-line">
+                      <span className="text-2xs font-mono text-caution-ink font-bold px-2 py-0.5 rounded bg-caution-soft border border-caution-line">
                         APPROVAL
                       </span>
                     )}
                     {node.status === 'success' && (
-                      <span className="text-[10px] font-mono text-positive-ink font-bold px-2 py-0.5 rounded bg-positive-soft border border-positive-line">
+                      <span className="text-2xs font-mono text-positive-ink font-bold px-2 py-0.5 rounded bg-positive-soft border border-positive-line">
                         SUCCESS
                       </span>
                     )}
@@ -258,10 +258,10 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
                   <h3 className="text-xs font-bold text-ink group-hover:text-accent-ink transition-colors">
                     {node.title}
                   </h3>
-                  <p className="text-[10px] text-ink-muted font-mono">{node.subtitle}</p>
+                  <p className="text-2xs text-ink-muted font-mono">{node.subtitle}</p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-line text-[10px] text-ink-muted line-clamp-2">
+                <div className="mt-4 pt-3 border-t border-line text-2xs text-ink-muted line-clamp-2">
                   {node.lastOutput}
                 </div>
               </div>
@@ -276,10 +276,10 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
               <Terminal className="w-3.5 h-3.5 text-info-ink" />
               <span>LIVE AGENT SWARM EXECUTION LOGS</span>
             </div>
-            <span className="text-[10px] text-ink-faint">Auto-scrolling stream</span>
+            <span className="text-2xs text-ink-faint">Auto-scrolling stream</span>
           </div>
 
-          <div className="h-36 overflow-y-auto space-y-1 text-[11px] text-ink-muted pr-2">
+          <div className="h-36 overflow-y-auto space-y-1 text-xs text-ink-muted pr-2">
             {executionLogs.map((log, i) => (
               <div
                 key={i}

@@ -181,11 +181,11 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
                 <h2 className="text-xl font-extrabold text-ink tracking-tight">
                   GitHub Repository Codebase Sync
                 </h2>
-                <span className="px-2 py-0.5 text-[10px] font-mono font-black bg-info-soft border border-info-line text-info-ink rounded-full">
+                <span className="px-2 py-0.5 text-2xs font-mono font-black bg-info-soft border border-info-line text-info-ink rounded-full">
                   AI AST ANALYZER
                 </span>
               </div>
-              <p className="text-xs text-ink-muted mt-1">
+              <p className="text-sm text-ink-muted mt-1">
                 Link your test engineering repository to automatically extract Playwright fixtures, k6 load profiles, and CodeQL security gates into your Master Profile.
               </p>
             </div>
@@ -201,7 +201,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
 
         {/* Preset Repositories Quick Selector */}
         <div className="space-y-2">
-          <span className="text-[11px] font-mono text-ink-muted uppercase font-bold flex items-center gap-1.5">
+          <span className="text-xs font-mono text-ink-muted uppercase font-bold flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-info-ink" />
             <span>Select Candidate Repository Preset:</span>
           </span>
@@ -227,7 +227,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
                     </span>
                     <GitBranch className="w-3.5 h-3.5 text-ink-muted" />
                   </div>
-                  <p className="text-[10px] text-ink-muted line-clamp-2 mt-1 leading-snug">
+                  <p className="text-2xs text-ink-muted line-clamp-2 mt-1 leading-snug">
                     {preset.desc}
                   </p>
                 </button>
@@ -264,7 +264,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
             <button
               onClick={() => handleAnalyze()}
               disabled={isAnalyzing}
-              className="px-5 py-2.5 text-xs font-extrabold text-ink bg-info hover:opacity-90 rounded-control transition-all flex items-center gap-2 shrink-0 cursor-pointer disabled:opacity-50"
+              className="px-5 py-2.5 text-xs font-extrabold text-accent-contrast bg-accent hover:bg-accent-strong rounded-control transition-all flex items-center gap-2 shrink-0 cursor-pointer disabled:opacity-50"
             >
               {isAnalyzing ? (
                 <>
@@ -307,7 +307,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
                     {analysisStep >= idx ? <CheckCircle2 className="w-3 h-3 text-positive-ink" /> : '•'}
                     <span>{step.title}</span>
                   </div>
-                  <div className="text-[10px] text-ink-muted mt-0.5 truncate">{step.desc}</div>
+                  <div className="text-2xs text-ink-muted mt-0.5 truncate">{step.desc}</div>
                 </div>
               ))}
             </div>
@@ -327,7 +327,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
                   <div className="text-xl font-mono font-black text-positive-ink">
                     {analysisResult.alignmentScore}% MATCH
                   </div>
-                  <div className="text-[11px] text-ink-muted">Technical Codebase Fit</div>
+                  <div className="text-xs text-ink-muted">Technical Codebase Fit</div>
                 </div>
               </div>
 
@@ -339,7 +339,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
                   <div className="text-xs font-mono font-bold text-ink">
                     {analysisResult.detectedArchitecture.e2eFramework}
                   </div>
-                  <div className="text-[11px] text-ink-muted">Verified Automation Engine</div>
+                  <div className="text-xs text-ink-muted">Verified Automation Engine</div>
                 </div>
               </div>
 
@@ -351,7 +351,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
                   <div className="text-xs font-mono font-bold text-info-ink">
                     {analysisResult.detectedArchitecture.sastEngine}
                   </div>
-                  <div className="text-[11px] text-ink-muted">Static Security Scanning</div>
+                  <div className="text-xs text-ink-muted">Static Security Scanning</div>
                 </div>
               </div>
             </div>
@@ -363,7 +363,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
                   <FileCode className="w-4 h-4 text-info-ink" />
                   <span>Hard Code Proof Points Extracted:</span>
                 </span>
-                <span className="text-[10px] font-mono text-positive-ink">
+                <span className="text-2xs font-mono text-positive-ink">
                   {analysisResult.codeProofPoints.length} VERIFIED ARTIFACTS
                 </span>
               </div>
@@ -380,22 +380,22 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
                           <span className="w-2 h-2 rounded-full bg-info" />
                           <span>{proof.domain}</span>
                         </div>
-                        <div className="text-[11px] font-mono text-positive-ink mt-0.5">
+                        <div className="text-xs font-mono text-positive-ink mt-0.5">
                           {proof.metric}
                         </div>
                       </div>
-                      <span className="text-[9px] font-mono px-2 py-0.5 bg-fill text-ink-muted rounded border border-line truncate max-w-[130px]">
+                      <span className="text-2xs font-mono px-2 py-0.5 bg-fill text-ink-muted rounded border border-line truncate max-w-[130px]">
                         {proof.filePath}
                       </span>
                     </div>
 
-                    <p className="text-[11px] text-ink-muted leading-relaxed">
+                    <p className="text-sm text-ink-muted leading-relaxed">
                       {proof.evidence}
                     </p>
 
                     {/* Code Snippet Box */}
                     <div className="relative group/snippet">
-                      <pre className="p-2.5 rounded-control bg-sunken border border-line text-[10px] font-mono text-ink-muted overflow-x-auto">
+                      <pre className="p-2.5 rounded-control bg-sunken border border-line text-2xs font-mono text-ink-muted overflow-x-auto">
                         {proof.snippet}
                       </pre>
                       <button
@@ -417,7 +417,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
 
             {/* Extracted Skills Chips */}
             <div className="p-4 rounded-card bg-surface border border-line space-y-2">
-              <div className="text-[11px] font-mono uppercase text-ink-muted font-bold">
+              <div className="text-xs font-mono uppercase text-ink-muted font-bold">
                 Extracted Competencies from AST:
               </div>
               <div className="flex flex-wrap gap-1.5">

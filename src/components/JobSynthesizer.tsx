@@ -620,7 +620,7 @@ ${qa.answer}
                 </Badge>
 
                 {/* Active LLM Provider Status Indicator */}
-                <span className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-chip bg-sunken border border-line text-[11px] font-mono">
+                <span className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-chip bg-sunken border border-line text-xs font-mono">
                   <span
                     className={`w-2 h-2 rounded-full ${
                       activeRouting.mode === 'local_only'
@@ -679,7 +679,7 @@ ${qa.answer}
                       style={{ backgroundColor: sample.brandColor || 'var(--color-accent)' }}
                     />
                     <span>{sample.company}</span>
-                    <span className="text-[10px] opacity-80 font-mono px-1.5 py-0.5 rounded bg-sunken border border-line">
+                    <span className="text-2xs opacity-80 font-mono px-1.5 py-0.5 rounded bg-sunken border border-line">
                       UK
                     </span>
                   </button>
@@ -705,7 +705,7 @@ ${qa.answer}
           <button
             onClick={handleScrape}
             disabled={isScraping}
-            className="px-5 py-2.5 text-xs font-extrabold text-ink bg-info hover:opacity-90 border border-info-line rounded-control transition-all flex items-center justify-center gap-2 shrink-0 disabled:opacity-50 cursor-pointer"
+            className="px-5 py-2.5 text-xs font-extrabold text-accent-contrast bg-accent hover:bg-accent-strong border border-info-line rounded-control transition-all flex items-center justify-center gap-2 shrink-0 disabled:opacity-50 cursor-pointer"
           >
             {isScraping ? (
               <>
@@ -747,7 +747,7 @@ ${qa.answer}
                 <button
                   type="button"
                   onClick={handleRestoreDraft}
-                  className="px-2.5 py-1 text-[10px] font-mono text-info-ink bg-info-soft hover:bg-info-soft border border-info-line rounded-control flex items-center gap-1 cursor-pointer transition-colors"
+                  className="px-2.5 py-1 text-2xs text-info-ink bg-info-soft hover:bg-info-soft border border-info-line rounded-control flex items-center gap-1 cursor-pointer transition-colors"
                 >
                   <RotateCcw className="w-3 h-3" />
                   <span>Restore Draft</span>
@@ -755,7 +755,7 @@ ${qa.answer}
                 <button
                   type="button"
                   onClick={handleClearDraft}
-                  className="px-2 py-1 text-[10px] font-mono text-ink-muted hover:text-critical-ink rounded-control hover:bg-fill transition-colors cursor-pointer"
+                  className="px-2 py-1 text-2xs text-ink-muted hover:text-critical-ink rounded-control hover:bg-fill transition-colors cursor-pointer"
                 >
                   Clear
                 </button>
@@ -807,7 +807,7 @@ ${qa.answer}
             <button
               type="button"
               onClick={() => setIsCompareModalOpen(true)}
-              className="px-3 py-1.5 text-xs font-mono font-bold bg-accent hover:bg-accent-strong text-info-ink border border-info-line rounded-control flex items-center gap-1.5 cursor-pointer transition-all"
+              className="px-3 py-1.5 text-xs font-bold bg-accent hover:bg-accent-strong text-info-ink border border-info-line rounded-control flex items-center gap-1.5 cursor-pointer transition-all"
             >
               <GitCompare className="w-3.5 h-3.5 text-info-ink" />
               <span>Compare Models (Cloud vs Local)</span>
@@ -816,7 +816,7 @@ ${qa.answer}
             <button
               type="button"
               onClick={() => setIsLinkedInScoutOpen(true)}
-              className="px-3 py-1.5 text-xs font-mono font-bold bg-info-soft hover:bg-info-soft text-info-ink border border-info-line rounded-control flex items-center gap-1.5 cursor-pointer transition-all"
+              className="px-3 py-1.5 text-xs font-bold bg-info-soft hover:bg-info-soft text-info-ink border border-info-line rounded-control flex items-center gap-1.5 cursor-pointer transition-all"
             >
               <Linkedin className="w-3.5 h-3.5" />
               <span>LinkedIn Scout MCP</span>
@@ -825,7 +825,7 @@ ${qa.answer}
             <button
               type="button"
               onClick={() => setIsVoiceInterviewOpen(true)}
-              className="px-3 py-1.5 text-xs font-mono font-bold bg-accent-soft hover:bg-accent-soft text-accent-ink border border-accent-line rounded-control flex items-center gap-1.5 cursor-pointer transition-all"
+              className="px-3 py-1.5 text-xs font-bold bg-accent-soft hover:bg-accent-soft text-accent-ink border border-accent-line rounded-control flex items-center gap-1.5 cursor-pointer transition-all"
             >
               <Mic className="w-3.5 h-3.5" />
               <span>Mock Interview</span>
@@ -835,7 +835,7 @@ ${qa.answer}
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label htmlFor="job-synthesizer-target-company" className="block text-[11px] font-mono uppercase text-ink-muted mb-1 font-bold">
+            <label htmlFor="job-synthesizer-target-company" className="block text-xs font-mono uppercase text-ink-muted mb-1 font-bold">
               Target Company
             </label>
             <input id="job-synthesizer-target-company"
@@ -848,7 +848,7 @@ ${qa.answer}
           </div>
 
           <div>
-            <label htmlFor="job-synthesizer-target-role-title" className="block text-[11px] font-mono uppercase text-ink-muted mb-1 font-bold">
+            <label htmlFor="job-synthesizer-target-role-title" className="block text-xs font-mono uppercase text-ink-muted mb-1 font-bold">
               Target Role Title
             </label>
             <input id="job-synthesizer-target-role-title"
@@ -861,7 +861,7 @@ ${qa.answer}
           </div>
 
           <div>
-            <label htmlFor="job-synthesizer-recruiter-talent-email" className="block text-[11px] font-mono uppercase text-ink-muted mb-1 font-bold">
+            <label htmlFor="job-synthesizer-recruiter-talent-email" className="block text-xs font-mono uppercase text-ink-muted mb-1 font-bold">
               Recruiter / Talent Email
             </label>
             <input id="job-synthesizer-recruiter-talent-email"
@@ -877,17 +877,17 @@ ${qa.answer}
         {/* Job Description Text Area */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[11px] font-mono uppercase text-ink-muted font-bold flex items-center gap-1.5">
+            <span className="text-xs font-mono uppercase text-ink-muted font-bold flex items-center gap-1.5">
               <FileText className="w-3.5 h-3.5 text-accent-ink" />
               <span>Job Description Raw Content</span>
             </span>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono text-info-ink font-bold bg-info-soft px-2 py-0.5 rounded border border-info-line">
+              <span className="text-2xs font-mono text-info-ink font-bold bg-info-soft px-2 py-0.5 rounded border border-info-line">
                 {jobDescription.length} chars • ~{Math.round(jobDescription.split(/\s+/).length)} words
               </span>
               <button
                 onClick={() => setJobDescription('')}
-                className="text-[10px] text-critical-ink hover:text-critical-ink font-mono transition-colors cursor-pointer"
+                className="text-2xs text-critical-ink hover:text-critical-ink transition-colors cursor-pointer"
               >
                 Clear
               </button>
@@ -913,7 +913,7 @@ ${qa.answer}
             <button
               onClick={handleSynthesize}
               disabled={isSynthesizing || !jobDescription.trim()}
-              className="w-full sm:w-auto px-8 py-3.5 text-xs font-black text-ink bg-accent hover:bg-accent-strong rounded-control transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 cursor-pointer tracking-wide uppercase"
+              className="w-full sm:w-auto px-8 py-3.5 text-xs font-black text-accent-contrast bg-accent hover:bg-accent-strong rounded-control transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 cursor-pointer tracking-wide uppercase"
             >
               {isSynthesizing ? (
                 <>
@@ -932,12 +932,12 @@ ${qa.answer}
 
           {/* Local LLM Loading Status */}
           {activeRouting.mode === 'local_only' && !isWebLLMReady && !webLLMError && (
-            <div className="text-[10px] font-mono text-info-ink/70 text-center animate-pulse mt-2">
+            <div className="text-2xs font-mono text-info-ink/70 text-center animate-pulse mt-2">
               Initializing WebGPU MLC Engine ({webLLMProgress}%)... PII will remain in-browser.
             </div>
           )}
           {activeRouting.mode === 'local_only' && webLLMError && (
-            <div className="text-[10px] font-mono text-critical-ink/70 text-center mt-2">
+            <div className="text-2xs font-mono text-critical-ink/70 text-center mt-2">
               WebGPU Model Failed to Load: {webLLMError}. Falling back to Cloud / Ollama API.
             </div>
           )}
@@ -973,7 +973,7 @@ ${qa.answer}
                           : 'bg-fill border-line text-ink-faint opacity-60'
                       }`}
                     >
-                      <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold">
+                      <div className="flex items-center gap-1.5 font-mono text-2xs font-bold">
                         {isDone ? (
                           <CheckCircle2 className="w-3 h-3 text-positive-ink" />
                         ) : isCurrent ? (
@@ -983,7 +983,7 @@ ${qa.answer}
                         )}
                         <span>{step.title}</span>
                       </div>
-                      <div className="text-[9px] mt-0.5 truncate">{step.desc}</div>
+                      <div className="text-2xs mt-0.5 truncate">{step.desc}</div>
                     </div>
                   );
                 })}
@@ -1070,7 +1070,7 @@ ${qa.answer}
                   </svg>
                   <div className="absolute flex flex-col items-center">
                     <span className="text-sm font-extrabold text-ink font-mono">96%</span>
-                    <span className="text-[8px] font-mono text-info-ink font-black uppercase">TOP TIER</span>
+                    <span className="text-2xs font-mono text-info-ink font-black uppercase">TOP TIER</span>
                   </div>
                 </div>
 
@@ -1079,7 +1079,7 @@ ${qa.answer}
                     <span>High Fit Probability</span>
                     <Award className="w-3.5 h-3.5 text-caution-ink" />
                   </div>
-                  <p className="text-[11px] text-ink-muted mt-0.5 leading-snug">
+                  <p className="text-sm text-ink-muted mt-0.5 leading-snug">
                     Strong alignment across Playwright automation, AI QA test synthesizers, and CodeQL static gates.
                   </p>
                 </div>
@@ -1088,7 +1088,7 @@ ${qa.answer}
               {/* Progress Gauges with distinct domain colors */}
               <div className="space-y-2.5 text-xs pt-1">
                 <div>
-                  <div className="flex justify-between text-[11px] mb-1 font-mono">
+                  <div className="flex justify-between text-xs mb-1 font-mono">
                     <span className="text-ink-muted">AI Testing & cherenkov-qa Framework</span>
                     <span className="text-positive-ink font-bold">100%</span>
                   </div>
@@ -1098,7 +1098,7 @@ ${qa.answer}
                 </div>
 
                 <div>
-                  <div className="flex justify-between text-[11px] mb-1 font-mono">
+                  <div className="flex justify-between text-xs mb-1 font-mono">
                     <span className="text-ink-muted">Playwright & k6 Infrastructure</span>
                     <span className="text-info-ink font-bold">98%</span>
                   </div>
@@ -1108,7 +1108,7 @@ ${qa.answer}
                 </div>
 
                 <div>
-                  <div className="flex justify-between text-[11px] mb-1 font-mono">
+                  <div className="flex justify-between text-xs mb-1 font-mono">
                     <span className="text-ink-muted">Static Security Gates (CodeQL)</span>
                     <span className="text-accent-ink font-bold">95%</span>
                   </div>
@@ -1118,7 +1118,7 @@ ${qa.answer}
                 </div>
 
                 <div>
-                  <div className="flex justify-between text-[11px] mb-1 font-mono">
+                  <div className="flex justify-between text-xs mb-1 font-mono">
                     <span className="text-ink-muted">Visa Feasibility (UK/EU Target)</span>
                     <span className="text-positive-ink font-bold">100%</span>
                   </div>
@@ -1139,11 +1139,11 @@ ${qa.answer}
                   <h4 className="text-xs font-extrabold text-ink uppercase font-mono">
                     Verified Visa Sponsor
                   </h4>
-                  <span className="px-1.5 py-0.5 text-[9px] font-mono font-black bg-positive-soft text-positive-ink rounded border border-positive-line">
+                  <span className="px-1.5 py-0.5 text-2xs font-mono font-black bg-positive-soft text-positive-ink rounded border border-positive-line">
                     UK SKILLED WORKER / EU
                   </span>
                 </div>
-                <p className="text-xs text-ink-muted leading-relaxed">
+                <p className="text-sm text-ink-muted leading-relaxed">
                   {companyName} maintains a licensed sponsorship register. Moayed fulfills all technical lead criteria and is ready for expedited processing.
                 </p>
               </div>
@@ -1158,13 +1158,13 @@ ${qa.answer}
                     Gap Analysis & Mitigation
                   </h3>
                 </div>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-caution-soft border border-caution-line text-caution-ink">
+                <span className="text-2xs font-mono font-bold px-2 py-0.5 rounded bg-caution-soft border border-caution-line text-caution-ink">
                   ACTION PLAN
                 </span>
               </div>
 
               <div>
-                <span className="text-[11px] font-semibold text-ink-muted block mb-1.5">
+                <span className="text-xs font-semibold text-ink-muted block mb-1.5">
                   Identified Gaps for this JD:
                 </span>
                 <div className="flex flex-wrap gap-1.5">
@@ -1184,7 +1184,7 @@ ${qa.answer}
               </div>
 
               <div className="p-3.5 rounded-card bg-sunken border border-line space-y-2">
-                <div className="text-[11px] font-mono uppercase text-ink-muted font-bold">
+                <div className="text-xs font-mono uppercase text-ink-muted font-bold">
                   Recommended Targeted Upskilling:
                 </div>
                 <div className="text-xs font-semibold text-ink leading-snug">
@@ -1297,7 +1297,7 @@ ${qa.answer}
                     <div className="flex items-center bg-sunken p-0.5 rounded-control border border-line">
                       <button
                         onClick={() => setSummaryViewMode('polished')}
-                        className={`px-2.5 py-1 text-[10px] font-mono font-bold rounded-control transition-all cursor-pointer ${
+                        className={`px-2.5 py-1 text-2xs font-mono font-bold rounded-control transition-all cursor-pointer ${
                           summaryViewMode === 'polished'
                             ? 'bg-accent/30 text-accent-ink border border-accent-line'
                             : 'text-ink-muted hover:text-ink'
@@ -1307,7 +1307,7 @@ ${qa.answer}
                       </button>
                       <button
                         onClick={() => setSummaryViewMode('diff')}
-                        className={`px-2.5 py-1 text-[10px] font-mono font-bold rounded-control transition-all flex items-center gap-1 cursor-pointer ${
+                        className={`px-2.5 py-1 text-2xs font-mono font-bold rounded-control transition-all flex items-center gap-1 cursor-pointer ${
                           summaryViewMode === 'diff'
                             ? 'bg-info-soft text-info-ink border border-info-line'
                             : 'text-ink-muted hover:text-ink'
@@ -1322,7 +1322,7 @@ ${qa.answer}
                       <button
                         onClick={handleGeneratePdfResume}
                         disabled={isGeneratingPdf}
-                        className="px-3 py-1 text-xs bg-accent hover:bg-accent-strong text-ink rounded-control font-bold flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                        className="px-3 py-1 text-xs bg-accent hover:bg-accent-strong text-accent-contrast rounded-control font-bold flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
                         title="Export clean ATS-friendly PDF Resume" aria-label="Export clean ATS-friendly PDF Resume"
                       >
                         {isGeneratingPdf ? (
@@ -1366,8 +1366,8 @@ ${qa.answer}
                   </div>
                 ) : (
                   /* Visual Git-Diff Comparison Engine */
-                  <div className="p-4 rounded-card bg-sunken border border-info-line space-y-3 font-mono text-[11px]">
-                    <div className="flex items-center justify-between text-[10px] text-ink-muted border-b border-line pb-2">
+                  <div className="p-4 rounded-card bg-sunken border border-info-line space-y-3 font-mono text-xs">
+                    <div className="flex items-center justify-between text-2xs text-ink-muted border-b border-line pb-2">
                       <div className="flex items-center gap-2">
                         <span className="px-1.5 py-0.5 rounded bg-critical-soft text-critical-ink border border-critical-line font-bold">
                           - MASTER BASELINE
@@ -1390,7 +1390,7 @@ ${qa.answer}
                   </div>
                 )}
 
-                <div className="text-[11px] text-ink-muted flex items-center gap-1.5 font-mono">
+                <div className="text-xs text-ink-muted flex items-center gap-1.5 font-mono">
                   <CheckCircle2 className="w-3.5 h-3.5 text-positive-ink" />
                   <span>Calibrated to pass Greenhouse, Workday, and Lever ATS semantic filters.</span>
                 </div>
@@ -1414,7 +1414,7 @@ ${qa.answer}
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => setIsLinkedInScoutOpen(true)}
-                        className="px-3.5 py-1.5 text-xs bg-info-soft hover:bg-info-soft text-info-ink rounded-control border border-info-line font-bold flex items-center gap-1.5 transition-all cursor-pointer font-mono"
+                        className="px-3.5 py-1.5 text-xs bg-info-soft hover:bg-info-soft text-info-ink rounded-control border border-info-line font-bold flex items-center gap-1.5 transition-all cursor-pointer"
                       >
                         <Linkedin className="w-3.5 h-3.5" />
                         <span className="hidden sm:inline">Scout</span>
@@ -1426,7 +1426,7 @@ ${qa.answer}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => playSynthSound('click')}
-                        className="px-4 py-2.5 rounded-control bg-critical-soft hover:bg-critical-soft border border-critical-line text-critical-ink text-xs font-bold font-mono flex items-center gap-2 transition-all cursor-pointer"
+                        className="px-4 py-2.5 rounded-control bg-critical-soft hover:bg-critical-soft border border-critical-line text-critical-ink text-xs font-bold flex items-center gap-2 transition-all cursor-pointer"
                       >
                         <Mail className="w-3.5 h-3.5" />
                         <span>Send via Gmail</span>
@@ -1438,7 +1438,7 @@ ${qa.answer}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => playSynthSound('click')}
-                        className="px-4 py-2.5 rounded-control bg-info-soft hover:bg-info-soft border border-info-line text-info-ink text-xs font-bold font-mono flex items-center gap-2 transition-all cursor-pointer"
+                        className="px-4 py-2.5 rounded-control bg-info-soft hover:bg-info-soft border border-info-line text-info-ink text-xs font-bold flex items-center gap-2 transition-all cursor-pointer"
                       >
                         <Mail className="w-3.5 h-3.5" />
                         <span>Outlook Web</span>
@@ -1469,7 +1469,7 @@ ${qa.answer}
 
                 {/* Persona Tone Switcher */}
                 <div className="flex items-center gap-1.5 p-1 rounded-control bg-sunken border border-line overflow-x-auto">
-                  <span className="text-[10px] font-mono font-bold text-ink-muted px-2 uppercase">Tone:</span>
+                  <span className="text-2xs font-mono font-bold text-ink-muted px-2 uppercase">Tone:</span>
                   {[
                     { id: 'executive', name: 'Executive QA Leader', color: 'text-accent-ink' },
                     { id: 'deeptech', name: 'Deep-Tech Automation', color: 'text-info-ink' },
@@ -1482,7 +1482,7 @@ ${qa.answer}
                         setOutreachTone(t.id as OutreachTone);
                         playSynthSound('click');
                       }}
-                      className={`px-2.5 py-1 text-[11px] font-semibold rounded-control transition-all shrink-0 cursor-pointer ${
+                      className={`px-2.5 py-1 text-xs font-semibold rounded-control transition-all shrink-0 cursor-pointer ${
                         outreachTone === t.id
                           ? 'bg-fill-strong text-ink border border-line-strong'
                           : 'text-ink-muted hover:text-ink'
@@ -1497,7 +1497,7 @@ ${qa.answer}
                   {getTailoredColdPitch(outreachTone)}
                 </div>
 
-                <div className="flex items-center justify-between text-[11px] text-ink-muted font-mono">
+                <div className="flex items-center justify-between text-xs text-ink-muted font-mono">
                   <span>To: {targetEmail || 'talent@company.com'}</span>
                   <span>From: moaid.elmoatasem.bellah@gmail.com</span>
                 </div>
@@ -1516,7 +1516,7 @@ ${qa.answer}
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent-soft text-accent-ink border border-accent-line font-bold">
+                    <span className="text-2xs font-mono px-2 py-0.5 rounded bg-accent-soft text-accent-ink border border-accent-line font-bold">
                       {synthesizedData.ats_answers?.length || 0} QUESTIONS
                     </span>
                   </div>
@@ -1538,7 +1538,7 @@ ${qa.answer}
 
                         <button
                           onClick={() => handleCopy(qa.answer, `ats-${index}`, `Answer ${index + 1}`)}
-                          className="px-2.5 py-1 text-[11px] bg-fill hover:bg-fill-strong text-ink-muted rounded-control border border-line flex items-center gap-1 shrink-0 transition-all cursor-pointer font-mono"
+                          className="px-2.5 py-1 text-xs bg-fill hover:bg-fill-strong text-ink-muted rounded-control border border-line flex items-center gap-1 shrink-0 transition-all cursor-pointer"
                         >
                           {copiedKeys[`ats-${index}`] ? (
                             <Check className="w-3 h-3 text-positive-ink" />
@@ -1571,12 +1571,12 @@ ${qa.answer}
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setIsVoiceInterviewOpen(true)}
-                      className="px-3 py-1.5 text-xs font-mono font-bold bg-accent-soft hover:bg-accent/30 text-accent-ink border border-accent-line rounded-control flex items-center gap-1.5 transition-all cursor-pointer"
+                      className="px-3 py-1.5 text-xs font-bold bg-accent-soft hover:bg-accent/30 text-accent-ink border border-accent-line rounded-control flex items-center gap-1.5 transition-all cursor-pointer"
                     >
                       <Mic className="w-3.5 h-3.5" />
                       <span>Launch Voice Audio Mode</span>
                     </button>
-                    <span className="text-[10px] font-mono font-bold px-2 py-1 bg-positive-soft border border-positive-line text-positive-ink rounded-control">
+                    <span className="text-2xs font-mono font-bold px-2 py-1 bg-positive-soft border border-positive-line text-positive-ink rounded-control">
                       STAR SIMULATOR
                     </span>
                   </div>
@@ -1605,7 +1605,7 @@ ${qa.answer}
 
                 {/* Active Question Box */}
                 <div className="p-4 rounded-card bg-sunken border border-line space-y-2">
-                  <div className="text-[11px] font-mono text-positive-ink uppercase font-bold">
+                  <div className="text-xs font-mono text-positive-ink uppercase font-bold">
                     Target Interview Prompt:
                   </div>
                   <div className="text-xs font-bold text-ink leading-relaxed">
@@ -1615,7 +1615,7 @@ ${qa.answer}
 
                 {/* Candidate Practice Input */}
                 <div className="space-y-2">
-                  <div className="text-[11px] font-mono uppercase text-ink-muted font-bold flex items-center justify-between">
+                  <div className="text-xs font-mono uppercase text-ink-muted font-bold flex items-center justify-between">
                     <label htmlFor="job-synthesizer-practice-star-answer">Your Practice STAR Answer:</label>
                     <button
                       onClick={() =>
@@ -1623,7 +1623,7 @@ ${qa.answer}
                           synthesizedData.ats_answers[activeQuestionIdx]?.answer || ''
                         )
                       }
-                      className="text-[10px] text-info-ink hover:text-info-ink font-mono cursor-pointer"
+                      className="text-2xs text-info-ink hover:text-info-ink cursor-pointer"
                     >
                       Fill with Optimal Answer
                     </button>
@@ -1669,16 +1669,16 @@ ${qa.answer}
                           STAR Score: {practiceFeedback.score}%
                         </span>
                       </div>
-                      <span className="text-[10px] font-mono px-2 py-0.5 bg-positive-soft text-positive-ink font-bold rounded">
+                      <span className="text-2xs font-mono px-2 py-0.5 bg-positive-soft text-positive-ink font-bold rounded">
                         RECRUITER READY
                       </span>
                     </div>
 
                     <div className="space-y-1.5 text-xs">
-                      <div className="text-[11px] font-bold text-ink-muted font-mono">Key Strengths:</div>
+                      <div className="text-xs font-bold text-ink-muted font-mono">Key Strengths:</div>
                       <ul className="space-y-1">
                         {practiceFeedback.strengths.map((s, i) => (
-                          <li key={i} className="text-ink-muted flex items-center gap-1.5 text-[11px]">
+                          <li key={i} className="text-ink-muted flex items-center gap-1.5 text-xs">
                             <span className="w-1.5 h-1.5 rounded-full bg-positive" />
                             <span>{s}</span>
                           </li>
@@ -1686,7 +1686,7 @@ ${qa.answer}
                       </ul>
                     </div>
 
-                    <div className="p-2.5 rounded-control bg-sunken border border-line text-[11px] text-ink-muted">
+                    <div className="p-2.5 rounded-control bg-sunken border border-line text-xs text-ink-muted">
                       <strong className="text-caution-ink font-mono block mb-0.5">Tactical Coaching Tip:</strong>
                       {practiceFeedback.improvement}
                     </div>
@@ -1729,7 +1729,7 @@ ${qa.answer}
                       onClick={() =>
                         handleCopy(getFullMarkdownDossier(), 'dossier', 'Complete Markdown Dossier')
                       }
-                      className="px-4 py-2 text-xs bg-accent hover:bg-accent-strong text-ink rounded-control font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                      className="px-4 py-2 text-xs bg-accent hover:bg-accent-strong text-accent-contrast rounded-control font-bold flex items-center gap-1.5 transition-all cursor-pointer"
                     >
                       {copiedKeys['dossier'] ? (
                         <>
@@ -1789,13 +1789,13 @@ ${qa.answer}
           </div>
           <div>
             <h3 className="text-base font-bold text-ink">Ready to Synthesize Role</h3>
-            <p className="text-xs text-ink-muted max-w-md mx-auto mt-1 leading-relaxed">
+            <p className="text-sm text-ink-muted max-w-md mx-auto mt-1 leading-relaxed">
               Select one of the verified UK sponsor presets above or paste a custom job description, then click "Synthesize Role & Tailor Weaponry".
             </p>
           </div>
           <button
             onClick={handleSynthesize}
-            className="px-6 py-3 text-xs font-extrabold text-ink bg-accent hover:bg-accent-strong rounded-control transition-all inline-flex items-center gap-2 cursor-pointer"
+            className="px-6 py-3 text-xs font-extrabold text-accent-contrast bg-accent hover:bg-accent-strong rounded-control transition-all inline-flex items-center gap-2 cursor-pointer"
           >
             <Zap className="w-4 h-4" />
             <span>Synthesize Monzo Preset Now</span>

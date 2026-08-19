@@ -220,7 +220,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
             </div>
             <div>
               <h1 className="text-base font-bold text-ink tracking-tight">Cherenkov Nexus Onboarding</h1>
-              <p className="text-xs text-ink-muted">Tailor AI synthesis & agent pipelines to your career profile</p>
+              <p className="text-sm text-ink-muted">Tailor AI synthesis & agent pipelines to your career profile</p>
             </div>
           </div>
           <span className="text-xs font-mono px-3 py-1 rounded-full bg-fill-strong border border-line-strong text-info-ink font-semibold">
@@ -245,7 +245,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
               >
                 {step > s.num ? '✓' : s.num}
               </div>
-              <span className={`text-[11px] font-mono hidden sm:inline ${step >= s.num ? 'text-ink font-bold' : 'text-ink-faint'}`}>
+              <span className={`text-xs font-mono hidden sm:inline ${step >= s.num ? 'text-ink font-bold' : 'text-ink-faint'}`}>
                 {s.label}
               </span>
               {s.num < 3 && <div className={`flex-1 h-px ${step > s.num ? 'bg-info/60' : 'bg-fill-strong'}`} />}
@@ -294,7 +294,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
               <div className="space-y-3">
                 <div className="text-center">
                   <h2 className="text-xl font-extrabold text-ink tracking-tight">Select Your Career Archetype</h2>
-                  <p className="text-xs text-ink-muted mt-1">
+                  <p className="text-sm text-ink-muted mt-1">
                     Pre-calibrates inference routing, immigration checks, AST prompt templates, and default views.
                   </p>
                 </div>
@@ -333,7 +333,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                             <div className="min-w-0 space-y-1">
                               <span className="block font-bold text-sm text-ink leading-tight">{preset.label}</span>
                               <span
-                                className="inline-block text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-chip border uppercase whitespace-nowrap"
+                                className="inline-block text-2xs font-mono font-bold px-1.5 py-0.5 rounded-chip border uppercase whitespace-nowrap"
                                 style={{
                                   color: preset.accentColor,
                                   borderColor: `color-mix(in srgb, ${preset.accentColor} 40%, transparent)`,
@@ -344,12 +344,12 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                               </span>
                             </div>
                           </div>
-                          <p className="text-xs text-ink-muted line-clamp-2 leading-relaxed">
+                          <p className="text-sm text-ink-muted line-clamp-2 leading-relaxed">
                             {preset.tagline}
                           </p>
                         </div>
 
-                        <div className="mt-2.5 pt-2 border-t border-line flex items-center justify-between gap-2 text-[11px] font-mono text-ink-faint">
+                        <div className="mt-2.5 pt-2 border-t border-line flex items-center justify-between gap-2 text-xs font-mono text-ink-faint">
                           <span className="truncate">Focus: {preset.profile.title.split('&')[0]}</span>
                           <span className="text-info-ink shrink-0">
                             {preset.profile.workspaceConfig?.defaultTab}
@@ -372,7 +372,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
               <div className="space-y-4">
                 <div className="text-center">
                   <h2 className="text-xl font-extrabold text-ink tracking-tight">The Magic Resume & LinkedIn Parser</h2>
-                  <p className="text-xs text-ink-muted mt-1">
+                  <p className="text-sm text-ink-muted mt-1">
                     Upload your CV or input a public LinkedIn URL to extract your technical vector and detect your archetype.
                   </p>
                 </div>
@@ -402,7 +402,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                       <div className="flex flex-col items-center justify-center gap-2">
                         <FileText className="w-7 h-7 text-info-ink" />
                         <span className="text-sm font-bold text-ink">Drop your Resume PDF / DOCX here</span>
-                        <span className="text-[11px] text-ink-faint font-mono">AST schema parsing with zero cloud data retention</span>
+                        <span className="text-xs text-ink-faint font-mono">AST schema parsing with zero cloud data retention</span>
                       </div>
                     )}
                   </div>
@@ -446,12 +446,12 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                 <span className="font-bold text-ink">{ARCHETYPE_PRESETS[selectedArchetype].label}</span>
               </div>
               <h2 className="text-xl font-extrabold text-ink tracking-tight">The Career Compass</h2>
-              <p className="text-xs text-ink-muted">Configure target job titles, relocation readiness, and work style.</p>
+              <p className="text-sm text-ink-muted">Configure target job titles, relocation readiness, and work style.</p>
             </div>
 
             {/* Target Roles */}
             <div className="space-y-2">
-              <span className="text-[11px] font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
+              <span className="text-xs font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
                 <Briefcase className="w-3.5 h-3.5 text-info-ink" /> Target Roles & Disciplines
               </span>
               <div className="flex flex-wrap gap-2">
@@ -504,7 +504,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
 
             {/* Immigration & Visa Sponsorship Regions */}
             <div className="space-y-2">
-              <span className="text-[11px] font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
+              <span className="text-xs font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
                 <Globe className="w-3.5 h-3.5 text-info-ink" /> Immigration & Sponsorship Verification Regions
               </span>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
@@ -538,7 +538,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
 
             {/* Work Model */}
             <div className="space-y-2">
-              <span className="text-[11px] font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
+              <span className="text-xs font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
                 <Building2 className="w-3.5 h-3.5 text-info-ink" /> Work Preference
               </span>
               <div className="flex bg-surface rounded-control p-1 border border-line-strong">
@@ -588,7 +588,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                 <Lock className="w-6 h-6 text-accent-ink" />
               </div>
               <h2 className="text-xl font-extrabold text-ink tracking-tight">Zero-Trust Privacy & LLM Routing</h2>
-              <p className="text-xs text-ink-muted">Choose how candidate PII and AST synthesis payloads are routed.</p>
+              <p className="text-sm text-ink-muted">Choose how candidate PII and AST synthesis payloads are routed.</p>
             </div>
 
             <div className="space-y-3">
@@ -611,7 +611,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                 <div>
                   <div className="font-bold text-sm text-ink flex items-center gap-2">
                     <span>High-Speed Cloud Inference</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent-soft text-accent-ink">
+                    <span className="text-2xs font-mono px-2 py-0.5 rounded bg-accent-soft text-accent-ink">
                       Gemini 3.7 Flash
                     </span>
                   </div>
@@ -640,7 +640,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                 <div>
                   <div className="font-bold text-sm text-ink flex items-center gap-2">
                     <span>Air-Gapped Zero-Trust (Local Only)</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-positive-soft text-positive-ink">
+                    <span className="text-2xs font-mono px-2 py-0.5 rounded bg-positive-soft text-positive-ink">
                       Qwen 2.5 / Port 3001
                     </span>
                   </div>

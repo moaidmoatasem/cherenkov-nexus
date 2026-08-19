@@ -299,11 +299,11 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
               <h2 className="text-lg font-bold text-ink tracking-tight">
                 Voice Interview Sandbox (Web Speech API)
               </h2>
-              <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold bg-info-soft border border-info-line text-info-ink rounded-full">
+              <span className="px-2.5 py-0.5 text-2xs font-mono font-bold bg-info-soft border border-info-line text-info-ink rounded-full">
                 LIVE INTERACTIVE
               </span>
             </div>
-            <p className="text-xs text-ink-muted mt-0.5">
+            <p className="text-sm text-ink-muted mt-0.5">
               Simulates technical interview rounds for <span className="text-info-ink font-medium">{targetRole}</span> at <span className="text-ink font-medium">{companyName}</span>.
             </p>
           </div>
@@ -351,7 +351,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
               <span className="px-3 py-1 text-xs font-mono bg-info-soft text-info-ink border border-info-line rounded-control">
                 Topic: {currentQuestion.techTopic}
               </span>
-              <span className="px-2.5 py-1 text-[10px] font-mono bg-positive-soft text-positive-ink border border-positive-line rounded-control">
+              <span className="px-2.5 py-1 text-2xs font-mono bg-positive-soft text-positive-ink border border-positive-line rounded-control">
                 {currentQuestion.difficulty} Level
               </span>
             </div>
@@ -360,7 +360,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setSpeechRate((prev) => (prev === 1.0 ? 1.25 : prev === 1.25 ? 0.9 : 1.0))}
-                className="px-2.5 py-1 text-[10px] font-mono bg-fill text-ink-muted rounded-control hover:bg-fill-strong cursor-pointer"
+                className="px-2.5 py-1 text-2xs bg-fill text-ink-muted rounded-control hover:bg-fill-strong cursor-pointer"
                 title="Toggle Voice Playback Speed" aria-label="Toggle Voice Playback Speed"
               >
                 Speed: {speechRate}x
@@ -393,14 +393,14 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
 
             {/* Expected STAR Evaluation Focus */}
             <div className="pt-3 border-t border-line flex flex-wrap items-center gap-2 text-xs">
-              <span className="text-ink-muted font-mono text-[11px] flex items-center gap-1">
+              <span className="text-ink-muted font-mono text-xs flex items-center gap-1">
                 <HelpCircle className="w-3.5 h-3.5 text-info-ink" />
                 Interviewer rubric points:
               </span>
               {currentQuestion.expectedStarPoints.map((pt, i) => (
                 <span
                   key={i}
-                  className="px-2.5 py-0.5 rounded-control bg-fill border border-line text-ink-muted text-[11px]"
+                  className="px-2.5 py-0.5 rounded-control bg-fill border border-line text-ink-muted text-xs"
                 >
                   {pt}
                 </span>
@@ -416,7 +416,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
                   Your Spoken Answer
                 </span>
                 {isListening && (
-                  <span className="flex items-center gap-1.5 px-2.5 py-0.5 text-[10px] font-mono font-bold bg-critical-soft text-critical-ink border border-critical-line rounded-full animate-pulse">
+                  <span className="flex items-center gap-1.5 px-2.5 py-0.5 text-2xs font-mono font-bold bg-critical-soft text-critical-ink border border-critical-line rounded-full animate-pulse">
                     <span className="w-2 h-2 rounded-full bg-critical animate-ping" />
                     RECORDING AUDIO
                   </span>
@@ -428,8 +428,8 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
                 onClick={handleToggleListening}
                 className={`px-4 py-2 text-xs font-bold rounded-control transition-all flex items-center gap-2 cursor-pointer ${
                   isListening
-                    ? 'bg-critical hover:bg-critical text-ink animate-pulse'
-                    : 'bg-info hover:bg-info text-ink'
+                    ? 'bg-critical hover:bg-critical text-accent-contrast animate-pulse'
+                    : 'bg-accent hover:bg-accent-strong text-accent-contrast'
                 }`}
               >
                 {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
@@ -454,7 +454,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
 
             {/* Action Bar */}
             <div className="flex items-center justify-between pt-2">
-              <span className="text-[11px] text-ink-faint font-mono">
+              <span className="text-xs text-ink-faint font-mono">
                 {spokenTranscript.length} chars • {spokenTranscript.split(/\s+/).filter(Boolean).length} words
               </span>
 
@@ -470,7 +470,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
                 <button
                   onClick={handleEvaluateAnswer}
                   disabled={isEvaluating || !spokenTranscript.trim()}
-                  className="px-5 py-2 text-xs font-bold text-ink bg-accent hover:bg-accent-strong disabled:opacity-50 rounded-control transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="px-5 py-2 text-xs font-bold text-accent-contrast bg-accent hover:bg-accent-strong disabled:opacity-50 rounded-control transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Sparkles className={`w-3.5 h-3.5 ${isEvaluating ? 'animate-spin' : ''}`} />
                   <span>{isEvaluating ? 'AI Scoring...' : 'Submit Answer for AI Scoring'}</span>
@@ -495,7 +495,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
                     <h4 className="text-xs font-bold text-positive-ink uppercase tracking-wider font-mono">
                       AI Interviewer Evaluation
                     </h4>
-                    <p className="text-[11px] text-ink-muted">
+                    <p className="text-sm text-ink-muted">
                       Objective scoring against Senior QA leadership standards.
                     </p>
                   </div>
@@ -508,28 +508,28 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                 <div className="p-3.5 rounded-control bg-fill border border-line space-y-1">
-                  <span className="text-[10px] font-mono text-info-ink uppercase block font-bold">
+                  <span className="text-2xs font-mono text-info-ink uppercase block font-bold">
                     Technical Depth
                   </span>
-                  <p className="text-ink-muted leading-relaxed text-[11px]">
+                  <p className="text-ink-muted leading-relaxed text-sm">
                     {currentQuestion.feedback.technicalAccuracy}
                   </p>
                 </div>
 
                 <div className="p-3.5 rounded-control bg-fill border border-line space-y-1">
-                  <span className="text-[10px] font-mono text-accent-ink uppercase block font-bold">
+                  <span className="text-2xs font-mono text-accent-ink uppercase block font-bold">
                     STAR Structure
                   </span>
-                  <p className="text-ink-muted leading-relaxed text-[11px]">
+                  <p className="text-ink-muted leading-relaxed text-sm">
                     {currentQuestion.feedback.starStructure}
                   </p>
                 </div>
 
                 <div className="p-3.5 rounded-control bg-fill border border-line space-y-1">
-                  <span className="text-[10px] font-mono text-caution-ink uppercase block font-bold">
+                  <span className="text-2xs font-mono text-caution-ink uppercase block font-bold">
                     Next Iteration Edge
                   </span>
-                  <p className="text-ink-muted leading-relaxed text-[11px]">
+                  <p className="text-ink-muted leading-relaxed text-sm">
                     {currentQuestion.feedback.improvements}
                   </p>
                 </div>
@@ -537,10 +537,10 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
 
               {/* Ideal High-Scoring Benchmark Answer */}
               <div className="p-4 rounded-control bg-sunken border border-line space-y-1.5">
-                <span className="text-[10px] font-mono text-ink-muted uppercase tracking-wider block font-bold">
+                <span className="text-2xs font-mono text-ink-muted uppercase tracking-wider block font-bold">
                   High-Scoring Architectural Benchmark:
                 </span>
-                <p className="text-xs text-ink-muted font-mono leading-relaxed">
+                <p className="text-sm text-ink-muted font-mono leading-relaxed">
                   {currentQuestion.idealAnswer}
                 </p>
               </div>
@@ -561,7 +561,7 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
             <button
               onClick={handleNext}
               disabled={currentIndex === questions.length - 1}
-              className="px-5 py-2 text-xs font-bold text-ink bg-info hover:opacity-90 disabled:opacity-30 rounded-control transition-all flex items-center gap-1.5 cursor-pointer"
+              className="px-5 py-2 text-xs font-bold text-accent-contrast bg-accent hover:bg-accent-strong disabled:opacity-30 rounded-control transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <span>Next Question</span>
               <ChevronRight className="w-4 h-4" />

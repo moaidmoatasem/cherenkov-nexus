@@ -85,11 +85,11 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold text-ink">Master Profile Anchor</h3>
-                <span className="px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-wider bg-info-soft border border-info-line text-info-ink rounded-full font-bold">
+                <span className="px-2.5 py-0.5 text-2xs font-mono uppercase tracking-wider bg-info-soft border border-info-line text-info-ink rounded-full font-bold">
                   GROUND TRUTH
                 </span>
               </div>
-              <p className="text-xs text-ink-muted">Root candidate identity injected into Gemini agent synthesis pipeline</p>
+              <p className="text-sm text-ink-muted">Root candidate identity injected into Gemini agent synthesis pipeline</p>
             </div>
           </div>
 
@@ -165,7 +165,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                   </div>
 
                   <div className="p-4 rounded-card bg-fill border border-line text-right">
-                    <div className="text-[11px] font-mono text-ink-muted uppercase">Verified Tech Skills</div>
+                    <div className="text-xs font-mono text-ink-muted uppercase">Verified Tech Skills</div>
                     <div className="text-2xl font-black text-info-ink font-mono mt-0.5">{profile.tech_stack.length}</div>
                   </div>
                 </div>
@@ -211,7 +211,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                 <h4 className="text-xs font-bold text-ink uppercase font-mono">
                   Executive Experience Summary
                 </h4>
-                <p className="text-xs text-ink-muted leading-relaxed font-sans bg-fill p-4 rounded-card border border-line">
+                <p className="text-sm text-ink-muted leading-relaxed font-sans bg-fill p-4 rounded-card border border-line">
                   {profile.experience}
                 </p>
               </div>
@@ -222,7 +222,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                   <h4 className="text-xs font-bold text-ink uppercase font-mono">
                     Active & Completed Certifications ({profile.learning_certs?.length || 0})
                   </h4>
-                  <span className="text-[11px] text-positive-ink font-mono font-bold">Auto-Synced into AI Prompt</span>
+                  <span className="text-xs text-positive-ink font-mono font-bold">Auto-Synced into AI Prompt</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {profile.learning_certs?.map((cert) => (
@@ -231,19 +231,19 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                       className="p-4 rounded-card bg-fill border border-line flex items-start justify-between gap-2"
                     >
                       <div>
-                        <span className="text-[10px] font-mono text-info-ink font-bold block">
+                        <span className="text-2xs font-mono text-info-ink font-bold block">
                           {cert.provider}
                         </span>
                         <div className="text-xs font-bold text-ink mt-0.5">{cert.title}</div>
                         <div className="flex flex-wrap gap-1 mt-2">
                           {cert.extracted_skills.map((s) => (
-                            <span key={s} className="px-2 py-0.5 text-[9px] font-mono bg-fill text-ink-muted rounded">
+                            <span key={s} className="px-2 py-0.5 text-2xs font-mono bg-fill text-ink-muted rounded">
                               +{s}
                             </span>
                           ))}
                         </div>
                       </div>
-                      <span className={`px-2.5 py-1 text-[10px] font-mono font-bold rounded-control ${cert.status === 'Completed' ? 'bg-positive-soft text-positive-ink border border-positive-line' : 'bg-caution-soft text-caution-ink border border-caution-line'}`}>
+                      <span className={`px-2.5 py-1 text-2xs font-mono font-bold rounded-control ${cert.status === 'Completed' ? 'bg-positive-soft text-positive-ink border border-positive-line' : 'bg-caution-soft text-caution-ink border border-caution-line'}`}>
                         {cert.status}
                       </span>
                     </div>
@@ -336,7 +336,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 text-xs font-extrabold text-ink bg-accent hover:bg-accent-strong rounded-control cursor-pointer"
+                  className="px-5 py-2.5 text-xs font-extrabold text-accent-contrast bg-accent hover:bg-accent-strong rounded-control cursor-pointer"
                 >
                   Save Profile Changes
                 </button>
@@ -367,7 +367,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
                 </button>
                 <button
                   onClick={handleSaveJson}
-                  className="px-5 py-2.5 text-xs font-extrabold text-ink bg-accent hover:bg-accent-strong rounded-control cursor-pointer"
+                  className="px-5 py-2.5 text-xs font-extrabold text-accent-contrast bg-accent hover:bg-accent-strong rounded-control cursor-pointer"
                 >
                   Save JSON
                 </button>

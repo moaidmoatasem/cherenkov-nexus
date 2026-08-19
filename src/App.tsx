@@ -404,7 +404,7 @@ export default function App() {
                     <span className="font-mono tabular">({applications.length})</span>
                   )}
                   {workspace.id === 'kanban' && kanbanBackend === 'live' && (
-                    <span className="px-1 rounded-chip bg-positive-soft text-positive-ink border border-positive-line font-mono text-[9px] font-bold">
+                    <span className="px-1 rounded-chip bg-positive-soft text-positive-ink border border-positive-line font-mono text-2xs font-bold">
                       DB
                     </span>
                   )}

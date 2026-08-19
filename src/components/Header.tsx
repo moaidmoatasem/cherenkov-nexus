@@ -141,7 +141,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span className={cn('block text-xs font-semibold truncate', selected ? 'text-ink' : 'text-ink-muted')}>
                 {theme.name}
               </span>
-              <span className="block text-[10px] font-mono text-ink-faint truncate">{theme.tag}</span>
+              <span className="block text-2xs font-mono text-ink-faint truncate">{theme.tag}</span>
             </span>
             {selected && <Check className="w-3.5 h-3.5 text-accent-ink shrink-0" />}
           </button>
@@ -179,7 +179,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[13px] font-bold tracking-tight text-ink whitespace-nowrap">
+            <span className="font-mono text-xs font-bold tracking-tight text-ink whitespace-nowrap">
               CHERENKOV NEXUS
             </span>
             <span className="hidden sm:contents">
@@ -188,7 +188,7 @@ export const Header: React.FC<HeaderProps> = ({
               </Badge>
             </span>
           </div>
-          <p className="hidden lg:block text-[11px] leading-4 text-ink-faint whitespace-nowrap">
+          <p className="hidden lg:block text-sm leading-4 text-ink-faint whitespace-nowrap">
             Agentic Career Engine &amp; Multi-Agent QA Hub
           </p>
         </div>
@@ -199,7 +199,7 @@ export const Header: React.FC<HeaderProps> = ({
         <Badge tone="positive" dot font="mono">
           AI AGENTS ONLINE
         </Badge>
-        <span className="flex items-center gap-1.5 font-mono text-[11px] text-ink-faint min-w-0">
+        <span className="flex items-center gap-1.5 font-mono text-xs text-ink-faint min-w-0">
           <Terminal className="w-3.5 h-3.5 text-info-ink shrink-0" />
           <span className="truncate">cherenkov-qa / Playwright / k6</span>
         </span>
@@ -221,7 +221,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Command className="w-3.5 h-3.5" />
             <span className="text-xs font-semibold">Command</span>
-            <kbd className="px-1.5 py-0.5 rounded-chip bg-sunken border border-line font-mono text-[10px] text-ink-faint">
+            <kbd className="px-1.5 py-0.5 rounded-chip bg-sunken border border-line font-mono text-2xs text-ink-faint">
               ⌘K
             </kbd>
           </button>
@@ -343,7 +343,7 @@ export const Header: React.FC<HeaderProps> = ({
             'hover:bg-fill-strong hover:border-accent-line group'
           )}
         >
-          <span className="w-7 h-7 rounded-chip bg-accent text-accent-contrast flex items-center justify-center text-[11px] font-bold shrink-0">
+          <span className="w-7 h-7 rounded-chip bg-accent text-accent-contrast flex items-center justify-center text-xs font-bold shrink-0">
             {initialsOf(profile.name)}
           </span>
           <span className="hidden md:block text-left min-w-0 max-w-[9.5rem]">
@@ -351,7 +351,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="truncate">{profile.name}</span>
               <UserCheck className="w-3 h-3 text-info-ink shrink-0" />
             </span>
-            <span className="block text-[10px] font-mono text-ink-faint truncate">{profile.title}</span>
+            <span className="block text-2xs font-mono text-ink-faint truncate">{profile.title}</span>
           </span>
         </button>
       </div>

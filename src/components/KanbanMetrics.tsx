@@ -144,7 +144,7 @@ export const KanbanMetrics: React.FC<KanbanMetricsProps> = ({ applications }) =>
               Pipeline Telemetry & Conversion Analytics
             </h2>
           </div>
-          <p className="text-xs text-ink-muted mt-1">
+          <p className="text-sm text-ink-muted mt-1">
             Real-time transition velocity and stage conversion rate metrics for Moayed's applications.
           </p>
         </div>
@@ -193,9 +193,9 @@ export const KanbanMetrics: React.FC<KanbanMetricsProps> = ({ applications }) =>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-black text-ink font-mono">{stats.successRateToInterview}%</span>
-            <span className="text-[10px] text-positive-ink font-mono">({stats.stageCounts['Interviewing']} active)</span>
+            <span className="text-2xs text-positive-ink font-mono">({stats.stageCounts['Interviewing']} active)</span>
           </div>
-          <span className="text-[10px] text-ink-faint mt-1">Saved $\rightarrow$ Interview rate</span>
+          <span className="text-2xs text-ink-faint mt-1">Saved $\rightarrow$ Interview rate</span>
         </div>
 
         <div className="p-4 rounded-card bg-fill border border-line flex flex-col justify-between">
@@ -205,9 +205,9 @@ export const KanbanMetrics: React.FC<KanbanMetricsProps> = ({ applications }) =>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-black text-info-ink font-mono">{stats.appliedToInterviewRate}%</span>
-            <span className="text-[10px] text-info-ink font-mono">Benchmark: 15%</span>
+            <span className="text-2xs text-info-ink font-mono">Benchmark: 15%</span>
           </div>
-          <span className="text-[10px] text-ink-faint mt-1">Pitch conversion efficiency</span>
+          <span className="text-2xs text-ink-faint mt-1">Pitch conversion efficiency</span>
         </div>
 
         <div className="p-4 rounded-card bg-fill border border-line flex flex-col justify-between">
@@ -217,9 +217,9 @@ export const KanbanMetrics: React.FC<KanbanMetricsProps> = ({ applications }) =>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-black text-caution-ink font-mono">3.2</span>
-            <span className="text-[10px] text-ink-muted font-mono">Days / Stage</span>
+            <span className="text-2xs text-ink-muted font-mono">Days / Stage</span>
           </div>
-          <span className="text-[10px] text-ink-faint mt-1">Throughput turnaround</span>
+          <span className="text-2xs text-ink-faint mt-1">Throughput turnaround</span>
         </div>
 
         <div className="p-4 rounded-card bg-fill border border-line flex flex-col justify-between">
@@ -229,9 +229,9 @@ export const KanbanMetrics: React.FC<KanbanMetricsProps> = ({ applications }) =>
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-black text-accent-ink font-mono">{stats.sponsorRate}%</span>
-            <span className="text-[10px] text-accent-ink font-mono">({stats.sponsorCount} verified)</span>
+            <span className="text-2xs text-accent-ink font-mono">({stats.sponsorCount} verified)</span>
           </div>
-          <span className="text-[10px] text-ink-faint mt-1">Deterministic Home Office check</span>
+          <span className="text-2xs text-ink-faint mt-1">Deterministic Home Office check</span>
         </div>
       </div>
 
@@ -244,11 +244,11 @@ export const KanbanMetrics: React.FC<KanbanMetricsProps> = ({ applications }) =>
                 <h4 className="text-xs font-bold text-ink uppercase tracking-wider font-mono">
                   Stage Distribution & Cumulative Conversion Funnel
                 </h4>
-                <p className="text-[11px] text-ink-muted">
+                <p className="text-sm text-ink-muted">
                   Visual breakdown of target applications progressing through the 5 QA career stages.
                 </p>
               </div>
-              <span className="text-[10px] font-mono px-2.5 py-1 rounded-control bg-accent-soft text-accent-ink border border-accent-line">
+              <span className="text-2xs font-mono px-2.5 py-1 rounded-control bg-accent-soft text-accent-ink border border-accent-line">
                 Total Tracked: {stats.total}
               </span>
             </div>
@@ -290,11 +290,11 @@ export const KanbanMetrics: React.FC<KanbanMetricsProps> = ({ applications }) =>
                 <h4 className="text-xs font-bold text-ink uppercase tracking-wider font-mono">
                   Pipeline Transition Velocity (Average Days in Stage)
                 </h4>
-                <p className="text-[11px] text-ink-muted">
+                <p className="text-sm text-ink-muted">
                   Mean transit latency compared against target SLA benchmarks (fewer days = faster conversion).
                 </p>
               </div>
-              <span className="text-[10px] font-mono px-2.5 py-1 rounded-control bg-info-soft text-info-ink border border-info-line">
+              <span className="text-2xs font-mono px-2.5 py-1 rounded-control bg-info-soft text-info-ink border border-info-line">
                 Target SLA: &lt; 5 Days
               </span>
             </div>
@@ -356,11 +356,11 @@ export const KanbanMetrics: React.FC<KanbanMetricsProps> = ({ applications }) =>
                 <h4 className="text-xs font-bold text-ink uppercase tracking-wider font-mono">
                   UK Home Office Sponsorship Distribution
                 </h4>
-                <p className="text-[11px] text-ink-muted">
+                <p className="text-sm text-ink-muted">
                   Deterministic alignment against licensed Skilled Worker employers.
                 </p>
               </div>
-              <span className="text-[10px] font-mono px-2.5 py-1 rounded-control bg-positive-soft text-positive-ink border border-positive-line">
+              <span className="text-2xs font-mono px-2.5 py-1 rounded-control bg-positive-soft text-positive-ink border border-positive-line">
                 100% Deterministic Check
               </span>
             </div>

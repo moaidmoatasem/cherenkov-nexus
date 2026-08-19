@@ -13,4 +13,4 @@ export const labelClass = 'block text-xs font-semibold text-ink-muted mb-1.5';
 
 /** Mono caps label that introduces a group of controls or a sub-section. */
 export const sectionLabelClass =
-  'font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-faint';
+  'font-mono text-xs font-semibold uppercase tracking-[0.08em] text-ink-faint';

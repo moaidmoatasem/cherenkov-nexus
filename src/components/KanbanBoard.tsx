@@ -220,11 +220,11 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
               <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
                 Kanban Application Pipeline
               </h1>
-              <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold bg-info-soft border border-info-line text-info-ink rounded-full">
+              <span className="px-2.5 py-0.5 text-2xs font-mono font-bold bg-info-soft border border-info-line text-info-ink rounded-full">
                 {applications.length} TOTAL TARGETS
               </span>
             </div>
-            <p className="text-xs text-ink-muted mt-2 max-w-2xl leading-relaxed">
+            <p className="text-sm text-ink-muted mt-2 max-w-2xl leading-relaxed">
               5-stage tracking pipeline for Moayed's UK & EU sponsorship applications. Drag-and-drop cards between discovery, upskilling, ready pitches, and active rounds.
             </p>
           </div>
@@ -258,7 +258,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
             <button
               onClick={() => setIsAddModalOpen(true)}
-              className="px-5 py-2.5 text-xs font-bold text-ink bg-accent hover:bg-accent-strong rounded-control transition-all flex items-center gap-1.5 cursor-pointer"
+              className="px-5 py-2.5 text-xs font-bold text-accent-contrast bg-accent hover:bg-accent-strong rounded-control transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Add Custom Role</span>
@@ -306,7 +306,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
           </div>
 
           {/* Quick Column Counts Pill Array */}
-          <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
             {COLUMNS.map((col) => {
               const count = applications.filter((a) => a.column === col.id).length;
               return (
@@ -358,12 +358,12 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                       className="w-2 h-2 rounded-full shrink-0 mt-1"
                       style={{ color: col.accentColor, backgroundColor: col.accentColor }}
                     />
-                    <h3 className="text-[11px] font-extrabold text-ink uppercase tracking-wider font-mono leading-4">
+                    <h3 className="text-xs font-extrabold text-ink uppercase tracking-wider font-mono leading-4">
                       {col.name}
                     </h3>
                   </div>
                   <span
-                    className={`px-2 py-0.5 text-[10px] font-mono font-bold rounded-chip shrink-0 ${col.badge}`}
+                    className={`px-2 py-0.5 text-2xs font-mono font-bold rounded-chip shrink-0 ${col.badge}`}
                   >
                     {colApps.length}
                   </span>
@@ -407,7 +407,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                         {/* Top Company & Score */}
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
-                            <span className="text-[11px] font-mono text-info-ink font-bold block truncate">
+                            <span className="text-xs font-mono text-info-ink font-bold block truncate">
                               {app.company}
                             </span>
                             <h4 className="text-xs font-bold text-ink leading-snug mt-0.5 truncate">
@@ -416,14 +416,14 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                           </div>
 
                           {app.matchScore && (
-                            <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-positive-soft border border-positive-line text-positive-ink rounded-control shrink-0">
+                            <span className="px-2 py-0.5 text-2xs font-mono font-bold bg-positive-soft border border-positive-line text-positive-ink rounded-control shrink-0">
                               {app.matchScore}%
                             </span>
                           )}
                         </div>
 
                         {/* Location & Meta Badges */}
-                        <div className="flex flex-wrap gap-1 text-[10px]">
+                        <div className="flex flex-wrap gap-1 text-2xs">
                           <span className="px-2 py-0.5 bg-fill border border-line text-ink-muted rounded-control font-medium">
                             {app.location}
                           </span>
@@ -438,7 +438,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                         {/* Skill Gaps preview */}
                         {app.synthesis?.identified_skill_gaps &&
                           app.synthesis.identified_skill_gaps.length > 0 && (
-                            <div className="text-[10px] text-ink-muted truncate">
+                            <div className="text-2xs text-ink-muted truncate">
                               <span className="text-ink-faint">Target Gaps: </span>
                               <span className="text-caution-ink font-mono">
                                 {app.synthesis.identified_skill_gaps.slice(0, 2).join(', ')}
@@ -451,13 +451,13 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                           {app.synthesis ? (
                             <button
                               onClick={() => setActiveModalApp(app)}
-                              className="text-[11px] font-bold text-accent-ink hover:text-accent-ink flex items-center gap-1 transition-colors cursor-pointer"
+                              className="text-xs font-bold text-accent-ink hover:text-accent-ink flex items-center gap-1 transition-colors cursor-pointer"
                             >
                               <Sparkles className="w-3.5 h-3.5" />
                               <span>View Pitch</span>
                             </button>
                           ) : (
-                            <span className="text-[10px] text-ink-faint italic">Direct Entry</span>
+                            <span className="text-2xs text-ink-faint italic">Direct Entry</span>
                           )}
 
                           <div className="flex items-center gap-1.5">
@@ -465,7 +465,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                             <select
                               value={app.column}
                               onChange={(e) => handleMoveColumn(app, e.target.value as KanbanColumn)}
-                              className="text-[10px] font-mono bg-sunken border border-line text-ink-muted rounded-control px-2 py-1 focus:border-accent-line"
+                              className="text-2xs font-mono bg-sunken border border-line text-ink-muted rounded-control px-2 py-1 focus:border-accent-line"
                             >
                               {COLUMNS.map((c) => (
                                 <option key={c.id} value={c.id}>
@@ -508,7 +508,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
         <div className="p-5 rounded-panel bg-surface border border-line overflow-x-auto shadow-pop">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-line text-ink-muted font-mono text-[11px]">
+              <tr className="border-b border-line text-ink-muted font-mono text-xs">
                 <th className="pb-3 px-3 font-bold">Company & Target Role</th>
                 <th className="pb-3 px-3 font-bold">Pipeline Stage</th>
                 <th className="pb-3 px-3 font-bold">Match Score</th>
@@ -525,7 +525,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                     <div className="text-info-ink text-xs font-mono">{app.jobTitle}</div>
                   </td>
                   <td className="py-3.5 px-3">
-                    <span className="px-2.5 py-1 text-[10px] font-mono font-bold bg-accent-soft border border-accent-line text-accent-ink rounded-control">
+                    <span className="px-2.5 py-1 text-2xs font-mono font-bold bg-accent-soft border border-accent-line text-accent-ink rounded-control">
                       {app.column}
                     </span>
                   </td>
@@ -534,16 +534,16 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                   </td>
                   <td className="py-3.5 px-3">
                     {app.synthesis?.isLicensedSponsor ? (
-                      <span className="px-2.5 py-1 text-[10px] font-mono bg-positive-soft text-positive-ink border border-positive-line rounded-control font-bold">
+                      <span className="px-2.5 py-1 text-2xs font-mono bg-positive-soft text-positive-ink border border-positive-line rounded-control font-bold">
                         Licensed UK Sponsor
                       </span>
                     ) : (
-                      <span className="text-ink-faint text-[11px]">Standard Registry</span>
+                      <span className="text-ink-faint text-xs">Standard Registry</span>
                     )}
                   </td>
                   <td className="py-3.5 px-3 text-ink-muted">
                     <div>{app.location}</div>
-                    <div className="text-[10px] font-mono text-ink-muted">{app.salary || '£95k - £115k'}</div>
+                    <div className="text-2xs font-mono text-ink-muted">{app.salary || '£95k - £115k'}</div>
                   </td>
                   <td className="py-3.5 px-3 text-right">
                     <div className="flex items-center justify-end gap-2">
@@ -589,7 +589,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-ink">{activeModalApp.company}</h3>
-                    <p className="text-xs text-info-ink font-mono">{activeModalApp.jobTitle}</p>
+                    <p className="text-sm text-info-ink font-mono">{activeModalApp.jobTitle}</p>
                   </div>
                 </div>
 
@@ -627,7 +627,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                       <span>Copy Summary</span>
                     </button>
                   </div>
-                  <p className="text-xs text-ink leading-relaxed font-sans">
+                  <p className="text-sm text-ink leading-relaxed font-sans">
                     {activeModalApp.synthesis.tailored_summary}
                   </p>
                 </div>
@@ -671,14 +671,14 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                       <div key={i} className="p-4 rounded-card bg-sunken border border-line space-y-2.5">
                         <div className="flex items-start justify-between gap-2">
                           <span className="text-xs font-bold text-ink flex items-center gap-2">
-                            <span className="w-5 h-5 rounded bg-accent-soft text-accent-ink border border-accent-line text-[10px] font-mono flex items-center justify-center shrink-0">
+                            <span className="w-5 h-5 rounded bg-accent-soft text-accent-ink border border-accent-line text-2xs font-mono flex items-center justify-center shrink-0">
                               Q{i + 1}
                             </span>
                             {qa.question}
                           </span>
                           <button
                             onClick={() => handleCopy(qa.answer, `modal-ans-${i}`, `Answer ${i + 1}`)}
-                            className="px-2.5 py-1 text-[10px] bg-fill text-ink-muted rounded-control hover:bg-fill-strong flex items-center gap-1 shrink-0 cursor-pointer font-mono"
+                            className="px-2.5 py-1 text-2xs bg-fill text-ink-muted rounded-control hover:bg-fill-strong flex items-center gap-1 shrink-0 cursor-pointer"
                           >
                             {copiedKeys[`modal-ans-${i}`] ? (
                               <Check className="w-3.5 h-3.5 text-positive-ink" />
@@ -688,7 +688,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                             <span>Copy</span>
                           </button>
                         </div>
-                        <p className="text-xs text-ink-muted leading-relaxed bg-fill p-3 rounded-control">
+                        <p className="text-sm text-ink-muted leading-relaxed bg-fill p-3 rounded-control">
                           {qa.answer}
                         </p>
                       </div>
@@ -807,7 +807,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2.5 text-xs font-extrabold text-ink bg-accent hover:bg-accent-strong rounded-control cursor-pointer"
+                    className="px-5 py-2.5 text-xs font-extrabold text-accent-contrast bg-accent hover:bg-accent-strong rounded-control cursor-pointer"
                   >
                     Create Card
                   </button>

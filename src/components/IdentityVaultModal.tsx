@@ -110,11 +110,11 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                 <h2 className="text-xl font-bold text-ink tracking-tight">
                   Portable Identity & Zero-Trust Security Vault
                 </h2>
-                <span className="px-2 py-0.5 rounded-full bg-info-soft text-info-ink border border-info-line text-[10px] font-mono font-bold">
+                <span className="px-2 py-0.5 rounded-full bg-info-soft text-info-ink border border-info-line text-2xs font-mono font-bold">
                   AES-256-GCM
                 </span>
               </div>
-              <p className="text-xs text-ink-muted mt-0.5">
+              <p className="text-sm text-ink-muted mt-0.5">
                 Client-side E2EE encryption, zero-egress PII protection, and decentralized verifiable credentials.
               </p>
             </div>
@@ -135,7 +135,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
               <Key className="w-4 h-4 text-info-ink" />
               <span>INFERENCE ROUTING & PII ISOLATION</span>
             </div>
-            <span className="text-[10px] font-mono text-info-ink">Zero-Egress Gateway</span>
+            <span className="text-2xs font-mono text-info-ink">Zero-Egress Gateway</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -152,7 +152,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                 <span className="text-xs font-bold text-ink">Gemini (Cloud)</span>
                 <Globe className="w-4 h-4 text-accent-ink" />
               </div>
-              <p className="text-[10px] text-ink-muted mt-1">
+              <p className="text-2xs text-ink-muted mt-1">
                 Google GenAI Gemini 2.5 Flash for sub-second processing and high-precision synthesis.
               </p>
             </button>
@@ -170,7 +170,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                 <span className="text-xs font-bold text-ink">Ollama (Local)</span>
                 <Cpu className="w-4 h-4 text-positive-ink" />
               </div>
-              <p className="text-[10px] text-ink-muted mt-1">
+              <p className="text-2xs text-ink-muted mt-1">
                 Local Ollama / Qwen2.5-Coder. 100% air-gapped with zero cloud egress.
               </p>
             </button>
@@ -188,7 +188,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                 <span className="text-xs font-bold text-ink">Hybrid Smart Router</span>
                 <Sparkles className="w-4 h-4 text-info-ink" />
               </div>
-              <p className="text-[10px] text-ink-muted mt-1">
+              <p className="text-2xs text-ink-muted mt-1">
                 Routes public JD synthesis to Gemini while isolating private PII to local Ollama.
               </p>
             </button>
@@ -197,7 +197,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
           {/* Endpoint & Local Model Configuration */}
           <div className="pt-3 border-t border-line grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label htmlFor="identity-vault-modal-local-endpoint-ollama-anythingllm" className="block text-[10px] font-mono uppercase text-ink-muted font-bold mb-1 flex items-center gap-1.5">
+              <label htmlFor="identity-vault-modal-local-endpoint-ollama-anythingllm" className="block text-2xs font-mono uppercase text-ink-muted font-bold mb-1 flex items-center gap-1.5">
                 <Server className="w-3 h-3 text-positive-ink" />
                 <span>Local Endpoint (Ollama / AnythingLLM)</span>
               </label>
@@ -217,7 +217,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
             </div>
 
             <div>
-              <label htmlFor="identity-vault-modal-local-model-name-tag" className="block text-[10px] font-mono uppercase text-ink-muted font-bold mb-1 flex items-center gap-1.5">
+              <label htmlFor="identity-vault-modal-local-model-name-tag" className="block text-2xs font-mono uppercase text-ink-muted font-bold mb-1 flex items-center gap-1.5">
                 <Cpu className="w-3 h-3 text-info-ink" />
                 <span>Local Model Name / Tag</span>
               </label>
@@ -245,7 +245,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                     window.dispatchEvent(new CustomEvent('cherenkov_routing_changed', { detail: updated }));
                     onToast('info', 'Defaults Reset', 'Restored Qwen 2.5 & Ollama defaults.');
                   }}
-                  className="px-2.5 py-1.5 rounded-control bg-fill hover:bg-fill-strong text-[10px] font-mono text-ink-muted hover:text-ink border border-line cursor-pointer"
+                  className="px-2.5 py-1.5 rounded-control bg-fill hover:bg-fill-strong text-2xs text-ink-muted hover:text-ink border border-line cursor-pointer"
                   title="Reset to Qwen defaults" aria-label="Reset to Qwen defaults"
                 >
                   Reset
@@ -262,7 +262,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
               <Lock className="w-4 h-4 text-accent-ink" />
               <span>CLIENT-SIDE E2EE MASTER PROFILE VAULT</span>
             </div>
-            <span className="text-[10px] font-mono text-ink-muted">
+            <span className="text-2xs font-mono text-ink-muted">
               Fingerprint: <span className="text-info-ink">{config.vaultKeyHash?.slice(0, 16)}...</span>
             </span>
           </div>
@@ -275,7 +275,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                   Vault Status: {isLocked ? 'Encrypted & Locked' : 'Decrypted & Active in Memory'}
                 </span>
               </div>
-              <p className="text-[11px] text-ink-muted mt-1">
+              <p className="text-sm text-ink-muted mt-1">
                 {isLocked
                   ? 'All local profile fields are AES-GCM encrypted. Unlock with your master passphrase.'
                   : 'Profile data is unencrypted in volatile React memory for active synthesis.'}
@@ -323,7 +323,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
               <Award className="w-4 h-4 text-positive-ink" />
               <span>CRYPTOGRAPHICALLY VERIFIED CREDENTIALS</span>
             </div>
-            <span className="text-[10px] font-mono text-positive-ink">Ed25519 Verified</span>
+            <span className="text-2xs font-mono text-positive-ink">Ed25519 Verified</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -335,20 +335,20 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                 <div className="flex items-start justify-between">
                   <div>
                     <h4 className="text-xs font-bold text-ink">{b.name}</h4>
-                    <p className="text-[10px] text-ink-muted font-mono">Issuer: {b.issuer}</p>
+                    <p className="text-2xs text-ink-muted font-mono">Issuer: {b.issuer}</p>
                   </div>
                   <CheckCircle2 className="w-4 h-4 text-positive-ink shrink-0" />
                 </div>
 
-                <div className="text-[9px] font-mono text-ink-faint truncate">
+                <div className="text-2xs font-mono text-ink-faint truncate">
                   Sig: {b.cryptoSignature}
                 </div>
 
                 <div className="pt-2 border-t border-line flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-ink-muted">{b.issueDate}</span>
+                  <span className="text-2xs font-mono text-ink-muted">{b.issueDate}</span>
                   <button
                     onClick={() => handleCopyBadgeSig(b)}
-                    className="text-[10px] font-mono text-info-ink hover:text-info-ink flex items-center gap-1 cursor-pointer"
+                    className="text-2xs text-info-ink hover:text-info-ink flex items-center gap-1 cursor-pointer"
                   >
                     {copiedBadgeId === b.id ? <Check className="w-3 h-3 text-positive-ink" /> : <Copy className="w-3 h-3" />}
                     <span>{copiedBadgeId === b.id ? 'Copied' : 'Copy Proof'}</span>
@@ -363,7 +363,7 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
         <div className="flex justify-end pt-2">
           <button
             onClick={onClose}
-            className="px-6 py-2.5 rounded-control bg-info hover:opacity-90 text-ink text-xs font-bold font-mono cursor-pointer"
+            className="px-6 py-2.5 rounded-control bg-accent hover:bg-accent-strong text-accent-contrast text-xs font-bold cursor-pointer"
           >
             Done & Save Settings
           </button>

@@ -42,11 +42,11 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
                 <h2 className="text-base font-extrabold text-ink">
                   System Telemetry & Multi-Agent Health
                 </h2>
-                <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-positive-soft border border-positive-line text-positive-ink rounded-full">
+                <span className="px-2 py-0.5 text-2xs font-mono font-bold bg-positive-soft border border-positive-line text-positive-ink rounded-full">
                   ALL SYSTEMS OPERATIONAL
                 </span>
               </div>
-              <p className="text-xs text-ink-muted">
+              <p className="text-sm text-ink-muted">
                 Observability metrics for Playwright scraping, Home Office register indexing, and Gemini 2.5 Flash AST generation.
               </p>
             </div>
@@ -65,27 +65,27 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
           {/* Key Metrics Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="p-4 rounded-card bg-sunken border border-line space-y-1">
-              <div className="text-[10px] font-mono uppercase text-ink-muted">Scraper Success Rate</div>
+              <div className="text-2xs font-mono uppercase text-ink-muted">Scraper Success Rate</div>
               <div className="text-xl font-mono font-black text-positive-ink">99.8%</div>
-              <div className="text-[10px] text-ink-faint font-mono">Cheerio + Playwright fallback</div>
+              <div className="text-2xs text-ink-faint font-mono">Cheerio + Playwright fallback</div>
             </div>
 
             <div className="p-4 rounded-card bg-sunken border border-line space-y-1">
-              <div className="text-[10px] font-mono uppercase text-ink-muted">Average Latency</div>
+              <div className="text-2xs font-mono uppercase text-ink-muted">Average Latency</div>
               <div className="text-xl font-mono font-black text-info-ink">412 ms</div>
-              <div className="text-[10px] text-ink-faint font-mono">Edge-proxied scraping</div>
+              <div className="text-2xs text-ink-faint font-mono">Edge-proxied scraping</div>
             </div>
 
             <div className="p-4 rounded-card bg-sunken border border-line space-y-1">
-              <div className="text-[10px] font-mono uppercase text-ink-muted">UK Sponsors Indexed</div>
+              <div className="text-2xs font-mono uppercase text-ink-muted">UK Sponsors Indexed</div>
               <div className="text-xl font-mono font-black text-accent-ink">114,820</div>
-              <div className="text-[10px] text-ink-faint font-mono">Live Home Office DB</div>
+              <div className="text-2xs text-ink-faint font-mono">Live Home Office DB</div>
             </div>
 
             <div className="p-4 rounded-card bg-sunken border border-line space-y-1">
-              <div className="text-[10px] font-mono uppercase text-ink-muted">AST Schema Integrity</div>
+              <div className="text-2xs font-mono uppercase text-ink-muted">AST Schema Integrity</div>
               <div className="text-xl font-mono font-black text-caution-ink">100%</div>
-              <div className="text-[10px] text-ink-faint font-mono">JSON strict invariants</div>
+              <div className="text-2xs text-ink-faint font-mono">JSON strict invariants</div>
             </div>
           </div>
 
@@ -103,12 +103,12 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
                   <div className="w-2.5 h-2.5 rounded-full bg-positive" />
                   <div>
                     <div className="font-semibold text-ink">Scout & Ingestion Agent</div>
-                    <div className="text-[11px] text-ink-muted font-mono">
+                    <div className="text-xs text-ink-muted font-mono">
                       Playwright Headless + Cheerio DOM parsing + noise stripper (nav/footer)
                     </div>
                   </div>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-positive-soft text-positive-ink border border-positive-line">
+                <span className="text-2xs font-mono px-2 py-0.5 rounded bg-positive-soft text-positive-ink border border-positive-line">
                   HEALTHY
                 </span>
               </div>
@@ -119,12 +119,12 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
                   <div className="w-2.5 h-2.5 rounded-full bg-info" />
                   <div>
                     <div className="font-semibold text-ink">Visa Radar & Sponsor Validator</div>
-                    <div className="text-[11px] text-ink-muted font-mono">
+                    <div className="text-xs text-ink-muted font-mono">
                       UK Home Office Register + Fuzzy company name matcher (Levenshtein + alias check)
                     </div>
                   </div>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-info-soft text-info-ink border border-info-line">
+                <span className="text-2xs font-mono px-2 py-0.5 rounded bg-info-soft text-info-ink border border-info-line">
                   SYNCED
                 </span>
               </div>
@@ -135,12 +135,12 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
                   <div className="w-2.5 h-2.5 rounded-full bg-accent" />
                   <div>
                     <div className="font-semibold text-ink">STAR Synthesis & Pitch Generator</div>
-                    <div className="text-[11px] text-ink-muted font-mono">
+                    <div className="text-xs text-ink-muted font-mono">
                       Gemini 2.5 Flash / Local LLM fallback (Qwen-2.5) with Master Profile constraints
                     </div>
                   </div>
                 </div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent-soft text-accent-ink border border-accent-line">
+                <span className="text-2xs font-mono px-2 py-0.5 rounded bg-accent-soft text-accent-ink border border-accent-line">
                   RESONATING
                 </span>
               </div>
@@ -149,11 +149,11 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
 
           {/* Engine Runtime Stack */}
           <div className="p-4 rounded-card bg-sunken border border-line space-y-2">
-            <div className="text-[11px] font-mono uppercase text-ink-muted font-bold flex items-center justify-between">
+            <div className="text-xs font-mono uppercase text-ink-muted font-bold flex items-center justify-between">
               <span>Execution Runtime Configuration</span>
               <span className="text-info-ink">Node.js 22 LTS • React 18</span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11px] font-mono text-ink-muted">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-mono text-ink-muted">
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-positive-ink" />
                 <span>Playwright v1.42</span>
@@ -183,7 +183,7 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-line bg-sunken flex items-center justify-between text-[11px] font-mono">
+        <div className="p-4 border-t border-line bg-sunken flex items-center justify-between text-xs font-mono">
           <div className="text-ink-muted">
             Node Server Port: <span className="text-info-ink">3000</span> (Reverse Proxied)
           </div>

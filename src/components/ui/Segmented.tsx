@@ -51,7 +51,7 @@ export function Segmented<T extends string>({
             className={cn(
               'flex-1 inline-flex items-center justify-center gap-1.5 rounded-chip font-semibold whitespace-nowrap',
               'transition-colors duration-150 cursor-pointer',
-              size === 'sm' ? 'h-6 px-2 text-[11px]' : 'h-8 px-3 text-xs',
+              size === 'sm' ? 'h-6 px-2 text-xs' : 'h-8 px-3 text-xs',
               selected
                 ? 'bg-accent text-accent-contrast'
                 : 'text-ink-muted hover:text-ink hover:bg-fill'

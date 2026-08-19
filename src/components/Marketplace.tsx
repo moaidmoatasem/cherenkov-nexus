@@ -163,7 +163,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
           <div className="flex flex-wrap sm:flex-nowrap items-center gap-3">
             <button
               onClick={() => setIsGitHubModalOpen(true)}
-              className="px-4 py-2.5 rounded-card bg-accent hover:bg-accent-strong text-ink text-xs font-bold font-mono flex items-center gap-2 cursor-pointer transition-all hover:scale-[1.02]"
+              className="px-4 py-2.5 rounded-card bg-accent hover:bg-accent-strong text-accent-contrast text-xs font-bold flex items-center gap-2 cursor-pointer transition-all hover:scale-[1.02]"
             >
               <Github className="w-4 h-4" />
               <span>{linkedRepo ? 'GitHub Synced' : 'GitHub Repository Sync'}</span>
@@ -174,7 +174,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
 
             <button
               onClick={() => setIsPublishModalOpen(true)}
-              className="px-4 py-2.5 rounded-card bg-info hover:opacity-90 text-ink text-xs font-bold font-mono flex items-center gap-2 cursor-pointer transition-all hover:scale-[1.02]"
+              className="px-4 py-2.5 rounded-card bg-accent hover:bg-accent-strong text-accent-contrast text-xs font-bold flex items-center gap-2 cursor-pointer transition-all hover:scale-[1.02]"
             >
               <Plus className="w-4 h-4" />
               <span>Publish MCP Server</span>
@@ -187,7 +187,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
           <div data-testid="mcp-live-status" className="mt-4 p-3.5 rounded-card bg-sunken/80 border border-accent-line flex flex-wrap items-center gap-x-5 gap-y-2">
             <div className="flex items-center gap-2">
               <Server className="w-4 h-4 text-accent-ink" />
-              <span className="text-[10px] font-mono font-bold tracking-widest text-ink-muted">
+              <span className="text-2xs font-mono font-bold tracking-widest text-ink-muted">
                 LIVE MCP HOST
               </span>
             </div>
@@ -196,7 +196,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                 {mcpLive.servers.map((s) => (
                   <div
                     key={s.name}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-control text-[10px] font-mono font-bold bg-sunken/80 border border-line-strong text-ink-muted"
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-control text-2xs font-mono font-bold bg-sunken/80 border border-line-strong text-ink-muted"
                   >
                     <span
                       className={`w-1.5 h-1.5 rounded-full ${
@@ -207,13 +207,13 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                     <span className="text-ink-faint">({s.toolNames.length} tools)</span>
                   </div>
                 ))}
-                <span className="text-[10px] font-mono font-bold text-positive-ink flex items-center gap-1">
+                <span className="text-2xs font-mono font-bold text-positive-ink flex items-center gap-1">
                   <CheckCircle2 className="w-3 h-3" />
                   HOST {mcpLive.ready ? 'ONLINE' : 'DEGRADED'}
                 </span>
               </div>
             ) : (
-              <div className="flex items-center gap-2 text-[10px] font-mono font-bold text-caution-ink">
+              <div className="flex items-center gap-2 text-2xs font-mono font-bold text-caution-ink">
                 <RefreshCw className="w-3 h-3 animate-spin" />
                 CONNECTING…
               </div>
@@ -233,17 +233,17 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                   {linkedRepo ? `Linked Repository: ${linkedRepo.repoName}` : 'GitHub Codebase AST Analyzer'}
                 </h3>
                 {linkedRepo ? (
-                  <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-positive-soft text-positive-ink border border-positive-line rounded-full flex items-center gap-1">
+                  <span className="px-2 py-0.5 text-2xs font-mono font-bold bg-positive-soft text-positive-ink border border-positive-line rounded-full flex items-center gap-1">
                     <Check className="w-2.5 h-2.5" />
                     {linkedRepo.alignmentScore}% TECHNICAL FIT
                   </span>
                 ) : (
-                  <span className="px-2 py-0.5 text-[9px] font-mono text-ink-muted bg-fill rounded-full">
+                  <span className="px-2 py-0.5 text-2xs font-mono text-ink-muted bg-fill rounded-full">
                     AIR-GAPPED AST SCAN
                   </span>
                 )}
               </div>
-              <p className="text-[11px] text-ink-muted mt-0.5">
+              <p className="text-sm text-ink-muted mt-0.5">
                 {linkedRepo
                   ? `Extracted ${linkedRepo.codeProofPoints?.length || 4} hard proof points (Playwright CDP, k6 spikes, CodeQL SAST) into candidate profile.`
                   : 'Link your GitHub repo to automatically extract test architecture proof points and align with enterprise JD criteria.'}
@@ -253,7 +253,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
 
           <button
             onClick={() => setIsGitHubModalOpen(true)}
-            className="px-4 py-2 rounded-control text-xs font-mono font-bold bg-fill-strong hover:bg-fill-strong text-info-ink border border-info-line flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
+            className="px-4 py-2 rounded-control text-xs font-bold bg-fill-strong hover:bg-fill-strong text-info-ink border border-info-line flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
           >
             <span>{linkedRepo ? 'Rescan / View Code Proof' : 'Link Repository'}</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -268,7 +268,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
             </div>
             <div>
               <div className="text-xl font-bold text-ink font-mono">{stats.installed} / {stats.total}</div>
-              <div className="text-[11px] text-ink-muted">Active Connectors</div>
+              <div className="text-xs text-ink-muted">Active Connectors</div>
             </div>
           </div>
 
@@ -278,7 +278,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
             </div>
             <div>
               <div className="text-xl font-bold text-positive-ink font-mono">100% Stdio</div>
-              <div className="text-[11px] text-ink-muted">Zero-Egress Security</div>
+              <div className="text-xs text-ink-muted">Zero-Egress Security</div>
             </div>
           </div>
 
@@ -288,7 +288,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
             </div>
             <div>
               <div className="text-xl font-bold text-accent-ink font-mono">{(stats.totalDownloads / 1000).toFixed(1)}k</div>
-              <div className="text-[11px] text-ink-muted">Global Installs</div>
+              <div className="text-xs text-ink-muted">Global Installs</div>
             </div>
           </div>
 
@@ -298,7 +298,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
             </div>
             <div>
               <div className="text-xl font-bold text-caution-ink font-mono">2026-07-28</div>
-              <div className="text-[11px] text-ink-muted">MCP Standard Spec</div>
+              <div className="text-xs text-ink-muted">MCP Standard Spec</div>
             </div>
           </div>
         </div>
@@ -327,7 +327,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
               }`}
             >
               <span>{tab.label}</span>
-              <span className="ml-1.5 text-[10px] opacity-75 font-mono">({tab.count})</span>
+              <span className="ml-1.5 text-2xs opacity-75 font-mono">({tab.count})</span>
             </button>
           ))}
         </div>
@@ -359,16 +359,16 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                 {/* Header info */}
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-info-ink px-2 py-0.5 rounded bg-info-soft border border-info-line">
+                    <span className="text-2xs font-mono font-bold uppercase tracking-wider text-info-ink px-2 py-0.5 rounded bg-info-soft border border-info-line">
                       {pkg.category.toUpperCase()}
                     </span>
                     <h3 className="text-base font-bold text-ink mt-2 group-hover:text-info-ink transition-colors">
                       {pkg.name}
                     </h3>
-                    <div className="text-[11px] text-ink-muted flex items-center gap-2 mt-1">
+                    <div className="text-xs text-ink-muted flex items-center gap-2 mt-1">
                       <span>by {pkg.author}</span>
                       <span>•</span>
-                      <span className="font-mono text-[10px]">v{pkg.version}</span>
+                      <span className="font-mono text-2xs">v{pkg.version}</span>
                     </div>
                   </div>
 
@@ -379,7 +379,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                 </div>
 
                 {/* Description */}
-                <p className="text-xs text-ink-muted line-clamp-3 leading-relaxed">
+                <p className="text-sm text-ink-muted line-clamp-3 leading-relaxed">
                   {pkg.description}
                 </p>
 
@@ -388,7 +388,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                   {pkg.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-2 py-0.5 rounded-control bg-fill border border-line text-[10px] text-ink-muted font-mono"
+                      className="px-2 py-0.5 rounded-control bg-fill border border-line text-2xs text-ink-muted font-mono"
                     >
                       #{tag}
                     </span>
@@ -397,7 +397,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
 
                 {/* Capabilities list preview */}
                 <div className="p-3 rounded-card bg-sunken border border-line space-y-1.5">
-                  <div className="text-[10px] font-mono text-ink-muted font-bold uppercase tracking-wider flex items-center justify-between">
+                  <div className="text-2xs font-mono text-ink-muted font-bold uppercase tracking-wider flex items-center justify-between">
                     <span>Exposed MCP Tools</span>
                     <span className="text-info-ink lowercase">{pkg.transport} transport</span>
                   </div>
@@ -405,7 +405,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                     {pkg.capabilities.map((cap) => (
                       <span
                         key={cap}
-                        className="text-[10px] font-mono bg-info-soft text-info-ink px-1.5 py-0.5 rounded"
+                        className="text-2xs font-mono bg-info-soft text-info-ink px-1.5 py-0.5 rounded"
                       >
                         {cap}()
                       </span>
@@ -428,7 +428,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                   {pkg.installed && (
                     <button
                       onClick={() => handleToggleActive(pkg.id)}
-                      className={`px-2.5 py-1.5 rounded-control text-[11px] font-bold font-mono transition-all cursor-pointer ${
+                      className={`px-2.5 py-1.5 rounded-control text-xs font-bold font-mono transition-all cursor-pointer ${
                         pkg.active
                           ? 'bg-positive-soft text-positive-ink border border-positive-line'
                           : 'bg-sunken text-ink-muted border border-line-strong'
@@ -443,7 +443,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                     className={`px-3.5 py-1.5 rounded-control text-xs font-bold font-mono flex items-center gap-1.5 transition-all cursor-pointer ${
                       pkg.installed
                         ? 'bg-critical-soft hover:bg-critical-soft text-critical-ink border border-critical-line'
-                        : 'bg-info hover:opacity-90 text-ink'
+                        : 'bg-accent hover:bg-accent-strong text-accent-contrast'
                     }`}
                   >
                     {pkg.installed ? (
@@ -481,7 +481,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-ink">{selectedPackage.name}</h3>
-                  <p className="text-xs text-ink-muted">Author: {selectedPackage.author} • v{selectedPackage.version}</p>
+                  <p className="text-sm text-ink-muted">Author: {selectedPackage.author} • v{selectedPackage.version}</p>
                 </div>
               </div>
               <button
@@ -495,7 +495,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
             <div className="space-y-4">
               <div>
                 <h4 className="text-xs font-mono font-bold text-ink-muted uppercase">Description</h4>
-                <p className="text-xs text-ink-muted mt-1 leading-relaxed">{selectedPackage.description}</p>
+                <p className="text-sm text-ink-muted mt-1 leading-relaxed">{selectedPackage.description}</p>
               </div>
 
               <div>
@@ -537,7 +537,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                     handleToggleInstall(selectedPackage.id);
                     setSelectedPackage(null);
                   }}
-                  className="px-5 py-2 text-xs font-bold font-mono rounded-control bg-info hover:bg-info text-ink-inverse cursor-pointer"
+                  className="px-5 py-2 text-xs font-bold rounded-control bg-accent hover:bg-accent-strong text-ink-inverse cursor-pointer"
                 >
                   {selectedPackage.installed ? 'Uninstall MCP' : 'Install Connector'}
                 </button>
@@ -565,13 +565,13 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
               </button>
             </div>
 
-            <p className="text-xs text-ink-muted">
+            <p className="text-sm text-ink-muted">
               Publish your custom Model Context Protocol server or Swarm strategy pack into your local registry.
             </p>
 
             <div className="space-y-3">
               <div>
-                <label htmlFor="marketplace-package-name" className="text-[11px] font-mono text-ink-muted">Package Name</label>
+                <label htmlFor="marketplace-package-name" className="text-xs font-mono text-ink-muted">Package Name</label>
                 <input id="marketplace-package-name"
                   type="text"
                   placeholder="e.g. Canada Express Entry MCP"
@@ -580,7 +580,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
               </div>
 
               <div>
-                <label htmlFor="marketplace-command-stdio-endpoint" className="text-[11px] font-mono text-ink-muted">Command / Stdio Endpoint</label>
+                <label htmlFor="marketplace-command-stdio-endpoint" className="text-xs font-mono text-ink-muted">Command / Stdio Endpoint</label>
                 <input id="marketplace-command-stdio-endpoint"
                   type="text"
                   placeholder="npx -y @my-org/mcp-server@latest"
@@ -589,7 +589,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
               </div>
 
               <div>
-                <label htmlFor="marketplace-category" className="text-[11px] font-mono text-ink-muted">Category</label>
+                <label htmlFor="marketplace-category" className="text-xs font-mono text-ink-muted">Category</label>
                 <select id="marketplace-category" className="w-full px-3 py-2 mt-1 rounded-control bg-sunken border border-line text-xs text-ink focus:border-info-line">
                   <option value="visa">Regional Visa Validator</option>
                   <option value="ats">ATS Direct Connector</option>
@@ -611,7 +611,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                   onToast('success', 'MCP Registered', 'Custom MCP server added to local registry.');
                   setIsPublishModalOpen(false);
                 }}
-                className="px-5 py-2 text-xs font-bold font-mono rounded-control bg-info hover:bg-info text-ink-inverse"
+                className="px-5 py-2 text-xs font-bold font-mono rounded-control bg-accent hover:bg-accent-strong text-ink-inverse"
               >
                 Publish to Local Registry
               </button>

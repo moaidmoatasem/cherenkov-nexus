@@ -143,11 +143,11 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
                 <h2 className="text-xl font-bold text-ink tracking-tight">
                   Dual-Engine Synthesis Benchmark: Cloud vs. Local
                 </h2>
-                <span className="px-2.5 py-0.5 rounded-full bg-info-soft text-info-ink border border-info-line text-[10px] font-mono font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-info-soft text-info-ink border border-info-line text-2xs font-mono font-bold">
                   CONCURRENT INFERENCE
                 </span>
               </div>
-              <p className="text-xs text-ink-muted mt-0.5">
+              <p className="text-sm text-ink-muted mt-0.5">
                 Run simultaneous synthesis across <strong>Google Gemini 2.5 Flash</strong> and <strong>Local {config.localModel}</strong> to benchmark latency, STAR depth, and resume tailoring quality.
               </p>
             </div>
@@ -157,7 +157,7 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
             <button
               onClick={handleRunComparison}
               disabled={isRunning}
-              className="px-3.5 py-1.5 rounded-control bg-info-soft hover:bg-info-soft text-info-ink border border-info-line text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer disabled:opacity-50 transition-all"
+              className="px-3.5 py-1.5 rounded-control bg-info-soft hover:bg-info-soft text-info-ink border border-info-line text-xs font-bold flex items-center gap-1.5 cursor-pointer disabled:opacity-50 transition-all"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isRunning ? 'animate-spin' : ''}`} />
               <span>{isRunning ? 'Benchmarking...' : 'Re-Run Comparison'}</span>
@@ -181,7 +181,7 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
             <span className="text-ink-muted font-mono">Company:</span>
             <span className="text-info-ink font-bold">{companyName || 'Target Company'}</span>
           </div>
-          <div className="text-[11px] font-mono text-ink-muted">
+          <div className="text-xs font-mono text-ink-muted">
             Local Endpoint: <span className="text-positive-ink">{config.localEndpoint}</span>
           </div>
         </div>
@@ -193,7 +193,7 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
             <div className="text-sm font-bold text-ink font-mono">
               Running Parallel Inference Across Gemini 2.5 & Local Qwen Endpoint...
             </div>
-            <p className="text-xs text-ink-muted">
+            <p className="text-sm text-ink-muted">
               Measuring latency, AST alignment score, and STAR hook quality.
             </p>
           </div>
@@ -212,12 +212,12 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
                     </div>
                     <div>
                       <h3 className="text-sm font-bold text-ink">Google Gemini 2.5 Flash</h3>
-                      <span className="text-[10px] font-mono text-accent-ink">Cloud Enterprise Engine</span>
+                      <span className="text-2xs font-mono text-accent-ink">Cloud Enterprise Engine</span>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className="flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-control bg-sunken text-ink-muted border border-line">
+                    <span className="flex items-center gap-1 text-2xs font-mono px-2 py-0.5 rounded-control bg-sunken text-ink-muted border border-line">
                       <Clock className="w-3 h-3 text-info-ink" />
                       <span>{geminiResult?.latencyMs || 220} ms</span>
                     </span>
@@ -230,32 +230,32 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
                 {/* Content */}
                 <div className="mt-4 space-y-3">
                   <div>
-                    <span className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
+                    <span className="text-2xs font-mono uppercase text-ink-muted font-bold block mb-1">
                       3-Sentence Executive Summary:
                     </span>
-                    <p className="text-xs text-ink leading-relaxed p-3 rounded-control bg-sunken border border-line">
+                    <p className="text-sm text-ink leading-relaxed p-3 rounded-control bg-sunken border border-line">
                       {geminiResult?.tailored_summary}
                     </p>
                   </div>
 
                   <div>
-                    <span className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
+                    <span className="text-2xs font-mono uppercase text-ink-muted font-bold block mb-1">
                       Cold Email Opening Hook:
                     </span>
-                    <p className="text-xs text-ink-muted font-mono p-3 rounded-control bg-sunken border border-line italic">
+                    <p className="text-sm text-ink-muted font-mono p-3 rounded-control bg-sunken border border-line italic">
                       "{geminiResult?.cold_email_hook}"
                     </p>
                   </div>
 
                   <div>
-                    <span className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
+                    <span className="text-2xs font-mono uppercase text-ink-muted font-bold block mb-1">
                       Identified Tech Skill Gaps:
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {geminiResult?.identified_gaps?.map((gap, i) => (
                         <span
                           key={i}
-                          className="px-2 py-0.5 text-[10px] font-mono rounded bg-accent-soft text-accent-ink border border-accent-line"
+                          className="px-2 py-0.5 text-2xs font-mono rounded bg-accent-soft text-accent-ink border border-accent-line"
                         >
                           {gap}
                         </span>
@@ -271,7 +271,7 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
                   onClick={() =>
                     handleCopy(geminiResult?.tailored_summary || '', 'gemini_summary', 'Gemini Summary')
                   }
-                  className="px-3 py-1.5 rounded-control bg-fill hover:bg-fill-strong text-xs font-mono text-ink-muted flex items-center gap-1.5 cursor-pointer"
+                  className="px-3 py-1.5 rounded-control bg-fill hover:bg-fill-strong text-xs text-ink-muted flex items-center gap-1.5 cursor-pointer"
                 >
                   {copiedKey === 'gemini_summary' ? <Check className="w-3.5 h-3.5 text-positive-ink" /> : <Copy className="w-3.5 h-3.5" />}
                   <span>{copiedKey === 'gemini_summary' ? 'Copied' : 'Copy'}</span>
@@ -285,7 +285,7 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
                       onClose();
                     }
                   }}
-                  className="px-3.5 py-1.5 rounded-control bg-accent hover:bg-accent text-ink text-xs font-bold font-mono flex items-center gap-1.5 cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-control bg-accent hover:bg-accent text-ink text-xs font-bold flex items-center gap-1.5 cursor-pointer"
                 >
                   <span>Apply This Summary</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -303,12 +303,12 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
                     </div>
                     <div>
                       <h3 className="text-sm font-bold text-ink">{localResult?.model || 'Local Qwen 2.5'}</h3>
-                      <span className="text-[10px] font-mono text-positive-ink">Zero-Egress Air-Gapped Engine</span>
+                      <span className="text-2xs font-mono text-positive-ink">Zero-Egress Air-Gapped Engine</span>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className="flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-control bg-sunken text-ink-muted border border-line">
+                    <span className="flex items-center gap-1 text-2xs font-mono px-2 py-0.5 rounded-control bg-sunken text-ink-muted border border-line">
                       <Clock className="w-3 h-3 text-positive-ink" />
                       <span>{localResult?.latencyMs || 85} ms</span>
                     </span>
@@ -321,32 +321,32 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
                 {/* Content */}
                 <div className="mt-4 space-y-3">
                   <div>
-                    <span className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
+                    <span className="text-2xs font-mono uppercase text-ink-muted font-bold block mb-1">
                       3-Sentence Executive Summary:
                     </span>
-                    <p className="text-xs text-ink leading-relaxed p-3 rounded-control bg-sunken border border-line">
+                    <p className="text-sm text-ink leading-relaxed p-3 rounded-control bg-sunken border border-line">
                       {localResult?.tailored_summary}
                     </p>
                   </div>
 
                   <div>
-                    <span className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
+                    <span className="text-2xs font-mono uppercase text-ink-muted font-bold block mb-1">
                       Cold Email Opening Hook:
                     </span>
-                    <p className="text-xs text-ink-muted font-mono p-3 rounded-control bg-sunken border border-line italic">
+                    <p className="text-sm text-ink-muted font-mono p-3 rounded-control bg-sunken border border-line italic">
                       "{localResult?.cold_email_hook}"
                     </p>
                   </div>
 
                   <div>
-                    <span className="text-[10px] font-mono uppercase text-ink-muted font-bold block mb-1">
+                    <span className="text-2xs font-mono uppercase text-ink-muted font-bold block mb-1">
                       Identified Tech Skill Gaps:
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {localResult?.identified_gaps?.map((gap, i) => (
                         <span
                           key={i}
-                          className="px-2 py-0.5 text-[10px] font-mono rounded bg-positive-soft text-positive-ink border border-positive-line"
+                          className="px-2 py-0.5 text-2xs font-mono rounded bg-positive-soft text-positive-ink border border-positive-line"
                         >
                           {gap}
                         </span>
@@ -362,7 +362,7 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
                   onClick={() =>
                     handleCopy(localResult?.tailored_summary || '', 'local_summary', 'Local Summary')
                   }
-                  className="px-3 py-1.5 rounded-control bg-fill hover:bg-fill-strong text-xs font-mono text-ink-muted flex items-center gap-1.5 cursor-pointer"
+                  className="px-3 py-1.5 rounded-control bg-fill hover:bg-fill-strong text-xs text-ink-muted flex items-center gap-1.5 cursor-pointer"
                 >
                   {copiedKey === 'local_summary' ? <Check className="w-3.5 h-3.5 text-positive-ink" /> : <Copy className="w-3.5 h-3.5" />}
                   <span>{copiedKey === 'local_summary' ? 'Copied' : 'Copy'}</span>
@@ -376,7 +376,7 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
                       onClose();
                     }
                   }}
-                  className="px-3.5 py-1.5 rounded-control bg-positive hover:bg-positive text-ink text-xs font-bold font-mono flex items-center gap-1.5 cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-control bg-positive hover:bg-positive text-ink text-xs font-bold flex items-center gap-1.5 cursor-pointer"
                 >
                   <span>Apply This Summary</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -388,14 +388,14 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
 
         {/* Footer */}
         <div className="flex items-center justify-between pt-2 border-t border-line">
-          <div className="flex items-center gap-2 text-[11px] font-mono text-ink-muted">
+          <div className="flex items-center gap-2 text-xs font-mono text-ink-muted">
             <ShieldCheck className="w-4 h-4 text-info-ink" />
             <span>Local mode processes data strictly on {config.localEndpoint} with 0 cloud egress.</span>
           </div>
 
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-control bg-fill-strong hover:bg-fill-strong text-ink text-xs font-bold font-mono cursor-pointer border border-line"
+            className="px-5 py-2 rounded-control bg-fill-strong hover:bg-fill-strong text-ink text-xs font-bold cursor-pointer border border-line"
           >
             Close Benchmark
           </button>

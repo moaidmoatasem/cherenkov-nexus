@@ -33,6 +33,6 @@ export const StatTile: React.FC<StatTileProps> = ({
     <div className={cn('text-2xl font-bold tabular leading-none', toneText[tone], tone === 'neutral' && 'text-ink')}>
       {value}
     </div>
-    {hint && <div className="mt-1.5 text-[11px] leading-4 text-ink-faint truncate">{hint}</div>}
+    {hint && <div className="mt-1.5 text-xs leading-4 text-ink-faint truncate">{hint}</div>}
   </div>
 );

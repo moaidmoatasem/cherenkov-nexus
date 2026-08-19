@@ -71,7 +71,7 @@ const ToastItem: React.FC<{ toast: ToastMessage; onDismiss: (id: string) => void
       {icons[toast.type]}
       <div className="flex-1 min-w-0">
         <h4 className="text-xs font-bold text-ink uppercase tracking-wider font-mono">{toast.title}</h4>
-        <p className="text-xs text-ink-muted mt-1 leading-relaxed break-words font-sans">{toast.message}</p>
+        <p className="text-sm text-ink-muted mt-1 leading-relaxed break-words font-sans">{toast.message}</p>
       </div>
       <button
         onClick={() => onDismiss(toast.id)}

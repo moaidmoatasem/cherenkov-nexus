@@ -372,7 +372,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             placeholder="Type a command, search role preset, change theme, or jump to workspace..."
             className="w-full bg-transparent text-sm text-ink placeholder:text-ink-faint font-medium"
           />
-          <kbd className="px-2 py-1 text-[10px] font-mono bg-fill-strong text-ink-muted border border-line rounded-control">
+          <kbd className="px-2 py-1 text-2xs font-mono bg-fill-strong text-ink-muted border border-line rounded-control">
             ESC
           </kbd>
         </div>
@@ -420,19 +420,19 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                       <div className="text-xs font-semibold truncate flex items-center gap-2">
                         <span>{cmd.title}</span>
                         {cmd.badge && (
-                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-accent-soft text-accent-ink border border-accent-line font-bold">
+                          <span className="text-2xs font-mono px-1.5 py-0.5 rounded bg-accent-soft text-accent-ink border border-accent-line font-bold">
                             {cmd.badge}
                           </span>
                         )}
                       </div>
-                      <p className="text-[11px] text-ink-muted truncate mt-0.5">
+                      <p className="text-sm text-ink-muted truncate mt-0.5">
                         {cmd.description}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-[9px] font-mono uppercase px-2 py-0.5 rounded bg-fill text-ink-muted border border-line">
+                    <span className="text-2xs font-mono uppercase px-2 py-0.5 rounded bg-fill text-ink-muted border border-line">
                       {cmd.category}
                     </span>
                     {isSelected && <ArrowRight className="w-3.5 h-3.5 text-info-ink animate-pulse" />}
@@ -444,7 +444,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         </div>
 
         {/* Footer Navigation Hints */}
-        <div className="p-3 border-t border-line bg-sunken flex items-center justify-between text-[11px] font-mono text-ink-muted">
+        <div className="p-3 border-t border-line bg-sunken flex items-center justify-between text-xs font-mono text-ink-muted">
           <div className="flex items-center gap-3">
             <span>↑↓ Navigate</span>
             <span>↵ Select</span>

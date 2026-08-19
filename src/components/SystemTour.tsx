@@ -491,7 +491,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
           />
 
           {/* Floating Target Identification Beacon */}
-          <div className="absolute -top-7 left-3 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-scrim border text-[10px] font-mono font-bold"
+          <div className="absolute -top-7 left-3 flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-scrim border text-2xs font-mono font-bold"
                style={{ borderColor: `color-mix(in srgb, ${step.accentHex} 55%, transparent)`, color: step.accentHex }}>
             <span className="w-1.5 h-1.5 rounded-full animate-ping" style={{ backgroundColor: step.accentHex }} />
             <Target className="w-3 h-3" />
@@ -528,11 +528,11 @@ export const SystemTour: React.FC<SystemTourProps> = ({
         {/* Top Header with Step Counter and Close */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-fill-strong text-ink border border-line">
+            <span className="px-2.5 py-1 rounded-full text-2xs font-mono font-bold bg-fill-strong text-ink border border-line">
               STEP {currentStepIdx + 1} OF {TOUR_STEPS.length}
             </span>
             <span
-              className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border ${badgeColorMap[step.badgeColor]}`}
+              className={`px-2.5 py-1 rounded-full text-2xs font-mono font-bold border ${badgeColorMap[step.badgeColor]}`}
             >
               {step.badge}
             </span>
@@ -561,14 +561,14 @@ export const SystemTour: React.FC<SystemTourProps> = ({
             <h3 className="text-base font-bold text-ink tracking-tight leading-snug">
               {step.title}
             </h3>
-            <p className="text-[11px] font-mono font-semibold mt-0.5" style={{ color: step.accentHex }}>
+            <p className="text-sm font-mono font-semibold mt-0.5" style={{ color: step.accentHex }}>
               {step.subtitle}
             </p>
           </div>
         </div>
 
         {/* Description */}
-        <p className="text-xs text-ink-muted leading-relaxed font-sans">
+        <p className="text-sm text-ink-muted leading-relaxed font-sans">
           {step.description}
         </p>
 
@@ -577,7 +577,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
           <div className="pt-1">
             <button
               onClick={handleQuickAction}
-              className="w-full py-2 px-3 rounded-control bg-fill hover:bg-fill-strong border border-line text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
+              className="w-full py-2 px-3 rounded-control bg-fill hover:bg-fill-strong border border-line text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer"
               style={{ color: step.accentHex }}
             >
               <Zap className="w-3.5 h-3.5" style={{ color: step.accentHex }} />
@@ -613,7 +613,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
             {currentStepIdx > 0 && (
               <button
                 onClick={handlePrev}
-                className="px-3 py-1.5 rounded-control bg-fill hover:bg-fill-strong text-xs font-mono text-ink-muted hover:text-ink transition-all flex items-center gap-1 cursor-pointer"
+                className="px-3 py-1.5 rounded-control bg-fill hover:bg-fill-strong text-xs text-ink-muted hover:text-ink transition-all flex items-center gap-1 cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Back</span>
@@ -622,7 +622,7 @@ export const SystemTour: React.FC<SystemTourProps> = ({
 
             <button
               onClick={handleNext}
-              className="px-4 py-1.5 rounded-control text-ink text-xs font-mono font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+              className="px-4 py-1.5 rounded-control text-ink text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer"
               style={{
                 background: step.accentHex
               }}
