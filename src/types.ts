@@ -18,6 +18,12 @@ export interface MasterProfile {
   name: string;
   title: string;
   location: string;
+  /**
+   * Contact address used to sign generated outreach and exports. Optional so an
+   * imported profile without one is handled explicitly rather than silently
+   * inheriting somebody else's address.
+   */
+  email?: string;
   archetype?: CandidateArchetype;
   workspaceConfig?: UserWorkspaceConfig;
   target_roles: string[];
@@ -54,6 +60,12 @@ export interface SynthesizedResult {
   isLicensedSponsor?: boolean;
   matchedSponsor?: string;
   extractedRequirements?: string[];
+  /** Which engine produced this result, e.g. "Google Gemini 3.7 Flash". */
+  inferenceEngine?: string;
+  /** True when no model ran and the content is a profile-derived scaffold. */
+  isDeterministicFallback?: boolean;
+  /** Why the fallback was used, shown to the user verbatim. */
+  fallbackReason?: string;
 }
 
 export type KanbanColumn = 'Saved' | 'Upskilling' | 'Ready to Apply' | 'Applied' | 'Interviewing';

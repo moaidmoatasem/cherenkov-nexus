@@ -74,6 +74,12 @@ export const JobSynthesizer: React.FC<JobSynthesizerProps> = ({
   onNavigateToKanban,
   onToast
 }) => {
+  // Everything generated here is signed by the candidate, so it has to follow
+  // whichever profile is actually active — never a baked-in identity.
+  const candidateName = masterProfile.name;
+  const candidateTitle = masterProfile.title;
+  const candidateEmail = masterProfile.email ?? 'your.email@example.com';
+
   const [scrapeUrl, setScrapeUrl] = useState(SAMPLE_JOBS[0].url);
   const [isScraping, setIsScraping] = useState(false);
 
@@ -135,6 +141,71 @@ export const JobSynthesizer: React.FC<JobSynthesizerProps> = ({
       window.removeEventListener('cherenkov_routing_changed', handleCustomChange);
     };
   }, []);
+
+  /**
+   * Competency match, computed from the posting and the active profile.
+   *
+   * Every component is derived from data we actually hold, and each one is
+   * reported with the counts behind it so the headline number can be checked
+   * rather than taken on faith. A component with no evidence is omitted
+   * instead of being padded with a default.
+   */
+  const matchAnalysis = useMemo(() => {
+    if (!synthesizedData) return null;
+
+    const posting = `${jobTitle} ${jobDescription}`.toLowerCase();
+    const skills = Array.from(
+      new Set([...(masterProfile.tech_stack ?? []), ...(masterProfile.core_competencies ?? [])])
+    ).filter(Boolean);
+
+    const matchedSkills = skills.filter((skill) => posting.includes(skill.toLowerCase()));
+    const requirements = synthesizedData.extractedRequirements ?? [];
+    const coveredRequirements = requirements.filter((requirement) =>
+      skills.some((skill) => requirement.toLowerCase().includes(skill.toLowerCase()))
+    );
+    const gaps = synthesizedData.identified_skill_gaps ?? [];
+
+    const components: { label: string; value: number; detail: string }[] = [];
+
+    if (skills.length) {
+      components.push({
+        label: 'Your stack found in this posting',
+        value: Math.round((matchedSkills.length / skills.length) * 100),
+        detail: `${matchedSkills.length} of ${skills.length} listed skills`
+      });
+    }
+
+    if (requirements.length) {
+      components.push({
+        label: 'Extracted requirements you cover',
+        value: Math.round((coveredRequirements.length / requirements.length) * 100),
+        detail: `${coveredRequirements.length} of ${requirements.length} requirements`
+      });
+    }
+
+    // Gaps are capped at five so one noisy synthesis cannot zero the score.
+    components.push({
+      label: 'Gap load',
+      value: Math.max(0, 100 - Math.min(gaps.length, 5) * 20),
+      detail: gaps.length ? `${gaps.length} gap${gaps.length === 1 ? '' : 's'} identified` : 'no gaps identified'
+    });
+
+    components.push({
+      label: 'Visa feasibility',
+      value: synthesizedData.isLicensedSponsor ? 100 : synthesizedData.visa_sponsorship_likely ? 60 : 20,
+      detail: synthesizedData.isLicensedSponsor
+        ? `${synthesizedData.matchedSponsor ?? 'Licensed sponsor'} on register`
+        : synthesizedData.visa_sponsorship_likely
+        ? 'signalled in the posting text only'
+        : 'no sponsorship signal found'
+    });
+
+    const overall = Math.round(
+      components.reduce((sum, component) => sum + component.value, 0) / components.length
+    );
+
+    return { overall, components, matchedSkills, gaps };
+  }, [synthesizedData, jobDescription, jobTitle, masterProfile]);
 
   // Auto-Save Form State to localStorage
   const synthesizerFormData = useMemo(
@@ -434,7 +505,7 @@ export const JobSynthesizer: React.FC<JobSynthesizerProps> = ({
 
     switch (tone) {
       case 'deeptech':
-        return `Subject: Lead QA Automation & CI/CD Pipeline Infrastructure - Moayed Badawy - ${companyName}
+        return `Subject: Lead QA Automation & CI/CD Pipeline Infrastructure - ${candidateName} - ${companyName}
 
 Hi ${companyName} Engineering & Talent Team,
 
@@ -445,12 +516,12 @@ In my recent work, I integrated local LLMs (Qwen/AnythingLLM) directly into our 
 As an Egyptian national requiring UK Skilled Worker visa sponsorship (or EU relocation), I am fully prepared for immediate relocation or high-performing remote collaboration. I would welcome 15 minutes to demo how my architecture can elevate ${companyName}'s release velocity.
 
 Best regards,
-Moayed Badawy
-Senior Quality Assurance Lead
-moaid.elmoatasem.bellah@gmail.com`;
+${candidateName}
+${candidateTitle}
+${candidateEmail}`;
 
       case 'security':
-        return `Subject: Senior QA Lead / CodeQL Security Gateways & Quality Engineering - Moayed Badawy - ${companyName}
+        return `Subject: Senior QA Lead / CodeQL Security Gateways & Quality Engineering - ${candidateName} - ${companyName}
 
 Hi ${companyName} Talent & Security Engineering Team,
 
@@ -461,12 +532,12 @@ My background centers on architecting end-to-end automated pipelines (Playwright
 I am targeting UK/EU Visa-sponsored opportunities (or remote) and am ready for an expedited start. I would love to connect and discuss how my automated testing & security governance strategies align with ${companyName}.
 
 Warm regards,
-Moayed Badawy
-Senior QA Lead & Security Gate Specialist
-moaid.elmoatasem.bellah@gmail.com`;
+${candidateName}
+${candidateTitle}
+${candidateEmail}`;
 
       case 'chaos':
-        return `Subject: High-Scale Resilience & Autonomous QA Architecture - Moayed Badawy - ${companyName}
+        return `Subject: High-Scale Resilience & Autonomous QA Architecture - ${candidateName} - ${companyName}
 
 Hi ${companyName} Quality & Infrastructure Team,
 
@@ -477,9 +548,9 @@ I created the 'cherenkov-qa' framework to bring autonomous automated verificatio
 Let's schedule a brief conversation this week.
 
 Sincerely,
-Moayed Badawy
-Senior Quality Assurance Lead
-moaid.elmoatasem.bellah@gmail.com`;
+${candidateName}
+${candidateTitle}
+${candidateEmail}`;
 
       default:
         return baseEmail;
@@ -545,7 +616,7 @@ moaid.elmoatasem.bellah@gmail.com`;
   const getFullMarkdownDossier = () => {
     if (!synthesizedData) return '';
     return `# Application Dossier: ${jobTitle} at ${companyName}
-**Candidate:** Moayed Badawy (Senior Quality Assurance Lead)
+**Candidate:** ${candidateName} (${candidateTitle})
 **Target Location:** UK / EU / Remote (Skilled Worker Sponsorship)
 **Date Synthesized:** ${new Date().toLocaleDateString()}
 
@@ -908,7 +979,7 @@ ${qa.answer}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="text-xs text-ink-muted flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-positive inline-block animate-pulse" />
-              <span>Master Profile: <strong>Moayed Badawy</strong> (Senior QA Lead) active baseline</span>
+              <span>Master Profile: <strong>{candidateName}</strong> ({candidateTitle}) active baseline</span>
             </div>
 
             <button
@@ -1025,6 +1096,30 @@ ${qa.answer}
             </div>
           </div>
         </div>
+        {/* Provenance — a deterministic scaffold must never read as model output. */}
+        {synthesizedData.isDeterministicFallback ? (
+          <div className="flex items-start gap-3 p-4 rounded-panel border border-caution-line bg-caution-soft">
+            <AlertTriangle className="w-5 h-5 text-caution-ink shrink-0 mt-0.5" />
+            <div className="min-w-0">
+              <p className="text-sm font-bold text-caution-ink">Draft scaffold — not generated by a model</p>
+              <p className="text-xs leading-relaxed text-ink-muted mt-1">
+                {synthesizedData.fallbackReason ??
+                  'No inference engine was reachable.'}{' '}
+                The text below was assembled from your Master Profile and needs editing before you send it.
+              </p>
+            </div>
+          </div>
+        ) : (
+          synthesizedData.inferenceEngine && (
+            <div className="flex items-center gap-2 text-[11px] font-mono text-ink-faint">
+              <Cpu className="w-3.5 h-3.5 text-positive-ink" />
+              <span>
+                Synthesized by <span className="text-ink font-bold">{synthesizedData.inferenceEngine}</span>
+              </span>
+            </div>
+          )
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left Column (5 cols): Job Intelligence, Visa Check & Gap Analysis */}
           <div className="lg:col-span-5 space-y-4">
@@ -1038,11 +1133,11 @@ ${qa.answer}
                   </h3>
                 </div>
                 <span className="text-xs font-mono font-black px-2.5 py-1 bg-positive-soft border border-positive-line text-positive-ink rounded-control">
-                  96% MATCH
+                  {matchAnalysis ? `${matchAnalysis.overall}% MATCH` : '—'}
                 </span>
               </div>
 
-              {/* Visual Radial Dial */}
+              {/* Radial dial, driven by the computed score */}
               <div className="flex items-center gap-4 p-3.5 rounded-card bg-sunken border border-line">
                 <div className="relative w-20 h-20 flex items-center justify-center shrink-0">
                   <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 36 36">
@@ -1055,7 +1150,7 @@ ${qa.answer}
                     />
                     <path
                       className="text-accent"
-                      strokeDasharray="96, 100"
+                      strokeDasharray={`${matchAnalysis?.overall ?? 0}, 100`}
                       strokeWidth="3.5"
                       strokeLinecap="round"
                       stroke="url(#dialGradient)"
@@ -1064,71 +1159,60 @@ ${qa.answer}
                     />
                     <defs>
                       <linearGradient id="dialGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#8b5cf6" />
-                        <stop offset="35%" stopColor="#ec4899" />
-                        <stop offset="70%" stopColor="#06b6d4" />
-                        <stop offset="100%" stopColor="#10b981" />
+                        <stop offset="0%" stopColor="var(--color-accent)" />
+                        <stop offset="50%" stopColor="var(--color-accent2)" />
+                        <stop offset="100%" stopColor="var(--color-positive)" />
                       </linearGradient>
                     </defs>
                   </svg>
                   <div className="absolute flex flex-col items-center">
-                    <span className="text-sm font-extrabold text-ink font-mono">96%</span>
-                    <span className="text-[8px] font-mono text-accent2-ink font-black uppercase">TOP TIER</span>
+                    <span className="text-sm font-extrabold text-ink font-mono">
+                      {matchAnalysis ? `${matchAnalysis.overall}%` : '—'}
+                    </span>
+                    <span className="text-[8px] font-mono text-accent2-ink font-black uppercase">Signal</span>
                   </div>
                 </div>
 
                 <div className="flex-1 min-w-0 text-xs">
                   <div className="text-ink font-semibold flex items-center gap-1">
-                    <span>High Fit Probability</span>
+                    <span>
+                      {!matchAnalysis
+                        ? 'Awaiting synthesis'
+                        : matchAnalysis.overall >= 75
+                        ? 'Strong signal'
+                        : matchAnalysis.overall >= 50
+                        ? 'Partial signal'
+                        : 'Weak signal'}
+                    </span>
                     <Award className="w-3.5 h-3.5 text-caution-ink" />
                   </div>
                   <p className="text-[11px] text-ink-muted mt-0.5 leading-snug">
-                    Strong alignment across Playwright automation, AI QA test synthesizers, and CodeQL static gates.
+                    {matchAnalysis?.matchedSkills.length
+                      ? `Matched in this posting: ${matchAnalysis.matchedSkills.slice(0, 4).join(', ')}${
+                          matchAnalysis.matchedSkills.length > 4 ? `, +${matchAnalysis.matchedSkills.length - 4}` : ''
+                        }.`
+                      : 'None of your listed skills appear verbatim in this posting.'}
                   </p>
                 </div>
               </div>
 
-              {/* Progress Gauges with distinct domain colors */}
+              {/* The components behind the score, each with its own evidence */}
               <div className="space-y-2.5 text-xs pt-1">
-                <div>
-                  <div className="flex justify-between text-[11px] mb-1 font-mono">
-                    <span className="text-ink-muted">AI Testing & cherenkov-qa Framework</span>
-                    <span className="text-positive-ink font-bold">100%</span>
+                {matchAnalysis?.components.map((component) => (
+                  <div key={component.label}>
+                    <div className="flex justify-between gap-2 text-[11px] mb-1 font-mono">
+                      <span className="text-ink-muted truncate">{component.label}</span>
+                      <span className="text-ink font-bold tabular shrink-0">{component.value}%</span>
+                    </div>
+                    <div className="h-2 w-full bg-fill rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-accent to-accent2 rounded-full transition-[width] duration-500"
+                        style={{ width: `${component.value}%` }}
+                      />
+                    </div>
+                    <p className="text-[10px] text-ink-faint mt-1 font-mono">{component.detail}</p>
                   </div>
-                  <div className="h-2 w-full bg-fill rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-positive to-accent2 rounded-full w-full" />
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between text-[11px] mb-1 font-mono">
-                    <span className="text-ink-muted">Playwright & k6 Infrastructure</span>
-                    <span className="text-accent2-ink font-bold">98%</span>
-                  </div>
-                  <div className="h-2 w-full bg-fill rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-accent2 to-info rounded-full w-[98%]" />
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between text-[11px] mb-1 font-mono">
-                    <span className="text-ink-muted">Static Security Gates (CodeQL)</span>
-                    <span className="text-accent-ink font-bold">95%</span>
-                  </div>
-                  <div className="h-2 w-full bg-fill rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-accent to-accent rounded-full w-[95%]" />
-                  </div>
-                </div>
-
-                <div>
-                  <div className="flex justify-between text-[11px] mb-1 font-mono">
-                    <span className="text-ink-muted">Visa Feasibility (UK/EU Target)</span>
-                    <span className="text-positive-ink font-bold">100%</span>
-                  </div>
-                  <div className="h-2 w-full bg-fill rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-positive to-positive rounded-full w-full" />
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
 
@@ -1502,7 +1586,7 @@ ${qa.answer}
 
                 <div className="flex items-center justify-between text-[11px] text-ink-muted font-mono">
                   <span>To: {targetEmail || 'talent@company.com'}</span>
-                  <span>From: moaid.elmoatasem.bellah@gmail.com</span>
+                  <span>From: {candidateEmail}</span>
                 </div>
               </div>
             )}

@@ -40,9 +40,13 @@ app.use(cors());
 // asset request — a single page load pulls hundreds of modules through the Vite
 // middleware — so the budget was exhausted before the UI finished booting and
 // the rest of the app came back 429.
+// 100 per 15 minutes was too tight for a single-user local app: the Kanban
+// board autosaves on a 600ms debounce and every page load hits several
+// endpoints, so ordinary use — and the E2E suite — ran into 429s partway
+// through. This still bounds a runaway client without breaking normal work.
 app.use("/api", rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100
+  max: 1000
 }));
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-3.7-flash";
@@ -575,6 +579,10 @@ app.post("/api/synthesize", async (req: Request, res: Response) => {
 
     const candName = masterProfile?.name || "Moayed Badawy";
     const candTitle = masterProfile?.title || jobTitle || "Senior Quality Assurance Lead";
+    const candEmail = masterProfile?.email || process.env.CANDIDATE_EMAIL || "your.email@example.com";
+    const candLocation = masterProfile?.location || "your current location";
+    const candStack: string[] = Array.isArray(masterProfile?.tech_stack) ? masterProfile.tech_stack : [];
+    const candStackText = candStack.length ? candStack.slice(0, 6).join(", ") : "your core toolchain";
 
     // ZERO-TRUST / LOCAL ROUTER: If local model is explicitly requested or PII is flagged
     if (isLocalRequested) {
@@ -686,30 +694,44 @@ app.post("/api/synthesize", async (req: Request, res: Response) => {
 
     if (!apiKey) {
       console.warn("GEMINI_API_KEY is not set. Generating deterministic QA strategic synthesis fallback.");
+      // No inference engine is reachable. Build a clearly labelled scaffold
+      // from the candidate's own profile — never another person's details,
+      // and never dressed up as model output.
       const fallbackResult = {
         visa_sponsorship_likely: visaCheck.isLicensedSponsor || /visa|relocation|remote|uk|eu/i.test(jobDescription),
-        tailored_summary: `Senior Quality Assurance Lead with deep specialization in Playwright infrastructure, k6 load testing, and AI-driven QA frameworks (cherenkov-qa). Proven track record orchestrating enterprise test automation pipelines, local LLM integrations (Qwen, AnythingLLM), and CodeQL static security analysis. Immediate readiness for UK/EU relocation or high-autonomy global remote QA leadership.`,
+        tailored_summary: `${candTitle} with hands-on depth across ${candStackText}. This is a deterministic scaffold assembled from your Master Profile because no inference engine was reachable — edit it before sending.`,
         identified_skill_gaps: extractLikelyGaps(jobDescription, masterProfile),
-        upskilling_recommendation: "AWS Certified DevOps / Cloud Security Specialty (Coursera/AWS) to augment cloud infrastructure test orchestration.",
-        cold_email: `Subject: Senior QA Lead / QA Architect Candidate - Moayed Badawy\n\nDear ${companyName ? `${companyName} Hiring Team` : "Hiring Manager"},\n\nI came across your opening for ${jobTitle || "the Senior QA role"} and was immediately drawn to your engineering standards. As a Senior QA Lead with extensive hands-on experience building custom agentic test frameworks (cherenkov-qa), architecting resilient Playwright & k6 suites, and embedding CodeQL into continuous delivery pipelines, I specialize in eliminating regression bottlenecks and accelerating deployment frequency.\n\nI am actively seeking ${visaCheck.isLicensedSponsor ? "roles offering UK/EU visa sponsorship or high-impact remote leadership" : "remote leadership or UK/EU sponsored roles"} where I can elevate test maturity from day one. I would welcome the opportunity to discuss how my QA automation infrastructure background aligns with your roadmap.\n\nBest regards,\nMoayed Badawy\nSenior Quality Assurance Lead\nmoaid.elmoatasem.bellah@gmail.com`,
+        upskilling_recommendation: "Configure or retry an inference engine to receive a gap-specific upskilling recommendation.",
+        cold_email: `Subject: ${jobTitle || "Application"}${companyName ? ` - ${companyName}` : ""} - ${candName}
+
+Dear ${companyName ? `${companyName} Hiring Team` : "Hiring Manager"},
+
+I am writing regarding the ${jobTitle || "open role"}${companyName ? ` at ${companyName}` : ""}. My background is in ${candTitle.toLowerCase()}, working primarily with ${candStackText}.
+
+[Draft scaffold — no inference engine was reachable, so this outline was assembled from your Master Profile rather than generated. Replace this paragraph with the specific evidence you want to lead on.]
+
+I am based in ${candLocation} and would welcome the chance to discuss the role.
+
+Best regards,
+${candName}
+${candTitle}
+${candEmail}`,
         ats_answers: [
           {
-            question: "Describe your experience with automated test frameworks and QA architecture.",
-            answer: "Over 7+ years orchestrating end-to-end testing infrastructure, I designed the cherenkov-qa framework, implemented modular Playwright suites, and integrated k6 for distributed load testing, achieving 99.4% CI pass rates and reducing feedback cycles by 65%."
+            question: "Describe your relevant experience for this role.",
+            answer: `Draft scaffold from your Master Profile: ${candTitle}, working with ${candStackText}. Replace with a specific, evidenced example — this answer was not generated.`
           },
           {
-            question: "How do you leverage AI and LLMs in quality assurance workflows?",
-            answer: "I pioneer agentic QA pipelines by integrating local LLMs (Qwen, AnythingLLM) and prompt-driven test generators to autonomously synthesize test cases, validate API contracts, and analyze CodeQL security findings prior to staging deployments."
+            question: "Why are you interested in this position?",
+            answer: `Draft scaffold: connect ${companyName || "this employer"}'s work to your experience as ${candTitle}. Replace with your own reasoning — this answer was not generated.`
           },
           {
             question: "What is your work authorization status and relocation availability?",
-            answer: "Currently based in Cairo, Egypt, with complete readiness for UK/EU visa sponsorship relocation or global remote engagement. I have extensive experience collaborating asynchronously across European and international time zones."
-          },
-          {
-            question: "How do you ensure security and performance testing in CI/CD pipelines?",
-            answer: "I embed automated CodeQL static analysis rules into GitHub Actions/GitLab CI pipelines to intercept vulnerabilities at pull-request time, paired with k6 baseline thresholds that automatically gate performance regressions."
+            answer: `Draft scaffold: currently based in ${candLocation}. State your authorization status and relocation availability here — this answer was not generated.`
           }
-        ]
+        ],
+        isDeterministicFallback: true,
+        fallbackReason: "No GEMINI_API_KEY configured and no local model requested."
       };
 
       return res.json({
@@ -717,7 +739,8 @@ app.post("/api/synthesize", async (req: Request, res: Response) => {
         isLicensedSponsor: visaCheck.isLicensedSponsor,
         matchedSponsor: visaCheck.matchedSponsor,
         inferenceEngine: "Deterministic Fallback Engine",
-        provider: 'gemini'
+        // No model ran, so do not claim one did.
+        provider: 'none'
       });
     }
 
@@ -826,37 +849,52 @@ Return ONLY valid JSON strictly matching the defined responseSchema. No markdown
       console.warn("Gemini synthesis generateContent failed. Engaging air-gapped deterministic fallback engine:", aiErr);
       parsedData = {
         visa_sponsorship_likely: visaCheck.isLicensedSponsor || /visa|relocation|remote|uk|eu/i.test(jobDescription),
-        tailored_summary: `${candidateTitle} with deep focus on resilient automation frameworks, distributed load testing, and AI-driven quality pipelines. Proven track record reducing CI/CD feedback cycles by 65% with strict static analysis (CodeQL) security gates. Immediate readiness for UK/EU relocation or high-autonomy remote QA engineering leadership.`,
+        tailored_summary: `${candTitle} with hands-on depth across ${candStackText}. This is a deterministic scaffold assembled from your Master Profile because the inference call failed — edit it before sending.`,
         identified_skill_gaps: extractLikelyGaps(jobDescription, masterProfile),
-        upskilling_recommendation: "AWS Certified DevOps / Cloud Security Specialty to augment cloud-native automation pipelines.",
-        cold_email: `Subject: Senior QA Lead / QA Architect Candidate - Moayed Badawy\n\nDear ${companyName ? `${companyName} Hiring Team` : "Hiring Manager"},\n\nI came across your opening for ${jobTitle || "the Senior QA role"} and was immediately drawn to your engineering standards. As a Senior QA Lead with extensive hands-on experience building custom agentic test frameworks (cherenkov-qa), architecting resilient Playwright & k6 suites, and embedding CodeQL into continuous delivery pipelines, I specialize in eliminating regression bottlenecks and accelerating deployment frequency.\n\nI am actively seeking ${visaCheck.isLicensedSponsor ? "roles offering UK/EU visa sponsorship or high-impact remote leadership" : "remote leadership or UK/EU sponsored roles"} where I can elevate test maturity from day one. I would welcome the opportunity to discuss how my QA automation infrastructure background aligns with your roadmap.\n\nBest regards,\nMoayed Badawy\nSenior Quality Assurance Lead\nmoaid.elmoatasem.bellah@gmail.com`,
+        upskilling_recommendation: "Configure or retry an inference engine to receive a gap-specific upskilling recommendation.",
+        cold_email: `Subject: ${jobTitle || "Application"}${companyName ? ` - ${companyName}` : ""} - ${candName}
+
+Dear ${companyName ? `${companyName} Hiring Team` : "Hiring Manager"},
+
+I am writing regarding the ${jobTitle || "open role"}${companyName ? ` at ${companyName}` : ""}. My background is in ${candTitle.toLowerCase()}, working primarily with ${candStackText}.
+
+[Draft scaffold — the inference call failed, so this outline was assembled from your Master Profile rather than generated. Replace this paragraph with the specific evidence you want to lead on.]
+
+I am based in ${candLocation} and would welcome the chance to discuss the role.
+
+Best regards,
+${candName}
+${candTitle}
+${candEmail}`,
         ats_answers: [
           {
-            question: "Describe your experience with automated test frameworks and QA architecture.",
-            answer: "Over 7+ years orchestrating end-to-end testing infrastructure, I designed the cherenkov-qa framework, implemented modular Playwright suites, and integrated k6 for distributed load testing, achieving 99.4% CI pass rates and reducing feedback cycles by 65%."
+            question: "Describe your relevant experience for this role.",
+            answer: `Draft scaffold from your Master Profile: ${candTitle}, working with ${candStackText}. Replace with a specific, evidenced example — this answer was not generated.`
           },
           {
-            question: "How do you leverage AI and LLMs in quality assurance workflows?",
-            answer: "I pioneer agentic QA pipelines by integrating local LLMs (Qwen, AnythingLLM) and prompt-driven test generators to autonomously synthesize test cases, validate API contracts, and analyze CodeQL security findings prior to staging deployments."
+            question: "Why are you interested in this position?",
+            answer: `Draft scaffold: connect ${companyName || "this employer"}'s work to your experience as ${candTitle}. Replace with your own reasoning — this answer was not generated.`
           },
           {
             question: "What is your work authorization status and relocation availability?",
-            answer: "Currently based in Cairo, Egypt, with complete readiness for UK/EU visa sponsorship relocation or global remote engagement. I have extensive experience collaborating asynchronously across European and international time zones."
-          },
-          {
-            question: "How do you ensure security and performance testing in CI/CD pipelines?",
-            answer: "I embed automated CodeQL static analysis rules into GitHub Actions/GitLab CI pipelines to intercept vulnerabilities at pull-request time, paired with k6 baseline thresholds that automatically gate performance regressions."
+            answer: `Draft scaffold: currently based in ${candLocation}. State your authorization status and relocation availability here — this answer was not generated.`
           }
-        ]
+        ],
+        isDeterministicFallback: true,
+        fallbackReason: "The configured inference engine did not return a usable response."
       };
     }
 
+    // This return is shared with the path where the Gemini call failed and a
+    // scaffold was substituted, so the engine label has to follow what
+    // actually produced the payload.
+    const usedFallback = Boolean((parsedData as { isDeterministicFallback?: boolean }).isDeterministicFallback);
     return res.json({
       ...parsedData,
       isLicensedSponsor: visaCheck.isLicensedSponsor,
       matchedSponsor: visaCheck.matchedSponsor,
-      inferenceEngine: GEMINI_DISPLAY_NAME,
-      provider: 'gemini'
+      inferenceEngine: usedFallback ? "Deterministic Fallback Engine" : GEMINI_DISPLAY_NAME,
+      provider: usedFallback ? 'none' : 'gemini'
     });
 
   } catch (error: any) {
@@ -1581,51 +1619,16 @@ You must return ONLY valid JSON strictly matching this schema. Do not include ma
       }
     }
 
-    // High-Fidelity Calibrated Fallback
-    return res.json({
-      name: "Moayed Badawy",
-      title: "Senior Quality Assurance Lead & SDET Architect",
-      location: "Cairo, Egypt / Prepared for UK/EU Relocation",
-      capturedFromUrl: Boolean(capturedUrlText),
-      sourceUrl: capturedUrlText ? url : undefined,
-      archetype: "international_seeker",
-      target_roles: [
-        "Senior QA Lead",
-        "Staff SDET",
-        "QA Infrastructure Architect",
-        "UK/EU Visa Sponsorship"
-      ],
-      core_competencies: [
-        "AI-driven autonomous QA testing (cherenkov-qa)",
-        "Playwright CDP & Accessibility tree test automation",
-        "k6 distributed load & latency engineering (p99 <42ms)",
-        "CodeQL static AST security analysis & OWASP gates",
-        "High-velocity CI/CD matrix release governance"
-      ],
-      tech_stack: [
-        "Playwright", "TypeScript", "k6", "CodeQL", "Docker", "GitHub Actions", "cherenkov-qa",
-        "AnythingLLM", "Qwen 2.5", "Vitest", "Jest", "Postman", "Kubernetes", "Datadog", "GraphQL", "REST APIs",
-        "WireMock", "Allure", "SonarQube", "Terraform", "AWS", "GCP", "Linux / Bash", "OWASP Top 10"
-      ],
-      experience: "10+ years engineering mission-critical automated testing infrastructures, architecting distributed load frameworks, and pioneering agentic MCP quality gates.",
-      learning_certs: [
-        {
-          id: `cert-import-${Date.now()}`,
-          title: "Agentic AI in Quality Engineering & LLM Automation",
-          provider: "DeepLearning.AI xAPI LRS",
-          status: "Completed",
-          dateCompleted: "2026-02-10",
-          extracted_skills: ["Autonomous Test Agents", "AnythingLLM", "Qwen", "MCP Stdio"],
-          badge_color: "emerald"
-        }
-      ],
-      extractedSkillCount: 42,
-      diffHighlights: [
-        "+ Playwright CDP Accessibility Tree Locators",
-        "+ Distributed k6 Spike Latency Harness",
-        "+ CodeQL Custom SAST Taint Tracking",
-        "+ Zero-Trust PII Masking Pipeline"
-      ]
+    // No inference engine could read the submitted document. Returning a
+    // stand-in profile here would silently hand the user somebody else's
+    // identity, which then flows into every generated application, so this
+    // fails loudly instead.
+    return res.status(503).json({
+      error: "Profile extraction needs an inference engine.",
+      detail:
+        "Set GEMINI_API_KEY, or point LOCAL_LLM_ENDPOINT at a local model, to extract a profile from a CV or LinkedIn URL. " +
+        "You can also pick an archetype and edit the Master Profile by hand.",
+      extractionAvailable: false
     });
   } catch (err: any) {
     return res.status(500).json({ error: err.message || "Failed to extract profile" });
@@ -1820,31 +1823,43 @@ app.get("/api/kanban/state", async (req: Request, res: Response) => {
 app.post("/api/kanban/state", async (req: Request, res: Response) => {
   try {
     const applications = req.body;
-    const db = getDb();
-    
-    // Transactional replace
-    await db.execute("DELETE FROM kanban_tasks");
-
-    for (const app of applications) {
-      await db.execute({
-        sql: "INSERT INTO kanban_tasks (id, columnId, company, jobTitle, salary, location, createdAt, updatedAt, matchScore, jobDescription, coldEmail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        args: [
-          app.id,
-          app.column,
-          app.company,
-          app.jobTitle,
-          app.salary || null,
-          app.location || null,
-          app.createdAt || new Date().toISOString(),
-          app.updatedAt || new Date().toISOString(),
-          app.matchScore || 0,
-          app.jobDescription || null,
-          app.coldEmail || null
-        ]
-      });
+    if (!Array.isArray(applications)) {
+      return res.status(400).json({ error: "Expected an array of applications" });
     }
-    
-    res.json({ success: true });
+    const db = getDb();
+
+    // Last write wins per id. A duplicate id in the payload used to abort the
+    // save halfway through, and because the DELETE had already committed the
+    // board was left empty.
+    const deduped = Array.from(
+      new Map(applications.map((app: any) => [app.id, app])).values()
+    );
+
+    // One transaction: either the whole board is replaced or nothing changes.
+    await db.batch(
+      [
+        { sql: "DELETE FROM kanban_tasks", args: [] },
+        ...deduped.map((app: any) => ({
+          sql: "INSERT OR REPLACE INTO kanban_tasks (id, columnId, company, jobTitle, salary, location, createdAt, updatedAt, matchScore, jobDescription, coldEmail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          args: [
+            app.id,
+            app.column,
+            app.company,
+            app.jobTitle,
+            app.salary || null,
+            app.location || null,
+            app.createdAt || new Date().toISOString(),
+            app.updatedAt || new Date().toISOString(),
+            app.matchScore || 0,
+            app.jobDescription || null,
+            app.coldEmail || null
+          ]
+        }))
+      ],
+      "write"
+    );
+
+    res.json({ success: true, saved: deduped.length });
   } catch (error: any) {
     console.error("Failed to update kanban state:", error);
     res.status(500).json({ error: "Failed to update kanban state" });
