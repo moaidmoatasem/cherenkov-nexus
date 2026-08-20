@@ -225,7 +225,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
               </span>
             </div>
             <p className="text-sm text-ink-muted mt-2 max-w-2xl leading-relaxed">
-              5-stage tracking pipeline for Moayed's UK & EU sponsorship applications. Drag-and-drop cards between discovery, upskilling, ready pitches, and active rounds.
+              5-stage tracking pipeline for your UK & EU sponsorship applications. Drag-and-drop cards between discovery, upskilling, ready pitches, and active rounds.
             </p>
           </div>
 

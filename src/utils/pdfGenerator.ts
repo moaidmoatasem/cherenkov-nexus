@@ -203,6 +203,8 @@ export function generateAtsPdfResume({
 export function downloadAtsPdfResume(options: GeneratePdfOptions, filename?: string) {
   const doc = generateAtsPdfResume(options);
   const safeCompany = (options.companyName || 'Job').replace(/[^a-zA-Z0-9_-]/g, '_');
-  const finalFilename = filename || `Moayed_Badawy_Resume_${safeCompany}.pdf`;
+  // Name the file after whoever the résumé is actually for.
+  const safeName = (options.masterProfile?.name || 'Resume').replace(/[^a-zA-Z0-9_-]/g, '_');
+  const finalFilename = filename || `${safeName}_Resume_${safeCompany}.pdf`;
   doc.save(finalFilename);
 }

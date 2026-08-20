@@ -377,7 +377,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
             </span>
           </div>
           <p className="text-sm text-ink-muted mt-2 max-w-2xl leading-relaxed">
-            Target ATS skill gaps identified during Job Synthesis. When you complete any pathway or certification, its verified competencies automatically inject into Moayed's active Master Profile.
+            Target ATS skill gaps identified during Job Synthesis. When you complete any pathway or certification, its verified competencies automatically inject into your active Master Profile.
           </p>
         </div>
 

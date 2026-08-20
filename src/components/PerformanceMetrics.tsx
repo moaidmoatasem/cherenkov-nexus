@@ -155,7 +155,7 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
             </h2>
           </div>
           <p className="text-sm text-ink-muted mt-1">
-            Real-time transition velocity and stage conversion rate metrics for Moayed's applications.
+            Real-time transition velocity and stage conversion rate metrics for your applications.
           </p>
         </div>
 

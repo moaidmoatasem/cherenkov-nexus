@@ -7,6 +7,7 @@ import { analyzeRepo } from "./src/server/githubAnalysis";
 import { fetchAtsJob } from "./src/server/integrations/atsConnector";
 import { executeServerlessScrape } from "./server/mcp/playwrightScraper";
 import { createOracleRouter } from "./src/oracle/routes";
+import { MIN_CANDIDATE_SCORE, normaliseName, scoreMatch } from "./src/oracle/register";
 
 
 import path from "path";
@@ -40,10 +41,10 @@ app.use(cors());
 // asset request — a single page load pulls hundreds of modules through the Vite
 // middleware — so the budget was exhausted before the UI finished booting and
 // the rest of the app came back 429.
-// 100 per 15 minutes is under a minute of normal use: the Kanban board
-// autosaves on a 600ms debounce and the synthesizer fans out several calls per
-// run. Raised to a ceiling that still stops abuse but no longer throttles a
-// single active session.
+// 100 per 15 minutes was too tight for a single-user local app: the Kanban
+// board autosaves on a 600ms debounce and every page load hits several
+// endpoints, so ordinary use — and the E2E suite — ran into 429s partway
+// through. This still bounds a runaway client without breaking normal work.
 app.use("/api", rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 1000,
@@ -105,72 +106,128 @@ const SPONSORS_DATABASE: SponsorRecord[] = [
   { name: "Bolt", aliases: ["Bolt Technology OU", "Bolt Services UK"], region: "EU", licenseType: "EU Blue Card / Skilled Worker", rating: "A Rating", minSalaryThresholdGbp: 41700 }
 ];
 
+/**
+ * Resolve a company against the Register of Licensed Sponsors.
+ *
+ * Retrieval is anchored on the registered name — never the unanchored
+ * `LIKE '%query%'` this replaced, which returned an arbitrary row for any
+ * short query — and ranking reuses the Oracle's scorer, so the quick check
+ * and the Oracle agree about what counts as a match.
+ */
+async function matchSponsorOnRegister(query: string): Promise<string | null> {
+  const lower = query.toLowerCase();
+  const lead = lower.split(/\s+/)[0];
+  const rows = await getDb().execute({
+    sql: `SELECT name FROM sponsors
+          WHERE LOWER(name) = ? OR LOWER(name) LIKE ? OR LOWER(name) LIKE ?
+          LIMIT 200`,
+    args: [lower, `${lower} %`, `${lead} %`],
+  });
+
+  const best = rows.rows
+    .map((row) => {
+      const registeredName = row.name as string;
+      return { registeredName, ...scoreMatch(query, registeredName) };
+    })
+    .filter((candidate) => candidate.score >= MIN_CANDIDATE_SCORE)
+    .sort((a, b) => b.score - a.score);
+
+  // Same rule as the indexed path: only an unambiguous match counts.
+  if (best.length === 0) return null;
+  if (best.length > 1 && best[0].score - best[1].score < 0.1 && best[0].score < 1) return null;
+  return best[0].registeredName;
+}
+
+const VISA_TEXT_SIGNALS = [
+  "visa sponsorship",
+  "tier 2",
+  "skilled worker visa",
+  "relocation support",
+  "relocation package",
+  "visa support",
+  "sponsorship provided",
+  "sponsorship available",
+  "eligible for visa",
+  "right to work in the uk",
+  "eu blue card",
+  "30% ruling",
+  "kennismigrant",
+  "critical skills employment permit"
+];
+
+export type SponsorSource = "register" | "offline-list" | "none";
+
+/**
+ * Resolve an employer against the Register of Licensed Sponsors.
+ *
+ * Matching is delegated to the Oracle's register matcher, which normalises
+ * names and scores candidates, rather than the unanchored `LIKE '%query%'`
+ * this used to run: that returned an arbitrary row for any short query, so
+ * "o" resolved to "Google" and reported it as a verified sponsor.
+ *
+ * Two signals are kept apart on purpose. Being on the register is a fact we
+ * can check; a posting advertising sponsorship is the employer's own claim,
+ * and collapsing the two into one boolean is what let an unverified employer
+ * render as "Verified Visa Sponsor".
+ */
 async function checkVisaSponsorship(companyName: string, text: string = "") {
-  const compClean = (companyName || "").trim().toLowerCase();
-  
-  if (!compClean && !text) return { isLicensedSponsor: false, matchedSponsor: null };
+  const query = (companyName || "").trim();
+  const lowerText = (text || "").toLowerCase();
+  const postingClaimsSponsorship = VISA_TEXT_SIGNALS.some((signal) => lowerText.includes(signal));
 
-  // Shared LibSQL/Turso client (Turso when configured, portable ./nexus.db otherwise)
-  let matchedRecord: any = null;
+  let matchedName: string | null = null;
+  let minSalaryThresholdGbp: number | undefined;
+  let source: SponsorSource = "none";
+  let registerAvailable = true;
 
+  // A one-character query cannot identify an employer; there is no honest
+  // answer to give, so do not go looking for one.
+  if (query.length >= 2) {
     try {
-      const db = getDb();
-
-      const result = await db.execute({
-        sql: "SELECT * FROM sponsors WHERE LOWER(name) LIKE ? OR LOWER(aliases) LIKE ? LIMIT 1",
-        args: [`%${compClean}%`, `%${compClean}%`]
-      });
-
-      if (result.rows.length > 0) {
-        const row = result.rows[0];
-        matchedRecord = {
-          name: row.name as string,
-          aliases: (row.aliases as string).split(','),
-          region: row.region as string,
-          licenseType: row.licenseType as string,
-          rating: row.rating as string,
-          minSalaryThresholdGbp: row.minSalaryThresholdGbp as number
-        };
+      // Deliberately index-free. The `nameCore` backfill takes several seconds
+      // and holds the SQLite write lock while it runs; the Oracle routes build
+      // it when someone actually uses the Oracle. This path is on the critical
+      // route for every synthesis, so it must never wait on that.
+      const match = await matchSponsorOnRegister(query);
+      if (match) {
+        matchedName = match;
+        source = "register";
       }
     } catch (err) {
-      console.warn("Database query failed (Turso/SQLite), falling back to local array:", err);
+      registerAvailable = false;
+      console.warn("Sponsor register unavailable; falling back to the offline list:", err);
     }
 
-  // Fallback to local SPONSORS_DATABASE if DB fails
-  if (!matchedRecord) {
-    matchedRecord = SPONSORS_DATABASE.find((sponsor) => {
-      const nameMatch = compClean.includes(sponsor.name.toLowerCase()) || sponsor.name.toLowerCase().includes(compClean);
-      const aliasMatch = sponsor.aliases.some(alias => 
-        compClean.includes(alias.toLowerCase()) || alias.toLowerCase().includes(compClean)
+    // The bundled list is a last resort for an unreachable register, not a
+    // supplement to it. It previously ran whenever the register simply found
+    // nothing, and matched substrings in both directions, so a fictional
+    // "Amazonia Fake Corp Ltd" resolved to "Amazon".
+    if (!matchedName && !registerAvailable) {
+      const normalisedQuery = normaliseName(query);
+      const offline = SPONSORS_DATABASE.find(
+        (sponsor) =>
+          normaliseName(sponsor.name) === normalisedQuery ||
+          sponsor.aliases.some((alias) => normaliseName(alias) === normalisedQuery)
       );
-      return nameMatch || aliasMatch;
-    });
+      if (offline) {
+        matchedName = offline.name;
+        minSalaryThresholdGbp = offline.minSalaryThresholdGbp;
+        source = "offline-list";
+      }
+    }
   }
 
-  const lowerText = text.toLowerCase();
-  const textSignals = [
-    "visa sponsorship",
-    "tier 2",
-    "skilled worker visa",
-    "relocation support",
-    "relocation package",
-    "visa support",
-    "sponsorship provided",
-    "sponsorship available",
-    "eligible for visa",
-    "right to work in the uk",
-    "eu blue card",
-    "30% ruling",
-    "kennismigrant",
-    "critical skills employment permit"
-  ];
-  const hasVisaKeywords = textSignals.some((signal) => lowerText.includes(signal));
-  const isLicensedSponsor = Boolean(matchedRecord) || hasVisaKeywords;
-  
   return {
-    isLicensedSponsor,
-    matchedSponsor: matchedRecord ? matchedRecord.name : (hasVisaKeywords ? "Identified from JD Text" : undefined),
-    minSalaryThresholdGbp: matchedRecord ? matchedRecord.minSalaryThresholdGbp : undefined
+    /** True only when the employer was matched on the register. */
+    isLicensedSponsor: Boolean(matchedName),
+    matchedSponsor: matchedName ?? undefined,
+    minSalaryThresholdGbp,
+    /** Where the answer came from, so callers can describe it accurately. */
+    sponsorSource: source,
+    /** False when the register could not be consulted at all. */
+    registerAvailable,
+    /** The posting advertises sponsorship — the employer's claim, not a check. */
+    postingClaimsSponsorship
   };
 }
 
@@ -319,7 +376,7 @@ const xapiEvents = new EventEmitter();
 app.post("/api/webhooks/xapi", async (req: Request, res: Response) => {
   try {
     const payload = req.body;
-    const actorName = payload?.actor?.name || payload?.actor?.account?.name || "Moayed Badawy";
+    const actorName = payload?.actor?.name || payload?.actor?.account?.name || "Unknown learner";
     const verb = payload?.verb?.display?.["en-US"] || payload?.verb?.id || "interacted";
     const objectName = payload?.object?.definition?.name?.["en-US"] || payload?.object?.id || "Course Activity";
 
@@ -579,8 +636,12 @@ app.post("/api/synthesize", async (req: Request, res: Response) => {
 
     const isLocalRequested = provider === "local" || useLocalModel || (provider === "hybrid" && containsSensitiveData) || containsSensitiveData;
 
-    const candName = masterProfile?.name || "Moayed Badawy";
+    const candName = masterProfile?.name || "the candidate";
     const candTitle = masterProfile?.title || jobTitle || "Senior Quality Assurance Lead";
+    const candEmail = masterProfile?.email || process.env.CANDIDATE_EMAIL || "your.email@example.com";
+    const candLocation = masterProfile?.location || "your current location";
+    const candStack: string[] = Array.isArray(masterProfile?.tech_stack) ? masterProfile.tech_stack : [];
+    const candStackText = candStack.length ? candStack.slice(0, 6).join(", ") : "your core toolchain";
 
     // ZERO-TRUST / LOCAL ROUTER: If local model is explicitly requested or PII is flagged
     if (isLocalRequested) {
@@ -630,11 +691,11 @@ app.post("/api/synthesize", async (req: Request, res: Response) => {
             parsedContent = JSON.parse(rawText);
           } catch {
             parsedContent = {
-              visa_sponsorship_likely: visaCheck.isLicensedSponsor || true,
+              visa_sponsorship_likely: visaCheck.isLicensedSponsor || visaCheck.postingClaimsSponsorship,
               tailored_summary: rawText.slice(0, 350) || "Senior QA Lead specializing in resilient Playwright automation, k6 load testing, and local AI quality frameworks.",
               identified_skill_gaps: extractLikelyGaps(jobDescription, masterProfile),
               upskilling_recommendation: "AWS Cloud DevOps & Distributed Performance Architecture",
-              cold_email: `Subject: Senior QA Lead / Automation Architect - Moayed Badawy\n\nDear ${companyName} Team,\n\nI am eager to apply my 7+ years building enterprise QA test frameworks and CI/CD pipelines to ${companyName}. Ready for immediate UK/EU visa relocation or remote leadership.\n\nBest regards,\nMoayed Badawy`,
+              cold_email: `Subject: ${jobTitle || "Application"} - ${candName}\n\nDear ${companyName} Team,\n\nI am writing regarding the ${jobTitle || "open role"} at ${companyName}. My background is in ${candTitle.toLowerCase()}, working primarily with ${candStackText}.\n\n[Draft scaffold — the local model returned no usable response, so this was assembled from your Master Profile rather than generated.]\n\nBest regards,\n${candName}\n${candTitle}\n${candEmail}`,
               ats_answers: [
                 {
                   question: "Describe your test automation architecture experience.",
@@ -648,6 +709,9 @@ app.post("/api/synthesize", async (req: Request, res: Response) => {
             ...parsedContent,
             isLicensedSponsor: visaCheck.isLicensedSponsor,
             matchedSponsor: visaCheck.matchedSponsor,
+            sponsorSource: visaCheck.sponsorSource,
+            registerAvailable: visaCheck.registerAvailable,
+            postingClaimsSponsorship: visaCheck.postingClaimsSponsorship,
             inferenceEngine: `Local (${localModelName})`,
             provider: 'local'
           });
@@ -655,11 +719,11 @@ app.post("/api/synthesize", async (req: Request, res: Response) => {
       } catch (localErr) {
         console.warn("Local LLM inference unreachable or error, falling back to deterministic local synthesis:", localErr);
         const localFallback = {
-          visa_sponsorship_likely: visaCheck.isLicensedSponsor || /visa|relocation|remote|uk|eu/i.test(jobDescription),
+          visa_sponsorship_likely: visaCheck.isLicensedSponsor || visaCheck.postingClaimsSponsorship,
           tailored_summary: `[Local Air-Gapped ${localModelName}] Senior QA Lead with extensive Playwright infrastructure, k6 load testing, and cherenkov-qa framework orchestration. Proven experience implementing local LLM test generators (Qwen, AnythingLLM) and CodeQL static security analysis gates. Fully prepared for UK/EU visa relocation or remote QA leadership.`,
           identified_skill_gaps: extractLikelyGaps(jobDescription, masterProfile),
           upskilling_recommendation: "AWS Certified DevOps / Cloud Security Specialty (Air-Gapped Sync)",
-          cold_email: `Subject: Senior QA Lead / QA Architect Candidate (Air-Gapped Local) - Moayed Badawy\n\nDear ${companyName ? `${companyName} Hiring Team` : "Hiring Manager"},\n\nI am writing to present my candidacy for ${jobTitle || "the Senior QA Lead role"}. With proven expertise building the cherenkov-qa framework, hardening CI/CD pipelines with CodeQL, and architecting zero-flake Playwright automation, I specialize in accelerating test velocity and engineering confidence.\n\nBest regards,\nMoayed Badawy\nSenior Quality Assurance Lead`,
+          cold_email: `Subject: ${jobTitle || "Application"}${companyName ? ` - ${companyName}` : ""} - ${candName}\n\nDear ${companyName ? `${companyName} Hiring Team` : "Hiring Manager"},\n\nI am writing regarding the ${jobTitle || "open role"}. My background is in ${candTitle.toLowerCase()}, working primarily with ${candStackText}.\n\n[Draft scaffold — the local model was unreachable, so this was assembled from your Master Profile rather than generated.]\n\nBest regards,\n${candName}\n${candTitle}\n${candEmail}`,
           ats_answers: [
             {
               question: "Describe your experience with automated test frameworks and QA architecture.",
@@ -671,7 +735,7 @@ app.post("/api/synthesize", async (req: Request, res: Response) => {
             },
             {
               question: "What is your work authorization status and relocation availability?",
-              answer: "Currently based in Cairo, Egypt, with complete readiness for UK/EU visa sponsorship relocation or global remote engagement."
+              answer: `Draft scaffold: currently based in ${candLocation}. State your authorization status and relocation availability here — this answer was not generated.`
             },
             {
               question: "How do you ensure security and performance testing in CI/CD pipelines?",
@@ -692,38 +756,56 @@ app.post("/api/synthesize", async (req: Request, res: Response) => {
 
     if (!apiKey) {
       console.warn("GEMINI_API_KEY is not set. Generating deterministic QA strategic synthesis fallback.");
+      // No inference engine is reachable. Build a clearly labelled scaffold
+      // from the candidate's own profile — never another person's details,
+      // and never dressed up as model output.
       const fallbackResult = {
-        visa_sponsorship_likely: visaCheck.isLicensedSponsor || /visa|relocation|remote|uk|eu/i.test(jobDescription),
-        tailored_summary: `Senior Quality Assurance Lead with deep specialization in Playwright infrastructure, k6 load testing, and AI-driven QA frameworks (cherenkov-qa). Proven track record orchestrating enterprise test automation pipelines, local LLM integrations (Qwen, AnythingLLM), and CodeQL static security analysis. Immediate readiness for UK/EU relocation or high-autonomy global remote QA leadership.`,
+        visa_sponsorship_likely: visaCheck.isLicensedSponsor || visaCheck.postingClaimsSponsorship,
+        tailored_summary: `${candTitle} with hands-on depth across ${candStackText}. This is a deterministic scaffold assembled from your Master Profile because no inference engine was reachable — edit it before sending.`,
         identified_skill_gaps: extractLikelyGaps(jobDescription, masterProfile),
-        upskilling_recommendation: "AWS Certified DevOps / Cloud Security Specialty (Coursera/AWS) to augment cloud infrastructure test orchestration.",
-        cold_email: `Subject: Senior QA Lead / QA Architect Candidate - Moayed Badawy\n\nDear ${companyName ? `${companyName} Hiring Team` : "Hiring Manager"},\n\nI came across your opening for ${jobTitle || "the Senior QA role"} and was immediately drawn to your engineering standards. As a Senior QA Lead with extensive hands-on experience building custom agentic test frameworks (cherenkov-qa), architecting resilient Playwright & k6 suites, and embedding CodeQL into continuous delivery pipelines, I specialize in eliminating regression bottlenecks and accelerating deployment frequency.\n\nI am actively seeking ${visaCheck.isLicensedSponsor ? "roles offering UK/EU visa sponsorship or high-impact remote leadership" : "remote leadership or UK/EU sponsored roles"} where I can elevate test maturity from day one. I would welcome the opportunity to discuss how my QA automation infrastructure background aligns with your roadmap.\n\nBest regards,\nMoayed Badawy\nSenior Quality Assurance Lead\nmoaid.elmoatasem.bellah@gmail.com`,
+        upskilling_recommendation: "Configure or retry an inference engine to receive a gap-specific upskilling recommendation.",
+        cold_email: `Subject: ${jobTitle || "Application"}${companyName ? ` - ${companyName}` : ""} - ${candName}
+
+Dear ${companyName ? `${companyName} Hiring Team` : "Hiring Manager"},
+
+I am writing regarding the ${jobTitle || "open role"}${companyName ? ` at ${companyName}` : ""}. My background is in ${candTitle.toLowerCase()}, working primarily with ${candStackText}.
+
+[Draft scaffold — no inference engine was reachable, so this outline was assembled from your Master Profile rather than generated. Replace this paragraph with the specific evidence you want to lead on.]
+
+I am based in ${candLocation} and would welcome the chance to discuss the role.
+
+Best regards,
+${candName}
+${candTitle}
+${candEmail}`,
         ats_answers: [
           {
-            question: "Describe your experience with automated test frameworks and QA architecture.",
-            answer: "Over 7+ years orchestrating end-to-end testing infrastructure, I designed the cherenkov-qa framework, implemented modular Playwright suites, and integrated k6 for distributed load testing, achieving 99.4% CI pass rates and reducing feedback cycles by 65%."
+            question: "Describe your relevant experience for this role.",
+            answer: `Draft scaffold from your Master Profile: ${candTitle}, working with ${candStackText}. Replace with a specific, evidenced example — this answer was not generated.`
           },
           {
-            question: "How do you leverage AI and LLMs in quality assurance workflows?",
-            answer: "I pioneer agentic QA pipelines by integrating local LLMs (Qwen, AnythingLLM) and prompt-driven test generators to autonomously synthesize test cases, validate API contracts, and analyze CodeQL security findings prior to staging deployments."
+            question: "Why are you interested in this position?",
+            answer: `Draft scaffold: connect ${companyName || "this employer"}'s work to your experience as ${candTitle}. Replace with your own reasoning — this answer was not generated.`
           },
           {
             question: "What is your work authorization status and relocation availability?",
-            answer: "Currently based in Cairo, Egypt, with complete readiness for UK/EU visa sponsorship relocation or global remote engagement. I have extensive experience collaborating asynchronously across European and international time zones."
-          },
-          {
-            question: "How do you ensure security and performance testing in CI/CD pipelines?",
-            answer: "I embed automated CodeQL static analysis rules into GitHub Actions/GitLab CI pipelines to intercept vulnerabilities at pull-request time, paired with k6 baseline thresholds that automatically gate performance regressions."
+            answer: `Draft scaffold: currently based in ${candLocation}. State your authorization status and relocation availability here — this answer was not generated.`
           }
-        ]
+        ],
+        isDeterministicFallback: true,
+        fallbackReason: "No GEMINI_API_KEY configured and no local model requested."
       };
 
       return res.json({
         ...fallbackResult,
         isLicensedSponsor: visaCheck.isLicensedSponsor,
         matchedSponsor: visaCheck.matchedSponsor,
+        sponsorSource: visaCheck.sponsorSource,
+        registerAvailable: visaCheck.registerAvailable,
+        postingClaimsSponsorship: visaCheck.postingClaimsSponsorship,
         inferenceEngine: "Deterministic Fallback Engine",
-        provider: 'gemini'
+        // No model ran, so do not claim one did.
+        provider: 'none'
       });
     }
 
@@ -736,7 +818,7 @@ app.post("/api/synthesize", async (req: Request, res: Response) => {
       }
     });
 
-    const candidateName = masterProfile?.name || "Moayed Badawy";
+    const candidateName = masterProfile?.name || "the candidate";
     const candidateTitle = masterProfile?.title || jobTitle || "Senior Quality Assurance Lead";
     const candidateLocation = masterProfile?.location || "Prepared for UK/EU Visa Relocation or Remote";
     const candidateCompetencies = Array.isArray(masterProfile?.core_competencies) ? masterProfile.core_competencies.join("; ") : "Test Automation, CI/CD, Quality Architecture";
@@ -831,38 +913,56 @@ Return ONLY valid JSON strictly matching the defined responseSchema. No markdown
     } catch (aiErr) {
       console.warn("Gemini synthesis generateContent failed. Engaging air-gapped deterministic fallback engine:", aiErr);
       parsedData = {
-        visa_sponsorship_likely: visaCheck.isLicensedSponsor || /visa|relocation|remote|uk|eu/i.test(jobDescription),
-        tailored_summary: `${candidateTitle} with deep focus on resilient automation frameworks, distributed load testing, and AI-driven quality pipelines. Proven track record reducing CI/CD feedback cycles by 65% with strict static analysis (CodeQL) security gates. Immediate readiness for UK/EU relocation or high-autonomy remote QA engineering leadership.`,
+        visa_sponsorship_likely: visaCheck.isLicensedSponsor || visaCheck.postingClaimsSponsorship,
+        tailored_summary: `${candTitle} with hands-on depth across ${candStackText}. This is a deterministic scaffold assembled from your Master Profile because the inference call failed — edit it before sending.`,
         identified_skill_gaps: extractLikelyGaps(jobDescription, masterProfile),
-        upskilling_recommendation: "AWS Certified DevOps / Cloud Security Specialty to augment cloud-native automation pipelines.",
-        cold_email: `Subject: Senior QA Lead / QA Architect Candidate - Moayed Badawy\n\nDear ${companyName ? `${companyName} Hiring Team` : "Hiring Manager"},\n\nI came across your opening for ${jobTitle || "the Senior QA role"} and was immediately drawn to your engineering standards. As a Senior QA Lead with extensive hands-on experience building custom agentic test frameworks (cherenkov-qa), architecting resilient Playwright & k6 suites, and embedding CodeQL into continuous delivery pipelines, I specialize in eliminating regression bottlenecks and accelerating deployment frequency.\n\nI am actively seeking ${visaCheck.isLicensedSponsor ? "roles offering UK/EU visa sponsorship or high-impact remote leadership" : "remote leadership or UK/EU sponsored roles"} where I can elevate test maturity from day one. I would welcome the opportunity to discuss how my QA automation infrastructure background aligns with your roadmap.\n\nBest regards,\nMoayed Badawy\nSenior Quality Assurance Lead\nmoaid.elmoatasem.bellah@gmail.com`,
+        upskilling_recommendation: "Configure or retry an inference engine to receive a gap-specific upskilling recommendation.",
+        cold_email: `Subject: ${jobTitle || "Application"}${companyName ? ` - ${companyName}` : ""} - ${candName}
+
+Dear ${companyName ? `${companyName} Hiring Team` : "Hiring Manager"},
+
+I am writing regarding the ${jobTitle || "open role"}${companyName ? ` at ${companyName}` : ""}. My background is in ${candTitle.toLowerCase()}, working primarily with ${candStackText}.
+
+[Draft scaffold — the inference call failed, so this outline was assembled from your Master Profile rather than generated. Replace this paragraph with the specific evidence you want to lead on.]
+
+I am based in ${candLocation} and would welcome the chance to discuss the role.
+
+Best regards,
+${candName}
+${candTitle}
+${candEmail}`,
         ats_answers: [
           {
-            question: "Describe your experience with automated test frameworks and QA architecture.",
-            answer: "Over 7+ years orchestrating end-to-end testing infrastructure, I designed the cherenkov-qa framework, implemented modular Playwright suites, and integrated k6 for distributed load testing, achieving 99.4% CI pass rates and reducing feedback cycles by 65%."
+            question: "Describe your relevant experience for this role.",
+            answer: `Draft scaffold from your Master Profile: ${candTitle}, working with ${candStackText}. Replace with a specific, evidenced example — this answer was not generated.`
           },
           {
-            question: "How do you leverage AI and LLMs in quality assurance workflows?",
-            answer: "I pioneer agentic QA pipelines by integrating local LLMs (Qwen, AnythingLLM) and prompt-driven test generators to autonomously synthesize test cases, validate API contracts, and analyze CodeQL security findings prior to staging deployments."
+            question: "Why are you interested in this position?",
+            answer: `Draft scaffold: connect ${companyName || "this employer"}'s work to your experience as ${candTitle}. Replace with your own reasoning — this answer was not generated.`
           },
           {
             question: "What is your work authorization status and relocation availability?",
-            answer: "Currently based in Cairo, Egypt, with complete readiness for UK/EU visa sponsorship relocation or global remote engagement. I have extensive experience collaborating asynchronously across European and international time zones."
-          },
-          {
-            question: "How do you ensure security and performance testing in CI/CD pipelines?",
-            answer: "I embed automated CodeQL static analysis rules into GitHub Actions/GitLab CI pipelines to intercept vulnerabilities at pull-request time, paired with k6 baseline thresholds that automatically gate performance regressions."
+            answer: `Draft scaffold: currently based in ${candLocation}. State your authorization status and relocation availability here — this answer was not generated.`
           }
-        ]
+        ],
+        isDeterministicFallback: true,
+        fallbackReason: "The configured inference engine did not return a usable response."
       };
     }
 
+    // This return is shared with the path where the Gemini call failed and a
+    // scaffold was substituted, so the engine label has to follow what
+    // actually produced the payload.
+    const usedFallback = Boolean((parsedData as { isDeterministicFallback?: boolean }).isDeterministicFallback);
     return res.json({
       ...parsedData,
       isLicensedSponsor: visaCheck.isLicensedSponsor,
       matchedSponsor: visaCheck.matchedSponsor,
-      inferenceEngine: GEMINI_DISPLAY_NAME,
-      provider: 'gemini'
+      sponsorSource: visaCheck.sponsorSource,
+      registerAvailable: visaCheck.registerAvailable,
+      postingClaimsSponsorship: visaCheck.postingClaimsSponsorship,
+      inferenceEngine: usedFallback ? "Deterministic Fallback Engine" : GEMINI_DISPLAY_NAME,
+      provider: usedFallback ? 'none' : 'gemini'
     });
 
   } catch (error: any) {
@@ -884,7 +984,7 @@ app.post("/api/synthesize/compare", async (req: Request, res: Response) => {
 
     const visaCheck = await checkVisaSponsorship(companyName || "", jobDescription);
 
-    const candidateName = masterProfile?.name || "Moayed Badawy";
+    const candidateName = masterProfile?.name || "the candidate";
     const candidateTitle = masterProfile?.title || jobTitle || "Senior Quality Assurance Lead";
     const candidateTech = Array.isArray(masterProfile?.tech_stack) ? masterProfile.tech_stack.slice(0, 6).join(", ") : "Playwright, k6, TypeScript, CodeQL";
 
@@ -1016,6 +1116,9 @@ Return a JSON object with:
       jobTitle,
       isLicensedSponsor: visaCheck.isLicensedSponsor,
       matchedSponsor: visaCheck.matchedSponsor,
+      sponsorSource: visaCheck.sponsorSource,
+      registerAvailable: visaCheck.registerAvailable,
+      postingClaimsSponsorship: visaCheck.postingClaimsSponsorship,
       gemini: geminiResult,
       local: localResult,
       timestamp: new Date().toISOString()
@@ -1030,6 +1133,11 @@ Return a JSON object with:
 app.post(["/api/mcp/linkedin-scout", "/api/linkedin/scout"], async (req: Request, res: Response) => {
   try {
     const { profileUrl, company, recruiterName, targetRole, candidateProfile } = req.body;
+    // Outreach is sent as the candidate, so it must be signed by whoever is
+    // actually using the app rather than a name baked into this file.
+    const scoutName = candidateProfile?.name || "the candidate";
+    const scoutTitle = candidateProfile?.title || "your current title";
+    const scoutEmail = candidateProfile?.email || process.env.CANDIDATE_EMAIL || "your.email@example.com";
     const apiKey = process.env.GEMINI_API_KEY;
 
     const companyTarget = company || "Tech Enterprise";
@@ -1096,8 +1204,8 @@ app.post(["/api/mcp/linkedin-scout", "/api/linkedin/scout"], async (req: Request
         ],
         personalizedOutreach: {
           subject: `Quick thought on your post re: eliminating test flakiness at ${companyTarget}`,
-          body: `Hi ${nameFormatted.split(" ")[0] || "Sarah"},\n\nI really resonated with your recent post regarding how flaky test suites derail developer velocity at ${companyTarget}—particularly your point on prioritizing deterministic API contracts and headless Playwright execution over brittle UI assertions.\n\nAs a Senior QA Lead, I recently architected the 'cherenkov-qa' agentic framework and migrated legacy CI suites to parallelized Playwright workers with k6 distributed performance baselines, cutting regression cycles by 65% and achieving a 99.4% CI pass rate.\n\nI noticed you are scouting for senior QA infrastructure talent and offering UK sponsorship. I'd love to share a 2-minute overview of how I eliminate flaky pipelines without slowing sprint cadence.\n\nAre you open to a brief chat next Tuesday?\n\nBest regards,\nMoayed Badawy\nSenior Quality Assurance Lead\nmoaid.elmoatasem.bellah@gmail.com`,
-          hookReason: `Directly bridges recruiter's post on flaky test costs with Moayed's Playwright/cherenkov-qa concrete metrics.`
+          body: `Hi ${nameFormatted.split(" ")[0] || "there"},\n\nI came across your work at ${companyTarget} and wanted to reach out directly about ${targetRole || "engineering roles on your team"}.\n\n[Draft scaffold — this outreach was assembled from your Master Profile, not generated. Replace this paragraph with the specific evidence you want to lead on.]\n\nWould you be open to a brief conversation?\n\nBest regards,\n${scoutName}\n${scoutTitle}\n${scoutEmail}`,
+          hookReason: `Bridges the recruiter's stated priorities with ${scoutName}'s background — replace with the specific evidence you want to lead on.`
         }
       };
 
@@ -1587,51 +1695,16 @@ You must return ONLY valid JSON strictly matching this schema. Do not include ma
       }
     }
 
-    // High-Fidelity Calibrated Fallback
-    return res.json({
-      name: "Moayed Badawy",
-      title: "Senior Quality Assurance Lead & SDET Architect",
-      location: "Cairo, Egypt / Prepared for UK/EU Relocation",
-      capturedFromUrl: Boolean(capturedUrlText),
-      sourceUrl: capturedUrlText ? url : undefined,
-      archetype: "international_seeker",
-      target_roles: [
-        "Senior QA Lead",
-        "Staff SDET",
-        "QA Infrastructure Architect",
-        "UK/EU Visa Sponsorship"
-      ],
-      core_competencies: [
-        "AI-driven autonomous QA testing (cherenkov-qa)",
-        "Playwright CDP & Accessibility tree test automation",
-        "k6 distributed load & latency engineering (p99 <42ms)",
-        "CodeQL static AST security analysis & OWASP gates",
-        "High-velocity CI/CD matrix release governance"
-      ],
-      tech_stack: [
-        "Playwright", "TypeScript", "k6", "CodeQL", "Docker", "GitHub Actions", "cherenkov-qa",
-        "AnythingLLM", "Qwen 2.5", "Vitest", "Jest", "Postman", "Kubernetes", "Datadog", "GraphQL", "REST APIs",
-        "WireMock", "Allure", "SonarQube", "Terraform", "AWS", "GCP", "Linux / Bash", "OWASP Top 10"
-      ],
-      experience: "10+ years engineering mission-critical automated testing infrastructures, architecting distributed load frameworks, and pioneering agentic MCP quality gates.",
-      learning_certs: [
-        {
-          id: `cert-import-${Date.now()}`,
-          title: "Agentic AI in Quality Engineering & LLM Automation",
-          provider: "DeepLearning.AI xAPI LRS",
-          status: "Completed",
-          dateCompleted: "2026-02-10",
-          extracted_skills: ["Autonomous Test Agents", "AnythingLLM", "Qwen", "MCP Stdio"],
-          badge_color: "emerald"
-        }
-      ],
-      extractedSkillCount: 42,
-      diffHighlights: [
-        "+ Playwright CDP Accessibility Tree Locators",
-        "+ Distributed k6 Spike Latency Harness",
-        "+ CodeQL Custom SAST Taint Tracking",
-        "+ Zero-Trust PII Masking Pipeline"
-      ]
+    // No inference engine could read the submitted document. Returning a
+    // stand-in profile here would silently hand the user somebody else's
+    // identity, which then flows into every generated application, so this
+    // fails loudly instead.
+    return res.status(503).json({
+      error: "Profile extraction needs an inference engine.",
+      detail:
+        "Set GEMINI_API_KEY, or point LOCAL_LLM_ENDPOINT at a local model, to extract a profile from a CV or LinkedIn URL. " +
+        "You can also pick an archetype and edit the Master Profile by hand.",
+      extractionAvailable: false
     });
   } catch (err: any) {
     return res.status(500).json({ error: err.message || "Failed to extract profile" });
@@ -1669,8 +1742,8 @@ app.post("/api/onboarding/connect-lms-webhook", async (req: Request, res: Respon
     const base = `http://127.0.0.1:${PORT}`;
     const sampleStatement = {
       actor: {
-        name: "Moayed Badawy",
-        mbox: "mailto:moaid.elmoatasem.bellah@gmail.com"
+        name: "Cherenkov Connectivity Probe",
+        mbox: "mailto:connectivity-probe@cherenkov.invalid"
       },
       verb: {
         id: "http://adlnet.gov/expapi/verbs/completed",
@@ -1826,31 +1899,43 @@ app.get("/api/kanban/state", async (req: Request, res: Response) => {
 app.post("/api/kanban/state", async (req: Request, res: Response) => {
   try {
     const applications = req.body;
-    const db = getDb();
-    
-    // Transactional replace
-    await db.execute("DELETE FROM kanban_tasks");
-
-    for (const app of applications) {
-      await db.execute({
-        sql: "INSERT INTO kanban_tasks (id, columnId, company, jobTitle, salary, location, createdAt, updatedAt, matchScore, jobDescription, coldEmail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        args: [
-          app.id,
-          app.column,
-          app.company,
-          app.jobTitle,
-          app.salary || null,
-          app.location || null,
-          app.createdAt || new Date().toISOString(),
-          app.updatedAt || new Date().toISOString(),
-          app.matchScore || 0,
-          app.jobDescription || null,
-          app.coldEmail || null
-        ]
-      });
+    if (!Array.isArray(applications)) {
+      return res.status(400).json({ error: "Expected an array of applications" });
     }
-    
-    res.json({ success: true });
+    const db = getDb();
+
+    // Last write wins per id. A duplicate id in the payload used to abort the
+    // save halfway through, and because the DELETE had already committed the
+    // board was left empty.
+    const deduped = Array.from(
+      new Map(applications.map((app: any) => [app.id, app])).values()
+    );
+
+    // One transaction: either the whole board is replaced or nothing changes.
+    await db.batch(
+      [
+        { sql: "DELETE FROM kanban_tasks", args: [] },
+        ...deduped.map((app: any) => ({
+          sql: "INSERT OR REPLACE INTO kanban_tasks (id, columnId, company, jobTitle, salary, location, createdAt, updatedAt, matchScore, jobDescription, coldEmail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          args: [
+            app.id,
+            app.column,
+            app.company,
+            app.jobTitle,
+            app.salary || null,
+            app.location || null,
+            app.createdAt || new Date().toISOString(),
+            app.updatedAt || new Date().toISOString(),
+            app.matchScore || 0,
+            app.jobDescription || null,
+            app.coldEmail || null
+          ]
+        }))
+      ],
+      "write"
+    );
+
+    res.json({ success: true, saved: deduped.length });
   } catch (error: any) {
     console.error("Failed to update kanban state:", error);
     res.status(500).json({ error: "Failed to update kanban state" });
