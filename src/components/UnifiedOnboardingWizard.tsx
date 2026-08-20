@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  AlertTriangle,
   Globe,
   MapPin,
   Cpu,
@@ -53,6 +54,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
   const [llmMode, setLlmMode] = useState<'cloud' | 'local' | 'hybrid'>('cloud');
   const [newRoleInput, setNewRoleInput] = useState('');
   const [showAddRole, setShowAddRole] = useState(false);
+  const [extractionNotice, setExtractionNotice] = useState<string | null>(null);
 
   // Handle Preset Selection
   const handleSelectPreset = (presetKey: CandidateArchetype) => {
@@ -70,22 +72,45 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
     }
   };
 
-  // Handle File Upload & Simulation / Endpoint Call
+  /** Text formats the browser can read directly; anything else must be pasted. */
+  const isReadableAsText = (file: File) =>
+    /\.(txt|md|markdown|json|csv)$/i.test(file.name) || file.type.startsWith('text/');
+
+  // Handle File Upload & Extraction
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || !e.target.files[0]) return;
     const file = e.target.files[0];
-    setIsExtracting(true);
+    setExtractionNotice(null);
 
+    // Only send what was actually read. Inventing a description of the file
+    // would mean extracting a profile from text the CV never contained.
+    if (!isReadableAsText(file)) {
+      setExtractionNotice(
+        `${file.name} can't be read in the browser. Paste the CV text into the box below instead, or pick an archetype and edit the profile by hand.`
+      );
+      return;
+    }
+
+    setIsExtracting(true);
     try {
-      // Call backend extraction endpoint if available
+      const rawText = await file.text();
+      if (!rawText.trim()) {
+        setExtractionNotice(`${file.name} appears to be empty.`);
+        return;
+      }
+
       const res = await fetch('/api/onboarding/extract-profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          rawText: `Uploaded resume filename: ${file.name}. Experience in automated testing, engineering architectures, CI/CD, and distributed validation.`,
+          rawText,
           source: 'RESUME_UPLOAD'
         })
       });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        setExtractionNotice(err.detail || err.error || 'Profile extraction failed.');
+      }
       if (res.ok) {
         const data = await res.json();
         if (data.name && data.tech_stack) {
@@ -102,18 +127,21 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
             experience: data.experience || activeProfile.experience,
             archetype: detectedArchetype
           });
+          // Only advance once something was actually extracted; a failure
+          // leaves the user on this step with the notice visible.
+          setStep(2);
         }
       }
-    } catch {
-      // Fallback
+    } catch (err) {
+      setExtractionNotice(err instanceof Error ? err.message : 'Profile extraction failed.');
     } finally {
       setIsExtracting(false);
-      setStep(2);
     }
   };
 
   const handleLinkedInExtract = async () => {
     if (!linkedInUrl.trim()) return;
+    setExtractionNotice(null);
     setIsExtracting(true);
     try {
       const res = await fetch('/api/onboarding/extract-profile', {
@@ -121,6 +149,10 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: linkedInUrl.trim(), source: 'LINKEDIN_URL' })
       });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        setExtractionNotice(err.detail || err.error || 'Profile extraction failed.');
+      }
       if (res.ok) {
         const data = await res.json();
         if (data.name) {
@@ -133,13 +165,13 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
             target_roles: data.target_roles || activeProfile.target_roles,
             tech_stack: data.tech_stack || activeProfile.tech_stack
           });
+          setStep(2);
         }
       }
-    } catch {
-      // Fallback
+    } catch (err) {
+      setExtractionNotice(err instanceof Error ? err.message : 'Profile extraction failed.');
     } finally {
       setIsExtracting(false);
-      setStep(2);
     }
   };
 
@@ -401,12 +433,22 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                     ) : (
                       <div className="flex flex-col items-center justify-center gap-2">
                         <FileText className="w-7 h-7 text-accent2-ink" />
-                        <span className="text-sm font-bold text-ink">Drop your Resume PDF / DOCX here</span>
-                        <span className="text-[11px] text-ink-faint font-mono">AST schema parsing with zero cloud data retention</span>
+                        <span className="text-sm font-bold text-ink">Drop your CV here (.txt / .md)</span>
+                        <span className="text-[11px] text-ink-faint font-mono">
+                          Parsed in-browser · PDF and DOCX must be pasted as text
+                        </span>
                       </div>
                     )}
                   </div>
                 </div>
+
+                {/* Extraction outcome — never silently substitute a profile. */}
+                {extractionNotice && (
+                  <div className="flex items-start gap-2.5 rounded-card border border-caution-line bg-caution-soft px-3.5 py-3">
+                    <AlertTriangle className="w-4 h-4 text-caution-ink shrink-0 mt-0.5" />
+                    <p className="text-xs leading-relaxed text-caution-ink">{extractionNotice}</p>
+                  </div>
+                )}
 
                 {/* LinkedIn URL Input */}
                 <div className="flex gap-2">

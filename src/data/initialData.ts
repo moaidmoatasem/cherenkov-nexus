@@ -20,6 +20,7 @@ export const ARCHETYPE_PRESETS: Record<CandidateArchetype, ArchetypePreset> = {
     recommendedTheme: 'cyber',
     profile: {
       name: "Moayed Badawy",
+      email: "moaid.elmoatasem.bellah@gmail.com",
       title: "Senior Quality Assurance Lead & SDET Architect",
       location: "Cairo, Egypt / Prepared for UK/EU Relocation",
       archetype: 'international_seeker',
@@ -92,6 +93,7 @@ export const ARCHETYPE_PRESETS: Record<CandidateArchetype, ArchetypePreset> = {
     recommendedTheme: 'emerald',
     profile: {
       name: "Alexei Vance",
+      email: "alexei.vance@proton.me",
       title: "Principal Security & Systems Engineer",
       location: "Frankfurt, Germany (Domestic / EU Only)",
       archetype: 'zero_trust_specialist',
@@ -155,6 +157,7 @@ export const ARCHETYPE_PRESETS: Record<CandidateArchetype, ArchetypePreset> = {
     recommendedTheme: 'solar',
     profile: {
       name: "Jordan Lee",
+      email: "jordan.lee.qa@gmail.com",
       title: "Junior QA Engineer & Test Automation Specialist",
       location: "Manchester, UK",
       archetype: 'upskilling_switcher',
@@ -225,6 +228,7 @@ export const ARCHETYPE_PRESETS: Record<CandidateArchetype, ArchetypePreset> = {
     recommendedTheme: 'synthwave',
     profile: {
       name: "Marcus Sterling",
+      email: "marcus.sterling@outlook.com",
       title: "Director of Quality Engineering & Developer Productivity",
       location: "London, UK / New York, US",
       archetype: 'staff_executive',
@@ -285,6 +289,7 @@ export const ARCHETYPE_PRESETS: Record<CandidateArchetype, ArchetypePreset> = {
     recommendedTheme: 'cyber',
     profile: {
       name: "Tariq Al-Mansoor",
+      email: "tariq.almansoor@gmail.com",
       title: "Lead AI Automation & SDET Swarm Engineer",
       location: "Dubai, UAE / Remote",
       archetype: 'automation_power_user',
