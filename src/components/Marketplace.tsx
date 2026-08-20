@@ -537,7 +537,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                     handleToggleInstall(selectedPackage.id);
                     setSelectedPackage(null);
                   }}
-                  className="px-5 py-2 text-xs font-bold rounded-control bg-accent hover:bg-accent-strong text-ink-inverse cursor-pointer"
+                  className="px-5 py-2 text-xs font-bold rounded-control bg-accent hover:bg-accent-strong text-accent-contrast-inverse cursor-pointer"
                 >
                   {selectedPackage.installed ? 'Uninstall MCP' : 'Install Connector'}
                 </button>
@@ -611,7 +611,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                   onToast('success', 'MCP Registered', 'Custom MCP server added to local registry.');
                   setIsPublishModalOpen(false);
                 }}
-                className="px-5 py-2 text-xs font-bold font-mono rounded-control bg-accent hover:bg-accent-strong text-ink-inverse"
+                className="px-5 py-2 text-xs font-bold font-mono rounded-control bg-accent hover:bg-accent-strong text-accent-contrast-inverse"
               >
                 Publish to Local Registry
               </button>

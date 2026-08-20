@@ -40,9 +40,15 @@ app.use(cors());
 // asset request — a single page load pulls hundreds of modules through the Vite
 // middleware — so the budget was exhausted before the UI finished booting and
 // the rest of the app came back 429.
+// 100 per 15 minutes is under a minute of normal use: the Kanban board
+// autosaves on a 600ms debounce and the synthesizer fans out several calls per
+// run. Raised to a ceiling that still stops abuse but no longer throttles a
+// single active session.
 app.use("/api", rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100
+  max: 1000,
+  standardHeaders: true,
+  legacyHeaders: false
 }));
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-3.7-flash";

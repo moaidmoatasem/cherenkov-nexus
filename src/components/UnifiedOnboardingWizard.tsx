@@ -420,7 +420,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                   <button
                     onClick={handleLinkedInExtract}
                     disabled={isExtracting || !linkedInUrl.trim()}
-                    className="px-4 py-2.5 bg-accent hover:bg-accent disabled:opacity-50 text-ink rounded-control text-xs font-bold cursor-pointer transition-colors flex items-center gap-1.5"
+                    className="px-4 py-2.5 bg-accent hover:bg-accent-strong disabled:opacity-50 text-accent-contrast rounded-control text-xs font-bold cursor-pointer transition-colors flex items-center gap-1.5"
                   >
                     <Sparkles className="w-3.5 h-3.5" />
                     Extract

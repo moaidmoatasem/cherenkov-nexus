@@ -674,8 +674,8 @@ const ORACLE_CSS = `
   --fail:var(--color-critical); --fail-deep:var(--color-critical);
   --pass:var(--color-positive); --cond:var(--color-caution);
   --wash-fail:var(--color-critical-soft); --wash-cond:var(--color-caution-soft);
-  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
-  --sans:'IBM Plex Sans',system-ui,sans-serif;
+  /* UI faces follow the product; the serif is the dossier's own and stays. */
+  --mono:var(--font-mono); --sans:var(--font-sans);
   --serif:'Spectral',Georgia,serif;
   background:var(--ink); color:var(--paper); font-family:var(--sans);
   font-size:15px; line-height:1.5; border:1px solid var(--rule); border-radius:4px;

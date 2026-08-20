@@ -348,7 +348,7 @@ export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({
           {activeTab === 'json' && (
             <div className="space-y-4">
               {jsonError && (
-                <div className="p-3.5 rounded-control bg-critical/60 border border-critical-line text-critical-ink text-xs font-mono">
+                <div className="p-3.5 rounded-control bg-critical-soft border border-critical-line text-critical-ink text-xs font-mono">
                   {jsonError}
                 </div>
               )}

@@ -312,7 +312,10 @@ export default function App() {
   };
 
   return (
-    <div className="h-dvh min-h-[40rem] flex flex-col bg-canvas text-ink font-sans relative overflow-hidden">
+    <div
+      data-testid="app-shell"
+      className="h-dvh min-h-[40rem] flex flex-col bg-canvas text-ink font-sans relative overflow-hidden"
+    >
 
       {/* Top Application Header */}
       <Header

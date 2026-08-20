@@ -550,7 +550,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                       {app.synthesis && (
                         <button
                           onClick={() => setActiveModalApp(app)}
-                          className="px-3 py-1.5 text-xs bg-accent-soft hover:bg-accent/30 text-accent-ink border border-accent-line rounded-control font-bold transition-all cursor-pointer"
+                          className="px-3 py-1.5 text-xs bg-accent-soft hover:bg-accent/30 text-accent-contrast border border-accent-line rounded-control font-bold transition-all cursor-pointer"
                         >
                           View Pitch
                         </button>

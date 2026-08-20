@@ -705,7 +705,7 @@ ${qa.answer}
           <button
             onClick={handleScrape}
             disabled={isScraping}
-            className="px-5 py-2.5 text-xs font-extrabold text-accent-contrast bg-accent hover:bg-accent-strong border border-info-line rounded-control transition-all flex items-center justify-center gap-2 shrink-0 disabled:opacity-50 cursor-pointer"
+            className="px-5 py-2.5 text-xs font-extrabold text-accent-contrast bg-accent hover:bg-accent-strong border border-accent-line rounded-control transition-all flex items-center justify-center gap-2 shrink-0 disabled:opacity-50 cursor-pointer"
           >
             {isScraping ? (
               <>
@@ -807,9 +807,9 @@ ${qa.answer}
             <button
               type="button"
               onClick={() => setIsCompareModalOpen(true)}
-              className="px-3 py-1.5 text-xs font-bold bg-accent hover:bg-accent-strong text-info-ink border border-info-line rounded-control flex items-center gap-1.5 cursor-pointer transition-all"
+              className="px-3 py-1.5 text-xs font-bold bg-accent hover:bg-accent-strong text-accent-contrast border border-accent-line rounded-control flex items-center gap-1.5 cursor-pointer transition-all"
             >
-              <GitCompare className="w-3.5 h-3.5 text-info-ink" />
+              <GitCompare className="w-3.5 h-3.5 text-accent-contrast" />
               <span>Compare Models (Cloud vs Local)</span>
             </button>
 
@@ -1571,7 +1571,7 @@ ${qa.answer}
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setIsVoiceInterviewOpen(true)}
-                      className="px-3 py-1.5 text-xs font-bold bg-accent-soft hover:bg-accent/30 text-accent-ink border border-accent-line rounded-control flex items-center gap-1.5 transition-all cursor-pointer"
+                      className="px-3 py-1.5 text-xs font-bold bg-accent-soft hover:bg-accent/30 text-accent-contrast border border-accent-line rounded-control flex items-center gap-1.5 transition-all cursor-pointer"
                     >
                       <Mic className="w-3.5 h-3.5" />
                       <span>Launch Voice Audio Mode</span>
@@ -1784,7 +1784,7 @@ ${qa.answer}
       ) : (
         /* Empty State / Prompt to Synthesize */
         <div className="p-12 rounded-panel bg-surface border border-line text-center space-y-4 shadow-pop">
-          <div className="w-14 h-14 rounded-card bg-accent text-accent-ink border border-accent-line flex items-center justify-center mx-auto">
+          <div className="w-14 h-14 rounded-card bg-accent text-accent-contrast border border-accent-line flex items-center justify-center mx-auto">
             <Sparkles className="w-7 h-7 text-accent-ink" />
           </div>
           <div>

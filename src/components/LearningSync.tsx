@@ -366,7 +366,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
 
         <div className="relative z-10">
           <div className="flex items-center gap-2.5">
-            <span className="p-2.5 rounded-control bg-accent text-ink">
+            <span className="p-2.5 rounded-control bg-accent text-accent-contrast">
               <GraduationCap className="w-5 h-5" />
             </span>
             <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
@@ -555,7 +555,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
 
                 <button
                   onClick={() => handleEnrollPreset(p)}
-                  className="w-full py-2 text-xs font-bold bg-fill-strong hover:bg-accent hover:text-ink text-ink rounded-control transition-all border border-line flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="w-full py-2 text-xs font-bold bg-fill-strong hover:bg-accent hover:text-accent-contrast text-accent-contrast rounded-control transition-all border border-line flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Enroll in Pathway</span>

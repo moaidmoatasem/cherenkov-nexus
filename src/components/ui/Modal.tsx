@@ -1,6 +1,11 @@
 import React, { useCallback, useEffect, useId, useRef } from 'react';
 import { cn } from './cn';
 
+/** `Voice interview sandbox` -> `voice-interview-sandbox`, so a test can name
+ *  a dialog without depending on its visible wording staying identical. */
+const slug = (value: string) =>
+  value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
 const FOCUSABLE = [
   'a[href]',
   'button:not([disabled])',
@@ -134,7 +139,7 @@ export const Modal: React.FC<ModalProps> = ({
         align === 'left' && 'justify-start items-stretch',
         className,
       )}
-      data-testid={`modal-${labelledBy ?? label ?? fallbackId}`}
+      data-testid={`modal-${slug(labelledBy ?? label ?? fallbackId)}`}
     >
       {children}
     </div>

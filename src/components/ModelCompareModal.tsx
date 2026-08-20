@@ -135,7 +135,7 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-card bg-accent text-ink">
+            <div className="p-3 rounded-card bg-accent text-accent-contrast">
               <GitCompare className="w-6 h-6 text-ink" />
             </div>
             <div>
@@ -285,7 +285,7 @@ export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({
                       onClose();
                     }
                   }}
-                  className="px-3.5 py-1.5 rounded-control bg-accent hover:bg-accent text-ink text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-control bg-accent hover:bg-accent-strong text-accent-contrast text-xs font-bold flex items-center gap-1.5 cursor-pointer"
                 >
                   <span>Apply This Summary</span>
                   <ArrowRight className="w-3.5 h-3.5" />
