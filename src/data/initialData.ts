@@ -5,6 +5,7 @@ export interface ArchetypePreset {
   label: string;
   badge: string;
   tagline: string;
+  /** A theme token, so an archetype's colour follows the active theme. */
   accentColor: string;
   recommendedTheme: string;
   profile: MasterProfile;
@@ -16,7 +17,7 @@ export const ARCHETYPE_PRESETS: Record<CandidateArchetype, ArchetypePreset> = {
     label: 'International Visa Seeker',
     badge: 'Global Relocation',
     tagline: 'Prioritizes UK/EU sponsor matching, ATS compliance, and high-speed cloud synthesis.',
-    accentColor: '#06b6d4',
+    accentColor: 'var(--color-info)',
     recommendedTheme: 'cyber',
     profile: {
       name: "Moayed Badawy",
@@ -89,7 +90,7 @@ export const ARCHETYPE_PRESETS: Record<CandidateArchetype, ArchetypePreset> = {
     label: 'Zero-Trust Enterprise Engineer',
     badge: 'Air-Gapped Privacy',
     tagline: 'Client-side AES-GCM PII encryption, local Qwen inference, zero cloud data egress.',
-    accentColor: '#10b981',
+    accentColor: 'var(--color-positive)',
     recommendedTheme: 'emerald',
     profile: {
       name: "Alexei Vance",
@@ -153,7 +154,7 @@ export const ARCHETYPE_PRESETS: Record<CandidateArchetype, ArchetypePreset> = {
     label: 'Upskilling Career Switcher',
     badge: 'Fast-Track Growth',
     tagline: 'Dynamic skill-gap detection, living xAPI course triggers, and STAR mock interview practice.',
-    accentColor: '#f59e0b',
+    accentColor: 'var(--color-caution)',
     recommendedTheme: 'solar',
     profile: {
       name: "Jordan Lee",
@@ -224,7 +225,7 @@ export const ARCHETYPE_PRESETS: Record<CandidateArchetype, ArchetypePreset> = {
     label: 'Staff & Executive Leader',
     badge: 'High-Impact Outreach',
     tagline: 'LinkedIn scout mapping, executive recruiter outreach, and company ghost job radar.',
-    accentColor: '#8b5cf6',
+    accentColor: 'var(--color-accent)',
     recommendedTheme: 'synthwave',
     profile: {
       name: "Marcus Sterling",
@@ -285,7 +286,7 @@ export const ARCHETYPE_PRESETS: Record<CandidateArchetype, ArchetypePreset> = {
     label: 'Autonomous Swarm Architect',
     badge: 'Multi-Agent DAG',
     tagline: 'High-throughput visual agent canvas, headless AST dispatches, and sub-50ms command palette.',
-    accentColor: '#3b82f6',
+    accentColor: 'var(--color-chart-2)',
     recommendedTheme: 'cyber',
     profile: {
       name: "Tariq Al-Mansoor",

@@ -41,10 +41,19 @@ labels and metadata · `text-ink-inverse` → text on a bright fill.
 
 ### Accent and status
 
-`accent` is the single interactive colour and changes per theme. `accent2` is a
-supporting hue for gradients and charts. The four status tones —
-`positive`, `caution`, `critical`, `info` — carry meaning and are **never** used
-for decoration.
+`accent` is the single interactive colour and changes per theme. There is no
+second accent: a solid fill on a control is always the accent, and the four
+status tones — `positive`, `caution`, `critical`, `info` — carry meaning and are
+**never** used for decoration.
+
+A solid fill takes `text-accent-contrast`, not `text-ink`. `text-ink` is the page
+foreground and inverts with the theme, so on a filled control it goes unreadable
+in light mode.
+
+Charts resolve through `ui/chart.ts`: `chartSeries` is the categorical ramp,
+`chartStatus` maps pass/fail meaning, and `chartAxis` covers axes, gridlines and
+tooltip chrome. Recharts takes `var()` in `fill`/`stroke` like CSS does, so a
+chart is correct in all eight themes for free.
 
 Each of these exposes four utilities, so a chip is always built the same way:
 
@@ -59,8 +68,14 @@ way.
 
 ### Geometry and elevation
 
-`rounded-chip` (6px) · `rounded-control` (10px) · `rounded-card` (14px) ·
-`rounded-panel` (18px). Shadows are `shadow-card` and `shadow-pop` only.
+`rounded-chip` (6px) · `rounded-control` (8px) · `rounded-card` (10px) ·
+`rounded-panel` (12px).
+
+Surfaces are flat. Depth comes from the luminance ramp and a hairline border, not
+from gradients or glow — there are no `bg-gradient-to-*` utilities and no blurred
+colour orbs in the product. Elevation is reserved for things that genuinely float:
+`shadow-pop` on overlays, `shadow-card` for a hairline lift. Buttons and inline
+cards carry neither.
 
 ---
 
@@ -68,20 +83,25 @@ way.
 
 Eight themes ship: five dark (`cyber`, `synthwave`, `emerald`, `solar`, `slate`)
 and three light (`light-executive`, `light-frost`, `light-ceramic`). `App.tsx`
-sets `body.theme-<id>`, and each theme block in `src/index.css` restates the same
-token contract.
+sets `body.theme-<id>`.
+
+**The surface ramp is shared.** A theme swaps the accent triplet and nothing else,
+so the eight themes read as one product rather than eight skins. The three light
+themes additionally invert the ramp once, in a single grouped block, rather than
+restating it three times.
 
 Because custom properties inherit, redefining a token on `body` changes it for
 every descendant. **This is why the stylesheet contains no `!important` and no
 per-theme component overrides.** A component styled with tokens is correct in all
 eight themes with no extra work.
 
-Adding a theme means adding one block that restates the token contract and one
-entry in the `Header` theme list — no component changes.
+Adding a theme means adding one block that sets five accent tokens and one entry
+in the `Header` theme list — no component changes.
 
 > The theme picker's swatches are the one deliberate exception: they use literal
-> hex values, because a swatch previews the palette it switches *to* and must not
-> follow the palette currently in force.
+> hex values, because a swatch previews the accent it switches *to* and must not
+> follow the accent currently in force. Themes differ by accent alone, so one dot
+> tells the whole truth.
 
 ---
 
@@ -99,7 +119,9 @@ writing a new bespoke element.
 | `PanelHeader` | The masthead every workspace opens with — owns the title type ramp |
 | `Segmented` | Two-to-four mutually exclusive views |
 | `StatTile` | A single number with its label, tabular-aligned |
+| `Modal` | Every overlay: dialog role, focus trap, Escape, backdrop dismissal, scroll lock, focus restore |
 | `fieldClass` | Shared input geometry and focus treatment |
+| `chart` | `chartSeries` / `chartStatus` / `chartAxis` / `stageColor` |
 | `tones` | `toneChip` / `toneText` / `toneTile` / `toneRail` maps |
 
 `Button` renders its children directly rather than wrapping them, so a caller can
@@ -122,41 +144,66 @@ wrapper invisible to layout:
 ## 4. Navigation registry
 
 `src/navigation.tsx` is the single source of truth for workspaces: id, full name,
-short name, subtitle, icon, tone and group. The sidebar, the mobile tab strip and
-the command palette all read from it, so a new module appears everywhere at once
-and cannot drift between surfaces.
+short name, subtitle, icon, tone and group. The sidebar, the mobile drawer, the
+mobile tab strip and the command palette all read from it, so a new module appears
+everywhere at once and cannot drift between surfaces.
+
+Below `md` the sidebar rail is hidden and the same component renders inside an
+off-canvas drawer (`variant="drawer"`), opened from the header.
 
 ---
 
 ## 5. Type
 
 `Plus Jakarta Sans` for prose, `JetBrains Mono` for machine values — counts,
-versions, endpoints, ids. Numeric readouts carry the `tabular` utility so a row
-of figures lines up.
+versions, endpoints, ids. Mono marks data, never a control: buttons and menu items
+read in the UI face. Numeric readouts carry the `tabular` utility so a row of
+figures lines up.
 
-Body copy starts at 13px. The `eyebrow` utility is the standard mono caps label
-above a dense panel. Sub-11px type is reserved for badges and metadata that a
-reader scans rather than reads.
+The scale is declared in `@theme`; there are **no arbitrary `text-[Npx]` values**
+and nothing in the product is smaller than 12px.
+
+| Utility | Size | For |
+|---|---|---|
+| `text-2xs` | 12px | Badge text, table meta, micro-labels |
+| `text-xs` | 13px | Eyebrows, dense chrome, secondary labels |
+| `text-sm` | 14px | Secondary prose |
+| `text-base` | 15px | **Body default** |
+| `text-lg` → `text-3xl` | 17–30px | Headings |
+
+The rule: anything that is a sentence is `text-sm` at minimum. `xs` and `2xs` are
+label sizes, not body sizes. The `eyebrow` utility is the standard mono caps label
+above a dense panel.
 
 ---
 
 ## 6. Motion and focus
 
 One focus treatment covers the product: a 2px accent `:focus-visible` outline
-declared once in the base layer. Never remove it without replacing it.
+declared once in the base layer. Never add `focus:outline-none` — there are zero
+in the codebase and it should stay that way.
 
-Ambient motion — the aurora orbs behind the canvas — runs on a 20-second-plus
-cycle, and the whole stylesheet honours `prefers-reduced-motion: reduce`.
+Four entrance gestures are declared as utilities and nothing else animates in:
+`animate-fade-in`, `animate-pop-in`, `animate-slide-down`, `animate-slide-up`,
+plus `animate-slide-right` for the drawer. (`animate-in` / `fade-in` /
+`zoom-in-*` / `slide-in-from-*` are `tailwindcss-animate` syntax; that package is
+not a dependency, so those class names emit nothing.) The whole stylesheet honours
+`prefers-reduced-motion: reduce`.
+
+Overlays go through `ui/Modal`, which supplies `role="dialog"`, `aria-modal`, a
+Tab focus trap, Escape, backdrop dismissal, body scroll lock and focus
+restoration. Do not hand-roll a `fixed inset-0` backdrop.
 
 ---
 
 ## 7. The Sponsorship Oracle
 
-The Oracle workbench keeps a deliberately separate typographic identity — Spectral
-headings, IBM Plex body, hairline rules, a print-dossier layout — expressed in a
-scoped `.oracle` stylesheet. Its local variables (`--ink`, `--paper`, `--rule`,
+The Oracle workbench keeps a deliberately separate identity — Spectral headings,
+hairline rules, a print-dossier layout — expressed in a scoped `.oracle`
+stylesheet. Its local variables (`--ink`, `--paper`, `--rule`,
 `--pass`/`--fail`/`--cond`) are bound to the app's theme tokens, so it inverts
-correctly in the light themes while keeping its own voice.
+correctly in the light themes while keeping its own voice. Its `--mono`/`--sans`
+follow the product faces; only the serif is its own.
 
 ---
 

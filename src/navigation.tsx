@@ -65,7 +65,7 @@ export const WORKSPACES: WorkspaceDef[] = [
     shortName: 'MCP',
     subtitle: 'Registry & stdio servers',
     icon: <Layers className="w-4 h-4" />,
-    tone: 'accent2',
+    tone: 'info',
     group: 'platform',
   },
   {

@@ -7,6 +7,7 @@ import {
   ShieldCheck,
   Sparkles,
   TrendingUp,
+  X,
 } from 'lucide-react';
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { Badge, Button, Card, IconTile, Segmented, cn, sectionLabelClass, toneRail } from './ui';
@@ -14,6 +15,11 @@ import { Badge, Button, Card, IconTile, Segmented, cn, sectionLabelClass, toneRa
 export type { TabId };
 
 interface SidebarProps {
+  /** `rail` is the fixed desktop column; `drawer` is the same nav inside the
+   *  mobile off-canvas panel. */
+  variant?: 'rail' | 'drawer';
+  /** Dismisses the drawer. Only meaningful for `variant="drawer"`. */
+  onCloseDrawer?: () => void;
   activeTab: TabId;
   onSelectTab: (tab: TabId) => void;
   profile: MasterProfile;
@@ -38,6 +44,8 @@ const CHART_TOOLTIP_STYLE: React.CSSProperties = {
 const AXIS_TICK = { fill: 'var(--color-ink-faint)', fontSize: 10 } as const;
 
 export const Sidebar: React.FC<SidebarProps> = ({
+  variant = 'rail',
+  onCloseDrawer,
   activeTab,
   onSelectTab,
   profile,
@@ -57,7 +65,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { name: 'Saved', count: countIn('Saved'), fill: 'var(--color-ink-faint)' },
     { name: 'Upskill', count: countIn('Upskilling'), fill: 'var(--color-caution)' },
     { name: 'Ready', count: countIn('Ready to Apply'), fill: 'var(--color-accent)' },
-    { name: 'Sent', count: countIn('Applied'), fill: 'var(--color-accent2)' },
+    { name: 'Sent', count: countIn('Applied'), fill: 'var(--color-info)' },
     { name: 'Interv.', count: countIn('Interviewing'), fill: 'var(--color-positive)' },
   ];
 
@@ -73,7 +81,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       count: certs.filter((cert) => cert.status === 'In Progress').length,
       fill: 'var(--color-caution)',
     },
-    { name: 'Total Stack', count: profile.tech_stack.length, fill: 'var(--color-accent2)' },
+    { name: 'Total Stack', count: profile.tech_stack.length, fill: 'var(--color-info)' },
   ];
 
   /** Counts only appear where the number is the point of the row. */
@@ -110,16 +118,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </IconTile>
 
         <span className="min-w-0 flex-1">
-          <span className={cn('block text-[13px] font-semibold truncate', isActive ? 'text-ink' : 'text-ink-muted')}>
+          <span className={cn('block text-xs font-semibold truncate', isActive ? 'text-ink' : 'text-ink-muted')}>
             {workspace.name}
           </span>
-          <span className="block text-[11px] leading-4 text-ink-faint truncate">{workspace.subtitle}</span>
+          <span className="block text-2xs leading-4 text-ink-faint truncate">{workspace.subtitle}</span>
         </span>
 
         {count !== null && (
           <span
             className={cn(
-              'shrink-0 min-w-5 px-1.5 py-0.5 rounded-chip text-[11px] font-mono font-bold tabular text-center',
+              'shrink-0 min-w-5 px-1.5 py-0.5 rounded-chip text-xs font-mono font-bold tabular text-center',
               isActive ? 'bg-accent text-accent-contrast' : 'bg-fill-strong text-ink-muted'
             )}
           >
@@ -131,7 +139,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <aside className="hidden md:flex w-[17rem] shrink-0 flex-col gap-5 overflow-y-auto border-r border-line bg-canvas/70 p-3">
+    <aside
+      data-testid={`sidebar-${variant}`}
+      className={cn(
+        'flex w-[18rem] shrink-0 flex-col gap-5 overflow-y-auto border-r border-line p-3',
+        variant === 'rail' ? 'hidden md:flex bg-canvas/70' : 'bg-canvas animate-slide-right',
+      )}
+    >
+      {variant === 'drawer' && onCloseDrawer && (
+        <div className="flex items-center justify-between pl-3">
+          <p className={sectionLabelClass}>Navigation</p>
+          <button
+            type="button"
+            onClick={onCloseDrawer}
+            aria-label="Close workspace navigation"
+            className="p-2 rounded-control text-ink-muted hover:text-ink hover:bg-fill transition-colors cursor-pointer"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       {/* Workspace navigation ---------------------------------------------- */}
       {WORKSPACE_GROUPS.map((group) => (
         <nav key={group.id} className="space-y-0.5">
@@ -147,7 +175,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           variant="secondary"
           size="sm"
           onClick={onOpenIdentityVault}
-          icon={<ShieldCheck className="w-3.5 h-3.5 text-accent2-ink" />}
+          icon={<ShieldCheck className="w-3.5 h-3.5 text-info-ink" />}
           className="justify-start"
         >
           Zero-Trust Vault
@@ -168,7 +196,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <Card padding="sm" className="space-y-3">
         <div className="space-y-2">
           <span className="flex items-center gap-1.5">
-            <TrendingUp className="w-3.5 h-3.5 text-accent2-ink shrink-0" />
+            <TrendingUp className="w-3.5 h-3.5 text-info-ink shrink-0" />
             <span className={sectionLabelClass}>Live Analytics</span>
           </span>
           <Segmented
@@ -213,7 +241,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-2 pt-2.5 border-t border-line text-[11px] font-mono tabular">
+        <div className="flex items-center justify-between gap-2 pt-2.5 border-t border-line text-xs font-mono tabular">
           <span className="text-ink-faint">{applications.length} Active Targets</span>
           <span className="text-positive-ink font-bold">{countIn('Interviewing')} Interviewing</span>
         </div>
@@ -229,7 +257,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <button
             type="button"
             onClick={onOpenProfile}
-            className="flex items-center gap-0.5 text-[11px] font-semibold text-accent-ink hover:text-accent-strong transition-colors cursor-pointer shrink-0"
+            className="flex items-center gap-0.5 text-xs font-semibold text-accent-ink hover:text-accent-strong transition-colors cursor-pointer shrink-0"
           >
             Edit
             <ArrowUpRight className="w-3 h-3" />
@@ -237,9 +265,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         <div className="space-y-1">
-          <p className="text-[13px] font-semibold text-ink truncate">{profile.name}</p>
-          <p className="text-[11px] font-mono text-accent-ink truncate">{profile.title}</p>
-          <p className="flex items-center gap-1.5 text-[11px] text-ink-faint">
+          <p className="text-sm font-semibold text-ink truncate">{profile.name}</p>
+          <p className="text-sm font-mono text-accent-ink truncate">{profile.title}</p>
+          <p className="flex items-center gap-1.5 text-sm text-ink-faint">
             <span className="truncate">{profile.location}</span>
             <span aria-hidden>·</span>
             <span className="text-positive-ink font-semibold shrink-0">Visa Ready</span>
@@ -249,7 +277,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="pt-2.5 border-t border-line space-y-1.5">
           <div className="flex items-center justify-between gap-2">
             <span className={sectionLabelClass}>Synchronized Stack</span>
-            <span className="text-[11px] font-mono font-bold tabular text-positive-ink shrink-0">
+            <span className="text-xs font-mono font-bold tabular text-positive-ink shrink-0">
               {profile.tech_stack.length}
             </span>
           </div>
@@ -287,12 +315,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="mt-auto rounded-card border border-line bg-sunken px-3 py-2.5 space-y-1.5">
         <div className="flex items-center justify-between gap-2">
           <span className={sectionLabelClass}>Cherenkov Pipeline</span>
-          <span className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-positive-ink shrink-0">
+          <span className="flex items-center gap-1.5 text-xs font-mono font-bold text-positive-ink shrink-0">
             <span className="w-1.5 h-1.5 rounded-full bg-positive" />
             ONLINE
           </span>
         </div>
-        <p className="text-[11px] leading-4 text-ink-faint">
+        <p className="text-sm leading-4 text-ink-faint">
           Autonomous tailoring &amp; UK sponsorship verification.
         </p>
       </div>

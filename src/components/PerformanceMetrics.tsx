@@ -17,6 +17,7 @@ import {
   Legend
 } from 'recharts';
 import { ApplicationCard, KanbanColumn } from '../types';
+import { chartAxis, chartStatus } from './ui';
 import {
   TrendingUp,
   Zap,
@@ -40,11 +41,11 @@ export interface PerformanceMetricsProps {
 }
 
 const STAGE_COLORS: Record<KanbanColumn, string> = {
-  'Saved': '#94a3b8',
-  'Upskilling': '#f59e0b',
-  'Ready to Apply': '#8b5cf6',
-  'Applied': '#06b6d4',
-  'Interviewing': '#10b981'
+  'Saved': chartStatus.neutral,
+  'Upskilling': chartStatus.caution,
+  'Ready to Apply': chartStatus.accent,
+  'Applied': chartStatus.info,
+  'Interviewing': chartStatus.positive
 };
 
 const STAGE_ORDER: KanbanColumn[] = [
@@ -117,8 +118,8 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
 
     // Sponsorship & Target Breakdown Data
     const sponsorshipData = [
-      { name: 'Licensed UK Sponsor', value: sponsorCount, color: '#10b981' },
-      { name: 'Standard / High-Match', value: Math.max(0, total - sponsorCount), color: '#8b5cf6' }
+      { name: 'Licensed UK Sponsor', value: sponsorCount, color: chartStatus.positive },
+      { name: 'Standard / High-Match', value: Math.max(0, total - sponsorCount), color: chartStatus.accent }
     ];
 
     const meanCycleTimeDays = 16.5;
@@ -141,7 +142,7 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
   }, [applications]);
 
   return (
-    <div className={`p-6 rounded-panel bg-gradient-to-br from-surface via-sunken to-sunken border border-accent-line shadow-2xl space-y-6 ${className}`}>
+    <div className={`p-6 rounded-panel bg-surface border border-accent-line shadow-pop space-y-6 ${className}`}>
       {/* Top Title & Tab Switcher */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -153,7 +154,7 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
               Performance Metrics & Pipeline Velocity
             </h2>
           </div>
-          <p className="text-xs text-ink-muted mt-1">
+          <p className="text-sm text-ink-muted mt-1">
             Real-time transition velocity and stage conversion rate metrics for your applications.
           </p>
         </div>
@@ -164,7 +165,7 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
             onClick={() => setActiveMetricTab('conversion')}
             className={`px-3 py-1.5 rounded-control text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
               activeMetricTab === 'conversion'
-                ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md'
+                ? 'bg-accent text-ink'
                 : 'text-ink-muted hover:text-ink'
             }`}
           >
@@ -174,7 +175,7 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
             onClick={() => setActiveMetricTab('velocity')}
             className={`px-3 py-1.5 rounded-control text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
               activeMetricTab === 'velocity'
-                ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md'
+                ? 'bg-accent text-ink'
                 : 'text-ink-muted hover:text-ink'
             }`}
           >
@@ -184,7 +185,7 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
             onClick={() => setActiveMetricTab('sponsorship')}
             className={`px-3 py-1.5 rounded-control text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
               activeMetricTab === 'sponsorship'
-                ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md'
+                ? 'bg-accent text-ink'
                 : 'text-ink-muted hover:text-ink'
             }`}
           >
@@ -202,21 +203,21 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-black text-ink font-mono">{stats.successRateToInterview}%</span>
-            <span className="text-[10px] text-positive-ink font-mono">({stats.stageCounts['Interviewing']} active)</span>
+            <span className="text-2xs text-positive-ink font-mono">({stats.stageCounts['Interviewing']} active)</span>
           </div>
-          <span className="text-[10px] text-ink-faint mt-1">Saved &rarr; Interview rate</span>
+          <span className="text-2xs text-ink-faint mt-1">Saved &rarr; Interview rate</span>
         </div>
 
         <div className="p-4 rounded-card bg-fill border border-line flex flex-col justify-between">
           <div className="flex items-center justify-between text-ink-muted text-xs">
             <span className="font-mono">Applied-to-Interview</span>
-            <Award className="w-4 h-4 text-accent2-ink" />
+            <Award className="w-4 h-4 text-info-ink" />
           </div>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-black text-accent2-ink font-mono">{stats.appliedToInterviewRate}%</span>
-            <span className="text-[10px] text-accent2-ink font-mono">Benchmark: 15%</span>
+            <span className="text-2xl font-black text-info-ink font-mono">{stats.appliedToInterviewRate}%</span>
+            <span className="text-2xs text-info-ink font-mono">Benchmark: 15%</span>
           </div>
-          <span className="text-[10px] text-ink-faint mt-1">Pitch conversion efficiency</span>
+          <span className="text-2xs text-ink-faint mt-1">Pitch conversion efficiency</span>
         </div>
 
         <div className="p-4 rounded-card bg-fill border border-line flex flex-col justify-between">
@@ -226,9 +227,9 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-black text-caution-ink font-mono">3.2</span>
-            <span className="text-[10px] text-ink-muted font-mono">Days / Stage</span>
+            <span className="text-2xs text-ink-muted font-mono">Days / Stage</span>
           </div>
-          <span className="text-[10px] text-ink-faint mt-1">Throughput turnaround</span>
+          <span className="text-2xs text-ink-faint mt-1">Throughput turnaround</span>
         </div>
 
         <div className="p-4 rounded-card bg-fill border border-line flex flex-col justify-between">
@@ -238,9 +239,9 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-2xl font-black text-accent-ink font-mono">{stats.sponsorRate}%</span>
-            <span className="text-[10px] text-accent-ink font-mono">({stats.sponsorCount} verified)</span>
+            <span className="text-2xs text-accent-ink font-mono">({stats.sponsorCount} verified)</span>
           </div>
-          <span className="text-[10px] text-ink-faint mt-1">Deterministic Home Office check</span>
+          <span className="text-2xs text-ink-faint mt-1">Deterministic Home Office check</span>
         </div>
       </div>
 
@@ -253,11 +254,11 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
                 <h4 className="text-xs font-bold text-ink uppercase tracking-wider font-mono">
                   Stage Distribution & Cumulative Conversion Funnel
                 </h4>
-                <p className="text-[11px] text-ink-muted">
+                <p className="text-sm text-ink-muted">
                   Visual breakdown of target applications progressing through the 5 QA career stages.
                 </p>
               </div>
-              <span className="text-[10px] font-mono px-2.5 py-1 rounded-control bg-accent-soft text-accent-ink border border-accent-line">
+              <span className="text-2xs font-mono px-2.5 py-1 rounded-control bg-accent-soft text-accent-ink border border-accent-line">
                 Total Tracked: {stats.total}
               </span>
             </div>
@@ -265,13 +266,13 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={stats.funnelData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-                  <XAxis dataKey="stage" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} allowDecimals={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartAxis.grid} vertical={false} />
+                  <XAxis dataKey="stage" stroke={chartAxis.tick} fontSize={11} tickLine={false} />
+                  <YAxis stroke={chartAxis.tick} fontSize={11} tickLine={false} allowDecimals={false} />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#0c101a',
-                      borderColor: '#ffffff20',
+                      backgroundColor: chartAxis.tooltipBg,
+                      borderColor: chartAxis.tooltipBorder,
                       borderRadius: '12px',
                       fontSize: '12px',
                       color: '#fff'
@@ -299,11 +300,11 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
                 <h4 className="text-xs font-bold text-ink uppercase tracking-wider font-mono">
                   Pipeline Transition Velocity (Average Days in Stage)
                 </h4>
-                <p className="text-[11px] text-ink-muted">
+                <p className="text-sm text-ink-muted">
                   Mean transit latency compared against target SLA benchmarks (fewer days = faster conversion).
                 </p>
               </div>
-              <span className="text-[10px] font-mono px-2.5 py-1 rounded-control bg-accent2-soft text-accent2-ink border border-accent2-line">
+              <span className="text-2xs font-mono px-2.5 py-1 rounded-control bg-info-soft text-info-ink border border-info-line">
                 Target SLA: &lt; 5 Days
               </span>
             </div>
@@ -313,21 +314,21 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
                 <AreaChart data={stats.velocityData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <defs>
                     <linearGradient id="perfVelocityGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.4} />
-                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0} />
+                      <stop offset="5%" stopColor={chartStatus.info} stopOpacity={0.4} />
+                      <stop offset="95%" stopColor={chartStatus.info} stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="perfTargetGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                      <stop offset="5%" stopColor={chartStatus.accent} stopOpacity={0.2} />
+                      <stop offset="95%" stopColor={chartStatus.accent} stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-                  <XAxis dataKey="stage" stroke="#94a3b8" fontSize={11} tickLine={false} />
-                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} unit="d" />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartAxis.grid} vertical={false} />
+                  <XAxis dataKey="stage" stroke={chartAxis.tick} fontSize={11} tickLine={false} />
+                  <YAxis stroke={chartAxis.tick} fontSize={11} tickLine={false} unit="d" />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: '#0c101a',
-                      borderColor: '#ffffff20',
+                      backgroundColor: chartAxis.tooltipBg,
+                      borderColor: chartAxis.tooltipBorder,
                       borderRadius: '12px',
                       fontSize: '12px',
                       color: '#fff'
@@ -337,7 +338,7 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
                     type="monotone"
                     dataKey="avgDays"
                     name="Actual Avg Days"
-                    stroke="#06b6d4"
+                    stroke={chartStatus.info}
                     strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#perfVelocityGradient)"
@@ -346,7 +347,7 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
                     type="monotone"
                     dataKey="targetDays"
                     name="Target SLA Days"
-                    stroke="#8b5cf6"
+                    stroke={chartStatus.accent}
                     strokeWidth={2}
                     strokeDasharray="4 4"
                     fillOpacity={1}
@@ -365,11 +366,11 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
                 <h4 className="text-xs font-bold text-ink uppercase tracking-wider font-mono">
                   UK Home Office Sponsorship Distribution
                 </h4>
-                <p className="text-[11px] text-ink-muted">
+                <p className="text-sm text-ink-muted">
                   Deterministic alignment against licensed Skilled Worker employers.
                 </p>
               </div>
-              <span className="text-[10px] font-mono px-2.5 py-1 rounded-control bg-positive-soft text-positive-ink border border-positive-line">
+              <span className="text-2xs font-mono px-2.5 py-1 rounded-control bg-positive-soft text-positive-ink border border-positive-line">
                 100% Deterministic Check
               </span>
             </div>
@@ -394,8 +395,8 @@ export const PerformanceMetrics: React.FC<PerformanceMetricsProps> = ({
                     </Pie>
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: '#0c101a',
-                        borderColor: '#ffffff20',
+                        backgroundColor: chartAxis.tooltipBg,
+                        borderColor: chartAxis.tooltipBorder,
                         borderRadius: '12px',
                         fontSize: '12px',
                         color: '#fff'

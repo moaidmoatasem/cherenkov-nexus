@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ApplicationCard, KanbanColumn, SynthesizedResult } from '../types';
+import { Modal, chartStatus } from './ui';
 import { KanbanMetrics } from './KanbanMetrics';
 import { PerformanceMetrics } from './PerformanceMetrics';
 import {
@@ -60,43 +61,43 @@ const COLUMNS: {
     badge: 'bg-sunken/80 text-ink-muted border border-line-strong',
     headerBg: 'bg-fill-strong/10 text-ink-muted',
     glow: 'hover:border-line-strong',
-    accentColor: '#94a3b8'
+    accentColor: chartStatus.neutral
   },
   {
     id: 'Upskilling',
     name: 'Upskilling In-Flight',
-    border: 'border-caution-line bg-gradient-to-b from-caution/15 via-surface/70 to-sunken',
+    border: 'border-caution-line bg-caution',
     badge: 'bg-caution-soft text-caution-ink border border-caution-line',
     headerBg: 'bg-caution-soft text-caution-ink',
     glow: 'hover:border-caution-line',
-    accentColor: '#f59e0b'
+    accentColor: chartStatus.caution
   },
   {
     id: 'Ready to Apply',
     name: 'Ready to Pitch',
-    border: 'border-accent-line bg-gradient-to-b from-accent/20 via-surface/70 to-sunken',
+    border: 'border-accent-line bg-accent',
     badge: 'bg-accent-soft text-accent-ink border border-accent-line',
     headerBg: 'bg-accent-soft text-accent-ink',
     glow: 'hover:border-accent-line',
-    accentColor: '#8b5cf6'
+    accentColor: chartStatus.accent
   },
   {
     id: 'Applied',
     name: 'Submitted / Cold Sent',
-    border: 'border-accent2-line bg-gradient-to-b from-accent2/15 via-surface/70 to-sunken',
-    badge: 'bg-accent2-soft text-accent2-ink border border-accent2-line',
-    headerBg: 'bg-accent2-soft text-accent2-ink',
-    glow: 'hover:border-accent2-line',
-    accentColor: '#06b6d4'
+    border: 'border-info-line bg-info',
+    badge: 'bg-info-soft text-info-ink border border-info-line',
+    headerBg: 'bg-info-soft text-info-ink',
+    glow: 'hover:border-info-line',
+    accentColor: chartStatus.info
   },
   {
     id: 'Interviewing',
     name: 'Active Interviews',
-    border: 'border-positive-line bg-gradient-to-b from-positive/20 via-surface/70 to-sunken',
+    border: 'border-positive-line bg-positive',
     badge: 'bg-positive-soft text-positive-ink border border-positive-line',
     headerBg: 'bg-positive-soft text-positive-ink',
     glow: 'hover:border-positive-line',
-    accentColor: '#10b981'
+    accentColor: chartStatus.positive
   }
 ];
 
@@ -208,38 +209,37 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Top Banner & Pipeline Funnel */}
-      <div className="p-6 rounded-panel bg-gradient-to-br from-surface via-surface to-sunken border border-accent2-line space-y-4 relative overflow-hidden">
-        <div className="absolute -right-10 -top-10 w-96 h-96 bg-gradient-to-br from-accent2/10 via-accent/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="p-6 rounded-panel bg-surface border border-info-line space-y-4 relative overflow-hidden">
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
           <div>
             <div className="flex items-center gap-2.5">
-              <span className="p-2.5 rounded-control bg-gradient-to-br from-accent2 to-info text-ink shadow-md">
+              <span className="p-2.5 rounded-control bg-info text-ink">
                 <Kanban className="w-5 h-5" />
               </span>
               <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
                 Kanban Application Pipeline
               </h1>
-              <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold bg-accent2-soft border border-accent2-line text-accent2-ink rounded-full">
+              <span className="px-2.5 py-0.5 text-2xs font-mono font-bold bg-info-soft border border-info-line text-info-ink rounded-full">
                 {applications.length} TOTAL TARGETS
               </span>
             </div>
-            <p className="text-xs text-ink-muted mt-2 max-w-2xl leading-relaxed">
+            <p className="text-sm text-ink-muted mt-2 max-w-2xl leading-relaxed">
               5-stage tracking pipeline for your UK & EU sponsorship applications. Drag-and-drop cards between discovery, upskilling, ready pitches, and active rounds.
             </p>
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
             {/* View Mode Switcher */}
-            <div className="p-1 rounded-card bg-fill border border-line flex items-center gap-1 shadow-md">
+            <div className="p-1 rounded-card bg-fill border border-line flex items-center gap-1">
               <button
                 onClick={() => setViewMode('board')}
                 className={`p-2 rounded-control text-xs transition-all cursor-pointer ${
                   viewMode === 'board'
-                    ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md'
+                    ? 'bg-accent text-ink'
                     : 'text-ink-muted hover:text-ink'
                 }`}
-                title="Board View"
+                title="Board View" aria-label="Board View"
               >
                 <LayoutGrid className="w-4 h-4" />
               </button>
@@ -247,10 +247,10 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                 onClick={() => setViewMode('list')}
                 className={`p-2 rounded-control text-xs transition-all cursor-pointer ${
                   viewMode === 'list'
-                    ? 'bg-gradient-to-r from-accent to-accent2 text-ink shadow-md'
+                    ? 'bg-accent text-ink'
                     : 'text-ink-muted hover:text-ink'
                 }`}
-                title="List View"
+                title="List View" aria-label="List View"
               >
                 <List className="w-4 h-4" />
               </button>
@@ -258,7 +258,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
             <button
               onClick={() => setIsAddModalOpen(true)}
-              className="px-5 py-2.5 text-xs font-bold text-ink bg-gradient-to-r from-accent to-info hover:from-accent hover:to-info rounded-control transition-all shadow-lg flex items-center gap-1.5 cursor-pointer"
+              className="px-5 py-2.5 text-xs font-bold text-accent-contrast bg-accent hover:bg-accent-strong rounded-control transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Add Custom Role</span>
@@ -270,13 +270,13 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
         <div className="pt-3 border-t border-line flex flex-wrap items-center justify-between gap-x-4 gap-y-3 relative z-10">
           <div className="flex flex-wrap items-center gap-2 min-w-0">
             <div className="relative flex-1 min-w-56 sm:w-72 sm:flex-none">
-              <Search className="w-4 h-4 absolute left-3.5 top-3 text-accent2-ink" />
+              <Search className="w-4 h-4 absolute left-3.5 top-3 text-info-ink" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Filter by company, role, tech..."
-                className="w-full pl-10 pr-3 py-2 text-xs bg-sunken border border-line rounded-control text-ink placeholder:text-ink-faint focus:outline-none focus:border-accent2-line"
+                className="w-full pl-10 pr-3 py-2 text-xs bg-sunken border border-line rounded-control text-ink placeholder:text-ink-faint focus:border-info-line"
               />
             </div>
 
@@ -306,7 +306,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
           </div>
 
           {/* Quick Column Counts Pill Array */}
-          <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
             {COLUMNS.map((col) => {
               const count = applications.filter((a) => a.column === col.id).length;
               return (
@@ -349,7 +349,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                 key={col.id}
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, col.id)}
-                className={`rounded-panel border ${col.border} p-3.5 flex flex-col gap-3 min-h-[540px] transition-all shadow-xl`}
+                className={`rounded-panel border ${col.border} p-3.5 flex flex-col gap-3 min-h-[540px] transition-all shadow-pop`}
               >
                 {/* Column Header */}
                 <div className="flex items-start justify-between gap-2 px-2 py-1.5">
@@ -358,12 +358,12 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                       className="w-2 h-2 rounded-full shrink-0 mt-1"
                       style={{ color: col.accentColor, backgroundColor: col.accentColor }}
                     />
-                    <h3 className="text-[11px] font-extrabold text-ink uppercase tracking-wider font-mono leading-4">
+                    <h3 className="text-xs font-extrabold text-ink uppercase tracking-wider font-mono leading-4">
                       {col.name}
                     </h3>
                   </div>
                   <span
-                    className={`px-2 py-0.5 text-[10px] font-mono font-bold rounded-chip shrink-0 ${col.badge}`}
+                    className={`px-2 py-0.5 text-2xs font-mono font-bold rounded-chip shrink-0 ${col.badge}`}
                   >
                     {colApps.length}
                   </span>
@@ -402,12 +402,12 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                         whileTap={{ scale: 0.98 }}
                         draggable
                         onDragStart={(e: any) => handleDragStart(e, app.id)}
-                        className="p-4 rounded-card bg-surface border border-line hover:border-accent-line transition-colors shadow-lg group cursor-grab active:cursor-grabbing space-y-3 relative overflow-hidden"
+                        className="p-4 rounded-card bg-surface border border-line hover:border-accent-line transition-colors group cursor-grab active:cursor-grabbing space-y-3 relative overflow-hidden"
                       >
                         {/* Top Company & Score */}
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
-                            <span className="text-[11px] font-mono text-accent2-ink font-bold block truncate">
+                            <span className="text-xs font-mono text-info-ink font-bold block truncate">
                               {app.company}
                             </span>
                             <h4 className="text-xs font-bold text-ink leading-snug mt-0.5 truncate">
@@ -416,14 +416,14 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                           </div>
 
                           {app.matchScore && (
-                            <span className="px-2 py-0.5 text-[10px] font-mono font-bold bg-positive-soft border border-positive-line text-positive-ink rounded-control shrink-0">
+                            <span className="px-2 py-0.5 text-2xs font-mono font-bold bg-positive-soft border border-positive-line text-positive-ink rounded-control shrink-0">
                               {app.matchScore}%
                             </span>
                           )}
                         </div>
 
                         {/* Location & Meta Badges */}
-                        <div className="flex flex-wrap gap-1 text-[10px]">
+                        <div className="flex flex-wrap gap-1 text-2xs">
                           <span className="px-2 py-0.5 bg-fill border border-line text-ink-muted rounded-control font-medium">
                             {app.location}
                           </span>
@@ -438,7 +438,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                         {/* Skill Gaps preview */}
                         {app.synthesis?.identified_skill_gaps &&
                           app.synthesis.identified_skill_gaps.length > 0 && (
-                            <div className="text-[10px] text-ink-muted truncate">
+                            <div className="text-2xs text-ink-muted truncate">
                               <span className="text-ink-faint">Target Gaps: </span>
                               <span className="text-caution-ink font-mono">
                                 {app.synthesis.identified_skill_gaps.slice(0, 2).join(', ')}
@@ -451,13 +451,13 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                           {app.synthesis ? (
                             <button
                               onClick={() => setActiveModalApp(app)}
-                              className="text-[11px] font-bold text-accent-ink hover:text-accent-ink flex items-center gap-1 transition-colors cursor-pointer"
+                              className="text-xs font-bold text-accent-ink hover:text-accent-ink flex items-center gap-1 transition-colors cursor-pointer"
                             >
                               <Sparkles className="w-3.5 h-3.5" />
                               <span>View Pitch</span>
                             </button>
                           ) : (
-                            <span className="text-[10px] text-ink-faint italic">Direct Entry</span>
+                            <span className="text-2xs text-ink-faint italic">Direct Entry</span>
                           )}
 
                           <div className="flex items-center gap-1.5">
@@ -465,7 +465,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                             <select
                               value={app.column}
                               onChange={(e) => handleMoveColumn(app, e.target.value as KanbanColumn)}
-                              className="text-[10px] font-mono bg-sunken border border-line text-ink-muted rounded-control px-2 py-1 focus:outline-none focus:border-accent-line"
+                              className="text-2xs font-mono bg-sunken border border-line text-ink-muted rounded-control px-2 py-1 focus:border-accent-line"
                             >
                               {COLUMNS.map((c) => (
                                 <option key={c.id} value={c.id}>
@@ -477,7 +477,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                             <button
                               onClick={() => onDeleteApplication(app.id)}
                               className="p-1 text-ink-faint hover:text-critical-ink transition-colors cursor-pointer"
-                              title="Delete card"
+                              title="Delete card" aria-label="Delete card"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
@@ -505,10 +505,10 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
       {/* VIEW MODE: HIGH-DENSITY LIST TABLE */}
       {viewMode === 'list' && (
-        <div className="p-5 rounded-panel bg-surface border border-line overflow-x-auto shadow-xl">
+        <div className="p-5 rounded-panel bg-surface border border-line overflow-x-auto shadow-pop">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-line text-ink-muted font-mono text-[11px]">
+              <tr className="border-b border-line text-ink-muted font-mono text-xs">
                 <th className="pb-3 px-3 font-bold">Company & Target Role</th>
                 <th className="pb-3 px-3 font-bold">Pipeline Stage</th>
                 <th className="pb-3 px-3 font-bold">Match Score</th>
@@ -522,10 +522,10 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                 <tr key={app.id} className="hover:bg-fill transition-colors">
                   <td className="py-3.5 px-3">
                     <div className="font-bold text-ink text-sm">{app.company}</div>
-                    <div className="text-accent2-ink text-xs font-mono">{app.jobTitle}</div>
+                    <div className="text-info-ink text-xs font-mono">{app.jobTitle}</div>
                   </td>
                   <td className="py-3.5 px-3">
-                    <span className="px-2.5 py-1 text-[10px] font-mono font-bold bg-accent-soft border border-accent-line text-accent-ink rounded-control">
+                    <span className="px-2.5 py-1 text-2xs font-mono font-bold bg-accent-soft border border-accent-line text-accent-ink rounded-control">
                       {app.column}
                     </span>
                   </td>
@@ -534,23 +534,23 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                   </td>
                   <td className="py-3.5 px-3">
                     {app.synthesis?.isLicensedSponsor ? (
-                      <span className="px-2.5 py-1 text-[10px] font-mono bg-positive-soft text-positive-ink border border-positive-line rounded-control font-bold">
+                      <span className="px-2.5 py-1 text-2xs font-mono bg-positive-soft text-positive-ink border border-positive-line rounded-control font-bold">
                         Licensed UK Sponsor
                       </span>
                     ) : (
-                      <span className="text-ink-faint text-[11px]">Standard Registry</span>
+                      <span className="text-ink-faint text-xs">Standard Registry</span>
                     )}
                   </td>
                   <td className="py-3.5 px-3 text-ink-muted">
                     <div>{app.location}</div>
-                    <div className="text-[10px] font-mono text-ink-muted">{app.salary || '£95k - £115k'}</div>
+                    <div className="text-2xs font-mono text-ink-muted">{app.salary || '£95k - £115k'}</div>
                   </td>
                   <td className="py-3.5 px-3 text-right">
                     <div className="flex items-center justify-end gap-2">
                       {app.synthesis && (
                         <button
                           onClick={() => setActiveModalApp(app)}
-                          className="px-3 py-1.5 text-xs bg-accent-soft hover:bg-accent/30 text-accent-ink border border-accent-line rounded-control font-bold transition-all cursor-pointer"
+                          className="px-3 py-1.5 text-xs bg-accent-soft hover:bg-accent/30 text-accent-contrast border border-accent-line rounded-control font-bold transition-all cursor-pointer"
                         >
                           View Pitch
                         </button>
@@ -573,28 +573,23 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
       {/* Synthesis Detail Modal */}
       <AnimatePresence>
         {activeModalApp && activeModalApp.synthesis && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md"
-          >
+          <Modal open onClose={() => setActiveModalApp(null)} label="Application details">
             <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="relative w-full max-w-3xl max-h-[90vh] bg-surface border border-accent-line rounded-panel shadow-2xl overflow-hidden flex flex-col"
+              className="relative w-full max-w-3xl max-h-[90vh] bg-surface border border-accent-line rounded-panel shadow-pop overflow-hidden flex flex-col"
             >
               {/* Header */}
               <div className="flex items-center justify-between px-6 py-4 border-b border-line bg-sunken">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-card bg-accent-soft text-accent-ink border border-accent-line flex items-center justify-center shadow-md">
+                  <div className="w-10 h-10 rounded-card bg-accent-soft text-accent-ink border border-accent-line flex items-center justify-center">
                     <Building2 className="w-5 h-5" />
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-ink">{activeModalApp.company}</h3>
-                    <p className="text-xs text-accent2-ink font-mono">{activeModalApp.jobTitle}</p>
+                    <p className="text-sm text-info-ink font-mono">{activeModalApp.jobTitle}</p>
                   </div>
                 </div>
 
@@ -632,7 +627,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                       <span>Copy Summary</span>
                     </button>
                   </div>
-                  <p className="text-xs text-ink leading-relaxed font-sans">
+                  <p className="text-sm text-ink leading-relaxed font-sans">
                     {activeModalApp.synthesis.tailored_summary}
                   </p>
                 </div>
@@ -640,7 +635,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                 {/* Cold Email */}
                 <div className="p-5 rounded-card bg-sunken border border-line space-y-2.5">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-xs font-bold text-accent2-ink uppercase tracking-wider font-mono">
+                    <h4 className="text-xs font-bold text-info-ink uppercase tracking-wider font-mono">
                       Tailored Cold Email Pitch
                     </h4>
                     <button
@@ -656,7 +651,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                       {copiedKeys['modal-email'] ? (
                         <Check className="w-3.5 h-3.5 text-positive-ink" />
                       ) : (
-                        <Copy className="w-3.5 h-3.5 text-accent2-ink" />
+                        <Copy className="w-3.5 h-3.5 text-info-ink" />
                       )}
                       <span>Copy Email</span>
                     </button>
@@ -676,14 +671,14 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                       <div key={i} className="p-4 rounded-card bg-sunken border border-line space-y-2.5">
                         <div className="flex items-start justify-between gap-2">
                           <span className="text-xs font-bold text-ink flex items-center gap-2">
-                            <span className="w-5 h-5 rounded bg-accent-soft text-accent-ink border border-accent-line text-[10px] font-mono flex items-center justify-center shrink-0">
+                            <span className="w-5 h-5 rounded bg-accent-soft text-accent-ink border border-accent-line text-2xs font-mono flex items-center justify-center shrink-0">
                               Q{i + 1}
                             </span>
                             {qa.question}
                           </span>
                           <button
                             onClick={() => handleCopy(qa.answer, `modal-ans-${i}`, `Answer ${i + 1}`)}
-                            className="px-2.5 py-1 text-[10px] bg-fill text-ink-muted rounded-control hover:bg-fill-strong flex items-center gap-1 shrink-0 cursor-pointer font-mono"
+                            className="px-2.5 py-1 text-2xs bg-fill text-ink-muted rounded-control hover:bg-fill-strong flex items-center gap-1 shrink-0 cursor-pointer"
                           >
                             {copiedKeys[`modal-ans-${i}`] ? (
                               <Check className="w-3.5 h-3.5 text-positive-ink" />
@@ -693,7 +688,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                             <span>Copy</span>
                           </button>
                         </div>
-                        <p className="text-xs text-ink-muted leading-relaxed bg-fill p-3 rounded-control">
+                        <p className="text-sm text-ink-muted leading-relaxed bg-fill p-3 rounded-control">
                           {qa.answer}
                         </p>
                       </div>
@@ -702,25 +697,20 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                 )}
               </div>
             </motion.div>
-          </motion.div>
+          </Modal>
         )}
       </AnimatePresence>
 
       {/* Add New Application Modal */}
       <AnimatePresence>
         {isAddModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md"
-          >
+          <Modal open onClose={() => setIsAddModalOpen(false)} label="Add a custom role">
             <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="relative w-full max-w-md bg-surface border border-accent-line rounded-panel shadow-2xl overflow-hidden"
+              className="relative w-full max-w-md bg-surface border border-accent-line rounded-panel shadow-pop overflow-hidden"
             >
               <div className="flex items-center justify-between px-6 py-4 border-b border-line bg-sunken">
                 <h3 className="text-sm font-bold text-ink flex items-center gap-2">
@@ -737,53 +727,53 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
               <form onSubmit={handleCreateApp} className="p-6 space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                  <label htmlFor="kanban-board-target-company-name" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                     Target Company Name
                   </label>
-                  <input
+                  <input id="kanban-board-target-company-name"
                     type="text"
                     value={newCompany}
                     onChange={(e) => setNewCompany(e.target.value)}
                     placeholder="e.g. Wise, Stripe, Arm, BBC"
-                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                     required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                  <label htmlFor="kanban-board-target-job-title" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                     Target Job Title
                   </label>
-                  <input
+                  <input id="kanban-board-target-job-title"
                     type="text"
                     value={newTitle}
                     onChange={(e) => setNewTitle(e.target.value)}
                     placeholder="e.g. Senior QA Engineer / SDET Lead"
-                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                    className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                     required
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                    <label htmlFor="kanban-board-location" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                       Location
                     </label>
-                    <input
+                    <input id="kanban-board-location"
                       type="text"
                       value={newLocation}
                       onChange={(e) => setNewLocation(e.target.value)}
-                      className="w-full px-3.5 py-2 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                      className="w-full px-3.5 py-2 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                    <label htmlFor="kanban-board-initial-stage" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                       Initial Stage
                     </label>
-                    <select
+                    <select id="kanban-board-initial-stage"
                       value={newColumn}
                       onChange={(e) => setNewColumn(e.target.value as KanbanColumn)}
-                      className="w-full px-3.5 py-2 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                      className="w-full px-3.5 py-2 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                     >
                       {COLUMNS.map((c) => (
                         <option key={c.id} value={c.id}>
@@ -795,15 +785,15 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                  <label htmlFor="kanban-board-job-description-snippet-notes" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                     Job Description Snippet / Notes
                   </label>
-                  <textarea
+                  <textarea id="kanban-board-job-description-snippet-notes"
                     rows={3}
                     value={newJd}
                     onChange={(e) => setNewJd(e.target.value)}
                     placeholder="Paste snippet or brief notes..."
-                    className="w-full p-3 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                    className="w-full p-3 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                   />
                 </div>
 
@@ -817,14 +807,14 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
                   </button>
                   <button
                     type="submit"
-                    className="px-5 py-2.5 text-xs font-extrabold text-ink bg-gradient-to-r from-accent to-accent2 hover:from-accent hover:to-accent2 rounded-control shadow-md cursor-pointer"
+                    className="px-5 py-2.5 text-xs font-extrabold text-accent-contrast bg-accent hover:bg-accent-strong rounded-control cursor-pointer"
                   >
                     Create Card
                   </button>
                 </div>
               </form>
             </motion.div>
-          </motion.div>
+          </Modal>
         )}
       </AnimatePresence>
     </div>

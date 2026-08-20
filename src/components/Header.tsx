@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MasterProfile, AppTheme } from '../types';
 import {
   Activity,
+  Menu,
   Check,
   Command,
   Globe,
@@ -19,6 +20,8 @@ import { Badge, Button, cn } from './ui';
 
 interface HeaderProps {
   profile: MasterProfile;
+  /** Opens the navigation drawer. Only rendered below `md`, where the rail is hidden. */
+  onOpenNav?: () => void;
   onOpenProfile: () => void;
   currentTheme: AppTheme;
   onChangeTheme: (theme: AppTheme) => void;
@@ -34,28 +37,29 @@ interface ThemeOption {
   name: string;
   tag: string;
   /**
-   * Literal colours on purpose: a swatch previews the palette it switches to,
-   * so it must not follow the palette currently in force.
+   * A literal colour on purpose: the swatch previews the accent it switches
+   * to, so it must not follow the accent currently in force. Themes differ by
+   * accent alone, so one dot tells the whole truth.
    */
-  swatch: [string, string];
+  swatch: string;
 }
 
 const DARK_THEMES: ThemeOption[] = [
-  { id: 'cyber', name: 'Cyber Aurora', tag: 'Obsidian Glow', swatch: ['#8b5cf6', '#22d3ee'] },
-  { id: 'synthwave', name: 'Neon Synthwave', tag: 'Midnight Tokyo', swatch: ['#ec4899', '#22d3ee'] },
-  { id: 'emerald', name: 'Quantum Emerald', tag: 'Forest Titanium', swatch: ['#10b981', '#38bdf8'] },
-  { id: 'solar', name: 'Solar Ember', tag: 'Espresso Bronze', swatch: ['#f59e0b', '#fb7185'] },
-  { id: 'slate', name: 'Executive Slate', tag: 'Carbon Steel', swatch: ['#38bdf8', '#818cf8'] },
+  { id: 'cyber', name: 'Cyber Aurora', tag: 'Obsidian Glow', swatch: '#6e56cf' },
+  { id: 'synthwave', name: 'Neon Synthwave', tag: 'Midnight Tokyo', swatch: '#cf5695' },
+  { id: 'emerald', name: 'Quantum Emerald', tag: 'Forest Titanium', swatch: '#2f9e6e' },
+  { id: 'solar', name: 'Solar Ember', tag: 'Espresso Bronze', swatch: '#c4801f' },
+  { id: 'slate', name: 'Executive Slate', tag: 'Carbon Steel', swatch: '#4189c9' },
 ];
 
 const LIGHT_THEMES: ThemeOption[] = [
-  { id: 'light-executive', name: 'Executive Platinum', tag: 'Crisp Studio Light', swatch: ['#5b53d8', '#0284c7'] },
-  { id: 'light-frost', name: 'Nordic Frost Light', tag: 'Ice Cyan Modern', swatch: ['#0d9488', '#0284c7'] },
-  { id: 'light-ceramic', name: 'Warm Ceramic Light', tag: 'Alabaster Amber', swatch: ['#c2620a', '#be123c'] },
+  { id: 'light-executive', name: 'Executive Platinum', tag: 'Crisp Studio Light', swatch: '#5b53d8' },
+  { id: 'light-frost', name: 'Nordic Frost Light', tag: 'Ice Cyan Modern', swatch: '#0d9488' },
+  { id: 'light-ceramic', name: 'Warm Ceramic Light', tag: 'Alabaster Amber', swatch: '#c2620a' },
 ];
 
-const swatchStyle = ([from, to]: [string, string]): React.CSSProperties => ({
-  backgroundImage: `linear-gradient(135deg, ${from}, ${to})`,
+const swatchStyle = (colour: string): React.CSSProperties => ({
+  backgroundColor: colour,
 });
 
 const ALL_THEMES = [...DARK_THEMES, ...LIGHT_THEMES];
@@ -72,6 +76,7 @@ const initialsOf = (name: string): string =>
 
 export const Header: React.FC<HeaderProps> = ({
   profile,
+  onOpenNav,
   onOpenProfile,
   currentTheme,
   onChangeTheme,
@@ -136,7 +141,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span className={cn('block text-xs font-semibold truncate', selected ? 'text-ink' : 'text-ink-muted')}>
                 {theme.name}
               </span>
-              <span className="block text-[10px] font-mono text-ink-faint truncate">{theme.tag}</span>
+              <span className="block text-2xs font-mono text-ink-faint truncate">{theme.tag}</span>
             </span>
             {selected && <Check className="w-3.5 h-3.5 text-accent-ink shrink-0" />}
           </button>
@@ -152,6 +157,19 @@ export const Header: React.FC<HeaderProps> = ({
         'border-b border-line bg-canvas/85 backdrop-blur-xl'
       )}
     >
+      {/* Below md the sidebar is a drawer, so it needs a way in. */}
+      {onOpenNav && (
+        <button
+          type="button"
+          onClick={onOpenNav}
+          aria-label="Open workspace navigation"
+          data-testid="open-nav"
+          className="md:hidden -ml-1 p-2 rounded-control text-ink-muted hover:text-ink hover:bg-fill transition-colors cursor-pointer"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+      )}
+
       {/* Identity ---------------------------------------------------------- */}
       <div className="flex items-center gap-2.5 shrink-0">
         <span className="relative flex items-center justify-center w-8 h-8 rounded-control bg-accent text-accent-contrast shrink-0">
@@ -161,7 +179,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-[13px] font-bold tracking-tight text-ink whitespace-nowrap">
+            <span className="font-mono text-xs font-bold tracking-tight text-ink whitespace-nowrap">
               CHERENKOV NEXUS
             </span>
             <span className="hidden sm:contents">
@@ -170,7 +188,7 @@ export const Header: React.FC<HeaderProps> = ({
               </Badge>
             </span>
           </div>
-          <p className="hidden lg:block text-[11px] leading-4 text-ink-faint whitespace-nowrap">
+          <p className="hidden lg:block text-sm leading-4 text-ink-faint whitespace-nowrap">
             Agentic Career Engine &amp; Multi-Agent QA Hub
           </p>
         </div>
@@ -181,8 +199,8 @@ export const Header: React.FC<HeaderProps> = ({
         <Badge tone="positive" dot font="mono">
           AI AGENTS ONLINE
         </Badge>
-        <span className="flex items-center gap-1.5 font-mono text-[11px] text-ink-faint min-w-0">
-          <Terminal className="w-3.5 h-3.5 text-accent2-ink shrink-0" />
+        <span className="flex items-center gap-1.5 font-mono text-xs text-ink-faint min-w-0">
+          <Terminal className="w-3.5 h-3.5 text-info-ink shrink-0" />
           <span className="truncate">cherenkov-qa / Playwright / k6</span>
         </span>
       </div>
@@ -194,7 +212,7 @@ export const Header: React.FC<HeaderProps> = ({
             id="tour-command-palette"
             type="button"
             onClick={onOpenCommandPalette}
-            title="Open Command Palette (Cmd+K)"
+            title="Open Command Palette (Cmd+K)" aria-label="Open Command Palette (Cmd+K)"
             className={cn(
               'hidden sm:flex items-center gap-2 h-8 pl-2.5 pr-1.5 rounded-control cursor-pointer',
               'border border-line bg-fill text-ink-muted transition-colors duration-150',
@@ -203,7 +221,7 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Command className="w-3.5 h-3.5" />
             <span className="text-xs font-semibold">Command</span>
-            <kbd className="px-1.5 py-0.5 rounded-chip bg-sunken border border-line font-mono text-[10px] text-ink-faint">
+            <kbd className="px-1.5 py-0.5 rounded-chip bg-sunken border border-line font-mono text-2xs text-ink-faint">
               ⌘K
             </kbd>
           </button>
@@ -215,7 +233,7 @@ export const Header: React.FC<HeaderProps> = ({
               variant="outline"
               onClick={onOpenOnboarding}
               icon={<Sparkles className="w-3.5 h-3.5" />}
-              title="Zero-Friction Agentic Onboarding (Terminal Handshake, Magic Ingest, Visa Seeding & Live ATS Test)"
+              title="Zero-Friction Agentic Onboarding (Terminal Handshake, Magic Ingest, Visa Seeding & Live ATS Test)" aria-label="Zero-Friction Agentic Onboarding (Terminal Handshake, Magic Ingest, Visa Seeding & Live ATS Test)"
             >
               Agentic Onboard
             </Button>
@@ -230,7 +248,7 @@ export const Header: React.FC<HeaderProps> = ({
               variant="ghost"
               onClick={onOpenIdentityVault}
               icon={<ShieldCheck className="w-3.5 h-3.5" />}
-              title="Zero-Trust Identity Vault & Inference Router"
+              title="Zero-Trust Identity Vault & Inference Router" aria-label="Zero-Trust Identity Vault & Inference Router"
             >
               <span className="hidden 2xl:inline">Vault</span>
             </Button>
@@ -243,7 +261,7 @@ export const Header: React.FC<HeaderProps> = ({
             variant="ghost"
             onClick={onStartTour}
             icon={<HelpCircle className="w-3.5 h-3.5" />}
-            title="Start Guided System Tour"
+            title="Start Guided System Tour" aria-label="Start Guided System Tour"
           >
             <span className="hidden 2xl:inline">Tour</span>
           </Button>
@@ -256,7 +274,7 @@ export const Header: React.FC<HeaderProps> = ({
               variant="ghost"
               onClick={onOpenTelemetry}
               icon={<Activity className="w-3.5 h-3.5" />}
-              title="System Telemetry & Scraper Health"
+              title="System Telemetry & Scraper Health" aria-label="System Telemetry & Scraper Health"
             >
               <span className="hidden 2xl:inline">Metrics</span>
             </Button>
@@ -268,7 +286,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={() => setShowThemePicker((open) => !open)}
-            title="Switch Visual Theme Palette & Mode"
+            title="Switch Visual Theme Palette & Mode" aria-label="Switch Visual Theme Palette & Mode"
             aria-haspopup="menu"
             aria-expanded={showThemePicker}
             className={cn(
@@ -318,22 +336,22 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           type="button"
           onClick={onOpenProfile}
-          title={`${profile.name} — ${profile.title}`}
+          title={`${profile.name} — ${profile.title}`} aria-label={`${profile.name} — ${profile.title}`}
           className={cn(
             'flex items-center gap-2.5 h-9 pl-1 pr-1 sm:pr-2.5 rounded-control cursor-pointer',
             'border border-line bg-fill transition-colors duration-150',
             'hover:bg-fill-strong hover:border-accent-line group'
           )}
         >
-          <span className="w-7 h-7 rounded-chip bg-accent text-accent-contrast flex items-center justify-center text-[11px] font-bold shrink-0">
+          <span className="w-7 h-7 rounded-chip bg-accent text-accent-contrast flex items-center justify-center text-xs font-bold shrink-0">
             {initialsOf(profile.name)}
           </span>
           <span className="hidden md:block text-left min-w-0 max-w-[9.5rem]">
             <span className="flex items-center gap-1 text-xs font-semibold text-ink group-hover:text-accent-ink transition-colors">
               <span className="truncate">{profile.name}</span>
-              <UserCheck className="w-3 h-3 text-accent2-ink shrink-0" />
+              <UserCheck className="w-3 h-3 text-info-ink shrink-0" />
             </span>
-            <span className="block text-[10px] font-mono text-ink-faint truncate">{profile.title}</span>
+            <span className="block text-2xs font-mono text-ink-faint truncate">{profile.title}</span>
           </span>
         </button>
       </div>

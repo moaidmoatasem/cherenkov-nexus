@@ -14,13 +14,12 @@ import { IdentityVaultModal } from './components/IdentityVaultModal';
 import { OnboardingModal } from './components/OnboardingModal';
 import { MasterProfileModal } from './components/MasterProfileModal';
 import { ToastContainer, ToastMessage } from './components/Toast';
-import { ThemeAuraBackground } from './components/ThemeAuraBackground';
 import { CommandPalette } from './components/CommandPalette';
 import { TelemetryModal } from './components/TelemetryModal';
 import { SystemTour } from './components/SystemTour';
 import { OracleWorkbench } from './components/OracleWorkbench';
 import { WORKSPACES } from './navigation';
-import { cn } from './components/ui';
+import { cn, Modal } from './components/ui';
 
 export default function App() {
   const [masterProfile, setMasterProfile] = useState<MasterProfile>(() => {
@@ -57,6 +56,7 @@ export default function App() {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isTelemetryOpen, setIsTelemetryOpen] = useState(false);
   const [isTourOpen, setIsTourOpen] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const [kanbanBackend, setKanbanBackend] = useState<'live' | 'local' | 'syncing'>('syncing');
   const hydratedFromApiRef = useRef(false);
@@ -275,14 +275,52 @@ export default function App() {
     });
   };
 
+  /** Each workspace's element, keyed by tab. Building these is cheap; only the
+   *  one selected above is ever mounted. */
+  const workspaceViews: Record<TabId, React.ReactNode> = {
+    synthesizer: (
+      <JobSynthesizer
+        masterProfile={masterProfile}
+        onApplicationCreated={handleApplicationCreated}
+        onAddCourseToLearning={handleAddCourseFromSynthesis}
+        onNavigateToKanban={() => setActiveTab('kanban')}
+        onToast={addToast}
+      />
+    ),
+    kanban: (
+      <KanbanBoard
+        applications={applications}
+        onUpdateApplication={handleUpdateApplication}
+        onDeleteApplication={handleDeleteApplication}
+        onAddApplication={handleApplicationCreated}
+        onToast={addToast}
+      />
+    ),
+    learning: (
+      <LearningSync
+        masterProfile={masterProfile}
+        onUpdateProfile={setMasterProfile}
+        onToast={addToast}
+      />
+    ),
+    marketplace: (
+      <Marketplace onToast={addToast} onSyncSkillsToProfile={handleSyncSkillsToProfile} />
+    ),
+    orchestrator: <AgentCanvas onToast={addToast} />,
+    hivemind: <HiveMind onToast={addToast} />,
+    oracle: <OracleWorkbench />,
+  };
+
   return (
-    <div className="h-dvh min-h-[40rem] flex flex-col bg-canvas text-ink font-sans subtle-grid relative overflow-hidden">
-      {/* Dynamic Animated Ambient Theme Aura */}
-      <ThemeAuraBackground theme={currentTheme} />
+    <div
+      data-testid="app-shell"
+      className="h-dvh min-h-[40rem] flex flex-col bg-canvas text-ink font-sans relative overflow-hidden"
+    >
 
       {/* Top Application Header */}
       <Header
         profile={masterProfile}
+        onOpenNav={() => setIsNavOpen(true)}
         onOpenProfile={() => setIsProfileModalOpen(true)}
         currentTheme={currentTheme}
         onChangeTheme={setCurrentTheme}
@@ -308,6 +346,44 @@ export default function App() {
           onStartTour={() => setIsTourOpen(true)}
         />
 
+        {/* Below md the rail is hidden, so the same nav opens as a drawer. */}
+        <Modal
+          open={isNavOpen}
+          onClose={() => setIsNavOpen(false)}
+          align="left"
+          label="Workspace navigation"
+          className="md:hidden pt-14"
+        >
+          <Sidebar
+            variant="drawer"
+            onCloseDrawer={() => setIsNavOpen(false)}
+            activeTab={activeTab}
+            onSelectTab={(tab) => {
+              setActiveTab(tab);
+              setIsNavOpen(false);
+            }}
+            profile={masterProfile}
+            onOpenProfile={() => {
+              setIsNavOpen(false);
+              setIsProfileModalOpen(true);
+            }}
+            applications={applications}
+            certCount={masterProfile.learning_certs?.length || 0}
+            onOpenIdentityVault={() => {
+              setIsNavOpen(false);
+              setIsIdentityVaultOpen(true);
+            }}
+            onOpenOnboarding={() => {
+              setIsNavOpen(false);
+              setIsOnboardingOpen(true);
+            }}
+            onStartTour={() => {
+              setIsNavOpen(false);
+              setIsTourOpen(true);
+            }}
+          />
+        </Modal>
+
         {/* Dynamic Workspace Body */}
         <main className="flex-1 min-w-0 overflow-y-auto p-4 md:p-6 lg:p-8">
           {/* Mobile Tab Selector — same workspace registry as the sidebar */}
@@ -331,7 +407,7 @@ export default function App() {
                     <span className="font-mono tabular">({applications.length})</span>
                   )}
                   {workspace.id === 'kanban' && kanbanBackend === 'live' && (
-                    <span className="px-1 rounded-chip bg-positive-soft text-positive-ink border border-positive-line font-mono text-[9px] font-bold">
+                    <span className="px-1 rounded-chip bg-positive-soft text-positive-ink border border-positive-line font-mono text-2xs font-bold">
                       DB
                     </span>
                   )}
@@ -341,109 +417,19 @@ export default function App() {
           </div>
 
           {/* Module Transitions with Framer Motion */}
+          {/* One transition, seven destinations. The workspaces differ only in
+              which node renders, so the wrapper is written once. */}
           <AnimatePresence mode="wait">
-            {activeTab === 'synthesizer' && (
-              <motion.div
-                key="synthesizer"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.2, ease: 'easeOut' }}
-              >
-                <JobSynthesizer
-                  masterProfile={masterProfile}
-                  onApplicationCreated={handleApplicationCreated}
-                  onAddCourseToLearning={handleAddCourseFromSynthesis}
-                  onNavigateToKanban={() => setActiveTab('kanban')}
-                  onToast={addToast}
-                />
-              </motion.div>
-            )}
-
-            {activeTab === 'kanban' && (
-              <motion.div
-                key="kanban"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.2, ease: 'easeOut' }}
-              >
-                <KanbanBoard
-                  applications={applications}
-                  onUpdateApplication={handleUpdateApplication}
-                  onDeleteApplication={handleDeleteApplication}
-                  onAddApplication={handleApplicationCreated}
-                  onToast={addToast}
-                />
-              </motion.div>
-            )}
-
-            {activeTab === 'learning' && (
-              <motion.div
-                key="learning"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.2, ease: 'easeOut' }}
-              >
-                <LearningSync
-                  masterProfile={masterProfile}
-                  onUpdateProfile={setMasterProfile}
-                  onToast={addToast}
-                />
-              </motion.div>
-            )}
-
-            {activeTab === 'marketplace' && (
-              <motion.div
-                key="marketplace"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.2, ease: 'easeOut' }}
-              >
-                <Marketplace
-                  onToast={addToast}
-                  onSyncSkillsToProfile={handleSyncSkillsToProfile}
-                />
-              </motion.div>
-            )}
-
-            {activeTab === 'orchestrator' && (
-              <motion.div
-                key="orchestrator"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.2, ease: 'easeOut' }}
-              >
-                <AgentCanvas onToast={addToast} />
-              </motion.div>
-            )}
-
-            {activeTab === 'hivemind' && (
-              <motion.div
-                key="hivemind"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.2, ease: 'easeOut' }}
-              >
-                <HiveMind onToast={addToast} />
-              </motion.div>
-            )}
-
-            {activeTab === 'oracle' && (
-              <motion.div
-                key="oracle"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.2, ease: 'easeOut' }}
-              >
-                <OracleWorkbench />
-              </motion.div>
-            )}
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              data-testid={`workspace-${activeTab}`}
+            >
+              {workspaceViews[activeTab]}
+            </motion.div>
           </AnimatePresence>
         </main>
       </div>

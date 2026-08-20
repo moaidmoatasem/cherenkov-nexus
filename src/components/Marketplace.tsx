@@ -29,6 +29,7 @@ import {
   FileCode,
   Check
 } from 'lucide-react';
+import { Modal } from './ui';
 
 export interface MarketplaceProps {
   onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
@@ -142,13 +143,11 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="p-8 rounded-panel bg-gradient-to-br from-surface via-sunken to-sunken border border-accent2-line relative overflow-hidden shadow-2xl">
-        <div className="absolute -right-16 -top-16 w-80 h-80 bg-accent2-soft rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -left-16 -bottom-16 w-80 h-80 bg-accent-soft rounded-full blur-3xl pointer-events-none" />
+      <div className="p-8 rounded-panel bg-surface border border-info-line relative overflow-hidden shadow-pop">
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent2-soft border border-accent2-line text-accent2-ink text-xs font-mono font-bold">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-info-soft border border-info-line text-info-ink text-xs font-mono font-bold">
               <Store className="w-3.5 h-3.5" />
               <span>MCP 2026 OFFICIAL REGISTRY</span>
             </div>
@@ -164,7 +163,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
           <div className="flex flex-wrap sm:flex-nowrap items-center gap-3">
             <button
               onClick={() => setIsGitHubModalOpen(true)}
-              className="px-4 py-2.5 rounded-card bg-gradient-to-r from-accent via-info to-accent2 hover:from-accent hover:to-accent2 text-ink text-xs font-bold font-mono flex items-center gap-2 shadow-lg cursor-pointer transition-all hover:scale-[1.02]"
+              className="px-4 py-2.5 rounded-card bg-accent hover:bg-accent-strong text-accent-contrast text-xs font-bold flex items-center gap-2 cursor-pointer transition-all hover:scale-[1.02]"
             >
               <Github className="w-4 h-4" />
               <span>{linkedRepo ? 'GitHub Synced' : 'GitHub Repository Sync'}</span>
@@ -175,7 +174,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
 
             <button
               onClick={() => setIsPublishModalOpen(true)}
-              className="px-4 py-2.5 rounded-card bg-gradient-to-r from-accent2 via-info to-info hover:from-accent2 hover:to-info text-ink text-xs font-bold font-mono flex items-center gap-2 shadow-lg cursor-pointer transition-all hover:scale-[1.02]"
+              className="px-4 py-2.5 rounded-card bg-accent hover:bg-accent-strong text-accent-contrast text-xs font-bold flex items-center gap-2 cursor-pointer transition-all hover:scale-[1.02]"
             >
               <Plus className="w-4 h-4" />
               <span>Publish MCP Server</span>
@@ -188,7 +187,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
           <div data-testid="mcp-live-status" className="mt-4 p-3.5 rounded-card bg-sunken/80 border border-accent-line flex flex-wrap items-center gap-x-5 gap-y-2">
             <div className="flex items-center gap-2">
               <Server className="w-4 h-4 text-accent-ink" />
-              <span className="text-[10px] font-mono font-bold tracking-widest text-ink-muted">
+              <span className="text-2xs font-mono font-bold tracking-widest text-ink-muted">
                 LIVE MCP HOST
               </span>
             </div>
@@ -197,7 +196,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                 {mcpLive.servers.map((s) => (
                   <div
                     key={s.name}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-control text-[10px] font-mono font-bold bg-sunken/80 border border-line-strong text-ink-muted"
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-control text-2xs font-mono font-bold bg-sunken/80 border border-line-strong text-ink-muted"
                   >
                     <span
                       className={`w-1.5 h-1.5 rounded-full ${
@@ -208,13 +207,13 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                     <span className="text-ink-faint">({s.toolNames.length} tools)</span>
                   </div>
                 ))}
-                <span className="text-[10px] font-mono font-bold text-positive-ink flex items-center gap-1">
+                <span className="text-2xs font-mono font-bold text-positive-ink flex items-center gap-1">
                   <CheckCircle2 className="w-3 h-3" />
                   HOST {mcpLive.ready ? 'ONLINE' : 'DEGRADED'}
                 </span>
               </div>
             ) : (
-              <div className="flex items-center gap-2 text-[10px] font-mono font-bold text-caution-ink">
+              <div className="flex items-center gap-2 text-2xs font-mono font-bold text-caution-ink">
                 <RefreshCw className="w-3 h-3 animate-spin" />
                 CONNECTING…
               </div>
@@ -223,9 +222,9 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
         )}
 
         {/* GitHub Codebase Alignment Hero Card */}
-        <div className="mt-6 p-4 rounded-card bg-sunken/80 border border-accent2-line flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="mt-6 p-4 rounded-card bg-sunken/80 border border-info-line flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="p-3 rounded-control bg-accent2-soft border border-accent2-line text-accent2-ink">
+            <div className="p-3 rounded-control bg-info-soft border border-info-line text-info-ink">
               <Code2 className="w-5 h-5" />
             </div>
             <div>
@@ -234,17 +233,17 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                   {linkedRepo ? `Linked Repository: ${linkedRepo.repoName}` : 'GitHub Codebase AST Analyzer'}
                 </h3>
                 {linkedRepo ? (
-                  <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-positive-soft text-positive-ink border border-positive-line rounded-full flex items-center gap-1">
+                  <span className="px-2 py-0.5 text-2xs font-mono font-bold bg-positive-soft text-positive-ink border border-positive-line rounded-full flex items-center gap-1">
                     <Check className="w-2.5 h-2.5" />
                     {linkedRepo.alignmentScore}% TECHNICAL FIT
                   </span>
                 ) : (
-                  <span className="px-2 py-0.5 text-[9px] font-mono text-ink-muted bg-fill rounded-full">
+                  <span className="px-2 py-0.5 text-2xs font-mono text-ink-muted bg-fill rounded-full">
                     AIR-GAPPED AST SCAN
                   </span>
                 )}
               </div>
-              <p className="text-[11px] text-ink-muted mt-0.5">
+              <p className="text-sm text-ink-muted mt-0.5">
                 {linkedRepo
                   ? `Extracted ${linkedRepo.codeProofPoints?.length || 4} hard proof points (Playwright CDP, k6 spikes, CodeQL SAST) into candidate profile.`
                   : 'Link your GitHub repo to automatically extract test architecture proof points and align with enterprise JD criteria.'}
@@ -254,7 +253,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
 
           <button
             onClick={() => setIsGitHubModalOpen(true)}
-            className="px-4 py-2 rounded-control text-xs font-mono font-bold bg-fill-strong hover:bg-fill-strong text-accent2-ink border border-accent2-line flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
+            className="px-4 py-2 rounded-control text-xs font-bold bg-fill-strong hover:bg-fill-strong text-info-ink border border-info-line flex items-center gap-1.5 transition-all shrink-0 cursor-pointer"
           >
             <span>{linkedRepo ? 'Rescan / View Code Proof' : 'Link Repository'}</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -264,12 +263,12 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
         {/* Global Live Telemetry Stat Row */}
         <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-line pt-6">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-control bg-accent2-soft text-accent2-ink border border-accent2-line">
+            <div className="p-2.5 rounded-control bg-info-soft text-info-ink border border-info-line">
               <Server className="w-4 h-4" />
             </div>
             <div>
               <div className="text-xl font-bold text-ink font-mono">{stats.installed} / {stats.total}</div>
-              <div className="text-[11px] text-ink-muted">Active Connectors</div>
+              <div className="text-xs text-ink-muted">Active Connectors</div>
             </div>
           </div>
 
@@ -279,7 +278,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
             </div>
             <div>
               <div className="text-xl font-bold text-positive-ink font-mono">100% Stdio</div>
-              <div className="text-[11px] text-ink-muted">Zero-Egress Security</div>
+              <div className="text-xs text-ink-muted">Zero-Egress Security</div>
             </div>
           </div>
 
@@ -289,7 +288,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
             </div>
             <div>
               <div className="text-xl font-bold text-accent-ink font-mono">{(stats.totalDownloads / 1000).toFixed(1)}k</div>
-              <div className="text-[11px] text-ink-muted">Global Installs</div>
+              <div className="text-xs text-ink-muted">Global Installs</div>
             </div>
           </div>
 
@@ -299,7 +298,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
             </div>
             <div>
               <div className="text-xl font-bold text-caution-ink font-mono">2026-07-28</div>
-              <div className="text-[11px] text-ink-muted">MCP Standard Spec</div>
+              <div className="text-xs text-ink-muted">MCP Standard Spec</div>
             </div>
           </div>
         </div>
@@ -323,12 +322,12 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
               onClick={() => setSelectedCategory(tab.id as any)}
               className={`px-3 py-1.5 rounded-control text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                 selectedCategory === tab.id
-                  ? 'bg-gradient-to-r from-accent2 to-info text-ink shadow-md'
+                  ? 'bg-info text-ink'
                   : 'bg-fill hover:bg-fill-strong text-ink-muted hover:text-ink'
               }`}
             >
               <span>{tab.label}</span>
-              <span className="ml-1.5 text-[10px] opacity-75 font-mono">({tab.count})</span>
+              <span className="ml-1.5 text-2xs opacity-75 font-mono">({tab.count})</span>
             </button>
           ))}
         </div>
@@ -341,7 +340,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search MCPs by name, tag, tech..."
-            className="w-full pl-9 pr-4 py-2 bg-fill border border-line rounded-control text-xs text-ink placeholder:text-ink-faint focus:outline-none focus:border-accent2-line"
+            className="w-full pl-9 pr-4 py-2 bg-fill border border-line rounded-control text-xs text-ink placeholder:text-ink-faint focus:border-info-line"
           />
         </div>
       </div>
@@ -352,24 +351,24 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
           return (
             <div
               key={pkg.id}
-              className={`p-6 rounded-panel bg-gradient-to-b from-surface to-sunken border transition-all hover:border-accent2-line flex flex-col justify-between group ${
-                pkg.installed ? 'border-accent2-line shadow-lg' : 'border-line'
+              className={`p-6 rounded-panel bg-surface border transition-all hover:border-info-line flex flex-col justify-between group ${
+                pkg.installed ? 'border-info-line' : 'border-line'
               }`}
             >
               <div className="space-y-4">
                 {/* Header info */}
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-accent2-ink px-2 py-0.5 rounded bg-accent2-soft border border-accent2-line">
+                    <span className="text-2xs font-mono font-bold uppercase tracking-wider text-info-ink px-2 py-0.5 rounded bg-info-soft border border-info-line">
                       {pkg.category.toUpperCase()}
                     </span>
-                    <h3 className="text-base font-bold text-ink mt-2 group-hover:text-accent2-ink transition-colors">
+                    <h3 className="text-base font-bold text-ink mt-2 group-hover:text-info-ink transition-colors">
                       {pkg.name}
                     </h3>
-                    <div className="text-[11px] text-ink-muted flex items-center gap-2 mt-1">
+                    <div className="text-xs text-ink-muted flex items-center gap-2 mt-1">
                       <span>by {pkg.author}</span>
                       <span>•</span>
-                      <span className="font-mono text-[10px]">v{pkg.version}</span>
+                      <span className="font-mono text-2xs">v{pkg.version}</span>
                     </div>
                   </div>
 
@@ -380,7 +379,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                 </div>
 
                 {/* Description */}
-                <p className="text-xs text-ink-muted line-clamp-3 leading-relaxed">
+                <p className="text-sm text-ink-muted line-clamp-3 leading-relaxed">
                   {pkg.description}
                 </p>
 
@@ -389,7 +388,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                   {pkg.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-2 py-0.5 rounded-control bg-fill border border-line text-[10px] text-ink-muted font-mono"
+                      className="px-2 py-0.5 rounded-control bg-fill border border-line text-2xs text-ink-muted font-mono"
                     >
                       #{tag}
                     </span>
@@ -398,15 +397,15 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
 
                 {/* Capabilities list preview */}
                 <div className="p-3 rounded-card bg-sunken border border-line space-y-1.5">
-                  <div className="text-[10px] font-mono text-ink-muted font-bold uppercase tracking-wider flex items-center justify-between">
+                  <div className="text-2xs font-mono text-ink-muted font-bold uppercase tracking-wider flex items-center justify-between">
                     <span>Exposed MCP Tools</span>
-                    <span className="text-accent2-ink lowercase">{pkg.transport} transport</span>
+                    <span className="text-info-ink lowercase">{pkg.transport} transport</span>
                   </div>
                   <div className="flex flex-wrap gap-1">
                     {pkg.capabilities.map((cap) => (
                       <span
                         key={cap}
-                        className="text-[10px] font-mono bg-accent2-soft text-accent2-ink px-1.5 py-0.5 rounded"
+                        className="text-2xs font-mono bg-info-soft text-info-ink px-1.5 py-0.5 rounded"
                       >
                         {cap}()
                       </span>
@@ -429,7 +428,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                   {pkg.installed && (
                     <button
                       onClick={() => handleToggleActive(pkg.id)}
-                      className={`px-2.5 py-1.5 rounded-control text-[11px] font-bold font-mono transition-all cursor-pointer ${
+                      className={`px-2.5 py-1.5 rounded-control text-xs font-bold font-mono transition-all cursor-pointer ${
                         pkg.active
                           ? 'bg-positive-soft text-positive-ink border border-positive-line'
                           : 'bg-sunken text-ink-muted border border-line-strong'
@@ -444,7 +443,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                     className={`px-3.5 py-1.5 rounded-control text-xs font-bold font-mono flex items-center gap-1.5 transition-all cursor-pointer ${
                       pkg.installed
                         ? 'bg-critical-soft hover:bg-critical-soft text-critical-ink border border-critical-line'
-                        : 'bg-gradient-to-r from-accent2 to-info hover:from-accent2 hover:to-info text-ink shadow-md'
+                        : 'bg-accent hover:bg-accent-strong text-accent-contrast'
                     }`}
                   >
                     {pkg.installed ? (
@@ -468,21 +467,21 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
 
       {/* Package Inspector Modal */}
       {selectedPackage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md">
+        <Modal open onClose={() => setSelectedPackage(null)} label="MCP package details">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="w-full max-w-2xl bg-surface border border-accent2-line rounded-panel p-6 shadow-2xl space-y-6"
+            className="w-full max-w-2xl bg-surface border border-info-line rounded-panel p-6 shadow-pop space-y-6"
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-3 rounded-card bg-accent2-soft text-accent2-ink border border-accent2-line">
+                <div className="p-3 rounded-card bg-info-soft text-info-ink border border-info-line">
                   <Terminal className="w-6 h-6" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-ink">{selectedPackage.name}</h3>
-                  <p className="text-xs text-ink-muted">Author: {selectedPackage.author} • v{selectedPackage.version}</p>
+                  <p className="text-sm text-ink-muted">Author: {selectedPackage.author} • v{selectedPackage.version}</p>
                 </div>
               </div>
               <button
@@ -496,12 +495,12 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
             <div className="space-y-4">
               <div>
                 <h4 className="text-xs font-mono font-bold text-ink-muted uppercase">Description</h4>
-                <p className="text-xs text-ink-muted mt-1 leading-relaxed">{selectedPackage.description}</p>
+                <p className="text-sm text-ink-muted mt-1 leading-relaxed">{selectedPackage.description}</p>
               </div>
 
               <div>
                 <h4 className="text-xs font-mono font-bold text-ink-muted uppercase">Stdio Launch Command</h4>
-                <div className="p-3 rounded-control bg-sunken border border-line text-xs font-mono text-accent2-ink mt-1.5 flex items-center justify-between">
+                <div className="p-3 rounded-control bg-sunken border border-line text-xs font-mono text-info-ink mt-1.5 flex items-center justify-between">
                   <code>{selectedPackage.commandExample}</code>
                 </div>
               </div>
@@ -514,7 +513,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                       key={cap}
                       className="p-2.5 rounded-control bg-fill border border-line text-xs font-mono text-ink"
                     >
-                      <span className="text-accent2-ink">tool:</span> {cap}
+                      <span className="text-info-ink">tool:</span> {cap}
                     </div>
                   ))}
                 </div>
@@ -538,23 +537,23 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                     handleToggleInstall(selectedPackage.id);
                     setSelectedPackage(null);
                   }}
-                  className="px-5 py-2 text-xs font-bold font-mono rounded-control bg-accent2 hover:bg-accent2 text-ink-inverse cursor-pointer shadow-md"
+                  className="px-5 py-2 text-xs font-bold rounded-control bg-accent hover:bg-accent-strong text-accent-contrast-inverse cursor-pointer"
                 >
                   {selectedPackage.installed ? 'Uninstall MCP' : 'Install Connector'}
                 </button>
               </div>
             </div>
           </motion.div>
-        </div>
+        </Modal>
       )}
 
       {/* Publish MCP Modal */}
       {isPublishModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-scrim backdrop-blur-md">
+        <Modal open onClose={() => setIsPublishModalOpen(false)} label="Register community MCP server">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="w-full max-w-xl bg-surface border border-accent2-line rounded-panel p-6 shadow-2xl space-y-5"
+            className="w-full max-w-xl bg-surface border border-info-line rounded-panel p-6 shadow-pop space-y-5"
           >
             <div className="flex items-center justify-between">
               <h3 className="text-base font-bold text-ink font-mono">Register Community MCP Server</h3>
@@ -566,32 +565,32 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
               </button>
             </div>
 
-            <p className="text-xs text-ink-muted">
+            <p className="text-sm text-ink-muted">
               Publish your custom Model Context Protocol server or Swarm strategy pack into your local registry.
             </p>
 
             <div className="space-y-3">
               <div>
-                <label className="text-[11px] font-mono text-ink-muted">Package Name</label>
-                <input
+                <label htmlFor="marketplace-package-name" className="text-xs font-mono text-ink-muted">Package Name</label>
+                <input id="marketplace-package-name"
                   type="text"
                   placeholder="e.g. Canada Express Entry MCP"
-                  className="w-full px-3 py-2 mt-1 rounded-control bg-fill border border-line text-xs text-ink focus:outline-none focus:border-accent2-line"
+                  className="w-full px-3 py-2 mt-1 rounded-control bg-fill border border-line text-xs text-ink focus:border-info-line"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-mono text-ink-muted">Command / Stdio Endpoint</label>
-                <input
+                <label htmlFor="marketplace-command-stdio-endpoint" className="text-xs font-mono text-ink-muted">Command / Stdio Endpoint</label>
+                <input id="marketplace-command-stdio-endpoint"
                   type="text"
                   placeholder="npx -y @my-org/mcp-server@latest"
-                  className="w-full px-3 py-2 mt-1 rounded-control bg-fill border border-line text-xs text-ink focus:outline-none focus:border-accent2-line font-mono"
+                  className="w-full px-3 py-2 mt-1 rounded-control bg-fill border border-line text-xs text-ink focus:border-info-line font-mono"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-mono text-ink-muted">Category</label>
-                <select className="w-full px-3 py-2 mt-1 rounded-control bg-sunken border border-line text-xs text-ink focus:outline-none focus:border-accent2-line">
+                <label htmlFor="marketplace-category" className="text-xs font-mono text-ink-muted">Category</label>
+                <select id="marketplace-category" className="w-full px-3 py-2 mt-1 rounded-control bg-sunken border border-line text-xs text-ink focus:border-info-line">
                   <option value="visa">Regional Visa Validator</option>
                   <option value="ats">ATS Direct Connector</option>
                   <option value="strategy">Strategy Swarm Pack</option>
@@ -612,13 +611,13 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                   onToast('success', 'MCP Registered', 'Custom MCP server added to local registry.');
                   setIsPublishModalOpen(false);
                 }}
-                className="px-5 py-2 text-xs font-bold font-mono rounded-control bg-accent2 hover:bg-accent2 text-ink-inverse"
+                className="px-5 py-2 text-xs font-bold font-mono rounded-control bg-accent hover:bg-accent-strong text-accent-contrast-inverse"
               >
                 Publish to Local Registry
               </button>
             </div>
           </motion.div>
-        </div>
+        </Modal>
       )}
 
       {/* GitHub Repository Sync Modal */}

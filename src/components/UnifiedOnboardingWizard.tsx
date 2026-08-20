@@ -221,12 +221,12 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto bg-sunken rounded-panel p-6 sm:p-8 shadow-2xl relative border border-line overflow-hidden text-ink">
+    <div className="w-full max-w-3xl mx-auto bg-sunken rounded-panel p-6 sm:p-8 shadow-pop relative border border-line overflow-hidden text-ink">
       {/* Background Glow Aura */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[130%] h-48 blur-[110px] pointer-events-none transition-all duration-700"
         style={{
-          backgroundColor: `${ARCHETYPE_PRESETS[selectedArchetype].accentColor}25`
+          backgroundColor: `color-mix(in srgb, ${ARCHETYPE_PRESETS[selectedArchetype].accentColor} 25%, transparent)`
         }}
       />
 
@@ -240,22 +240,22 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
       )}
 
       {/* Playwright Test Target Anchors */}
-      <div className="opacity-0 absolute pointer-events-none text-[1px]">System Configuration</div>
-      <div className="opacity-0 absolute pointer-events-none text-[1px]">Location & Readiness</div>
+      <div className="sr-only">System Configuration</div>
+      <div className="sr-only">Location & Readiness</div>
 
       {/* Wizard Header & Progress Bar */}
       <div className="mb-6 relative z-10">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-control bg-accent2-soft border border-accent2-line flex items-center justify-center text-accent2-ink font-bold text-xs">
+            <div className="w-8 h-8 rounded-control bg-info-soft border border-info-line flex items-center justify-center text-info-ink font-bold text-xs">
               CN
             </div>
             <div>
               <h1 className="text-base font-bold text-ink tracking-tight">Cherenkov Nexus Onboarding</h1>
-              <p className="text-xs text-ink-muted">Tailor AI synthesis & agent pipelines to your career profile</p>
+              <p className="text-sm text-ink-muted">Tailor AI synthesis & agent pipelines to your career profile</p>
             </div>
           </div>
-          <span className="text-xs font-mono px-3 py-1 rounded-full bg-fill-strong border border-line-strong text-accent2-ink font-semibold">
+          <span className="text-xs font-mono px-3 py-1 rounded-full bg-fill-strong border border-line-strong text-info-ink font-semibold">
             Step {step} of 3
           </span>
         </div>
@@ -271,16 +271,16 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
               <div
                 className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all shrink-0 ${
                   step >= s.num
-                    ? 'bg-accent2 text-ink-inverse'
+                    ? 'bg-info text-ink-inverse'
                     : 'bg-fill-strong text-ink-faint border border-line-strong'
                 }`}
               >
                 {step > s.num ? '✓' : s.num}
               </div>
-              <span className={`text-[11px] font-mono hidden sm:inline ${step >= s.num ? 'text-ink font-bold' : 'text-ink-faint'}`}>
+              <span className={`text-xs font-mono hidden sm:inline ${step >= s.num ? 'text-ink font-bold' : 'text-ink-faint'}`}>
                 {s.label}
               </span>
-              {s.num < 3 && <div className={`flex-1 h-px ${step > s.num ? 'bg-accent2/60' : 'bg-fill-strong'}`} />}
+              {s.num < 3 && <div className={`flex-1 h-px ${step > s.num ? 'bg-info/60' : 'bg-fill-strong'}`} />}
             </div>
           ))}
         </div>
@@ -302,18 +302,18 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                 onClick={() => setIngestionTab('preset')}
                 className={`flex-1 py-2 text-xs font-bold rounded-control transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   ingestionTab === 'preset'
-                    ? 'bg-gradient-to-r from-accent2/30 to-accent/30 text-ink border border-accent2-line shadow-sm'
+                    ? 'bg-info text-ink border border-info-line'
                     : 'text-ink-muted hover:text-ink'
                 }`}
               >
-                <Sparkles className="w-3.5 h-3.5 text-accent2-ink" />
+                <Sparkles className="w-3.5 h-3.5 text-info-ink" />
                 1-Click Archetypes
               </button>
               <button
                 onClick={() => setIngestionTab('upload')}
                 className={`flex-1 py-2 text-xs font-bold rounded-control transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   ingestionTab === 'upload'
-                    ? 'bg-gradient-to-r from-accent2/30 to-accent/30 text-ink border border-accent2-line shadow-sm'
+                    ? 'bg-info text-ink border border-info-line'
                     : 'text-ink-muted hover:text-ink'
                 }`}
               >
@@ -326,7 +326,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
               <div className="space-y-3">
                 <div className="text-center">
                   <h2 className="text-xl font-extrabold text-ink tracking-tight">Select Your Career Archetype</h2>
-                  <p className="text-xs text-ink-muted mt-1">
+                  <p className="text-sm text-ink-muted mt-1">
                     Pre-calibrates inference routing, immigration checks, AST prompt templates, and default views.
                   </p>
                 </div>
@@ -356,7 +356,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                             <div
                               className="w-7 h-7 rounded-control flex items-center justify-center shrink-0"
                               style={{
-                                backgroundColor: `${preset.accentColor}20`,
+                                backgroundColor: `color-mix(in srgb, ${preset.accentColor} 20%, transparent)`,
                                 color: preset.accentColor
                               }}
                             >
@@ -365,25 +365,25 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                             <div className="min-w-0 space-y-1">
                               <span className="block font-bold text-sm text-ink leading-tight">{preset.label}</span>
                               <span
-                                className="inline-block text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-chip border uppercase whitespace-nowrap"
+                                className="inline-block text-2xs font-mono font-bold px-1.5 py-0.5 rounded-chip border uppercase whitespace-nowrap"
                                 style={{
                                   color: preset.accentColor,
-                                  borderColor: `${preset.accentColor}40`,
-                                  backgroundColor: `${preset.accentColor}10`
+                                  borderColor: `color-mix(in srgb, ${preset.accentColor} 40%, transparent)`,
+                                  backgroundColor: `color-mix(in srgb, ${preset.accentColor} 10%, transparent)`
                                 }}
                               >
                                 {preset.badge}
                               </span>
                             </div>
                           </div>
-                          <p className="text-xs text-ink-muted line-clamp-2 leading-relaxed">
+                          <p className="text-sm text-ink-muted line-clamp-2 leading-relaxed">
                             {preset.tagline}
                           </p>
                         </div>
 
-                        <div className="mt-2.5 pt-2 border-t border-line flex items-center justify-between gap-2 text-[11px] font-mono text-ink-faint">
+                        <div className="mt-2.5 pt-2 border-t border-line flex items-center justify-between gap-2 text-xs font-mono text-ink-faint">
                           <span className="truncate">Focus: {preset.profile.title.split('&')[0]}</span>
-                          <span className="text-accent2-ink shrink-0">
+                          <span className="text-info-ink shrink-0">
                             {preset.profile.workspaceConfig?.defaultTab}
                           </span>
                         </div>
@@ -394,7 +394,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
 
                 <button
                   onClick={() => setStep(2)}
-                  className="w-full bg-accent2 text-ink-inverse p-3.5 rounded-control font-extrabold mt-2 hover:bg-accent2 transition-all cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full bg-info text-ink-inverse p-3.5 rounded-control font-extrabold mt-2 hover:bg-info transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
                   <span>Continue with {ARCHETYPE_PRESETS[selectedArchetype].label}</span>
                   <ArrowRight className="w-4 h-4" />
@@ -404,7 +404,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
               <div className="space-y-4">
                 <div className="text-center">
                   <h2 className="text-xl font-extrabold text-ink tracking-tight">The Magic Resume & LinkedIn Parser</h2>
-                  <p className="text-xs text-ink-muted mt-1">
+                  <p className="text-sm text-ink-muted mt-1">
                     Upload your CV or input a public LinkedIn URL to extract your technical vector and detect your archetype.
                   </p>
                 </div>
@@ -421,20 +421,20 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                   <div
                     className={`border-2 border-dashed rounded-card p-8 transition-all text-center ${
                       isExtracting
-                        ? 'border-accent2-line bg-accent2-soft'
-                        : 'border-line-strong hover:border-accent2-line hover:bg-fill'
+                        ? 'border-info-line bg-info-soft'
+                        : 'border-line-strong hover:border-info-line hover:bg-fill'
                     }`}
                   >
                     {isExtracting ? (
                       <div className="flex flex-col items-center justify-center gap-3">
-                        <Sparkles className="w-8 h-8 text-accent2-ink animate-pulse" />
-                        <span className="text-xs font-mono text-accent2-ink">Extracting AST vector & classifying archetype...</span>
+                        <Sparkles className="w-8 h-8 text-info-ink animate-pulse" />
+                        <span className="text-xs font-mono text-info-ink">Extracting AST vector & classifying archetype...</span>
                       </div>
                     ) : (
                       <div className="flex flex-col items-center justify-center gap-2">
-                        <FileText className="w-7 h-7 text-accent2-ink" />
+                        <FileText className="w-7 h-7 text-info-ink" />
                         <span className="text-sm font-bold text-ink">Drop your CV here (.txt / .md)</span>
-                        <span className="text-[11px] text-ink-faint font-mono">
+                        <span className="text-xs text-ink-faint font-mono">
                           Parsed in-browser · PDF and DOCX must be pasted as text
                         </span>
                       </div>
@@ -457,12 +457,12 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                     placeholder="https://www.linkedin.com/in/username"
                     value={linkedInUrl}
                     onChange={(e) => setLinkedInUrl(e.target.value)}
-                    className="flex-1 bg-surface border border-line-strong rounded-control px-4 py-2.5 text-xs text-ink placeholder:text-ink-faint focus:outline-none focus:border-accent2-line"
+                    className="flex-1 bg-surface border border-line-strong rounded-control px-4 py-2.5 text-xs text-ink placeholder:text-ink-faint focus:border-info-line"
                   />
                   <button
                     onClick={handleLinkedInExtract}
                     disabled={isExtracting || !linkedInUrl.trim()}
-                    className="px-4 py-2.5 bg-accent hover:bg-accent disabled:opacity-50 text-ink rounded-control text-xs font-bold cursor-pointer transition-colors flex items-center gap-1.5"
+                    className="px-4 py-2.5 bg-accent hover:bg-accent-strong disabled:opacity-50 text-accent-contrast rounded-control text-xs font-bold cursor-pointer transition-colors flex items-center gap-1.5"
                   >
                     <Sparkles className="w-3.5 h-3.5" />
                     Extract
@@ -483,19 +483,19 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
             className="space-y-6 relative z-10"
           >
             <div className="text-center">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-fill-strong border border-line-strong text-xs font-mono text-accent2-ink mb-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-fill-strong border border-line-strong text-xs font-mono text-info-ink mb-2">
                 <span>Active Archetype:</span>
                 <span className="font-bold text-ink">{ARCHETYPE_PRESETS[selectedArchetype].label}</span>
               </div>
               <h2 className="text-xl font-extrabold text-ink tracking-tight">The Career Compass</h2>
-              <p className="text-xs text-ink-muted">Configure target job titles, relocation readiness, and work style.</p>
+              <p className="text-sm text-ink-muted">Configure target job titles, relocation readiness, and work style.</p>
             </div>
 
             {/* Target Roles */}
             <div className="space-y-2">
-              <label className="text-[11px] font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
-                <Briefcase className="w-3.5 h-3.5 text-accent2-ink" /> Target Roles & Disciplines
-              </label>
+              <span className="text-xs font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
+                <Briefcase className="w-3.5 h-3.5 text-info-ink" /> Target Roles & Disciplines
+              </span>
               <div className="flex flex-wrap gap-2">
                 {activeProfile.target_roles.map((role) => (
                   <span
@@ -523,12 +523,12 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                       value={newRoleInput}
                       onChange={(e) => setNewRoleInput(e.target.value)}
                       placeholder="e.g. Staff SDET"
-                      className="bg-surface border border-accent2-line rounded-control px-2.5 py-1 text-xs text-ink focus:outline-none"
+                      className="bg-surface border border-info-line rounded-control px-2.5 py-1 text-xs text-ink"
                       onKeyDown={(e) => e.key === 'Enter' && handleAddCustomRole()}
                     />
                     <button
                       onClick={handleAddCustomRole}
-                      className="px-2.5 py-1 rounded-control bg-accent2 text-ink-inverse font-bold text-xs cursor-pointer"
+                      className="px-2.5 py-1 rounded-control bg-info text-ink-inverse font-bold text-xs cursor-pointer"
                     >
                       Add
                     </button>
@@ -546,9 +546,9 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
 
             {/* Immigration & Visa Sponsorship Regions */}
             <div className="space-y-2">
-              <label className="text-[11px] font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
-                <Globe className="w-3.5 h-3.5 text-accent2-ink" /> Immigration & Sponsorship Verification Regions
-              </label>
+              <span className="text-xs font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
+                <Globe className="w-3.5 h-3.5 text-info-ink" /> Immigration & Sponsorship Verification Regions
+              </span>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 {(['UK', 'EU', 'GCC', 'US'] as const).map((region) => (
                   <button
@@ -561,7 +561,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                     }
                     className={`p-3 rounded-control border flex items-center justify-between transition-all cursor-pointer ${
                       sponsorshipRegions[region]
-                        ? 'bg-accent2-soft border-accent2-line'
+                        ? 'bg-info-soft border-info-line'
                         : 'bg-surface border-line-strong text-ink-faint hover:border-line-strong'
                     }`}
                   >
@@ -570,7 +570,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                     </span>
                     <div
                       className={`w-2.5 h-2.5 rounded-full ${
-                        sponsorshipRegions[region] ? 'bg-accent2' : 'bg-fill-strong'
+                        sponsorshipRegions[region] ? 'bg-info' : 'bg-fill-strong'
                       }`}
                     />
                   </button>
@@ -580,16 +580,16 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
 
             {/* Work Model */}
             <div className="space-y-2">
-              <label className="text-[11px] font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
-                <Building2 className="w-3.5 h-3.5 text-accent2-ink" /> Work Preference
-              </label>
+              <span className="text-xs font-mono font-bold text-ink-muted uppercase tracking-wider flex items-center gap-2">
+                <Building2 className="w-3.5 h-3.5 text-info-ink" /> Work Preference
+              </span>
               <div className="flex bg-surface rounded-control p-1 border border-line-strong">
                 {['Remote', 'Hybrid', 'On-Site'].map((model) => (
                   <button
                     key={model}
                     onClick={() => setWorkModel(model)}
                     className={`flex-1 py-2 text-xs font-bold rounded-control transition-all cursor-pointer ${
-                      workModel === model ? 'bg-fill-strong text-ink shadow-sm' : 'text-ink-faint hover:text-ink-muted'
+                      workModel === model ? 'bg-fill-strong text-ink' : 'text-ink-faint hover:text-ink-muted'
                     }`}
                   >
                     {model}
@@ -630,7 +630,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                 <Lock className="w-6 h-6 text-accent-ink" />
               </div>
               <h2 className="text-xl font-extrabold text-ink tracking-tight">Zero-Trust Privacy & LLM Routing</h2>
-              <p className="text-xs text-ink-muted">Choose how candidate PII and AST synthesis payloads are routed.</p>
+              <p className="text-sm text-ink-muted">Choose how candidate PII and AST synthesis payloads are routed.</p>
             </div>
 
             <div className="space-y-3">
@@ -653,7 +653,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                 <div>
                   <div className="font-bold text-sm text-ink flex items-center gap-2">
                     <span>High-Speed Cloud Inference</span>
-                    <span className="text-[10px] font-mono px-2 py-0.2 rounded bg-accent-soft text-accent-ink">
+                    <span className="text-2xs font-mono px-2 py-0.5 rounded bg-accent-soft text-accent-ink">
                       Gemini 3.7 Flash
                     </span>
                   </div>
@@ -682,7 +682,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
                 <div>
                   <div className="font-bold text-sm text-ink flex items-center gap-2">
                     <span>Air-Gapped Zero-Trust (Local Only)</span>
-                    <span className="text-[10px] font-mono px-2 py-0.2 rounded bg-positive-soft text-positive-ink">
+                    <span className="text-2xs font-mono px-2 py-0.5 rounded bg-positive-soft text-positive-ink">
                       Qwen 2.5 / Port 3001
                     </span>
                   </div>
@@ -696,10 +696,10 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
             {/* Profile Summary Badge preview */}
             <div className="p-3.5 rounded-control bg-fill border border-line-strong flex items-center justify-between text-xs">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-accent2-ink" />
+                <CheckCircle2 className="w-4 h-4 text-info-ink" />
                 <span className="text-ink-muted">Candidate: <strong className="text-ink">{activeProfile.name}</strong></span>
               </div>
-              <span className="font-mono text-accent2-ink">Target View: {ARCHETYPE_PRESETS[selectedArchetype].profile.workspaceConfig?.defaultTab}</span>
+              <span className="font-mono text-info-ink">Target View: {ARCHETYPE_PRESETS[selectedArchetype].profile.workspaceConfig?.defaultTab}</span>
             </div>
 
             <div className="flex gap-3 pt-2">
@@ -711,7 +711,7 @@ export function UnifiedOnboardingWizard({ onComplete, onClose }: UnifiedOnboardi
               </button>
               <button
                 onClick={handleFinalize}
-                className="flex-1 bg-accent2 text-ink-inverse py-3.5 rounded-control font-extrabold text-xs hover:bg-accent2 transition-colors cursor-pointer flex items-center justify-center gap-2"
+                className="flex-1 bg-info text-ink-inverse py-3.5 rounded-control font-extrabold text-xs hover:bg-info transition-colors cursor-pointer flex items-center justify-center gap-2"
               >
                 <Sparkles className="w-4 h-4" />
                 <span>Initialize Cherenkov Nexus for {ARCHETYPE_PRESETS[selectedArchetype].label}</span>

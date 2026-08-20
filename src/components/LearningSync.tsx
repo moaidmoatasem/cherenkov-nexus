@@ -41,7 +41,7 @@ const PRESET_PATHWAYS = [
     provider: 'k6 Academy',
     skills: ['k6', 'Distributed Load', 'Grafana k6 Cloud', 'SLO Budgeting'],
     badge: 'Performance',
-    color: 'from-caution/20 to-caution/10',
+    color: 'bg-caution-soft',
     borderColor: 'border-caution-line'
   },
   {
@@ -49,15 +49,15 @@ const PRESET_PATHWAYS = [
     provider: 'GitHub Skills',
     skills: ['CodeQL', 'AST Vulnerability Querying', 'SARIF Reports'],
     badge: 'Security',
-    color: 'from-accent2/20 to-info/10',
-    borderColor: 'border-accent2-line'
+    color: 'bg-info-soft',
+    borderColor: 'border-info-line'
   },
   {
     title: 'Autonomous Multi-Agent Systems for QA Automation',
     provider: 'DeepLearning.AI',
     skills: ['Qwen', 'AnythingLLM', 'Self-Healing Test Agents', 'cherenkov-qa'],
     badge: 'AI & Agents',
-    color: 'from-accent/20 to-accent/10',
+    color: 'bg-accent-soft',
     borderColor: 'border-accent-line'
   },
   {
@@ -65,7 +65,7 @@ const PRESET_PATHWAYS = [
     provider: 'Chaos Mesh & CNCF',
     skills: ['Chaos Engineering', 'OpenTelemetry', 'Kubernetes Probes', 'Resilience Matrix'],
     badge: 'Infrastructure',
-    color: 'from-positive/20 to-accent2/10',
+    color: 'bg-positive-soft',
     borderColor: 'border-positive-line'
   }
 ];
@@ -362,29 +362,28 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Banner */}
-      <div className="p-6 rounded-panel bg-gradient-to-br from-surface via-surface to-sunken border border-accent-line relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="absolute -right-10 -top-10 w-96 h-96 bg-gradient-to-br from-accent/15 via-accent2/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="p-6 rounded-panel bg-surface border border-accent-line relative overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 
         <div className="relative z-10">
           <div className="flex items-center gap-2.5">
-            <span className="p-2.5 rounded-control bg-gradient-to-br from-accent to-info text-ink shadow-md">
+            <span className="p-2.5 rounded-control bg-accent text-accent-contrast">
               <GraduationCap className="w-5 h-5" />
             </span>
             <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
               Learning Sync & Competency Matrix
             </h1>
-            <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold bg-accent-soft border border-accent-line text-accent-ink rounded-full">
+            <span className="px-2.5 py-0.5 text-2xs font-mono font-bold bg-accent-soft border border-accent-line text-accent-ink rounded-full">
               AUTO-PROFILE PROPAGATION
             </span>
           </div>
-          <p className="text-xs text-ink-muted mt-2 max-w-2xl leading-relaxed">
+          <p className="text-sm text-ink-muted mt-2 max-w-2xl leading-relaxed">
             Target ATS skill gaps identified during Job Synthesis. When you complete any pathway or certification, its verified competencies automatically inject into your active Master Profile.
           </p>
         </div>
 
         <button
           onClick={() => setIsAddingCourse(true)}
-          className="px-5 py-2.5 text-xs font-bold text-ink bg-gradient-to-r from-accent to-accent2 hover:from-accent hover:to-accent2 rounded-control transition-all shadow-lg flex items-center gap-1.5 shrink-0 cursor-pointer relative z-10"
+          className="px-5 py-2.5 text-xs font-bold text-accent-contrast bg-accent hover:bg-accent-strong rounded-control transition-all flex items-center gap-1.5 shrink-0 cursor-pointer relative z-10"
         >
           <Plus className="w-4 h-4" />
           <span>Add Custom Pathway</span>
@@ -393,8 +392,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-5 rounded-card bg-surface border border-positive-line shadow-lg flex items-center gap-4 relative overflow-hidden">
-          <div className="absolute right-0 top-0 w-24 h-24 bg-positive-soft rounded-full blur-2xl pointer-events-none" />
+        <div className="p-5 rounded-card bg-surface border border-positive-line flex items-center gap-4 relative overflow-hidden">
           <div className="p-3 rounded-card bg-positive-soft text-positive-ink border border-positive-line">
             <CheckCircle2 className="w-6 h-6" />
           </div>
@@ -404,8 +402,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
           </div>
         </div>
 
-        <div className="p-5 rounded-card bg-surface border border-caution-line shadow-lg flex items-center gap-4 relative overflow-hidden">
-          <div className="absolute right-0 top-0 w-24 h-24 bg-caution-soft rounded-full blur-2xl pointer-events-none" />
+        <div className="p-5 rounded-card bg-surface border border-caution-line flex items-center gap-4 relative overflow-hidden">
           <div className="p-3 rounded-card bg-caution-soft text-caution-ink border border-caution-line">
             <Clock className="w-6 h-6" />
           </div>
@@ -415,13 +412,12 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
           </div>
         </div>
 
-        <div className="p-5 rounded-card bg-surface border border-accent2-line shadow-lg flex items-center gap-4 relative overflow-hidden">
-          <div className="absolute right-0 top-0 w-24 h-24 bg-accent2-soft rounded-full blur-2xl pointer-events-none" />
-          <div className="p-3 rounded-card bg-accent2-soft text-accent2-ink border border-accent2-line">
+        <div className="p-5 rounded-card bg-surface border border-info-line flex items-center gap-4 relative overflow-hidden">
+          <div className="p-3 rounded-card bg-info-soft text-info-ink border border-info-line">
             <Cpu className="w-6 h-6" />
           </div>
           <div>
-            <div className="text-2xl font-black text-accent2-ink font-mono">+{totalSkillsAcquired}</div>
+            <div className="text-2xl font-black text-info-ink font-mono">+{totalSkillsAcquired}</div>
             <div className="text-xs font-medium text-ink-muted">Competencies Injected into Profile</div>
           </div>
         </div>
@@ -432,7 +428,6 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
         id="tour-sync-webhook"
         className="p-6 rounded-panel bg-surface border border-caution-line relative overflow-hidden space-y-4"
       >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-caution-soft rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
           <div className="flex items-start gap-3">
@@ -444,12 +439,12 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
                 <h3 className="text-base font-bold text-ink tracking-tight">
                   Continuous xAPI Learning Sync Webhook
                 </h3>
-                <span className="px-2 py-0.5 text-[9px] font-mono font-bold bg-caution-soft text-caution-ink border border-caution-line rounded-full flex items-center gap-1">
+                <span className="px-2 py-0.5 text-2xs font-mono font-bold bg-caution-soft text-caution-ink border border-caution-line rounded-full flex items-center gap-1">
                   <Radio className="w-2.5 h-2.5 text-caution-ink animate-ping" />
                   LISTENER ACTIVE
                 </span>
               </div>
-              <p className="text-xs text-ink-muted mt-1 max-w-2xl leading-relaxed">
+              <p className="text-sm text-ink-muted mt-1 max-w-2xl leading-relaxed">
                 Connect external LMS providers (Coursera, Udemy, Pluralsight) or custom LRS streams. Inbound statement triggers immediately parse extracted competencies and auto-update your active Master Profile with zero manual data entry.
               </p>
             </div>
@@ -461,7 +456,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
                 navigator.clipboard.writeText('https://nexus.cherenkov.internal/api/webhooks/xapi');
                 onToast('info', 'Webhook URL Copied', 'Endpoint URL copied to clipboard.');
               }}
-              className="px-3.5 py-2 rounded-control bg-fill hover:bg-fill-strong border border-line text-xs font-mono text-ink-muted hover:text-ink transition-all flex items-center gap-1.5 cursor-pointer"
+              className="px-3.5 py-2 rounded-control bg-fill hover:bg-fill-strong border border-line text-xs text-ink-muted hover:text-ink transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <Copy className="w-3.5 h-3.5" />
               <span>Copy Endpoint</span>
@@ -470,7 +465,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
             <button
               onClick={handleSimulateWebhook}
               disabled={isSimulatingWebhook}
-              className="px-4 py-2 rounded-control bg-gradient-to-r from-caution to-caution hover:from-caution hover:to-caution text-ink-inverse text-xs font-mono font-bold flex items-center gap-1.5 shadow-lg transition-all cursor-pointer disabled:opacity-50"
+              className="px-4 py-2 rounded-control bg-caution hover:opacity-90 text-ink-inverse text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
             >
               {isSimulatingWebhook ? (
                 <>
@@ -491,15 +486,15 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 relative z-10">
           <div className="p-3.5 rounded-card bg-sunken border border-line flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Terminal className="w-4 h-4 text-accent2-ink" />
+              <Terminal className="w-4 h-4 text-info-ink" />
               <div>
-                <div className="text-[10px] font-mono text-ink-muted uppercase font-bold">Inbound Webhook URI</div>
-                <div className="text-xs font-mono text-accent2-ink font-semibold truncate max-w-[280px]">
+                <div className="text-2xs font-mono text-ink-muted uppercase font-bold">Inbound Webhook URI</div>
+                <div className="text-xs font-mono text-info-ink font-semibold truncate max-w-[280px]">
                   POST /api/webhooks/xapi
                 </div>
               </div>
             </div>
-            <span className="text-[10px] font-mono text-positive-ink bg-positive-soft px-2 py-0.5 rounded border border-positive-line">
+            <span className="text-2xs font-mono text-positive-ink bg-positive-soft px-2 py-0.5 rounded border border-positive-line">
               TLS 1.3
             </span>
           </div>
@@ -508,13 +503,13 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
             <div className="flex items-center gap-2">
               <Activity className="w-4 h-4 text-caution-ink" />
               <div>
-                <div className="text-[10px] font-mono text-ink-muted uppercase font-bold">Recent Telemetry Activity</div>
+                <div className="text-2xs font-mono text-ink-muted uppercase font-bold">Recent Telemetry Activity</div>
                 <div className="text-xs font-mono text-ink-muted truncate max-w-[280px]">
                   {webhookLog[0]?.event || 'Awaiting incoming statements'}
                 </div>
               </div>
             </div>
-            <span className="text-[10px] font-mono text-ink-muted">
+            <span className="text-2xs font-mono text-ink-muted">
               {webhookLog[0]?.time || 'Idle'}
             </span>
           </div>
@@ -522,7 +517,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
       </div>
 
       {/* Fast Preset Upskilling Tracks */}
-      <div className="p-6 rounded-panel bg-surface border border-line shadow-xl space-y-4">
+      <div className="p-6 rounded-panel bg-surface border border-line shadow-pop space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Flame className="w-5 h-5 text-caution-ink" />
@@ -530,18 +525,18 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
               High-Yield QA Lead Upskilling Pathways
             </h3>
           </div>
-          <span className="text-[10px] text-accent2-ink font-mono font-bold">1-Click Fast Enroll</span>
+          <span className="text-2xs text-info-ink font-mono font-bold">1-Click Fast Enroll</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
           {PRESET_PATHWAYS.map((p, idx) => (
             <div
               key={idx}
-              className={`p-4 rounded-card bg-gradient-to-b ${p.color} bg-sunken border ${p.borderColor} hover:border-line-strong transition-all flex flex-col justify-between gap-3 shadow-md`}
+              className={`p-4 rounded-card ${p.color} border ${p.borderColor} hover:border-line-strong transition-all flex flex-col justify-between gap-3`}
             >
               <div>
-                <div className="flex items-center justify-between text-[10px] font-mono mb-1.5">
-                  <span className="text-accent2-ink font-bold">{p.provider}</span>
+                <div className="flex items-center justify-between text-2xs font-mono mb-1.5">
+                  <span className="text-info-ink font-bold">{p.provider}</span>
                   <span className="px-2 py-0.5 rounded-chip bg-fill-strong text-ink-muted font-bold">
                     {p.badge}
                   </span>
@@ -552,7 +547,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
               <div className="space-y-2.5">
                 <div className="flex flex-wrap gap-1">
                   {p.skills.slice(0, 3).map((s) => (
-                    <span key={s} className="px-1.5 py-0.5 text-[9px] font-mono bg-sunken text-ink-muted rounded">
+                    <span key={s} className="px-1.5 py-0.5 text-2xs font-mono bg-sunken text-ink-muted rounded">
                       +{s}
                     </span>
                   ))}
@@ -560,7 +555,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
 
                 <button
                   onClick={() => handleEnrollPreset(p)}
-                  className="w-full py-2 text-xs font-bold bg-fill-strong hover:bg-accent hover:text-ink text-ink rounded-control transition-all border border-line flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+                  className="w-full py-2 text-xs font-bold bg-fill-strong hover:bg-accent hover:text-accent-contrast text-accent-contrast rounded-control transition-all border border-line flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Enroll in Pathway</span>
@@ -573,7 +568,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
 
       {/* Add Course Form Card */}
       {isAddingCourse && (
-        <div className="p-6 rounded-panel bg-surface border border-accent-line shadow-2xl space-y-4">
+        <div className="p-6 rounded-panel bg-surface border border-accent-line shadow-pop space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-line">
             <h3 className="text-sm font-bold text-ink flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-accent-ink" />
@@ -590,27 +585,27 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
           <form onSubmit={handleAddCourse} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                <label htmlFor="learning-sync-course-or-certification-title" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Course or Certification Title
                 </label>
-                <input
+                <input id="learning-sync-course-or-certification-title"
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. AWS Certified DevOps or Advanced Playwright Architecture"
-                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                <label htmlFor="learning-sync-provider-platform" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Provider Platform
                 </label>
-                <select
+                <select id="learning-sync-provider-platform"
                   value={provider}
                   onChange={(e) => setProvider(e.target.value)}
-                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                 >
                   <option value="Coursera">Coursera</option>
                   <option value="Udemy">Udemy</option>
@@ -625,26 +620,26 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                <label htmlFor="learning-sync-extracted-tech-skills-comma-separated" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Extracted Tech Skills (comma-separated)
                 </label>
-                <input
+                <input id="learning-sync-extracted-tech-skills-comma-separated"
                   type="text"
                   value={skillsInput}
                   onChange={(e) => setSkillsInput(e.target.value)}
                   placeholder="e.g. Kubernetes, Chaos Mesh, Distributed Tracing"
-                  className="w-full px-3.5 py-2.5 text-xs font-mono bg-sunken border border-line rounded-control text-accent2-ink focus:outline-none focus:border-accent-line"
+                  className="w-full px-3.5 py-2.5 text-xs font-mono bg-sunken border border-line rounded-control text-info-ink focus:border-accent-line"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
+                <label htmlFor="learning-sync-initial-status" className="block text-xs font-bold text-ink-muted mb-1 font-mono uppercase">
                   Initial Status
                 </label>
-                <select
+                <select id="learning-sync-initial-status"
                   value={status}
                   onChange={(e) => setStatus(e.target.value as any)}
-                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:outline-none focus:border-accent-line"
+                  className="w-full px-3.5 py-2.5 text-xs bg-sunken border border-line rounded-control text-ink focus:border-accent-line"
                 >
                   <option value="In Progress">In Progress</option>
                   <option value="Completed">Completed (Auto-syncs into Master Profile)</option>
@@ -662,7 +657,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
               </button>
               <button
                 type="submit"
-                className="px-5 py-2.5 text-xs font-bold text-ink bg-gradient-to-r from-accent to-accent2 hover:from-accent hover:to-accent2 rounded-control shadow-md cursor-pointer"
+                className="px-5 py-2.5 text-xs font-bold text-accent-contrast bg-accent hover:bg-accent-strong rounded-control cursor-pointer"
               >
                 Save & Track Course
               </button>
@@ -687,7 +682,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
                 onClick={() => setActiveCategoryFilter(tab)}
                 className={`px-3 py-1 text-xs rounded-control transition-all cursor-pointer font-medium ${
                   activeCategoryFilter === tab
-                    ? 'bg-accent text-ink font-bold shadow-sm'
+                    ? 'bg-accent text-ink font-bold'
                     : 'text-ink-muted hover:text-ink'
                 }`}
               >
@@ -703,7 +698,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
             return (
               <div
                 key={course.id}
-                className={`p-5 rounded-panel border transition-all duration-200 flex flex-col justify-between shadow-xl ${
+                className={`p-5 rounded-panel border transition-all duration-200 flex flex-col justify-between shadow-pop ${
                   isDone
                     ? 'bg-surface border-positive-line'
                     : 'bg-surface border-line hover:border-accent-line'
@@ -712,7 +707,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
                 <div className="space-y-3.5">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <span className="text-[11px] font-mono font-bold text-accent2-ink block">
+                      <span className="text-xs font-mono font-bold text-info-ink block">
                         {course.provider}
                       </span>
                       <h4 className="text-sm font-bold text-ink mt-0.5">{course.title}</h4>
@@ -720,10 +715,10 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
 
                     <button
                       onClick={() => handleToggleComplete(course.id)}
-                      className={`px-3 py-1.5 text-[11px] font-bold rounded-control transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                      className={`px-3 py-1.5 text-xs font-bold rounded-control transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                         isDone
                           ? 'bg-positive-soft text-positive-ink border border-positive-line hover:bg-positive/30'
-                          : 'bg-fill text-ink-muted hover:bg-gradient-to-r hover:from-accent hover:to-accent2 hover:text-ink border border-line'
+                          : 'bg-fill text-ink-muted hover:bg-accent-strong hover:text-ink border border-line'
                       }`}
                     >
                       {isDone ? (
@@ -742,7 +737,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
 
                   {/* Skills extracted */}
                   <div>
-                    <span className="text-[10px] uppercase font-mono text-ink-muted block mb-1.5 font-bold">
+                    <span className="text-2xs uppercase font-mono text-ink-muted block mb-1.5 font-bold">
                       Extracted Competencies:
                     </span>
                     <div className="flex flex-wrap gap-1.5">
@@ -763,7 +758,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
                 </div>
 
                 <div className="pt-4 mt-4 border-t border-line flex items-center justify-between text-xs text-ink-muted">
-                  <div className="flex items-center gap-1.5 text-[11px]">
+                  <div className="flex items-center gap-1.5 text-xs">
                     {isDone ? (
                       <span className="text-positive-ink font-mono font-bold flex items-center gap-1">
                         <Zap className="w-3.5 h-3.5" />
@@ -780,7 +775,7 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
                   <button
                     onClick={() => handleDeleteCourse(course.id)}
                     className="p-1.5 text-ink-faint hover:text-critical-ink transition-colors cursor-pointer"
-                    title="Remove course"
+                    title="Remove course" aria-label="Remove course"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>

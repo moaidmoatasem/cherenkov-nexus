@@ -47,7 +47,9 @@ app.use(cors());
 // through. This still bounds a runaway client without breaking normal work.
 app.use("/api", rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 1000
+  max: 1000,
+  standardHeaders: true,
+  legacyHeaders: false
 }));
 
 const GEMINI_MODEL = process.env.GEMINI_MODEL ?? "gemini-3.7-flash";

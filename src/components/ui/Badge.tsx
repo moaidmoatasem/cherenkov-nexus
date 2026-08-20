@@ -27,7 +27,7 @@ export const Badge: React.FC<BadgeProps> = ({
     title={title}
     className={cn(
       'inline-flex items-center gap-1.5 shrink-0 rounded-chip border px-1.5 py-0.5',
-      'text-[11px] leading-4 font-semibold whitespace-nowrap',
+      'text-xs leading-4 font-semibold whitespace-nowrap',
       font === 'mono' && 'font-mono tabular',
       toneChip[tone],
       className
