@@ -192,11 +192,11 @@ export const JobSynthesizer: React.FC<JobSynthesizerProps> = ({
 
     components.push({
       label: 'Visa feasibility',
-      value: synthesizedData.isLicensedSponsor ? 100 : synthesizedData.visa_sponsorship_likely ? 60 : 20,
+      value: synthesizedData.isLicensedSponsor ? 100 : synthesizedData.postingClaimsSponsorship ? 60 : 20,
       detail: synthesizedData.isLicensedSponsor
-        ? `${synthesizedData.matchedSponsor ?? 'Licensed sponsor'} on register`
-        : synthesizedData.visa_sponsorship_likely
-        ? 'signalled in the posting text only'
+        ? `${synthesizedData.matchedSponsor ?? 'Employer'} matched on the register`
+        : synthesizedData.postingClaimsSponsorship
+        ? 'claimed in the posting, not matched on the register'
         : 'no sponsorship signal found'
     });
 
@@ -1069,32 +1069,72 @@ ${qa.answer}
       {synthesizedData ? (
         <div className="space-y-6">
           <div className="space-y-6">
-          {/* 1. Instant Traffic Light Visa Badge */}
-          <div className={`p-4 rounded-panel border flex items-center justify-between shadow-xl transition-all ${
-            synthesizedData.isLicensedSponsor 
-              ? 'bg-positive/30 border-positive-line' 
-              : 'bg-critical/30 border-critical-line'
-          }`}>
-            <div className="flex items-center gap-4">
-              <div className={`w-12 h-12 rounded-full flex items-center justify-center border-4 ${
-                synthesizedData.isLicensedSponsor ? 'border-positive-line bg-positive-soft' : 'border-critical-line bg-critical-soft'
-              }`}>
-                <div className={`w-4 h-4 rounded-full animate-pulse ${
-                  synthesizedData.isLicensedSponsor ? 'bg-positive text-positive-ink' : 'bg-critical text-critical-ink'
-                }`} />
+          {/* 1. Sponsor status. Three states, because "on the register" and
+              "the advert says so" are different claims and only one of them
+              is something this app can check. */}
+          {(() => {
+            const onRegister = Boolean(synthesizedData.isLicensedSponsor);
+            const claimedOnly = !onRegister && Boolean(synthesizedData.postingClaimsSponsorship);
+            const tone = onRegister ? 'positive' : claimedOnly ? 'caution' : 'critical';
+            const heading = onRegister
+              ? 'Licensed Visa Sponsor'
+              : claimedOnly
+              ? 'Sponsorship Claimed in Posting'
+              : 'Not Found on the Register';
+            const detail = onRegister
+              ? `${synthesizedData.matchedSponsor ?? companyName} appears on the Register of Licensed Sponsors${
+                  synthesizedData.sponsorSource === 'offline-list'
+                    ? ' (from the bundled offline list — the live register was unreachable)'
+                    : ''
+                }.`
+              : claimedOnly
+              ? `This posting advertises sponsorship, but ${companyName || 'the employer'} was not matched on the Register of Licensed Sponsors. Confirm the employer's registered legal name before relying on it.`
+              : synthesizedData.registerAvailable === false
+              ? 'The Register of Licensed Sponsors could not be consulted, so no check was made.'
+              : `${companyName || 'This employer'} was not matched on the Register of Licensed Sponsors. It may be listed under a different legal name.`;
+
+            return (
+              <div
+                className={`p-4 rounded-panel border flex items-center gap-4 shadow-xl transition-all ${
+                  tone === 'positive'
+                    ? 'bg-positive-soft border-positive-line'
+                    : tone === 'caution'
+                    ? 'bg-caution-soft border-caution-line'
+                    : 'bg-critical-soft border-critical-line'
+                }`}
+              >
+                <div
+                  className={`w-12 h-12 rounded-full flex items-center justify-center border-4 shrink-0 ${
+                    tone === 'positive'
+                      ? 'border-positive-line bg-positive-soft'
+                      : tone === 'caution'
+                      ? 'border-caution-line bg-caution-soft'
+                      : 'border-critical-line bg-critical-soft'
+                  }`}
+                >
+                  <div
+                    className={`w-4 h-4 rounded-full ${
+                      tone === 'positive' ? 'bg-positive' : tone === 'caution' ? 'bg-caution' : 'bg-critical'
+                    }`}
+                  />
+                </div>
+                <div className="min-w-0">
+                  <h3
+                    className={`text-lg font-black tracking-tight ${
+                      tone === 'positive'
+                        ? 'text-positive-ink'
+                        : tone === 'caution'
+                        ? 'text-caution-ink'
+                        : 'text-critical-ink'
+                    }`}
+                  >
+                    {heading}
+                  </h3>
+                  <p className="text-sm text-ink-muted leading-relaxed">{detail}</p>
+                </div>
               </div>
-              <div>
-                <h3 className={`text-lg font-black tracking-tight ${synthesizedData.isLicensedSponsor ? 'text-positive-ink' : 'text-critical-ink'}`}>
-                  {synthesizedData.isLicensedSponsor ? 'Verified Visa Sponsor' : 'Warning: Unverified Sponsor'}
-                </h3>
-                <p className="text-sm font-bold text-ink-muted">
-                  {synthesizedData.isLicensedSponsor 
-                    ? `Matches the minimum £41,700 salary threshold for UK Skilled Worker requirements.` 
-                    : `This company does not currently hold an active EU Blue Card or UK Skilled Worker sponsorship license.`}
-                </p>
-              </div>
-            </div>
-          </div>
+            );
+          })()}
         </div>
         {/* Provenance — a deterministic scaffold must never read as model output. */}
         {synthesizedData.isDeterministicFallback ? (
@@ -1216,25 +1256,30 @@ ${qa.answer}
               </div>
             </div>
 
-            {/* Visa Sponsorship Status Card */}
-            <div className="p-4 rounded-panel bg-gradient-to-r from-positive/40 via-surface to-sunken border border-positive-line flex items-start gap-3 shadow-lg">
-              <div className="p-2.5 rounded-control bg-positive-soft text-positive-ink border border-positive-line shrink-0">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h4 className="text-xs font-extrabold text-ink uppercase font-mono">
-                    Verified Visa Sponsor
-                  </h4>
-                  <span className="px-1.5 py-0.5 text-[9px] font-mono font-black bg-positive-soft text-positive-ink rounded border border-positive-line">
-                    UK SKILLED WORKER / EU
-                  </span>
+            {/* Register detail. Rendered only on a register match — this used to
+                show unconditionally, asserting a verified sponsor even when the
+                banner above reported the employer was not found. */}
+            {synthesizedData.isLicensedSponsor && (
+              <div className="p-4 rounded-panel bg-gradient-to-r from-positive/40 via-surface to-sunken border border-positive-line flex items-start gap-3 shadow-lg">
+                <div className="p-2.5 rounded-control bg-positive-soft text-positive-ink border border-positive-line shrink-0">
+                  <ShieldCheck className="w-5 h-5" />
                 </div>
-                <p className="text-xs text-ink-muted leading-relaxed">
-                  {companyName} maintains a licensed sponsorship register. Moayed fulfills all technical lead criteria and is ready for expedited processing.
-                </p>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-xs font-extrabold text-ink uppercase font-mono">
+                      Register Match
+                    </h4>
+                    <span className="px-1.5 py-0.5 text-[9px] font-mono font-black bg-positive-soft text-positive-ink rounded border border-positive-line">
+                      {synthesizedData.sponsorSource === 'offline-list' ? 'OFFLINE LIST' : 'LICENSED SPONSOR'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-ink-muted leading-relaxed">
+                    {synthesizedData.matchedSponsor ?? companyName} is listed on the Register of Licensed Sponsors.
+                    Eligibility for a specific role still depends on the occupation code and salary — check those in the Sponsorship Oracle.
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Gap Analysis & Actionable Upskilling */}
             <div className="p-5 rounded-panel bg-gradient-to-br from-caution/35 via-surface to-sunken border border-caution-line space-y-3.5 shadow-xl">

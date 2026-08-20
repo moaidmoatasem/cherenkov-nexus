@@ -66,6 +66,12 @@ export interface SynthesizedResult {
   isDeterministicFallback?: boolean;
   /** Why the fallback was used, shown to the user verbatim. */
   fallbackReason?: string;
+  /** Where the sponsor verdict came from. */
+  sponsorSource?: 'register' | 'offline-list' | 'none';
+  /** False when the Register of Licensed Sponsors could not be consulted. */
+  registerAvailable?: boolean;
+  /** The posting advertises sponsorship — the employer's claim, not a check. */
+  postingClaimsSponsorship?: boolean;
 }
 
 export type KanbanColumn = 'Saved' | 'Upskilling' | 'Ready to Apply' | 'Applied' | 'Interviewing';
