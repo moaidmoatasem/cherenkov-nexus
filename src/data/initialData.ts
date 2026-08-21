@@ -773,7 +773,7 @@ export const INITIAL_AGENT_EDGES: import('../types').AgentEdge[] = [
 export const INITIAL_GHOST_JOBS: import('../types').GhostJobSignal[] = [
   {
     id: 'ghost-1',
-    company: 'Meta FinTech Labs',
+    company: 'Northwind Ledger (sample)',
     role: 'Lead SDET - Blockchain Test Automation',
     applicantsReported: 840,
     interviewsReported: 1,
@@ -785,7 +785,7 @@ export const INITIAL_GHOST_JOBS: import('../types').GhostJobSignal[] = [
   },
   {
     id: 'ghost-2',
-    company: 'Monzo Bank',
+    company: 'Halcyon Pay (sample)',
     role: 'Lead QA Infrastructure Engineer',
     applicantsReported: 128,
     interviewsReported: 24,
@@ -797,7 +797,7 @@ export const INITIAL_GHOST_JOBS: import('../types').GhostJobSignal[] = [
   },
   {
     id: 'ghost-3',
-    company: 'Revolut',
+    company: 'Meridian Neobank (sample)',
     role: 'Senior QA Lead - Core Banking',
     applicantsReported: 215,
     interviewsReported: 38,
@@ -809,7 +809,7 @@ export const INITIAL_GHOST_JOBS: import('../types').GhostJobSignal[] = [
   },
   {
     id: 'ghost-4',
-    company: 'Global Legacy Systems Ltd',
+    company: 'Cormorant Legacy Systems (sample)',
     role: 'Principal QA Architect (Evergreen)',
     applicantsReported: 1420,
     interviewsReported: 3,
@@ -824,7 +824,7 @@ export const INITIAL_GHOST_JOBS: import('../types').GhostJobSignal[] = [
 export const INITIAL_VISA_HEATMAP: import('../types').VisaHeatmapItem[] = [
   {
     id: 'visa-1',
-    company: 'Monzo Bank',
+    company: 'Halcyon Pay (sample)',
     industry: 'FinTech / Challenger Banking',
     location: 'London, UK',
     recentApprovalsCount: 42,
@@ -835,7 +835,7 @@ export const INITIAL_VISA_HEATMAP: import('../types').VisaHeatmapItem[] = [
   },
   {
     id: 'visa-2',
-    company: 'Revolut',
+    company: 'Meridian Neobank (sample)',
     industry: 'Global Financial App',
     location: 'London, UK & EU Remote',
     recentApprovalsCount: 78,
@@ -846,7 +846,7 @@ export const INITIAL_VISA_HEATMAP: import('../types').VisaHeatmapItem[] = [
   },
   {
     id: 'visa-3',
-    company: 'Spotify',
+    company: 'Auralis Media (sample)',
     industry: 'Audio Streaming / Media',
     location: 'Stockholm, Sweden & London',
     recentApprovalsCount: 35,
@@ -857,7 +857,7 @@ export const INITIAL_VISA_HEATMAP: import('../types').VisaHeatmapItem[] = [
   },
   {
     id: 'visa-4',
-    company: 'Deliveroo',
+    company: 'Swiftbite (sample)',
     industry: 'Logistics / On-demand Food Delivery',
     location: 'London, UK',
     recentApprovalsCount: 22,

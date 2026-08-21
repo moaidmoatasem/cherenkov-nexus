@@ -58,14 +58,14 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
     setIsRunning(true);
     setCurrentStepIndex(0);
     setPausedAtApproval(false);
-    setExecutionLogs(['[00:00.000] Initializing Agent Swarm Orchestrator...']);
+    setExecutionLogs(['[00:00.000] Scripted walkthrough — no services are called.']);
 
     // Reset nodes status
     setNodes((prev) => prev.map((n) => ({ ...n, status: 'idle' })));
 
     // Step 1: Scout
     setNodes((prev) => prev.map((n, idx) => idx === 0 ? { ...n, status: 'running' } : n));
-    setExecutionLogs((prev) => [...prev, '[00:00.240] [Scout Node] Spawning Playwright MCP via Stdio... fetching ARIA accessibility tree.']);
+    setExecutionLogs((prev) => [...prev, '[00:00.240] [Scout Node] Would spawn Playwright MCP over stdio and read the ARIA tree.']);
     
     await new Promise((r) => setTimeout(r, 1000));
     setNodes((prev) => prev.map((n, idx) => idx === 0 ? { ...n, status: 'success' } : n));
@@ -73,7 +73,7 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
 
     // Step 2: Visa Validator
     setNodes((prev) => prev.map((n, idx) => idx === 1 ? { ...n, status: 'running' } : n));
-    setExecutionLogs((prev) => [...prev, '[00:01.200] [Visa Node] Executing Fuse.js fuzzy query against SQLite 114,800 records. Status: Verified Licensed Sponsor.']);
+    setExecutionLogs((prev) => [...prev, '[00:01.200] [Visa Node] Would query the sponsor register. No lookup ran, so no verdict here.']);
     
     await new Promise((r) => setTimeout(r, 900));
     setNodes((prev) => prev.map((n, idx) => idx === 1 ? { ...n, status: 'success' } : n));
@@ -81,7 +81,7 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
 
     // Step 3: Synthesizer
     setNodes((prev) => prev.map((n, idx) => idx === 2 ? { ...n, status: 'running' } : n));
-    setExecutionLogs((prev) => [...prev, '[00:02.100] [Synthesizer Node] Running Zero-Hallucination AST Ground Truth check against Master Profile.']);
+    setExecutionLogs((prev) => [...prev, '[00:02.100] [Synthesizer Node] Would tailor against your Master Profile.']);
     
     await new Promise((r) => setTimeout(r, 1200));
     setNodes((prev) => prev.map((n, idx) => idx === 2 ? { ...n, status: 'success' } : n));
@@ -91,16 +91,16 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
     setNodes((prev) => prev.map((n, idx) => idx === 3 ? { ...n, status: 'paused_approval' } : n));
     setExecutionLogs((prev) => [
       ...prev,
-      '[00:03.300] ⚠️ [HUMAN-IN-THE-LOOP GATE] Workflow paused. Candidate approval required before dispatching ATS payload.'
+      '[00:03.300] [HUMAN-IN-THE-LOOP GATE] Paused. This is where approval would be required.'
     ]);
     setPausedAtApproval(true);
-    onToast('info', 'Approval Required', 'Swarm reached Human-in-the-Loop pause gate.');
+    onToast('info', 'Approval Gate', 'The walkthrough paused where approval would be required.');
   };
 
   const handleApproveAndProceed = async () => {
     if (!pausedAtApproval) return;
     setPausedAtApproval(false);
-    setExecutionLogs((prev) => [...prev, '[00:04.100] Candidate Approved. Proceeding to ATS Submitter Node.']);
+    setExecutionLogs((prev) => [...prev, '[00:04.100] Approved. Walkthrough continues to the submitter step.']);
     
     // Step 4 success
     setNodes((prev) => prev.map((n, idx) => idx === 3 ? { ...n, status: 'success' } : n));
@@ -108,18 +108,22 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
 
     // Step 5 Submitter
     setNodes((prev) => prev.map((n, idx) => idx === 4 ? { ...n, status: 'running' } : n));
-    setExecutionLogs((prev) => [...prev, '[00:04.500] [Submitter Node] Posting verified payload directly to Greenhouse REST API endpoint.']);
+    setExecutionLogs((prev) => [...prev, '[00:04.500] [Submitter Node] Would post the approved payload to the ATS. Nothing was sent.']);
     
     await new Promise((r) => setTimeout(r, 1100));
     setNodes((prev) => prev.map((n, idx) => idx === 4 ? { ...n, status: 'success' } : n));
     
     setExecutionLogs((prev) => [
       ...prev,
-      '[00:05.600] ✅ [Workflow Complete] Application submitted successfully with Zero Hallucination guarantee.'
+      '[00:05.600] [Walkthrough complete] No application was submitted. Apply from the Kanban board.'
     ]);
     setIsRunning(false);
     setCurrentStepIndex(-1);
-    onToast('success', 'Swarm Completed', 'Full autonomous workflow executed successfully.');
+    onToast(
+      'info',
+      'Walkthrough Complete',
+      'This was a scripted preview — nothing was submitted to any ATS.'
+    );
   };
 
   const handleResetWorkflow = () => {
@@ -127,7 +131,7 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
     setPausedAtApproval(false);
     setCurrentStepIndex(-1);
     setNodes((prev) => prev.map((n) => ({ ...n, status: 'idle' })));
-    setExecutionLogs(['[00:00.000] Workflow reset to standby.']);
+    setExecutionLogs(['[00:00.000] Walkthrough reset to standby.']);
   };
 
   return (
@@ -147,7 +151,9 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
               Visual Multi-Agent Canvas & Workflow Builder
             </h1>
             <p className="text-sm text-ink-muted leading-relaxed">
-              Design, monitor, and execute autonomous multi-agent pipelines with deterministic Human-in-the-Loop approval gates.
+              A scripted walkthrough of the intended pipeline shape, including the
+              Human-in-the-Loop approval gate. Running it advances the graph on a timer — it does
+              not call the Scout, Visa or Synthesizer services.
             </p>
           </div>
 
