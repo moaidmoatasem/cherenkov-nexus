@@ -37,5 +37,14 @@ jobs:
       - name: Run tests and linting
         run: npm run test:ci
 
+      # The product's core journeys — the Oracle verdict above all — were only
+      # ever covered by a suite nothing ran. `@live` specs are excluded: they
+      # reach third-party hosts and must not gate a pull request.
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: End-to-end tests
+        run: npm run test:e2e:ci
+
       - name: Build application
         run: npm run build

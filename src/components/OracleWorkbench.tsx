@@ -118,6 +118,21 @@ export const OracleWorkbench: React.FC = () => {
   const [stage, setStage] = useState<Stage>('input');
   const [snapshot, setSnapshot] = useState<SnapshotInfo | null>(null);
   const [busy, setBusy] = useState(false);
+  /**
+   * The first sponsor lookup after a server start pays for a one-off migration
+   * over ~127k register rows. A bare spinner reads as a hang, so once a check
+   * has been running for a few seconds, say what it is waiting on.
+   */
+  const [slowFirstCheck, setSlowFirstCheck] = useState(false);
+
+  useEffect(() => {
+    if (!busy) {
+      setSlowFirstCheck(false);
+      return;
+    }
+    const timer = setTimeout(() => setSlowFirstCheck(true), 3000);
+    return () => clearTimeout(timer);
+  }, [busy]);
   const [error, setError] = useState<string | null>(null);
 
   // Posting under check
@@ -359,6 +374,12 @@ export const OracleWorkbench: React.FC = () => {
             <button className="o-act" onClick={goToConfirm} disabled={busy || !company.trim() || !title.trim()}>
               {busy ? 'Working…' : 'Check role →'}
             </button>
+            {busy && slowFirstCheck && (
+              <p className="o-hint o-sm" role="status" style={{ marginTop: 10 }}>
+                Preparing the sponsor register. This happens once after the app starts and takes
+                up to a minute — later checks are immediate.
+              </p>
+            )}
           </div>
 
           <div className="o-right">
