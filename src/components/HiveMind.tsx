@@ -197,7 +197,8 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
                 Ghost Job Warning Radar
               </h3>
               <p className="text-sm text-ink-muted">
-                Identifies stale job postings with high applicant traffic and 0 interview invitations across the network.
+                The pattern the radar looks for: a posting open for months, heavy applicant
+                traffic, almost no interviews.
               </p>
             </div>
             <span className="text-2xs font-mono px-2.5 py-1 rounded bg-critical-soft text-critical-ink border border-critical-line">
@@ -209,6 +210,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
             {ghostJobs.map((item) => (
               <div
                 key={item.id}
+                data-testid="ghost-job-card"
                 className={`p-5 rounded-card border transition-all ${
                   item.ghostScore > 75
                     ? 'bg-critical-soft border-critical-line'
@@ -251,20 +253,22 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
         </div>
       )}
 
-      {/* TAB 2: LIVE VISA HEATMAP */}
+      {/* TAB 2: VISA HEATMAP */}
       {activeTab === 'visa_heatmap' && (
-        <div className="p-6 rounded-panel bg-sunken border border-positive-line space-y-4 shadow-pop">
-          <div className="flex items-center justify-between">
+        <div className="p-6 rounded-panel bg-sunken border border-line space-y-4 shadow-pop">
+          <div className="flex items-start justify-between gap-4">
             <div>
               <h3 className="text-sm font-bold text-ink uppercase font-mono">
-                Verified Monthly Sponsorship Approvals
+                Sponsorship Approval Heatmap
               </h3>
               <p className="text-sm text-ink-muted">
-                Companies with active visa issuance and relocation offers verified by the global network this month.
+                Illustrative approval volumes and relocation timelines for the fictional
+                employers below. Nobody has verified these — the Sponsorship Oracle is where
+                a real answer comes from.
               </p>
             </div>
-            <span className="text-2xs font-mono px-2.5 py-1 rounded bg-positive-soft text-positive-ink border border-positive-line">
-              Verified Data
+            <span className="text-2xs font-mono px-2.5 py-1 rounded bg-caution-soft text-caution-ink border border-caution-line shrink-0">
+              Sample data
             </span>
           </div>
 
@@ -272,24 +276,25 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
             {visaHeatmap.map((item) => (
               <div
                 key={item.id}
-                className="p-5 rounded-card bg-surface border border-positive-line space-y-3"
+                data-testid="visa-heatmap-card"
+                className="p-5 rounded-card bg-surface border border-line space-y-3"
               >
                 <div className="flex items-start justify-between">
                   <div>
                     <h4 className="text-sm font-bold text-ink">{item.company}</h4>
                     <p className="text-sm text-ink-muted font-mono">{item.industry} • {item.location}</p>
                   </div>
-                  <span className="px-2.5 py-1 rounded-control bg-positive-soft text-positive-ink border border-positive-line text-xs font-mono font-bold">
+                  <span className="px-2.5 py-1 rounded-control bg-fill text-ink-muted border border-line text-xs font-mono font-bold">
                     {item.tierRating}
                   </span>
                 </div>
 
                 <div className="flex items-center gap-4 text-xs font-mono text-ink-muted">
                   <div>
-                    Monthly Approvals: <span className="text-positive-ink font-bold">{item.recentApprovalsCount}</span>
+                    Monthly Approvals: <span className="text-ink font-bold">{item.recentApprovalsCount}</span>
                   </div>
                   <div>
-                    Avg Relocation: <span className="text-info-ink font-bold">{item.avgRelocationDays} days</span>
+                    Avg Relocation: <span className="text-ink font-bold">{item.avgRelocationDays} days</span>
                   </div>
                 </div>
 
@@ -315,14 +320,16 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-bold text-ink uppercase font-mono">
-                ATS Accessibility Tree & Cloudflare Bypass Health
+                ATS Connector Health
               </h3>
               <p className="text-sm text-ink-muted">
-                Continuous health checks of headless Playwright ADA trees and Direct API endpoints.
+                How each published board API and accessibility-tree reader has been behaving.
+                No probe runs from this workspace — these are fixture readings like the rest
+                of the screen.
               </p>
             </div>
-            <span className="text-2xs font-mono px-2.5 py-1 rounded bg-info-soft text-info-ink border border-info-line">
-              Live Probes
+            <span className="text-2xs font-mono px-2.5 py-1 rounded bg-caution-soft text-caution-ink border border-caution-line shrink-0">
+              Sample data
             </span>
           </div>
 
@@ -330,22 +337,23 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
             {atsHealth.map((ats) => (
               <div
                 key={ats.id}
+                data-testid="ats-health-row"
                 className="p-4 rounded-card bg-surface border border-line flex items-center justify-between gap-4"
               >
                 <div>
                   <h4 className="text-xs font-bold text-ink font-mono">{ats.atsName}</h4>
-                  <p className="text-2xs text-ink-muted">Probe tested: {ats.lastTested}</p>
+                  <p className="text-2xs text-ink-muted">Sample reading, {ats.lastTested}</p>
                 </div>
 
                 <div className="flex items-center gap-6">
                   <div className="text-right">
-                    <div className="text-xs font-bold text-info-ink font-mono">{ats.ariaTreeHealth}%</div>
+                    <div className="text-xs font-bold text-ink font-mono">{ats.ariaTreeHealth}%</div>
                     <div className="text-2xs text-ink-faint uppercase">Tree Health</div>
                   </div>
 
                   <div className="text-right">
-                    <div className="text-xs font-bold text-positive-ink font-mono uppercase">{ats.cloudflareBypass}</div>
-                    <div className="text-2xs text-ink-faint uppercase">Bypass Status</div>
+                    <div className="text-xs font-bold text-ink font-mono uppercase">{ats.fetchStatus}</div>
+                    <div className="text-2xs text-ink-faint uppercase">Fetch Status</div>
                   </div>
 
                   <div className="text-right">

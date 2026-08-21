@@ -152,7 +152,7 @@ test.describe('CHERENKOV-NEXUS Multi-Profile Comprehensive Real Headed Test Suit
     const radarNav = page.locator('button:has-text("Community Radar")').first();
     if (await radarNav.isVisible()) {
       await radarNav.click({ force: true });
-      await expect(page.locator('text=Crowdsourced Hiring Telemetry').first()).toBeVisible({ timeout: 10000 });
+      await expect(page.locator('text=Hiring Telemetry').first()).toBeVisible({ timeout: 10000 });
     }
 
     // 3. Capture screenshot

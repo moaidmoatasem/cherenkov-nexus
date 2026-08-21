@@ -7,15 +7,11 @@ import {
   Store,
   Download,
   CheckCircle2,
-  Star,
+  AlertTriangle,
   ExternalLink,
   Terminal,
-  Cpu,
-  Globe,
   Sliders,
-  Sparkles,
   Zap,
-  Filter,
   Search,
   Plus,
   ShieldCheck,
@@ -24,9 +20,7 @@ import {
   Layers,
   ArrowRight,
   Github,
-  GitBranch,
   Code2,
-  FileCode,
   Check
 } from 'lucide-react';
 import { Modal } from './ui';
@@ -51,6 +45,11 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
   const [selectedCategory, setSelectedCategory] = useState<McpCategory | 'all'>('all');
   const [selectedPackage, setSelectedPackage] = useState<McpPackage | null>(null);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+  const [draftPackage, setDraftPackage] = useState<{
+    name: string;
+    command: string;
+    category: McpCategory;
+  }>({ name: '', command: '', category: 'visa' });
   const [isGitHubModalOpen, setIsGitHubModalOpen] = useState(false);
   const [linkedRepo, setLinkedRepo] = useState<any>(() => {
     try {
@@ -74,12 +73,20 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
   }, [isGitHubModalOpen]);
 
   const [mcpLive, setMcpLive] = useState<{ ready: boolean; servers: Array<{ name: string; kind: string; connected: boolean; toolNames: string[] }> } | null>(null);
+  const [mcpManifest, setMcpManifest] = useState<{ schemaVersion?: string; version?: string } | null>(null);
 
   useEffect(() => {
     fetch('/api/mcp/status')
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => setMcpLive(data))
       .catch(() => setMcpLive(null));
+
+    // The spec version the gateway actually advertises, rather than a date
+    // typed into the markup.
+    fetch('/api/mcp/manifest')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => setMcpManifest(data))
+      .catch(() => setMcpManifest(null));
   }, []);
 
   // Filter packages
@@ -96,36 +103,87 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
   }, [packages, selectedCategory, searchQuery]);
 
   const stats = useMemo(() => {
-    const installed = packages.filter((p) => p.installed).length;
+    const enabled = packages.filter((p) => p.installed).length;
     const active = packages.filter((p) => p.active).length;
-    const totalDownloads = packages.reduce((acc, p) => acc + p.downloads, 0);
-    return { installed, active, totalDownloads, total: packages.length };
+    return { enabled, active, total: packages.length };
   }, [packages]);
+
+  /** Servers and tools the gateway is genuinely holding open right now. */
+  const liveHost = useMemo(() => {
+    const servers = mcpLive?.servers ?? [];
+    const connected = servers.filter((s) => s.connected);
+    return {
+      known: servers.length,
+      connected: connected.length,
+      tools: connected.reduce((acc, s) => acc + s.toolNames.length, 0),
+      stdio: connected.filter((s) => s.kind === 'stdio').length
+    };
+  }, [mcpLive]);
 
   const handleToggleInstall = (pkgId: string) => {
     setPackages((prev) => {
-      const updated = prev.map((p) => {
-        if (p.id === pkgId) {
-          const nextInstalled = !p.installed;
-          return {
-            ...p,
-            installed: nextInstalled,
-            active: nextInstalled ? true : false,
-            downloads: nextInstalled ? p.downloads + 1 : p.downloads
-          };
-        }
-        return p;
-      });
+      const updated = prev.map((p) =>
+        p.id === pkgId ? { ...p, installed: !p.installed, active: !p.installed } : p
+      );
       localStorage.setItem('cherenkov_mcp_packages', JSON.stringify(updated));
       return updated;
     });
 
+    // Flipping this flag records a preference in this browser. It does not
+    // spawn a process, which is what the previous toast announced.
     const target = packages.find((p) => p.id === pkgId);
     if (target?.installed) {
-      onToast('info', 'Package Uninstalled', `Disconnected MCP server ${target.name}`);
+      onToast('info', 'Removed from catalogue', `${target.name} is no longer marked enabled.`);
     } else {
-      onToast('success', 'MCP Installed', `Spawned ${target?.name} in background stdio transport.`);
+      onToast(
+        'info',
+        'Marked enabled',
+        `${target?.name} is saved as enabled in this browser. Connected servers are listed under Live MCP Host.`
+      );
     }
+  };
+
+  /**
+   * Add the entry the form describes to the catalogue.
+   *
+   * The form used to discard everything typed into it and toast "Custom MCP
+   * server added to local registry" regardless, so the list never changed.
+   */
+  const handlePublish = () => {
+    const name = draftPackage.name.trim();
+    const command = draftPackage.command.trim();
+    if (!name || !command) {
+      onToast('error', 'Missing details', 'A catalogue entry needs both a name and a launch command.');
+      return;
+    }
+
+    const entry: McpPackage = {
+      id: `local-${Date.now().toString(36)}`,
+      name,
+      version: '0.1.0',
+      author: 'Added in this workspace',
+      category: draftPackage.category,
+      description: `Local catalogue entry. Declared launch command: ${command}`,
+      tags: ['Local'],
+      installed: true,
+      active: true,
+      transport: 'stdio',
+      commandExample: command,
+      capabilities: []
+    };
+
+    setPackages((prev) => {
+      const updated = [entry, ...prev];
+      localStorage.setItem('cherenkov_mcp_packages', JSON.stringify(updated));
+      return updated;
+    });
+    setDraftPackage({ name: '', command: '', category: 'visa' });
+    setIsPublishModalOpen(false);
+    onToast(
+      'success',
+      'Added to catalogue',
+      `${name} is listed and marked enabled in this browser. Nothing was started.`
+    );
   };
 
   const handleToggleActive = (pkgId: string) => {
@@ -148,16 +206,17 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-info-soft border border-info-line text-info-ink text-xs font-mono font-bold">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-fill border border-line text-ink-muted text-xs font-mono font-bold">
               <Store className="w-3.5 h-3.5" />
-              <span>MCP 2026 OFFICIAL REGISTRY</span>
+              <span>BUNDLED CATALOGUE</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-ink tracking-tight">
               Model Context Protocol & Strategy Marketplace
             </h1>
             <p className="text-sm text-ink-muted leading-relaxed">
-              Dynamically augment your AI agent with official and community MCP connectors: Regional Visa
-              Validators, Direct ATS Bypassers, and Senior QA Swarm Strategy Packs.
+              A catalogue of MCP connectors — regional visa validators, ATS board readers and
+              strategy packs — that you can mark as enabled for this workspace. What is
+              actually connected right now is shown under Live MCP Host below.
             </p>
           </div>
 
@@ -208,8 +267,16 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                     <span className="text-ink-faint">({s.toolNames.length} tools)</span>
                   </div>
                 ))}
-                <span className="text-2xs font-mono font-bold text-positive-ink flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3" />
+                <span
+                  className={`text-2xs font-mono font-bold flex items-center gap-1 ${
+                    mcpLive.ready ? 'text-positive-ink' : 'text-caution-ink'
+                  }`}
+                >
+                  {mcpLive.ready ? (
+                    <CheckCircle2 className="w-3 h-3" />
+                  ) : (
+                    <AlertTriangle className="w-3 h-3" />
+                  )}
                   HOST {mcpLive.ready ? 'ONLINE' : 'DEGRADED'}
                 </span>
               </div>
@@ -261,45 +328,56 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
           </button>
         </div>
 
-        {/* Global Live Telemetry Stat Row */}
+        {/*
+          Every tile below is either counted from the catalogue on screen or read
+          from the gateway. The row previously advertised a "Global Installs"
+          figure summed from per-package download counts that nothing produced —
+          and which went up by one when you clicked Install yourself.
+        */}
         <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-line pt-6">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-control bg-info-soft text-info-ink border border-info-line">
-              <Server className="w-4 h-4" />
+            <div className="p-2.5 rounded-control bg-fill text-ink-muted border border-line">
+              <Layers className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-xl font-bold text-ink font-mono">{stats.installed} / {stats.total}</div>
-              <div className="text-xs text-ink-muted">Active Connectors</div>
+              <div className="text-xl font-bold text-ink font-mono">{stats.enabled} / {stats.total}</div>
+              <div className="text-xs text-ink-muted">Marked enabled here</div>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-control bg-positive-soft text-positive-ink border border-positive-line">
-              <Zap className="w-4 h-4" />
+              <Server className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-xl font-bold text-positive-ink font-mono">100% Stdio</div>
-              <div className="text-xs text-ink-muted">Zero-Egress Security</div>
+              <div data-testid="mcp-stat-servers" className="text-xl font-bold text-ink font-mono">
+                {mcpLive ? `${liveHost.connected} / ${liveHost.known}` : '—'}
+              </div>
+              <div className="text-xs text-ink-muted">Servers connected</div>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-control bg-accent-soft text-accent-ink border border-accent-line">
-              <Download className="w-4 h-4" />
+              <Zap className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-xl font-bold text-accent-ink font-mono">{(stats.totalDownloads / 1000).toFixed(1)}k</div>
-              <div className="text-xs text-ink-muted">Global Installs</div>
+              <div data-testid="mcp-stat-tools" className="text-xl font-bold text-ink font-mono">
+                {mcpLive ? liveHost.tools : '—'}
+              </div>
+              <div className="text-xs text-ink-muted">Live tools exposed</div>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-control bg-caution-soft text-caution-ink border border-caution-line">
+            <div className="p-2.5 rounded-control bg-fill text-ink-muted border border-line">
               <ShieldCheck className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-xl font-bold text-caution-ink font-mono">2026-07-28</div>
-              <div className="text-xs text-ink-muted">MCP Standard Spec</div>
+              <div data-testid="mcp-stat-spec" className="text-xl font-bold text-ink font-mono">
+                {mcpManifest?.schemaVersion ?? '—'}
+              </div>
+              <div className="text-xs text-ink-muted">Gateway spec version</div>
             </div>
           </div>
         </div>
@@ -347,11 +425,18 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
       </div>
 
       {/* Package Grid */}
+      <p data-testid="catalogue-note" className="text-sm text-ink-muted">
+        These entries are a bundled catalogue describing connectors and the tools they
+        expose. Enabling one saves a preference in this browser — it does not start a
+        server. The Live MCP Host strip above is the authoritative list of what is running.
+      </p>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filteredPackages.map((pkg) => {
           return (
             <div
               key={pkg.id}
+              data-testid="mcp-package-card"
               className={`p-6 rounded-panel bg-surface border transition-all hover:border-info-line flex flex-col justify-between group ${
                 pkg.installed ? 'border-info-line' : 'border-line'
               }`}
@@ -373,10 +458,17 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1 text-caution-ink text-xs font-bold font-mono">
-                    <Star className="w-3.5 h-3.5 fill-amber-400" />
-                    <span>{pkg.rating}</span>
-                  </div>
+                  {pkg.githubUrl && (
+                    <a
+                      href={pkg.githubUrl}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="flex items-center gap-1 text-ink-muted hover:text-ink text-2xs font-mono shrink-0"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Source</span>
+                    </a>
+                  )}
                 </div>
 
                 {/* Description */}
@@ -450,12 +542,12 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                     {pkg.installed ? (
                       <>
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Installed</span>
+                        <span>Enabled</span>
                       </>
                     ) : (
                       <>
                         <Download className="w-3.5 h-3.5" />
-                        <span>Install MCP</span>
+                        <span>Enable</span>
                       </>
                     )}
                   </button>
@@ -523,7 +615,11 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
 
             <div className="flex items-center justify-between pt-4 border-t border-line">
               <div className="text-xs text-ink-muted font-mono">
-                Latency: <span className="text-positive-ink font-bold">{selectedPackage.latencyMs || 25}ms</span>
+                {typeof selectedPackage.latencyMs === 'number' ? (
+                  <>Catalogue latency note: {selectedPackage.latencyMs}ms</>
+                ) : (
+                  <>No latency recorded for this entry</>
+                )}
               </div>
 
               <div className="flex items-center gap-3">
@@ -540,7 +636,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                   }}
                   className="px-5 py-2 text-xs font-bold rounded-control bg-accent hover:bg-accent-strong text-accent-contrast-inverse cursor-pointer"
                 >
-                  {selectedPackage.installed ? 'Uninstall MCP' : 'Install Connector'}
+                  {selectedPackage.installed ? 'Disable' : 'Enable'}
                 </button>
               </div>
             </div>
@@ -567,7 +663,9 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
             </div>
 
             <p className="text-sm text-ink-muted">
-              Publish your custom Model Context Protocol server or Swarm strategy pack into your local registry.
+              Add your own Model Context Protocol server or strategy pack to this workspace's
+              catalogue. The entry is saved in this browser; no server is started and nothing
+              is published anywhere.
             </p>
 
             <div className="space-y-3">
@@ -575,6 +673,8 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                 <label htmlFor="marketplace-package-name" className="text-xs font-mono text-ink-muted">Package Name</label>
                 <input id="marketplace-package-name"
                   type="text"
+                  value={draftPackage.name}
+                  onChange={(e) => setDraftPackage((d) => ({ ...d, name: e.target.value }))}
                   placeholder="e.g. Canada Express Entry MCP"
                   className="w-full px-3 py-2 mt-1 rounded-control bg-fill border border-line text-xs text-ink focus:border-info-line"
                 />
@@ -584,6 +684,8 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                 <label htmlFor="marketplace-command-stdio-endpoint" className="text-xs font-mono text-ink-muted">Command / Stdio Endpoint</label>
                 <input id="marketplace-command-stdio-endpoint"
                   type="text"
+                  value={draftPackage.command}
+                  onChange={(e) => setDraftPackage((d) => ({ ...d, command: e.target.value }))}
                   placeholder="npx -y @my-org/mcp-server@latest"
                   className="w-full px-3 py-2 mt-1 rounded-control bg-fill border border-line text-xs text-ink focus:border-info-line font-mono"
                 />
@@ -591,7 +693,14 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
 
               <div>
                 <label htmlFor="marketplace-category" className="text-xs font-mono text-ink-muted">Category</label>
-                <select id="marketplace-category" className="w-full px-3 py-2 mt-1 rounded-control bg-sunken border border-line text-xs text-ink focus:border-info-line">
+                <select
+                  id="marketplace-category"
+                  value={draftPackage.category}
+                  onChange={(e) =>
+                    setDraftPackage((d) => ({ ...d, category: e.target.value as McpCategory }))
+                  }
+                  className="w-full px-3 py-2 mt-1 rounded-control bg-sunken border border-line text-xs text-ink focus:border-info-line"
+                >
                   <option value="visa">Regional Visa Validator</option>
                   <option value="ats">ATS Direct Connector</option>
                   <option value="strategy">Strategy Swarm Pack</option>
@@ -608,13 +717,10 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ onToast, onSyncSkillsT
                 Cancel
               </button>
               <button
-                onClick={() => {
-                  onToast('success', 'MCP Registered', 'Custom MCP server added to local registry.');
-                  setIsPublishModalOpen(false);
-                }}
+                onClick={handlePublish}
                 className="px-5 py-2 text-xs font-bold font-mono rounded-control bg-accent hover:bg-accent-strong text-accent-contrast-inverse"
               >
-                Publish to Local Registry
+                Add to Catalogue
               </button>
             </div>
           </motion.div>
