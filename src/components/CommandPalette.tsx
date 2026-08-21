@@ -403,7 +403,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                   onMouseEnter={() => setSelectedIndex(idx)}
                   className={`w-full text-left px-3.5 py-2.5 rounded-card flex items-center justify-between gap-3 cursor-pointer transition-all ${
                     isSelected
-                      ? 'bg-accent border border-accent-line text-ink'
+                      ? 'bg-accent-soft border border-accent-line text-ink'
                       : 'text-ink-muted hover:bg-fill border border-transparent'
                   }`}
                 >

@@ -6,7 +6,23 @@ export interface ToastMessage {
   type: 'success' | 'error' | 'info';
   title: string;
   message: string;
+  /**
+   * Optional recovery affordance. A toast carrying one stays up longer, because
+   * the whole point is that the reader has time to reach for it.
+   */
+  action?: { label: string; onClick: () => void };
 }
+
+/**
+ * The signature every component uses to raise a toast. Declared once so the
+ * optional recovery action cannot go missing from a caller's prop type.
+ */
+export type ToastFn = (
+  type: ToastMessage['type'],
+  title: string,
+  message: string,
+  action?: ToastMessage['action']
+) => void;
 
 interface ToastProps {
   toasts: ToastMessage[];
@@ -42,9 +58,10 @@ const ToastItem: React.FC<{ toast: ToastMessage; onDismiss: (id: string) => void
 
   useEffect(() => {
     if (paused) return;
-    const timer = setTimeout(() => dismiss.current(toast.id), 4500);
+    // A recovery action needs long enough to notice, read and reach.
+    const timer = setTimeout(() => dismiss.current(toast.id), toast.action ? 10000 : 4500);
     return () => clearTimeout(timer);
-  }, [toast.id, paused]);
+  }, [toast.id, paused, toast.action]);
 
   const icons = {
     success: <CheckCircle2 className="w-5 h-5 text-positive-ink shrink-0 mt-0.5" />,
@@ -72,6 +89,17 @@ const ToastItem: React.FC<{ toast: ToastMessage; onDismiss: (id: string) => void
       <div className="flex-1 min-w-0">
         <h4 className="text-xs font-bold text-ink uppercase tracking-wider font-mono">{toast.title}</h4>
         <p className="text-sm text-ink-muted mt-1 leading-relaxed break-words font-sans">{toast.message}</p>
+        {toast.action && (
+          <button
+            onClick={() => {
+              toast.action?.onClick();
+              onDismiss(toast.id);
+            }}
+            className="mt-2 px-2.5 py-1 rounded-chip text-xs font-bold text-accent-ink bg-accent-soft border border-accent-line hover:bg-fill-strong transition-colors cursor-pointer"
+          >
+            {toast.action.label}
+          </button>
+        )}
       </div>
       <button
         onClick={() => onDismiss(toast.id)}

@@ -24,9 +24,10 @@ import {
   Search,
   Filter
 } from 'lucide-react';
+import type { ToastFn } from './Toast';
 
 export interface HiveMindProps {
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
 }
 
 export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {

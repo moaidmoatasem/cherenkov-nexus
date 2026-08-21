@@ -22,9 +22,10 @@ import {
   ShieldCheck,
   FileCheck
 } from 'lucide-react';
+import type { ToastFn } from './Toast';
 
 export interface AgentCanvasProps {
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
 }
 
 const NODE_ICONS: Record<AgentNodeType, React.ReactNode> = {

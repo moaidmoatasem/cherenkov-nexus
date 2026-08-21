@@ -13,7 +13,7 @@ import { HiveMind } from './components/HiveMind';
 import { IdentityVaultModal } from './components/IdentityVaultModal';
 import { OnboardingModal } from './components/OnboardingModal';
 import { MasterProfileModal } from './components/MasterProfileModal';
-import { ToastContainer, ToastMessage } from './components/Toast';
+import { ToastContainer, ToastMessage, ToastFn } from './components/Toast';
 import { CommandPalette } from './components/CommandPalette';
 import { TelemetryModal } from './components/TelemetryModal';
 import { SystemTour } from './components/SystemTour';
@@ -184,9 +184,9 @@ export default function App() {
     }
   }, [currentTheme]);
 
-  const addToast = (type: 'success' | 'error' | 'info', title: string, message: string) => {
+  const addToast: ToastFn = (type, title, message, action) => {
     const id = `toast-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
-    setToasts((prev) => [...prev, { id, type, title, message }]);
+    setToasts((prev) => [...prev, { id, type, title, message, action }]);
   };
 
   const removeToast = (id: string) => {
@@ -203,8 +203,29 @@ export default function App() {
   };
 
   const handleDeleteApplication = (id: string) => {
+    // A card holds a tailored summary, STAR answers and a cold email — minutes
+    // of work and a paid inference call. Deleting is reversible for as long as
+    // the toast is up, and the card goes back to the position it came from.
+    const index = applications.findIndex((a) => a.id === id);
+    if (index === -1) return;
+    const removed = applications[index];
+
     setApplications((prev) => prev.filter((a) => a.id !== id));
-    addToast('info', 'Application Removed', 'Application card removed from pipeline.');
+    addToast(
+      'info',
+      'Application Removed',
+      `"${removed.jobTitle}" at ${removed.company} was removed from the pipeline.`,
+      {
+        label: 'Undo',
+        onClick: () =>
+          setApplications((prev) => {
+            if (prev.some((a) => a.id === removed.id)) return prev;
+            const next = [...prev];
+            next.splice(Math.min(index, next.length), 0, removed);
+            return next;
+          }),
+      }
+    );
   };
 
   // Add course to LearningSync from Gap Analysis recommendation

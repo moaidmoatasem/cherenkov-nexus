@@ -3,12 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { UnifiedOnboardingWizard } from './UnifiedOnboardingWizard';
 import { MasterProfile } from '../types';
 import { Modal } from './ui';
+import type { ToastFn } from './Toast';
 
 export interface OnboardingModalProps {
   isOpen: boolean;
   onClose: () => void;
   onProfileImported: (profile: MasterProfile) => void;
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
 }
 
 export const OnboardingModal: React.FC<OnboardingModalProps> = ({
