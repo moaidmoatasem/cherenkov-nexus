@@ -187,8 +187,6 @@ export interface McpPackage {
   tags: string[];
   installed: boolean;
   active: boolean;
-  downloads: number;
-  rating: number;
   githubUrl?: string;
   transport: 'stdio' | 'sse' | 'http';
   commandExample: string;
@@ -249,7 +247,12 @@ export interface AtsHealthStatus {
   id: string;
   atsName: string;
   ariaTreeHealth: number; // 0-100%
-  cloudflareBypass: 'operational' | 'degraded' | 'patch_pending';
+  /**
+   * How the connector last behaved. The app queries published board APIs; it
+   * does not circumvent anyone's bot protection, which is what the previous
+   * name for this field claimed.
+   */
+  fetchStatus: 'operational' | 'degraded' | 'patch_pending';
   lastTested: string;
   avgLatencyMs: number;
 }
