@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MasterProfile, InterviewQuestionItem } from '../types';
 import {
+  AlertTriangle,
   Mic,
   MicOff,
   Volume2,
@@ -224,17 +225,16 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
         })
       });
 
-      let evaluationData;
-      if (res.ok) {
-        evaluationData = await res.json();
-      } else {
-        evaluationData = {
-          score: 88,
-          technicalAccuracy: 'Solid demonstration of test architecture and deterministic verification.',
-          starStructure: 'Well-structured problem statement and technical remediation steps.',
-          improvements: 'Mention exact test metric reductions (e.g. 65% faster feedback cycles).'
-        };
-      }
+      // A failed request used to become a flattering 88/100 with praise
+      // attached. Inventing a mark on someone's interview practice is worse
+      // than telling them the assessment did not happen.
+      const evaluationData = res.ok
+        ? await res.json()
+        : {
+            scored: false,
+            reason: 'The evaluator could not be reached, so this answer was not assessed.',
+            expectedPoints: currentQuestion.expectedStarPoints
+          };
 
       // Update question state with answer and evaluation
       const updatedQuestions = [...questions];
@@ -244,7 +244,12 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
         feedback: evaluationData
       };
       setQuestions(updatedQuestions);
-      onToast('success', 'Answer Evaluated', `AI Score: ${evaluationData.score}/100.`);
+
+      if (evaluationData.scored && typeof evaluationData.score === 'number') {
+        onToast('success', 'Answer Evaluated', `Scored ${evaluationData.score}/100.`);
+      } else {
+        onToast('info', 'Not Assessed', evaluationData.reason ?? 'This answer was not assessed.');
+      }
     } catch (err) {
       console.error('Evaluation error:', err);
       onToast('error', 'Evaluation Failed', 'Failed to score answer. Please try again.');
@@ -275,15 +280,13 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
     }
   };
 
-  // Calculate cumulative session score
-  const evaluatedCount = questions.filter((q) => q.feedback !== undefined).length;
+  // Session average, over answers that were actually assessed. An unassessed
+  // answer used to count as a zero and drag the average down.
+  const scoredQuestions = questions.filter((q) => typeof q.feedback?.score === 'number');
+  const evaluatedCount = scoredQuestions.length;
   const avgSessionScore =
     evaluatedCount > 0
-      ? Math.round(
-          questions
-            .filter((q) => q.feedback !== undefined)
-            .reduce((acc, q) => acc + (q.feedback?.score || 0), 0) / evaluatedCount
-        )
+      ? Math.round(scoredQuestions.reduce((acc, q) => acc + (q.feedback?.score ?? 0), 0) / evaluatedCount)
       : 0;
 
   return (
@@ -479,8 +482,43 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
             </div>
           </div>
 
-          {/* AI Evaluation Feedback Card */}
-          {currentQuestion.feedback && (
+          {/* Not assessed — shown instead of a score when no engine ran. */}
+          {currentQuestion.feedback && currentQuestion.feedback.scored === false && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-6 rounded-card bg-caution-soft border border-caution-line space-y-3"
+            >
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="w-5 h-5 text-caution-ink shrink-0 mt-0.5" />
+                <div className="min-w-0 space-y-1">
+                  <h4 className="text-sm font-bold text-caution-ink">Answer not assessed</h4>
+                  <p className="text-sm text-ink-muted leading-relaxed">
+                    {currentQuestion.feedback.reason ?? 'This answer was not assessed.'}
+                  </p>
+                </div>
+              </div>
+
+              {(currentQuestion.feedback.expectedPoints?.length ?? 0) > 0 && (
+                <div className="p-4 rounded-control bg-sunken border border-line space-y-1.5">
+                  <span className="text-2xs font-mono text-ink-muted uppercase tracking-wider block font-bold">
+                    Check your answer against these points:
+                  </span>
+                  <ul className="space-y-1">
+                    {currentQuestion.feedback.expectedPoints?.map((point) => (
+                      <li key={point} className="text-sm text-ink-muted leading-relaxed flex gap-2">
+                        <span className="text-caution-ink shrink-0">·</span>
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {/* AI Evaluation Feedback Card — only when an engine actually scored. */}
+          {currentQuestion.feedback && typeof currentQuestion.feedback.score === 'number' && (
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -496,7 +534,9 @@ export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({
                       AI Interviewer Evaluation
                     </h4>
                     <p className="text-sm text-ink-muted">
-                      Objective scoring against Senior QA leadership standards.
+                      {currentQuestion.feedback.inferenceEngine
+                        ? `Assessed by ${currentQuestion.feedback.inferenceEngine}.`
+                        : 'Assessed against the expected points for this question.'}
                     </p>
                   </div>
                 </div>

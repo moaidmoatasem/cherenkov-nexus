@@ -149,10 +149,18 @@ export interface InterviewQuestionItem {
   idealAnswer: string;
   userAnswer?: string;
   feedback?: {
-    score: number; // 1-100
-    technicalAccuracy: string;
-    starStructure: string;
-    improvements: string;
+    /** Present only when an engine actually assessed the answer. */
+    score?: number; // 1-100
+    technicalAccuracy?: string;
+    starStructure?: string;
+    improvements?: string;
+    /** False when no assessment was made; `reason` says why. */
+    scored?: boolean;
+    reason?: string;
+    expectedPoints?: string[];
+    isDeterministicFallback?: boolean;
+    fallbackReason?: string;
+    inferenceEngine?: string;
   };
 }
 
