@@ -152,7 +152,13 @@ test.describe('CHERENKOV-NEXUS Multi-Profile Comprehensive Real Headed Test Suit
     const radarNav = page.locator('button:has-text("Community Radar")').first();
     if (await radarNav.isVisible()) {
       await radarNav.click({ force: true });
-      await expect(page.locator('text=Hiring Telemetry').first()).toBeVisible({ timeout: 10000 });
+      await expect(page.locator('[data-testid="workspace-hivemind"]')).toBeVisible({ timeout: 10000 });
+      // The screen renders fixture data, so it must say so. Asserting the
+      // disclosure rather than a heading keeps this test tied to a product
+      // requirement instead of to wording.
+      await expect(page.locator('[data-testid="hivemind-sample-notice"]')).toContainText(
+        /sample data — not live telemetry/i
+      );
     }
 
     // 3. Capture screenshot

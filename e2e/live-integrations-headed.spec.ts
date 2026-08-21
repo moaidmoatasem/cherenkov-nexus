@@ -96,7 +96,7 @@ test.describe('NEW LIVE-INTEGRATION SUITE (Phases 1, 2, 3, 4, 5, 6 — real head
     expect(nonMatch.isLicensedSponsor).toBe(false);
   });
 
-  test('Live ATS Greenhouse fetch (Monzo) + auto sponsor match (API)', async ({ request }) => {
+  test('Live ATS Greenhouse fetch (Monzo) + auto sponsor match (API) @live', async ({ request }) => {
     const res = await request.post('/api/ats/job', {
       data: { url: 'https://boards.greenhouse.io/monzo/jobs/7343996' }
     });
@@ -111,7 +111,7 @@ test.describe('NEW LIVE-INTEGRATION SUITE (Phases 1, 2, 3, 4, 5, 6 — real head
     expect(body.matchedSponsor).toBe('Monzo Bank');
   });
 
-  test('GitHub repository analysis resolves real evidence over MCP (API)', async ({ request }) => {
+  test('GitHub repository analysis resolves real evidence over MCP (API) @live', async ({ request }) => {
     const res = await request.post('/api/github/analyze-repo', {
       data: { repoUrl: 'https://github.com/microsoft/playwright', branch: 'main' }
     });

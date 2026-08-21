@@ -21,7 +21,8 @@
     "test:headed": "playwright test e2e/multi-profile-headed.spec.ts e2e/live-integrations-headed.spec.ts --headed",
     "test:records": "tsx scripts/run-headed-profiles.ts",
     "tauri": "tauri",
-    "postinstall": "npx playwright install chromium"
+    "postinstall": "npx playwright install chromium",
+    "test:e2e:ci": "playwright test --grep-invert @live"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

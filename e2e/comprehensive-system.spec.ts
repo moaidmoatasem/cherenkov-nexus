@@ -157,10 +157,25 @@ test.describe('CHERENKOV-NEXUS Comprehensive E2E System & Component Suite', () =
     await expect(paletteInput).toBeHidden();
     await page.waitForTimeout(500);
 
-    // Test Theme Selector
+    // Test Theme Selector. Assert the theme actually applied, not that a menu
+    // appeared — the picker opening proves nothing about whether switching works.
     const themeBtn = page.locator('button[title*="Switch Visual Theme"]').first();
     await themeBtn.click({ force: true });
-    await expect(page.locator('text=Dark Modes (Aura Glow)').first()).toBeVisible();
+
+    const before = await page.evaluate(() => document.body.className);
+    await page.locator('button:has-text("Quantum Emerald")').first().click({ force: true });
+
+    await expect
+      .poll(() => page.evaluate(() => document.body.className))
+      .toContain('theme-emerald');
+
+    expect(await page.evaluate(() => document.body.className)).not.toBe(before);
+
+    // The choice must survive a reload, or it is not a setting.
+    await page.reload();
+    await expect
+      .poll(() => page.evaluate(() => document.body.className))
+      .toContain('theme-emerald');
   });
 
 });
