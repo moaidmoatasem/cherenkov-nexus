@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { TabId } from '../types';
+import type { ToastFn } from './Toast';
 
 export interface TourStep {
   id: string;
@@ -50,7 +51,7 @@ interface SystemTourProps {
   activeTab: TabId;
   onOpenCommandPalette?: () => void;
   onOpenIdentityVault?: () => void;
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
 }
 
 export const TOUR_STEPS: TourStep[] = [

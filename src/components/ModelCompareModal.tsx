@@ -20,6 +20,7 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { Modal } from './ui';
+import type { ToastFn } from './Toast';
 
 interface ModelComparisonResult {
   model: string;
@@ -39,7 +40,7 @@ interface ModelCompareModalProps {
   jobTitle: string;
   jobDescription: string;
   onApplySummary: (summary: string) => void;
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
 }
 
 export const ModelCompareModal: React.FC<ModelCompareModalProps> = ({

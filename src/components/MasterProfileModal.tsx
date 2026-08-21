@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { MasterProfile } from '../types';
 import { User, Sparkles, MapPin, Globe, Cpu, Award, X, Code, Check, Edit2, ShieldCheck, Download, Copy, Braces } from 'lucide-react';
 import { Modal } from './ui';
+import type { ToastFn } from './Toast';
 
 interface MasterProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
   profile: MasterProfile;
   onUpdateProfile: (updated: MasterProfile) => void;
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
 }
 
 export const MasterProfileModal: React.FC<MasterProfileModalProps> = ({

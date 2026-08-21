@@ -24,17 +24,21 @@ import {
   Search,
   Filter
 } from 'lucide-react';
+import type { ToastFn } from './Toast';
 
 export interface HiveMindProps {
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
 }
 
 export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
   const [ghostJobs] = useState<GhostJobSignal[]>(INITIAL_GHOST_JOBS);
   const [visaHeatmap] = useState<VisaHeatmapItem[]>(INITIAL_VISA_HEATMAP);
   const [atsHealth] = useState<AtsHealthStatus[]>(INITIAL_ATS_HEALTH);
-  const [isTelemetryOptIn, setIsTelemetryOptIn] = useState(true);
+  const [isTelemetryOptIn, setIsTelemetryOptIn] = useState(false);
   const [activeTab, setActiveTab] = useState<'ghost_radar' | 'visa_heatmap' | 'ats_health'>('ghost_radar');
+
+  const flaggedCount = ghostJobs.filter((job) => job.status === 'flagged').length;
+  const sponsorCount = visaHeatmap.filter((item) => item.verifiedSponsor).length;
 
   const handleToggleOptIn = () => {
     const next = !isTelemetryOptIn;
@@ -42,7 +46,9 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
     onToast(
       'info',
       next ? 'Hive-Mind Enabled' : 'Hive-Mind Disabled',
-      next ? 'Contributing anonymous telemetry to global radar.' : 'Local offline mode enforced.'
+      next
+        ? 'Saved as a preference. No reporting network exists in this build, so nothing is sent.'
+        : 'Local offline mode enforced.'
     );
   };
 
@@ -57,10 +63,12 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
               <span>COMMUNITY HIVE-MIND RADAR</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-ink tracking-tight">
-              Crowdsourced Hiring Telemetry & Ghost Job Radar
+              Hiring Telemetry &amp; Ghost Job Radar
             </h1>
             <p className="text-sm text-ink-muted leading-relaxed">
-              Real-time collective intelligence mapping ghost postings, active UK/EU sponsorship confirmations, and ATS accessibility selector health.
+              A preview of what pooled reporting would surface: stale postings, sponsorship
+              activity by employer, and ATS selector health. Contributing requires a reporting
+              network this build does not have yet.
             </p>
           </div>
 
@@ -68,7 +76,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
             <div className="p-3 rounded-card bg-fill border border-line flex items-center gap-3">
               <div>
                 <div className="text-xs font-bold text-ink">Anonymous Telemetry</div>
-                <div className="text-2xs text-ink-muted">Zero PII Egress Guarantee</div>
+                <div className="text-2xs text-ink-muted">Preference only — nothing is sent</div>
               </div>
               <button
                 onClick={handleToggleOptIn}
@@ -86,15 +94,16 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
           </div>
         </div>
 
-        {/* Global Network Signals */}
+        {/* Counts describe the sample below, not a network. Anything else here
+            would be a number this build has no way to know. */}
         <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-line pt-6">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-control bg-critical-soft text-critical-ink border border-critical-line">
               <Ghost className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-xl font-bold text-ink font-mono">1,480+</div>
-              <div className="text-xs text-ink-muted">Ghost Postings Flagged</div>
+              <div className="text-xl font-bold text-ink font-mono tabular">{flaggedCount}</div>
+              <div className="text-xs text-ink-muted">Flagged in sample</div>
             </div>
           </div>
 
@@ -103,8 +112,8 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
               <ShieldCheck className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-xl font-bold text-positive-ink font-mono">342</div>
-              <div className="text-xs text-ink-muted">Monthly Confirmed Visas</div>
+              <div className="text-xl font-bold text-positive-ink font-mono tabular">{sponsorCount}</div>
+              <div className="text-xs text-ink-muted">Sponsors in sample</div>
             </div>
           </div>
 
@@ -113,8 +122,8 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
               <Users className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-xl font-bold text-info-ink font-mono">12,400+</div>
-              <div className="text-xs text-ink-muted">Connected Hubs</div>
+              <div className="text-xl font-bold text-info-ink font-mono tabular">0</div>
+              <div className="text-xs text-ink-muted">Reporting peers</div>
             </div>
           </div>
 
@@ -123,11 +132,26 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
               <Activity className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-xl font-bold text-accent-ink font-mono">99.4%</div>
-              <div className="text-xs text-ink-muted">ATS Solver Success</div>
+              <div className="text-xl font-bold text-accent-ink font-mono tabular">{atsHealth.length}</div>
+              <div className="text-xs text-ink-muted">ATS endpoints listed</div>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* The screen shows fixture data. Say so once, unmissably, above the tabs. */}
+      <div
+        role="note"
+        data-testid="hivemind-sample-notice"
+        className="p-4 rounded-card bg-caution-soft border border-caution-line flex items-start gap-3"
+      >
+        <AlertTriangle className="w-4 h-4 text-caution-ink shrink-0 mt-0.5" />
+        <p className="text-sm text-ink-muted leading-relaxed">
+          <span className="font-bold text-caution-ink">Sample data — not live telemetry.</span>{' '}
+          Every company, score and timestamp below is fixture content shipped with the app.
+          Employer names are fictional. Nothing here reflects a real posting, a real sponsorship
+          decision, or a real hiring pattern, and it must not be used to judge an employer.
+        </p>
       </div>
 
       {/* Sub-tab Navigation */}
@@ -150,7 +174,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
               : 'text-ink-muted hover:text-ink'
           }`}
         >
-          Live Visa Heatmap
+          Visa Heatmap
         </button>
         <button
           onClick={() => setActiveTab('ats_health')}
@@ -170,14 +194,14 @@ export const HiveMind: React.FC<HiveMindProps> = ({ onToast }) => {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-bold text-ink uppercase font-mono">
-                Real-Time Ghost Job Warning Radar
+                Ghost Job Warning Radar
               </h3>
               <p className="text-sm text-ink-muted">
                 Identifies stale job postings with high applicant traffic and 0 interview invitations across the network.
               </p>
             </div>
             <span className="text-2xs font-mono px-2.5 py-1 rounded bg-critical-soft text-critical-ink border border-critical-line">
-              Live Filter
+              Sample Filter
             </span>
           </div>
 

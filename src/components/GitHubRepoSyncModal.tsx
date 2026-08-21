@@ -24,12 +24,13 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { Modal } from './ui';
+import type { ToastFn } from './Toast';
 
 interface GitHubRepoSyncModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSyncSkillsToProfile?: (skills: string[]) => void;
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
 }
 
 interface RepoAnalysisResult {
@@ -319,7 +320,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
           <div className="space-y-5 animate-fade-in">
             {/* Top Score & Architecture Overview */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="p-4 rounded-card bg-positive border border-positive-line flex items-center gap-3.5">
+              <div className="p-4 rounded-card bg-positive-soft border border-positive-line flex items-center gap-3.5">
                 <div className="p-3 rounded-control bg-positive-soft text-positive-ink border border-positive-line">
                   <BarChart3 className="w-5 h-5" />
                 </div>
@@ -433,7 +434,7 @@ export const GitHubRepoSyncModal: React.FC<GitHubRepoSyncModalProps> = ({
             </div>
 
             {/* Sync Action Footer */}
-            <div className="p-4 rounded-card bg-info border border-info-line flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="p-4 rounded-card bg-info-soft border border-info-line flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="text-xs text-ink-muted">
                 <span>Synchronize verified codebase evidence into </span>
                 <span className="text-info-ink font-bold font-mono">Master Profile</span>

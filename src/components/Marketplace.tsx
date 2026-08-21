@@ -30,9 +30,10 @@ import {
   Check
 } from 'lucide-react';
 import { Modal } from './ui';
+import type { ToastFn } from './Toast';
 
 export interface MarketplaceProps {
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
   onSyncSkillsToProfile?: (skills: string[]) => void;
 }
 

@@ -22,12 +22,13 @@ import {
   QrCode
 } from 'lucide-react';
 import { Modal } from './ui';
+import type { ToastFn } from './Toast';
 
 export interface IdentityVaultModalProps {
   isOpen: boolean;
   onClose: () => void;
   masterProfile: MasterProfile;
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
 }
 
 export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({

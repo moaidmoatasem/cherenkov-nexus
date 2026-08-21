@@ -22,6 +22,7 @@ import {
   FileCheck,
   Send
 } from 'lucide-react';
+import type { ToastFn } from './Toast';
 
 interface InterviewSandboxProps {
   isOpen?: boolean;
@@ -30,7 +31,7 @@ interface InterviewSandboxProps {
   targetRole?: string;
   companyName?: string;
   masterProfile: MasterProfile;
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
 }
 
 export const InterviewSandbox: React.FC<InterviewSandboxProps> = ({

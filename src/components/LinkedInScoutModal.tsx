@@ -20,6 +20,7 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { Modal } from './ui';
+import type { ToastFn } from './Toast';
 
 interface LinkedInScoutModalProps {
   isOpen: boolean;
@@ -27,7 +28,7 @@ interface LinkedInScoutModalProps {
   masterProfile: MasterProfile;
   defaultCompany?: string;
   defaultRole?: string;
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
 }
 
 const PRESET_RECRUITERS = [

@@ -36,13 +36,14 @@ import {
   BarChart3,
   TrendingUp
 } from 'lucide-react';
+import type { ToastFn } from './Toast';
 
 interface KanbanBoardProps {
   applications: ApplicationCard[];
   onUpdateApplication: (app: ApplicationCard) => void;
   onDeleteApplication: (id: string) => void;
   onAddApplication: (app: ApplicationCard) => void;
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
 }
 
 const COLUMNS: {
@@ -66,7 +67,7 @@ const COLUMNS: {
   {
     id: 'Upskilling',
     name: 'Upskilling In-Flight',
-    border: 'border-caution-line bg-caution',
+    border: 'border-caution-line bg-caution-soft',
     badge: 'bg-caution-soft text-caution-ink border border-caution-line',
     headerBg: 'bg-caution-soft text-caution-ink',
     glow: 'hover:border-caution-line',
@@ -75,7 +76,7 @@ const COLUMNS: {
   {
     id: 'Ready to Apply',
     name: 'Ready to Pitch',
-    border: 'border-accent-line bg-accent',
+    border: 'border-accent-line bg-accent-soft',
     badge: 'bg-accent-soft text-accent-ink border border-accent-line',
     headerBg: 'bg-accent-soft text-accent-ink',
     glow: 'hover:border-accent-line',
@@ -84,7 +85,7 @@ const COLUMNS: {
   {
     id: 'Applied',
     name: 'Submitted / Cold Sent',
-    border: 'border-info-line bg-info',
+    border: 'border-info-line bg-info-soft',
     badge: 'bg-info-soft text-info-ink border border-info-line',
     headerBg: 'bg-info-soft text-info-ink',
     glow: 'hover:border-info-line',
@@ -93,7 +94,7 @@ const COLUMNS: {
   {
     id: 'Interviewing',
     name: 'Active Interviews',
-    border: 'border-positive-line bg-positive',
+    border: 'border-positive-line bg-positive-soft',
     badge: 'bg-positive-soft text-positive-ink border border-positive-line',
     headerBg: 'bg-positive-soft text-positive-ink',
     glow: 'hover:border-positive-line',

@@ -56,13 +56,14 @@ import {
   FileDown,
   Download
 } from 'lucide-react';
+import type { ToastFn } from './Toast';
 
 interface JobSynthesizerProps {
   masterProfile: MasterProfile;
   onApplicationCreated: (app: ApplicationCard) => void;
   onAddCourseToLearning: (title: string, provider: string, skills: string[]) => void;
   onNavigateToKanban: () => void;
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
 }
 
 export type OutreachTone = 'executive' | 'deeptech' | 'security' | 'chaos';
@@ -741,7 +742,7 @@ ${qa.answer}
                     onClick={() => handleLoadSample(sample)}
                     className={`px-3 py-1.5 text-xs font-bold rounded-control border transition-all flex items-center gap-2 cursor-pointer ${
                       isSelected
-                        ? 'bg-accent text-ink border-accent-line ring-2 ring-accent-line'
+                        ? 'bg-accent text-accent-contrast border-accent-line ring-2 ring-accent-line'
                         : 'bg-fill hover:bg-fill-strong border-line text-ink-muted hover:text-ink'
                     }`}
                   >
@@ -1280,7 +1281,7 @@ ${qa.answer}
             )}
 
             {/* Gap Analysis & Actionable Upskilling */}
-            <div className="p-5 rounded-panel bg-caution border border-caution-line space-y-3.5 shadow-pop">
+            <div className="p-5 rounded-panel bg-caution-soft border border-caution-line space-y-3.5 shadow-pop">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-caution-ink">
                   <AlertTriangle className="w-4 h-4" />
@@ -1326,7 +1327,7 @@ ${qa.answer}
                   disabled={addedToLearning}
                   className={`w-full mt-2 py-2.5 px-3 text-xs font-black rounded-control transition-all flex items-center justify-center gap-1.5 ${
                     addedToLearning
-                      ? 'bg-positive/90 text-positive-ink border border-positive-line cursor-default'
+                      ? 'bg-positive-soft text-positive-ink border border-positive-line cursor-default'
                       : 'bg-caution hover:opacity-90 text-ink-inverse font-black cursor-pointer'
                   }`}
                 >

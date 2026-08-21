@@ -28,11 +28,12 @@ import {
   Activity
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import type { ToastFn } from './Toast';
 
 interface LearningSyncProps {
   masterProfile: MasterProfile;
   onUpdateProfile: (updated: MasterProfile) => void;
-  onToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
+  onToast: ToastFn;
 }
 
 const PRESET_PATHWAYS = [
@@ -274,14 +275,26 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
   };
 
   const handleDeleteCourse = (id: string) => {
-    const filtered = courses.filter((c) => c.id !== id);
-    setCourses(filtered);
-    const nextProfile: MasterProfile = {
-      ...masterProfile,
-      learning_certs: filtered
+    const index = courses.findIndex((c) => c.id === id);
+    if (index === -1) return;
+    const removed = courses[index];
+
+    const applyCourses = (next: LearningCert[]) => {
+      setCourses(next);
+      onUpdateProfile({ ...masterProfile, learning_certs: next });
     };
-    onUpdateProfile(nextProfile);
-    onToast('info', 'Pathway Removed', 'Removed course from pipeline.');
+
+    applyCourses(courses.filter((c) => c.id !== id));
+    onToast('info', 'Pathway Removed', `"${removed.title}" was removed from the pipeline.`, {
+      label: 'Undo',
+      onClick: () => {
+        const restored = [...courses];
+        if (!restored.some((c) => c.id === removed.id)) {
+          restored.splice(Math.min(index, restored.length), 0, removed);
+        }
+        applyCourses(restored);
+      },
+    });
   };
 
   const [isSimulatingWebhook, setIsSimulatingWebhook] = useState(false);
