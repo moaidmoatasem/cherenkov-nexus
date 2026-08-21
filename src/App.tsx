@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MasterProfile, ApplicationCard, AppTheme, TabId, CandidateArchetype } from './types';
-import { INITIAL_MASTER_PROFILE, INITIAL_APPLICATIONS, ARCHETYPE_PRESETS } from './data/initialData';
+import {
+  INITIAL_MASTER_PROFILE,
+  INITIAL_APPLICATIONS,
+  EMPTY_MASTER_PROFILE,
+  ARCHETYPE_PRESETS
+} from './data/initialData';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { JobSynthesizer } from './components/JobSynthesizer';
@@ -25,18 +30,18 @@ export default function App() {
   const [masterProfile, setMasterProfile] = useState<MasterProfile>(() => {
     try {
       const saved = localStorage.getItem('cherenkov_master_profile');
-      return saved ? JSON.parse(saved) : INITIAL_MASTER_PROFILE;
+      return saved ? JSON.parse(saved) : EMPTY_MASTER_PROFILE;
     } catch {
-      return INITIAL_MASTER_PROFILE;
+      return EMPTY_MASTER_PROFILE;
     }
   });
 
   const [applications, setApplications] = useState<ApplicationCard[]>(() => {
     try {
       const saved = localStorage.getItem('cherenkov_applications');
-      return saved ? JSON.parse(saved) : INITIAL_APPLICATIONS;
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return INITIAL_APPLICATIONS;
+      return [];
     }
   });
 
@@ -127,6 +132,9 @@ export default function App() {
               jobDescription: task.jobDescription ?? '',
               matchScore: task.matchScore ?? undefined,
               contactEmail: task.coldEmail ?? undefined,
+              // Persisted server-side: a demo row has to still look like one
+              // after a reload, or the badge is decoration rather than a fact.
+              isSample: task.isSample ? true : undefined,
             }))
           );
         }
@@ -162,6 +170,7 @@ export default function App() {
             matchScore: app.matchScore ?? 0,
             jobDescription: app.jobDescription,
             coldEmail: app.contactEmail,
+            isSample: app.isSample ?? false,
           }))
         ),
       })
@@ -183,6 +192,23 @@ export default function App() {
       console.error('Failed to persist currentTheme to localStorage:', e);
     }
   }, [currentTheme]);
+
+  /** Seed the workspace with the shipped demo records, tagged as such. */
+  const loadSampleData = () => {
+    setApplications(INITIAL_APPLICATIONS.map((app) => ({ ...app, isSample: true })));
+    setMasterProfile(INITIAL_MASTER_PROFILE);
+    addToast(
+      'info',
+      'Sample Data Loaded',
+      'Every seeded record is badged "Sample". Clear them from the banner on the Kanban board.'
+    );
+  };
+
+  /** Remove only the seeded rows; anything the user added themselves survives. */
+  const clearSampleData = () => {
+    setApplications((prev) => prev.filter((app) => !app.isSample));
+    addToast('info', 'Sample Data Cleared', 'Your own applications are untouched.');
+  };
 
   const addToast: ToastFn = (type, title, message, action) => {
     const id = `toast-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
@@ -302,6 +328,8 @@ export default function App() {
     synthesizer: (
       <JobSynthesizer
         masterProfile={masterProfile}
+        onOpenOnboarding={() => setIsOnboardingOpen(true)}
+        onLoadSampleData={loadSampleData}
         onApplicationCreated={handleApplicationCreated}
         onAddCourseToLearning={handleAddCourseFromSynthesis}
         onNavigateToKanban={() => setActiveTab('kanban')}
@@ -311,6 +339,8 @@ export default function App() {
     kanban: (
       <KanbanBoard
         applications={applications}
+        onLoadSampleData={loadSampleData}
+        onClearSampleData={clearSampleData}
         onUpdateApplication={handleUpdateApplication}
         onDeleteApplication={handleDeleteApplication}
         onAddApplication={handleApplicationCreated}

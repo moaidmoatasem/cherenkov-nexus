@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { seedWorkspace } from './fixtures';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -11,6 +12,8 @@ test.describe('CHERENKOV-NEXUS Multi-Profile Comprehensive Real Headed Test Suit
   });
 
   test.beforeEach(async ({ context, page }) => {
+    // The app boots empty by design; this spec needs a populated workspace.
+    await seedWorkspace(context);
     // Forward console logs for live debugging
     page.on('console', msg => {
       if (msg.type() === 'error') {

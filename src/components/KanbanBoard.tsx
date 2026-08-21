@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ApplicationCard, KanbanColumn, SynthesizedResult } from '../types';
-import { Modal, chartStatus } from './ui';
+import { Button, EmptyState, Modal, chartStatus } from './ui';
 import { KanbanMetrics } from './KanbanMetrics';
 import { PerformanceMetrics } from './PerformanceMetrics';
 import {
@@ -40,6 +40,10 @@ import type { ToastFn } from './Toast';
 
 interface KanbanBoardProps {
   applications: ApplicationCard[];
+  /** Seeds the shipped demo records. Absent once the user has their own data. */
+  onLoadSampleData?: () => void;
+  /** Removes only the seeded rows. */
+  onClearSampleData?: () => void;
   onUpdateApplication: (app: ApplicationCard) => void;
   onDeleteApplication: (id: string) => void;
   onAddApplication: (app: ApplicationCard) => void;
@@ -104,6 +108,8 @@ const COLUMNS: {
 
 export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   applications,
+  onLoadSampleData,
+  onClearSampleData,
   onUpdateApplication,
   onDeleteApplication,
   onAddApplication,
@@ -116,6 +122,8 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
   const [activeModalApp, setActiveModalApp] = useState<ApplicationCard | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [copiedKeys, setCopiedKeys] = useState<Record<string, boolean>>({});
+
+  const sampleCount = applications.filter((app) => app.isSample).length;
 
   // New Application Form State
   const [newTitle, setNewTitle] = useState('');
@@ -340,8 +348,49 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
         )}
       </AnimatePresence>
 
+      {/* Seeded rows are demo data. Say which, and offer a way out. */}
+      {sampleCount > 0 && onClearSampleData && (
+        <div
+          data-testid="kanban-sample-banner"
+          className="p-4 rounded-card bg-caution-soft border border-caution-line flex flex-wrap items-center justify-between gap-3"
+        >
+          <p className="text-sm text-ink-muted">
+            <span className="font-bold text-caution-ink">
+              {sampleCount} sample {sampleCount === 1 ? 'application' : 'applications'}
+            </span>{' '}
+            — demo records shipped with the app, not your own.
+          </p>
+          <Button size="sm" variant="outline" onClick={onClearSampleData}>
+            Clear sample data
+          </Button>
+        </div>
+      )}
+
+      {/* Nothing to show yet — offer the two ways in rather than a blank grid. */}
+      {applications.length === 0 && (
+        <EmptyState
+          data-testid="kanban-empty"
+          icon={<Kanban className="w-5 h-5" />}
+          title="No applications yet"
+          description="Roles land here once you synthesise a posting, or you can add one by hand. The board tracks each application from discovery through to interview."
+          action={
+            onLoadSampleData && (
+              <Button onClick={onLoadSampleData} icon={<Sparkles className="w-3.5 h-3.5" />}>
+                Load sample data
+              </Button>
+            )
+          }
+          secondaryAction={
+            <Button variant="outline" onClick={() => setIsAddModalOpen(true)}>
+              Add a role
+            </Button>
+          }
+          footnote="Sample records are badged and can be cleared in one click."
+        />
+      )}
+
       {/* VIEW MODE: KANBAN BOARD */}
-      {viewMode === 'board' && (
+      {applications.length > 0 && viewMode === 'board' && (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-start min-h-[550px]">
           {COLUMNS.map((col) => {
             const colApps = filteredApps.filter((a) => a.column === col.id);
@@ -425,6 +474,14 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
                         {/* Location & Meta Badges */}
                         <div className="flex flex-wrap gap-1 text-2xs">
+                          {app.isSample && (
+                            <span
+                              data-testid="sample-badge"
+                              className="px-2 py-0.5 bg-caution-soft border border-caution-line text-caution-ink rounded-control font-mono font-bold"
+                            >
+                              Sample
+                            </span>
+                          )}
                           <span className="px-2 py-0.5 bg-fill border border-line text-ink-muted rounded-control font-medium">
                             {app.location}
                           </span>
@@ -505,7 +562,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
       )}
 
       {/* VIEW MODE: HIGH-DENSITY LIST TABLE */}
-      {viewMode === 'list' && (
+      {applications.length > 0 && viewMode === 'list' && (
         <div className="p-5 rounded-panel bg-surface border border-line overflow-x-auto shadow-pop">
           <table className="w-full text-left text-xs">
             <thead>
