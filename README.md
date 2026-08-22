@@ -20,23 +20,58 @@
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4.1-38B2AC.svg?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
 [![MCP](https://img.shields.io/badge/MCP-2026--07--28-purple.svg?style=for-the-badge)](https://modelcontextprotocol.io)
 
-**A localized, agentic command center designed to transform the international tech career pipeline into a deterministically verifiable deployment engine.**
+**A local-first desktop workspace for engineers pursuing UK visa-sponsored roles — built around a sponsorship eligibility oracle that gives reproducible, auditable verdicts instead of guesses.**
 
-[🚀 Quickstart Guide](docs/QUICKSTART.md) • [📐 System Architecture](docs/ARCHITECTURE.md) • [📚 Documentation Portal](docs/README.md) • [🧪 E2E Testing](docs/E2E_TESTING.md) • [🗺️ Roadmap](docs/ROADMAP.md)
+[⚖️ The Sponsorship Oracle](docs/ORACLE.md) • [🚀 Quickstart](docs/QUICKSTART.md) • [📐 Architecture](docs/ARCHITECTURE.md) • [📚 Documentation Portal](docs/README.md) • [🧪 E2E Testing](docs/E2E_TESTING.md) • [🗺️ Roadmap](docs/ROADMAP.md)
 
 </div>
 
 ---
 
-## 🌟 Executive Overview
+## ⚖️ Start here: the Sponsorship Eligibility Oracle
 
-**CHERENKOV-NEXUS** is an AI-orchestrated career warfare station built for Senior Engineers, QA Architects, and Technical Leaders targeting high-compensation, visa-sponsored roles across the UK, EU, and Global Remote markets.
+Most tools tell you a company "sponsors visas". That is not the question. The question is whether
+*this role, at this salary,* clears the rules — and if not, **which single requirement is the one
+that fails.**
 
-Unlike probabilistic job scrapers or blind submission bots, **CHERENKOV-NEXUS** employs:
-1. **Deterministic Verification:** Automatic verification against the **UK Home Office Register of Licensed Sponsors** and EU Blue Card registries using **LibSQL / Turso Edge** and local SQLite dictionaries.
-2. **Zero-Trust Privacy Routing:** On-device WebGPU (`@mlc-ai/web-llm`) & local Ollama failover ensuring sensitive candidate PII never leaves the local machine.
-3. **Stateless Model Context Protocol (MCP):** Full compliance with the official `2026-07-28` MCP specification for scraping, ATS parsing, and LLM orchestration.
-4. **Living Master Profile Synchronization:** Real-time Learning Record Store (LRS) listening for **xAPI** webhooks from Coursera, Udemy, and Pluralsight.
+The Oracle answers that, and shows its working:
+
+> **NOT ELIGIBLE** — Monzo Bank is on the Register of Licensed Sponsors, and £44,000 clears the
+> £41,700 general salary threshold. It does not clear the **going rate for SOC 2136 (£49,400)**.
+> That is the **binding constraint** — rule `SW 14.2`.
+> *Provisional — assessed against unverified rules snapshot `uk-skilled-worker-2026-08-14`.*
+
+Four properties make that verdict trustworthy, and each is locked by
+[`e2e/oracle.spec.ts`](e2e/oracle.spec.ts):
+
+1. **It names the binding constraint.** Not a score, not a probability — the specific rule that
+   fails, with the two numbers being compared and the rule reference.
+2. **It is checked against the real register.** All **126,998** rows of the UK Home Office Register
+   of Licensed Sponsors, held locally in SQLite — not a curated sample.
+3. **It cites a content-addressed rules snapshot.** Verdicts are evaluated against a sealed
+   snapshot (`uk-skilled-worker-2026-08-14+a8d94f73543a`); `npm run oracle:seal:check` fails CI if
+   its contents drift from its hash.
+4. **It admits what it does not know.** Every verdict is marked **PROVISIONAL** while the shipped
+   snapshot is unverified against primary sources. The product declines to overstate rather than
+   rounding up to confidence.
+
+The same posting and snapshot produce the same verdict every time. See [`docs/ORACLE.md`](docs/ORACLE.md)
+for the rule ledger and the deliberately narrow V1 scope (UK Skilled Worker route only).
+
+---
+
+## 🌟 What else is in the box
+
+**CHERENKOV-NEXUS** is a local-first desktop application (React 19 + Express, packaged with Tauri)
+for engineers targeting visa-sponsored roles in the UK and EU. Around the Oracle it adds:
+
+1. **Zero-Trust Privacy Routing:** On-device WebGPU (`@mlc-ai/web-llm`) and local Ollama failover,
+   so candidate PII need never leave the machine. Where no inference engine is configured, features
+   that would need one say so rather than generating a plausible-looking answer.
+2. **Stateless Model Context Protocol (MCP):** Built against the `2026-07-28` MCP specification for
+   scraping, ATS parsing, and LLM orchestration.
+3. **Living Master Profile Synchronization:** A Learning Record Store listening for **xAPI**
+   webhooks from Coursera, Udemy, and Pluralsight.
 
 ---
 
@@ -54,13 +89,14 @@ graph TB
 
     subgraph Gateway_Layer ["⚡ API Gateway & Local Orchestrator"]
         Express["Express.js Server (Port 3000)"]
+        OracleRouter["Oracle Router (/api/oracle/*)"]
         SSEStream["SSE Event Bus (/api/webhooks/xapi/stream)"]
-        LangGraph["LangGraph State Machine (TS)"]
     end
 
     subgraph Data_Layer ["💾 Edge & Persistence Tier"]
-        LibSQL["LibSQL / Turso Database Cache"]
-        SponsorsDB["Home Office Visa Registry (32+ Hot Anchors)"]
+        LibSQL["LibSQL / SQLite (nexus.db)"]
+        SponsorsDB["Register of Licensed Sponsors (126,998 rows)"]
+        Snapshots["Sealed rules snapshots (data/snapshots/)"]
         MasterProfile["Master Profile JSON (AST)"]
     end
 
@@ -78,13 +114,16 @@ graph TB
     end
 
     ReactApp <-->|"REST / JSON-RPC / SSE"| Express
-    Express <--> LangGraph
-    LangGraph <--> LibSQL
-    LangGraph <--> MasterProfile
-    LangGraph --> PlaywrightMCP
-    LangGraph --> LinkedInScout
-    LangGraph --> AudioInterview
-    LangGraph --> InferenceRouter
+    Express --> OracleRouter
+    OracleRouter --> SponsorsDB
+    OracleRouter --> Snapshots
+    Express <--> LibSQL
+    Express <--> MasterProfile
+    Express --> PlaywrightMCP
+    Express --> LinkedInScout
+    Express --> AudioInterview
+    Express --> InferenceRouter
+    LibSQL --- SponsorsDB
     InferenceRouter -->|"Cloud Mode"| GeminiCloud
     InferenceRouter -->|"Local Zero-Trust"| LocalWebLLM
     InferenceRouter -->|"Self-Hosted API"| LocalOllama
@@ -92,15 +131,16 @@ graph TB
 
 ---
 
-## ⚡ Core Capability Arsenal
+## ⚡ Core Capabilities
 
 | Module | Core Functionality | Primary Tech / Endpoint |
 |---|---|---|
+| ⚖️ **[Sponsorship Oracle](docs/ORACLE.md)** | Reproducible UK Skilled Worker verdicts naming the binding constraint, cited to a sealed rules snapshot | `POST /api/oracle/verdict` |
 | 🎯 **Job Synthesizer** | Splits job posting into Reality vs Tailored AST Layer; generates ATS answers & cover letters | `POST /api/synthesize` |
 | 🛡️ **Visa Sponsor Verifier** | Deterministic fuzzy lookup against official UK/EU government registries | `POST /api/visa-check` |
 | 🔄 **xAPI Learning Sync** | Autonomous competency ingestion from external LMS platforms via webhook | `POST /api/webhooks/xapi` |
 | 🕵️ **LinkedIn & Repo Scout** | Maps hiring managers & analyzes target open-source repositories | `POST /api/mcp/linkedin-scout` |
-| 🎙️ **Voice Interview Sandbox** | Adversarial technical interview simulation with real-time scoring | `POST /api/interview/generate-questions` |
+| 🎙️ **Voice Interview Sandbox** | Adversarial technical interview simulation. Scores answers when an inference engine is configured, and declines to score when none is — it will not invent a mark | `POST /api/interview/generate-questions` |
 | 🔐 **Identity Vault** | Zero-Trust PII masking & seamless switching between Cloud / Local WebGPU AI | `@mlc-ai/web-llm` / WebGPU |
 | 📋 **Live Kanban Board** | State-persisted multi-stage application pipeline | `GET /api/kanban/state` |
 | ⚖️ **Model Compare Engine** | Real-time benchmarking between cloud Gemini and a local Ollama/Qwen model (default qwen2.5-coder:7b-instruct) | `POST /api/synthesize/compare` |
@@ -130,8 +170,13 @@ PORT=3000
 GEMINI_API_KEY="your-google-gemini-api-key"
 TURSO_DATABASE_URL="your-turso-db-url-optional"
 TURSO_AUTH_TOKEN="your-turso-token-optional"
-LOCAL_LLM_URL="http://localhost:11434/v1"
+LOCAL_LLM_ENDPOINT="http://localhost:11434/v1"
+LOCAL_LLM_MODEL_NAME="qwen2.5-coder:7b-instruct"
 ```
+
+> [!NOTE]
+> The local-inference variable is `LOCAL_LLM_ENDPOINT`. Earlier revisions of this README named it
+> `LOCAL_LLM_URL`, which the server has never read.
 
 ### 3. Seed the Edge Database
 Initialize the local SQLite / LibSQL database containing the UK Home Office Licensed Sponsors:
@@ -158,7 +203,10 @@ npx tsx cherenkov.ts --url "https://careers.google.com/jobs/results/12345" --mod
 Cherenkov Nexus features full End-to-End (E2E) automation via Playwright:
 
 ```powershell
-# Run the entire E2E test suite
+# What CI gates on: every spec except the @live ones that hit third-party hosts
+npm run test:e2e:ci
+
+# Everything, including the @live specs (needs network to real services)
 npm run test
 
 # Run the comprehensive system & component suite with browser console mirroring
@@ -183,7 +231,8 @@ cherenkov-nexus/
 │   ├── README.md               # Master Documentation Hub Index
 │   ├── ARCHITECTURE.md         # Multi-Tiered Architecture Deep Dive
 │   ├── SYSTEM_DESIGN.md        # Pipeline Sequence & Invariant Specifications
-│   ├── AGENTS.md               # LangGraph Agent Swarm Specifications
+│   ├── ORACLE.md               # Sponsorship Eligibility Oracle — rules ledger & V1 scope
+│   ├── AGENTS.md               # Agent roles & orchestration
 │   ├── AI_ENGINE_MCP.md        # MCP 2026-07-28 & Structured Output Design
 │   ├── INTEGRATIONS.md         # External Systems & Government Data Ingestion
 │   ├── INTEGRATION_TESTING.md  # Integration Test Harnesses & Contracts
@@ -199,14 +248,24 @@ cherenkov-nexus/
 │   ├── TECH_STACK.md           # Exhaustive Technology & Version Matrix
 │   ├── NORTHSTAR.md            # Vision, Success KPIs & Anti-Goals
 │   └── HANDOVER.md             # Subagent Handover & Context Continuity Protocol
+├── data/snapshots/             # Sealed, content-addressed rules snapshots
 ├── e2e/                        # Playwright Automated Test Suites
+│   ├── oracle.spec.ts          # Verdict, binding constraint & reproducibility
+│   ├── data-provenance.spec.ts # Headline figures must equal the records beneath them
+│   ├── interview-honesty.spec.ts # No score is shown without a real assessment
 │   ├── comprehensive-system.spec.ts
+│   ├── fixtures.ts             # seedWorkspace() — specs state their own preconditions
+│   ├── global-setup.ts
 │   ├── cli.spec.ts
 │   └── ui.spec.ts
 ├── server/                     # Backend Core & MCP Tool Implementations
 │   └── mcp/
 │       └── playwrightScraper.ts # Stealth ATS DOM & Accessibility Tree Extractor
+├── scripts/                    # oracle-seal.ts and other maintenance scripts
+├── tests/                      # Vitest unit suites (125 tests)
 ├── src/                        # React 19 Frontend Source
+│   ├── oracle/                 # Eligibility engine, rules registry & snapshot sealing
+│   ├── server/                 # Sponsor matching, integrations & MCP host
 │   ├── components/             # Generative & Interactive UI Components
 │   │   └── ui/                 # Shared design-system primitives (Button, Card, Badge...)
 │   ├── data/                   # Default Master Profile & System Presets

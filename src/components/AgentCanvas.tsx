@@ -146,7 +146,7 @@ export const AgentCanvas: React.FC<AgentCanvasProps> = ({ onToast }) => {
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-soft border border-accent-line text-accent-ink text-xs font-mono font-bold">
               <Workflow className="w-3.5 h-3.5" />
-              <span>LANGGRAPH VISUAL AGENT ENGINE</span>
+              <span>SCRIPTED PIPELINE WALKTHROUGH</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-ink tracking-tight">
               Visual Multi-Agent Canvas & Workflow Builder
