@@ -23,19 +23,26 @@ import {
 } from 'lucide-react';
 import { Modal } from './ui';
 import type { ToastFn } from './Toast';
+import { isSealed, openProfile, sealProfile, WrongPassphraseError } from '../lib/vault';
 
 export interface IdentityVaultModalProps {
   isOpen: boolean;
   onClose: () => void;
   masterProfile: MasterProfile;
   onToast: ToastFn;
+  /** Called with the decrypted profile after a successful unlock. */
+  onVaultOpened?: (profile: MasterProfile) => void;
+  /** Called once the profile has been sealed and the plaintext removed. */
+  onVaultSealed?: () => void;
 }
 
 export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
   isOpen,
   onClose,
   masterProfile,
-  onToast
+  onToast,
+  onVaultOpened,
+  onVaultSealed
 }) => {
   const [config, setConfig] = useState<RoutingConfig>(() => {
     try {
@@ -48,7 +55,10 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
 
   const [badges] = useState<VerifiableBadge[]>(INITIAL_VERIFIABLE_BADGES);
   const [passphrase, setPassphrase] = useState('');
-  const [isLocked, setIsLocked] = useState(config.e2eeVaultLocked);
+  // Locked state is whether a sealed envelope actually exists on this device,
+  // not a boolean someone can flip in localStorage.
+  const [isLocked, setIsLocked] = useState(() => isSealed());
+  const [vaultBusy, setVaultBusy] = useState(false);
   const [copiedBadgeId, setCopiedBadgeId] = useState<string | null>(null);
 
   if (!isOpen) return null;
@@ -62,26 +72,64 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
     onToast('success', 'Router Updated', `Inference routing switched to ${mode.toUpperCase()}`);
   };
 
-  const handleToggleVaultLock = () => {
-    if (!isLocked) {
-      // Locking
-      setIsLocked(true);
-      const updated = { ...config, e2eeVaultLocked: true };
-      setConfig(updated);
-      localStorage.setItem('cherenkov_routing_config', JSON.stringify(updated));
-      onToast('info', 'Vault Locked', 'Master Profile encrypted with AES-GCM client-side key.');
-    } else {
-      // Unlocking
-      if (!passphrase) {
-        onToast('error', 'Passphrase Required', 'Please enter your client-side vault passphrase.');
-        return;
+  /**
+   * Real AES-GCM, not a boolean.
+   *
+   * Sealing encrypts the Master Profile under a key derived from the passphrase
+   * and deletes the plaintext copy. Opening requires the passphrase that sealed
+   * it — a wrong one fails the GCM authentication tag and the vault stays shut.
+   */
+  const handleToggleVaultLock = async () => {
+    if (vaultBusy) return;
+
+    if (!passphrase) {
+      onToast(
+        'error',
+        'Passphrase required',
+        isLocked
+          ? 'Enter the passphrase you sealed the vault with.'
+          : 'Choose a passphrase. There is no recovery — if you lose it, the profile is gone.'
+      );
+      return;
+    }
+
+    setVaultBusy(true);
+    try {
+      if (!isLocked) {
+        await sealProfile(JSON.stringify(masterProfile), passphrase);
+        const updated = { ...config, e2eeVaultLocked: true };
+        setConfig(updated);
+        localStorage.setItem('cherenkov_routing_config', JSON.stringify(updated));
+        setIsLocked(true);
+        setPassphrase('');
+        onVaultSealed?.();
+        onToast(
+          'success',
+          'Vault sealed',
+          'Profile encrypted with AES-256-GCM and the plaintext copy removed from this browser.'
+        );
+      } else {
+        const profileJson = await openProfile(passphrase);
+        const updated = { ...config, e2eeVaultLocked: false };
+        setConfig(updated);
+        localStorage.setItem('cherenkov_routing_config', JSON.stringify(updated));
+        setIsLocked(false);
+        setPassphrase('');
+        onVaultOpened?.(JSON.parse(profileJson) as MasterProfile);
+        onToast('success', 'Vault opened', 'Profile decrypted and restored on this device.');
       }
-      setIsLocked(false);
-      const updated = { ...config, e2eeVaultLocked: false };
-      setConfig(updated);
-      localStorage.setItem('cherenkov_routing_config', JSON.stringify(updated));
-      setPassphrase('');
-      onToast('success', 'Vault Decrypted', 'Local cryptographic vault successfully unlocked.');
+    } catch (err) {
+      if (err instanceof WrongPassphraseError) {
+        onToast('error', 'Wrong passphrase', err.message);
+      } else {
+        onToast(
+          'error',
+          isLocked ? 'Could not open the vault' : 'Could not seal the vault',
+          err instanceof Error ? err.message : String(err)
+        );
+      }
+    } finally {
+      setVaultBusy(false);
     }
   };
 
@@ -273,28 +321,28 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
               <div className="flex items-center gap-2">
                 <span className={`w-2.5 h-2.5 rounded-full ${isLocked ? 'bg-caution animate-pulse' : 'bg-positive'}`} />
                 <span className="text-xs font-bold text-ink">
-                  Vault Status: {isLocked ? 'Encrypted & Locked' : 'Decrypted & Active in Memory'}
+                  Vault Status: {isLocked ? 'Sealed' : 'Stored in the clear'}
                 </span>
               </div>
               <p className="text-sm text-ink-muted mt-1">
                 {isLocked
-                  ? 'All local profile fields are AES-GCM encrypted. Unlock with your master passphrase.'
-                  : 'Profile data is unencrypted in volatile React memory for active synthesis.'}
+                  ? 'The profile is stored as AES-256-GCM ciphertext in this browser. The passphrase never leaves this device and cannot be recovered.'
+                  : 'The profile is stored unencrypted in this browser. Seal it with a passphrase to replace the plaintext with ciphertext.'}
               </p>
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
-              {isLocked && (
-                <input
-                  type="password"
-                  value={passphrase}
-                  onChange={(e) => setPassphrase(e.target.value)}
-                  placeholder="Master Passphrase"
-                  className="px-3 py-2 bg-fill border border-line rounded-control text-xs text-ink placeholder:text-ink-faint focus:border-info-line"
-                />
-              )}
+              <input
+                type="password"
+                value={passphrase}
+                onChange={(e) => setPassphrase(e.target.value)}
+                placeholder={isLocked ? 'Passphrase' : 'Choose a passphrase'}
+                autoComplete={isLocked ? 'current-password' : 'new-password'}
+                className="px-3 py-2 bg-fill border border-line rounded-control text-xs text-ink placeholder:text-ink-faint focus:border-info-line"
+              />
               <button
                 onClick={handleToggleVaultLock}
+                disabled={vaultBusy}
                 className={`px-4 py-2 rounded-control text-xs font-bold font-mono flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
                   isLocked
                     ? 'bg-caution text-ink-inverse hover:bg-caution'
@@ -304,12 +352,12 @@ export const IdentityVaultModal: React.FC<IdentityVaultModalProps> = ({
                 {isLocked ? (
                   <>
                     <Unlock className="w-3.5 h-3.5" />
-                    <span>Decrypt Vault</span>
+                    <span>{vaultBusy ? 'Opening…' : 'Open vault'}</span>
                   </>
                 ) : (
                   <>
                     <Lock className="w-3.5 h-3.5" />
-                    <span>Lock & Encrypt</span>
+                    <span>{vaultBusy ? 'Sealing…' : 'Seal vault'}</span>
                   </>
                 )}
               </button>
