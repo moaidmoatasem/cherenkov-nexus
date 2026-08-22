@@ -348,6 +348,27 @@ export const ARCHETYPE_PRESETS: Record<CandidateArchetype, ArchetypePreset> = {
 
 export const INITIAL_MASTER_PROFILE: MasterProfile = ARCHETYPE_PRESETS.international_seeker.profile;
 
+/**
+ * What a first run starts from. The app used to boot straight into
+ * INITIAL_MASTER_PROFILE, so every user opened the product inside a stranger's
+ * job search with nothing marking it as demo. Sample data is now something you
+ * choose, not something you inherit.
+ */
+export const EMPTY_MASTER_PROFILE: MasterProfile = {
+  name: '',
+  title: '',
+  location: '',
+  target_roles: [],
+  core_competencies: [],
+  tech_stack: [],
+  experience: '',
+  learning_certs: []
+};
+
+/** True once a profile carries enough to synthesise against. */
+export const isProfileConfigured = (profile: MasterProfile): boolean =>
+  Boolean(profile.name.trim() && profile.title.trim());
+
 export const SAMPLE_JOBS = [
   {
     title: "Lead QA Infrastructure Engineer",

@@ -3,6 +3,8 @@ export { Button } from './Button';
 export { Badge } from './Badge';
 export { Card } from './Card';
 export { IconTile } from './IconTile';
+export { EmptyState } from './EmptyState';
+export type { EmptyStateProps } from './EmptyState';
 export { Modal } from './Modal';
 export type { ModalProps } from './Modal';
 export { PanelHeader } from './PanelHeader';

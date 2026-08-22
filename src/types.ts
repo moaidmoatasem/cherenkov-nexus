@@ -91,6 +91,11 @@ export interface ApplicationCard {
   notes?: string;
   matchScore?: number;
   contactEmail?: string;
+  /**
+   * Set on rows loaded through "Load sample data". Demo records are fine; not
+   * being able to tell them from your own applications is not.
+   */
+  isSample?: boolean;
 }
 
 export type AppTheme =

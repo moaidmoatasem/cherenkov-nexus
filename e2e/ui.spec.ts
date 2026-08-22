@@ -1,8 +1,11 @@
 import { test, expect } from '@playwright/test';
+import { seedWorkspace } from './fixtures';
 
 test.describe('CHERENKOV-NEXUS UI Workflows (Phase 3 & 4)', () => {
 
   test.beforeEach(async ({ context, page }) => {
+    // The app boots empty by design; this spec needs a populated workspace.
+    await seedWorkspace(context);
     await context.addInitScript(() => {
       localStorage.setItem('cherenkov_tour_completed', 'true');
     });

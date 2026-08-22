@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { MasterProfile, SynthesizedResult, ApplicationCard, RoutingConfig } from '../types';
-import { SAMPLE_JOBS, INITIAL_ROUTING_CONFIG } from '../data/initialData';
+import { INITIAL_ROUTING_CONFIG, SAMPLE_JOBS, isProfileConfigured } from '../data/initialData';
 import { useAutoSave } from '../hooks/useAutoSave';
 import { useWebLLM } from '../hooks/useWebLLM';
 import { LinkedInScoutModal } from './LinkedInScoutModal';
 import { InterviewSandbox } from './InterviewSandbox';
 import { ModelCompareModal } from './ModelCompareModal';
-import { Badge, Modal, PanelHeader } from './ui';
+import { Badge, Button, EmptyState, Modal, PanelHeader } from './ui';
 import { downloadAtsPdfResume } from '../utils/pdfGenerator';
 import {
   Sparkles,
@@ -60,6 +60,10 @@ import type { ToastFn } from './Toast';
 
 interface JobSynthesizerProps {
   masterProfile: MasterProfile;
+  /** Opens the profile setup flow from the empty state. */
+  onOpenOnboarding: () => void;
+  /** Seeds the shipped demo profile and applications. */
+  onLoadSampleData?: () => void;
   onApplicationCreated: (app: ApplicationCard) => void;
   onAddCourseToLearning: (title: string, provider: string, skills: string[]) => void;
   onNavigateToKanban: () => void;
@@ -70,6 +74,8 @@ export type OutreachTone = 'executive' | 'deeptech' | 'security' | 'chaos';
 
 export const JobSynthesizer: React.FC<JobSynthesizerProps> = ({
   masterProfile,
+  onOpenOnboarding,
+  onLoadSampleData,
   onApplicationCreated,
   onAddCourseToLearning,
   onNavigateToKanban,
@@ -670,6 +676,34 @@ ${qa.answer}
       setTimeout(() => setIsGeneratingPdf(false), 800);
     }
   };
+
+  // Synthesis tailors a posting *against your profile*. Without one there is
+  // nothing to tailor from, so ask for it rather than generating from a blank.
+  if (!isProfileConfigured(masterProfile)) {
+    return (
+      <div className="max-w-3xl mx-auto pt-6">
+        <EmptyState
+          data-testid="synthesizer-empty"
+          icon={<Sparkles className="w-5 h-5" />}
+          title="Set up your profile first"
+          description="The synthesizer tailors a job posting against your experience — your skills, your history, your evidence. It needs that profile before it can produce anything worth sending."
+          action={
+            <Button onClick={onOpenOnboarding} icon={<Sparkles className="w-3.5 h-3.5" />}>
+              Set up my profile
+            </Button>
+          }
+          secondaryAction={
+            onLoadSampleData && (
+              <Button variant="outline" onClick={onLoadSampleData}>
+                Explore with sample data
+              </Button>
+            )
+          }
+          footnote="Sample data loads a demo profile and a few example applications, all clearly badged."
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">

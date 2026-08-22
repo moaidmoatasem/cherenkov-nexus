@@ -1,8 +1,11 @@
 import { test, expect, request } from '@playwright/test';
+import { seedWorkspace } from './fixtures';
 
 test.describe('NEW LIVE-INTEGRATION SUITE (Phases 1, 2, 3, 4, 5, 6 — real headed)', () => {
 
   test.beforeEach(async ({ context, page }) => {
+    // The app boots empty by design; this spec needs a populated workspace.
+    await seedWorkspace(context);
     page.on('console', msg => console.log(`[BROWSER CONSOLE] [${msg.type()}] ${msg.text()}`));
     page.on('pageerror', err => console.log(`[BROWSER UNHANDLED ERROR] ${err.message}`));
     await context.addInitScript(() => {

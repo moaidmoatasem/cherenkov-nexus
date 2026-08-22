@@ -1692,25 +1692,43 @@ app.post("/api/onboarding/test-greenhouse-live", async (req: Request, res: Respo
 });
 
 // Kanban Board API Endpoints
+
+/**
+ * The board is the source of truth for a user's applications, so whether a row
+ * is demo data has to live here too — a client-side flag cannot survive the
+ * round-trip. `ALTER TABLE ADD COLUMN` has no `IF NOT EXISTS` in SQLite, hence
+ * the PRAGMA guard for databases created before the column existed.
+ */
+async function ensureKanbanSchema(db: ReturnType<typeof getDb>): Promise<void> {
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS kanban_tasks (
+      id TEXT PRIMARY KEY,
+      columnId TEXT NOT NULL,
+      company TEXT NOT NULL,
+      jobTitle TEXT NOT NULL,
+      salary TEXT,
+      location TEXT,
+      createdAt TEXT NOT NULL,
+      updatedAt TEXT NOT NULL,
+      matchScore INTEGER NOT NULL,
+      jobDescription TEXT,
+      coldEmail TEXT,
+      isSample INTEGER NOT NULL DEFAULT 0
+    )
+  `);
+
+  const tableInfo = await db.execute("PRAGMA table_info(kanban_tasks)");
+  const existing = new Set(tableInfo.rows.map((r) => r.name as string));
+  if (!existing.has("isSample")) {
+    await db.execute("ALTER TABLE kanban_tasks ADD COLUMN isSample INTEGER NOT NULL DEFAULT 0");
+  }
+}
+
 app.get("/api/kanban/state", async (req: Request, res: Response) => {
   try {
     const db = getDb();
-    
-    await db.execute(`
-      CREATE TABLE IF NOT EXISTS kanban_tasks (
-        id TEXT PRIMARY KEY,
-        columnId TEXT NOT NULL,
-        company TEXT NOT NULL,
-        jobTitle TEXT NOT NULL,
-        salary TEXT,
-        location TEXT,
-        createdAt TEXT NOT NULL,
-        updatedAt TEXT NOT NULL,
-        matchScore INTEGER NOT NULL,
-        jobDescription TEXT,
-        coldEmail TEXT
-      )
-    `);
+
+    await ensureKanbanSchema(db);
 
     const tasksResult = await db.execute("SELECT * FROM kanban_tasks");
 
@@ -1725,7 +1743,8 @@ app.get("/api/kanban/state", async (req: Request, res: Response) => {
       updatedAt: task.updatedAt,
       matchScore: task.matchScore,
       jobDescription: task.jobDescription,
-      coldEmail: task.coldEmail
+      coldEmail: task.coldEmail,
+      isSample: Boolean(task.isSample)
     }));
 
     res.json(applications);
@@ -1743,6 +1762,9 @@ app.post("/api/kanban/state", async (req: Request, res: Response) => {
     }
     const db = getDb();
 
+    // A POST can arrive before any GET has run, so the table may not exist yet.
+    await ensureKanbanSchema(db);
+
     // Last write wins per id. A duplicate id in the payload used to abort the
     // save halfway through, and because the DELETE had already committed the
     // board was left empty.
@@ -1755,7 +1777,7 @@ app.post("/api/kanban/state", async (req: Request, res: Response) => {
       [
         { sql: "DELETE FROM kanban_tasks", args: [] },
         ...deduped.map((app: any) => ({
-          sql: "INSERT OR REPLACE INTO kanban_tasks (id, columnId, company, jobTitle, salary, location, createdAt, updatedAt, matchScore, jobDescription, coldEmail) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          sql: "INSERT OR REPLACE INTO kanban_tasks (id, columnId, company, jobTitle, salary, location, createdAt, updatedAt, matchScore, jobDescription, coldEmail, isSample) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
           args: [
             app.id,
             app.column,
@@ -1767,7 +1789,8 @@ app.post("/api/kanban/state", async (req: Request, res: Response) => {
             app.updatedAt || new Date().toISOString(),
             app.matchScore || 0,
             app.jobDescription || null,
-            app.coldEmail || null
+            app.coldEmail || null,
+            app.isSample ? 1 : 0
           ]
         }))
       ],
