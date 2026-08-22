@@ -1251,6 +1251,14 @@ app.post("/api/interview/evaluate-answer", async (req: Request, res: Response) =
   try {
     const { question, userAnswer, techTopic, expectedPoints } = req.body;
     const apiKey = process.env.GEMINI_API_KEY;
+    const points: string[] = Array.isArray(expectedPoints) ? expectedPoints : [];
+
+    // Only promise the caller a checklist when one is actually being sent.
+    // The synthesizer's practice drill has no per-question rubric, so pointing
+    // it at "the points below" left the panel promising something not there.
+    const selfCheck = points.length
+      ? " In the meantime, check your answer against the points below yourself."
+      : "";
 
     // An answer this short carries nothing to assess. Returning a number here
     // would be inventing one.
@@ -1258,7 +1266,7 @@ app.post("/api/interview/evaluate-answer", async (req: Request, res: Response) =
       return res.json({
         scored: false,
         reason: "That answer is too short to assess. Talk through the situation, what you did, and the result.",
-        expectedPoints: Array.isArray(expectedPoints) ? expectedPoints : []
+        expectedPoints: points
       });
     }
 
@@ -1272,9 +1280,9 @@ app.post("/api/interview/evaluate-answer", async (req: Request, res: Response) =
         isDeterministicFallback: true,
         fallbackReason: "No inference engine is configured, so this answer was not assessed.",
         reason:
-          "Set GEMINI_API_KEY, or point LOCAL_LLM_ENDPOINT at a local model, to have answers assessed. " +
-          "In the meantime, check your answer against the points below yourself.",
-        expectedPoints: Array.isArray(expectedPoints) ? expectedPoints : []
+          "Set GEMINI_API_KEY, or point LOCAL_LLM_ENDPOINT at a local model, to have answers assessed." +
+          selfCheck,
+        expectedPoints: points
       });
     }
 
