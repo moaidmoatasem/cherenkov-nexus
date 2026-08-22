@@ -89,6 +89,11 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
   // Listen to Server-Sent Events (SSE) for live xAPI updates
   useEffect(() => {
     const evtSource = new EventSource("/api/webhooks/xapi/stream");
+
+    // The badge above reports this, rather than asserting "LISTENER ACTIVE"
+    // whether or not anything is listening.
+    evtSource.onopen = () => setListenerOpen(true);
+    evtSource.onerror = () => setListenerOpen(false);
     
     evtSource.onmessage = (event) => {
       try {
@@ -121,7 +126,10 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
       }
     };
     
-    return () => evtSource.close();
+    return () => {
+      setListenerOpen(false);
+      evtSource.close();
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -298,10 +306,12 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
   };
 
   const [isSimulatingWebhook, setIsSimulatingWebhook] = useState(false);
-  const [webhookLog, setWebhookLog] = useState<{ time: string; event: string; status: string }[]>([
-    { time: '18:42:10', event: 'POST /api/webhooks/xapi (k6 Performance Course)', status: '200 OK - Synced' },
-    { time: '17:15:04', event: 'POST /api/webhooks/xapi (CodeQL AST Certification)', status: '200 OK - Synced' }
-  ]);
+  /** Whether the SSE stream is currently connected. */
+  const [listenerOpen, setListenerOpen] = useState(false);
+  // Starts empty. This used to be seeded with two deliveries at 18:42:10 and
+  // 17:15:04, both "200 OK - Synced", presented as recent activity — statements
+  // that were never received.
+  const [webhookLog, setWebhookLog] = useState<{ time: string; event: string; status: string }[]>([]);
 
   const handleSimulateWebhook = async () => {
     setIsSimulatingWebhook(true);
@@ -452,9 +462,16 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
                 <h3 className="text-base font-bold text-ink tracking-tight">
                   Continuous xAPI Learning Sync Webhook
                 </h3>
-                <span className="px-2 py-0.5 text-2xs font-mono font-bold bg-caution-soft text-caution-ink border border-caution-line rounded-full flex items-center gap-1">
-                  <Radio className="w-2.5 h-2.5 text-caution-ink animate-ping" />
-                  LISTENER ACTIVE
+                <span
+                  data-testid="xapi-listener-state"
+                  className={`px-2 py-0.5 text-2xs font-mono font-bold border rounded-full flex items-center gap-1 ${
+                    listenerOpen
+                      ? 'bg-positive-soft text-positive-ink border-positive-line'
+                      : 'bg-fill text-ink-muted border-line'
+                  }`}
+                >
+                  <Radio className={`w-2.5 h-2.5 ${listenerOpen ? 'animate-ping' : ''}`} />
+                  {listenerOpen ? 'LISTENER CONNECTED' : 'LISTENER OFFLINE'}
                 </span>
               </div>
               <p className="text-sm text-ink-muted mt-1 max-w-2xl leading-relaxed">
@@ -466,8 +483,12 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             <button
               onClick={() => {
-                navigator.clipboard.writeText('https://nexus.cherenkov.internal/api/webhooks/xapi');
-                onToast('info', 'Webhook URL Copied', 'Endpoint URL copied to clipboard.');
+                // The address this app is actually served from. It used to copy
+                // https://nexus.cherenkov.internal/…, a host that does not
+                // exist — pasted into an LMS it would never deliver anything.
+                const endpoint = `${window.location.origin}/api/webhooks/xapi`;
+                navigator.clipboard.writeText(endpoint);
+                onToast('info', 'Webhook URL copied', endpoint);
               }}
               className="px-3.5 py-2 rounded-control bg-fill hover:bg-fill-strong border border-line text-xs text-ink-muted hover:text-ink transition-all flex items-center gap-1.5 cursor-pointer"
             >
@@ -507,8 +528,8 @@ export const LearningSync: React.FC<LearningSyncProps> = ({
                 </div>
               </div>
             </div>
-            <span className="text-2xs font-mono text-positive-ink bg-positive-soft px-2 py-0.5 rounded border border-positive-line">
-              TLS 1.3
+            <span className="text-2xs font-mono text-ink-muted bg-fill px-2 py-0.5 rounded border border-line">
+              {typeof window !== 'undefined' && window.location.protocol === 'https:' ? 'HTTPS' : 'HTTP'}
             </span>
           </div>
 

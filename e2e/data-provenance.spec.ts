@@ -148,4 +148,71 @@ test.describe('Data provenance: no invented figures', () => {
       timeout: 15000
     });
   });
+
+  test('Telemetry panel reports what the server measured', async ({ page, request }) => {
+    const telemetry = await request.get('/api/telemetry').then((r) => r.json());
+
+    // The register is the figure the panel got wrong: it printed a fixed
+    // 114,820 labelled "Live Home Office DB" against a table of ~127k rows.
+    expect(telemetry.sponsorsIndexed.value).toBeGreaterThan(100000);
+
+    await page.locator('button[aria-label="System Telemetry & Scraper Health"]').first().click();
+    await expect(page.getByTestId('telemetry-sponsors')).toHaveText(
+      telemetry.sponsorsIndexed.value.toLocaleString('en-US'),
+      { timeout: 15000 }
+    );
+    await expect(page.getByTestId('telemetry-tools')).toHaveText(String(telemetry.mcp.toolsExposed));
+
+    // Versions are resolved from package.json, not typed into the markup.
+    const deps = page.getByTestId('telemetry-dependencies');
+    await expect(deps).toContainText(`react ${telemetry.dependencies.react}`);
+
+    // Every figure the panel used to invent.
+    for (const invented of ['99.8%', '412 ms', '114,820', 'ALL SYSTEMS OPERATIONAL']) {
+      await expect(page.locator(`text=${invented}`)).toHaveCount(0);
+    }
+    // …and the status pills that reported health nothing had probed.
+    const body = (await page.locator('body').innerText()).toLowerCase();
+    for (const claim of ['resonating', 'gemini 2.5 flash', 'react 18']) {
+      expect(body, `"${claim}" still shown`).not.toContain(claim);
+    }
+  });
+
+  test('The xAPI webhook button copies an address that resolves', async ({
+    page,
+    context,
+    baseURL
+  }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+
+    await page.locator('button:has-text("Learning Sync")').first().click({ force: true });
+    await expect(page.locator('text=Continuous xAPI Learning Sync Webhook').first()).toBeVisible({
+      timeout: 15000
+    });
+
+    // The badge follows the SSE connection. It reported "LISTENER ACTIVE"
+    // unconditionally before — and the stream never opened at all, because the
+    // endpoint withheld its response head until the first event was emitted.
+    await expect(page.getByTestId('xapi-listener-state')).toHaveText('LISTENER CONNECTED', {
+      timeout: 15000
+    });
+
+    await page.locator('button:has-text("Copy Endpoint")').first().click();
+    const copied = await page.evaluate(() => navigator.clipboard.readText());
+
+    // It used to copy https://nexus.cherenkov.internal/api/webhooks/xapi — a
+    // host that does not exist, so an LMS pointed at it delivered nothing.
+    expect(copied).not.toContain('cherenkov.internal');
+    expect(copied).toBe(`${baseURL}/api/webhooks/xapi`);
+
+    // And the address it hands out actually accepts a statement.
+    const posted = await page.request.post(copied, {
+      data: {
+        actor: { name: 'E2E Probe' },
+        verb: { id: 'http://adlnet.gov/expapi/verbs/completed' },
+        object: { definition: { name: { 'en-US': 'Clipboard endpoint probe' } } }
+      }
+    });
+    expect(posted.ok()).toBe(true);
+  });
 });
