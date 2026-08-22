@@ -199,7 +199,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <TrendingUp className="w-3.5 h-3.5 text-info-ink shrink-0" />
             <span className={sectionLabelClass}>Live Analytics</span>
           </span>
-          <Segmented
+          <Segmented<'pipeline' | 'learning'>
             className="w-full"
             aria-label="Analytics view"
             value={chartView}

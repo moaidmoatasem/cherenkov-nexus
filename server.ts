@@ -1701,7 +1701,7 @@ app.post("/api/onboarding/test-greenhouse-live", async (req: Request, res: Respo
 
     return res.json({
       status: job.source ? "SYNTHESIS_COMPLETE" : "SYNTHESIS_FALLBACK",
-      live: typeof job.source !== "undefined" && job.live !== false,
+      live: typeof job.source !== "undefined",
       jobUrl,
       company,
       title,
