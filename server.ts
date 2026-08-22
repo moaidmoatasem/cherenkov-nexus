@@ -8,6 +8,7 @@ import { fetchAtsJob } from "./src/server/integrations/atsConnector";
 import { executeServerlessScrape } from "./server/mcp/playwrightScraper";
 import { createOracleRouter } from "./src/oracle/routes";
 import { checkVisaSponsorship } from "./src/server/sponsorCheck";
+import { collectTelemetry } from "./src/server/telemetry";
 
 
 import path from "path";
@@ -72,6 +73,24 @@ app.get("/api/health", (_req: Request, res: Response) => {
     geminiConfigured: Boolean(process.env.GEMINI_API_KEY),
     localLlmConfigured: Boolean(process.env.LOCAL_LLM_ENDPOINT)
   });
+});
+
+// What the system can actually report about itself. Everything here is read
+// from the running process, counted in SQLite, or resolved from package.json —
+// the telemetry modal used to render four figures nothing measured.
+app.get("/api/telemetry", async (_req: Request, res: Response) => {
+  try {
+    await ensureMcp();
+    const snapshot = await collectTelemetry({
+      db: getDb(),
+      mcp: { ready: mcpHost.connected(), servers: mcpHost.status() },
+      port: PORT,
+    });
+    return res.json(snapshot);
+  } catch (error: any) {
+    console.error("Telemetry collection failed:", error);
+    return res.status(500).json({ error: error?.message || "Failed to collect telemetry" });
+  }
 });
 
 // MCP 2026-07-28 Standard Manifest Endpoint (Stateless Discovery with ttlMs)
@@ -273,6 +292,13 @@ app.get("/api/webhooks/xapi/stream", (req: Request, res: Response) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
+  // Without an explicit flush, Express holds the response head until the first
+  // write — and the first write only happens when an xAPI statement arrives.
+  // The browser's EventSource therefore never fired `onopen`, and a client that
+  // connected before an event simply missed it. `curl -N` on this route
+  // returned no status line at all until something was posted.
+  res.flushHeaders();
+  res.write(": connected\n\n");
 
   const listener = (data: any) => {
     res.write(`data: ${JSON.stringify(data)}\n\n`);
@@ -280,7 +306,12 @@ app.get("/api/webhooks/xapi/stream", (req: Request, res: Response) => {
 
   xapiEvents.on("completion", listener);
 
+  // Idle streams get dropped by proxies; a comment costs nothing and is
+  // ignored by EventSource.
+  const heartbeat = setInterval(() => res.write(": ping\n\n"), 25000);
+
   req.on("close", () => {
+    clearInterval(heartbeat);
     xapiEvents.off("completion", listener);
   });
 });
