@@ -10,12 +10,13 @@ Welcome to the centralized engineering and operational documentation repository 
 mindmap
   root((CHERENKOV NEXUS))
     Architecture & Design
+      [Sponsorship Oracle](ORACLE.md)
       [Architecture Deep Dive](ARCHITECTURE.md)
       [System Design & Invariants](SYSTEM_DESIGN.md)
       [Design System & UI Tokens](DESIGN_SYSTEM.md)
       [Code Standards & Clean Arch](CODE_STANDARDS.md)
     Agentic & AI Infrastructure
-      [LangGraph Agent Swarm](AGENTS.md)
+      [Agent Roles & Orchestration](AGENTS.md)
       [MCP Spec & AI Engine](AI_ENGINE_MCP.md)
       [External Integrations](INTEGRATIONS.md)
     Verification & Testing
@@ -38,7 +39,13 @@ mindmap
 
 ## 📑 Core Documentation Categories
 
-### 1. 🏛️ Architecture & System Design
+### 1. ⚖️ The Sponsorship Oracle
+
+| Document | Focus | Audience |
+|---|---|---|
+| ⚖️ [ORACLE.md](ORACLE.md) | The rule ledger, binding-constraint semantics, PROVISIONAL verdicts, content-addressed snapshots, and the deliberately narrow V1 scope (UK Skilled Worker only) | Everyone — start here |
+
+### 2. 🏛️ Architecture & System Design
 | Document | Description | Target Audience |
 |---|---|---|
 | 📐 [ARCHITECTURE.md](ARCHITECTURE.md) | Multi-tiered decoupled model, Control vs Data vs Execution planes, Edge DB layer | Architects & Engineers |
@@ -46,20 +53,20 @@ mindmap
 | 🎨 [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) | Dark-mode IDE aesthetic, Cmd+K palette, Split-Screen Generative UI, Theme Aura | Frontend & UX Designers |
 | 🧹 [CODE_STANDARDS.md](CODE_STANDARDS.md) | Clean Architecture conventions, strict TypeScript rules, and state management patterns | All Contributors |
 
-### 2. 🤖 Agentic Swarm & AI Architecture
+### 3. 🤖 Agentic Swarm & AI Architecture
 | Document | Description | Target Audience |
 |---|---|---|
-| 🐝 [AGENTS.md](AGENTS.md) | LangGraph state machines, Scout, Synthesizer, Visa Validator, LinkedIn Scout, and Audio Interviewer | AI & Agent Engineers |
+| 🐝 [AGENTS.md](AGENTS.md) | Agent roles — Scout, Synthesizer, Visa Validator, LinkedIn Scout, Audio Interviewer — and how the Express gateway orchestrates them | AI & Agent Engineers |
 | 🧠 [AI_ENGINE_MCP.md](AI_ENGINE_MCP.md) | Model Context Protocol 2026-07-28 stateless spec, JSON Schema 2020-12, and WebLLM local inference | AI & Infrastructure |
 | 🔌 [INTEGRATIONS.md](INTEGRATIONS.md) | Deep dive into 7 external systems (UK Home Office Visa Register, xAPI LRS, Playwright Stealth, LibSQL) | Integration Engineers |
 
-### 3. 🧪 Testing, Quality Assurance & Verification
+### 4. 🧪 Testing, Quality Assurance & Verification
 | Document | Description | Target Audience |
 |---|---|---|
 | 🔬 [INTEGRATION_TESTING.md](INTEGRATION_TESTING.md) | API contract tests, LibSQL Edge DB tests, Webhook event ingestion, and LLM fallback verification | QA & Automation |
 | 🎭 [E2E_TESTING.md](E2E_TESTING.md) | Comprehensive Playwright test suite, CLI testing, UI stability fixtures, and console assertions | QA & CI/CD Engineers |
 
-### 4. 🗺️ Project Management, Execution & Handover
+### 5. 🗺️ Project Management, Execution & Handover
 | Document | Description | Target Audience |
 |---|---|---|
 | 🚀 [QUICKSTART.md](QUICKSTART.md) | 3-minute zero-friction setup guide for PowerShell and Unix environments | New Developers |
@@ -68,7 +75,7 @@ mindmap
 | 📝 [TASKS.md](TASKS.md) | Granular task catalog with status, priorities, dependencies, and acceptance criteria | Developers & Agents |
 | 🤝 [HANDOVER.md](HANDOVER.md) | Agent-to-Agent continuity protocol, current state, active commands, and token preservation | AI Pair Programmers |
 
-### 5. 🎯 Product Strategy & Governance
+### 6. 🎯 Product Strategy & Governance
 | Document | Description | Target Audience |
 |---|---|---|
 | ✨ [FEATURES.md](FEATURES.md) | Exhaustive 12-module feature matrix and UX workflow breakdown | Product Managers & Users |

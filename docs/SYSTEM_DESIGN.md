@@ -2,7 +2,7 @@
 
 ## Execution Pipeline (Sequence)
 1. **Trigger:** User enters URL in Command Palette (`Cmd + K` -> `> New App`).
-2. **Ingestion:** API Gateway triggers LangGraph. Scout Agent utilizes stealth Chromium to bypass ATS protections.
+2. **Ingestion:** The Express gateway invokes the Scout, which uses stealth Chromium to bypass ATS protections.
 3. **Telemetry Check:** Invariant check validates that the scraped text contains standard semantic job markers (e.g., "Responsibilities", "Requirements"). If absent, execution halts, protecting the LLM context window from garbage data.
 4. **Validation:** Visa sub-routine executes deterministic LibSQL/SQLite LIKE matching against the cached sponsor registry (with an in-memory array fallback), rather than a probabilistic fuzzy library.
 5. **Synthesis:** Google Gemini generates the structured JSON payload.
