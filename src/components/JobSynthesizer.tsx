@@ -2076,7 +2076,11 @@ ${qa.answer}
             <InterviewSandbox
               isOpen={isVoiceInterviewOpen}
               onClose={() => setIsVoiceInterviewOpen(false)}
-              techStack={synthesizedData?.required_skills || masterProfile.tech_stack}
+              techStack={
+                synthesizedData?.extractedRequirements?.length
+                  ? synthesizedData.extractedRequirements
+                  : masterProfile.tech_stack
+              }
               targetRole={jobTitle}
               companyName={companyName}
               masterProfile={masterProfile}
