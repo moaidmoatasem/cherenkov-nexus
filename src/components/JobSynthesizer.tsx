@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { MasterProfile, SynthesizedResult, ApplicationCard, RoutingConfig } from '../types';
+import { MasterProfile, SynthesizedResult, ApplicationCard, RoutingConfig, AnswerEvaluation } from '../types';
 import { INITIAL_ROUTING_CONFIG, SAMPLE_JOBS, isProfileConfigured } from '../data/initialData';
 import { useAutoSave } from '../hooks/useAutoSave';
 import { useWebLLM } from '../hooks/useWebLLM';
@@ -277,12 +277,7 @@ export const JobSynthesizer: React.FC<JobSynthesizerProps> = ({
   const [activeQuestionIdx, setActiveQuestionIdx] = useState(0);
   const [userPracticeAnswer, setUserPracticeAnswer] = useState('');
   const [isEvaluatingPractice, setIsEvaluatingPractice] = useState(false);
-  const [practiceFeedback, setPracticeFeedback] = useState<{
-    score: number;
-    strengths: string[];
-    improvement: string;
-    talkingPoint: string;
-  } | null>(null);
+  const [practiceFeedback, setPracticeFeedback] = useState<AnswerEvaluation | null>(null);
 
   // Futuristic Web Audio Synthesizer Chime
   const playSynthSound = (type: 'success' | 'click' | 'powerup') => {
@@ -592,8 +587,15 @@ ${candidateEmail}`;
     }
   };
 
-  // Practice Mock Interview Evaluation Simulator
-  const handleEvaluatePractice = () => {
+  // Practice Mock Interview Evaluation
+  //
+  // This used to return `Math.random() * 8 + 91` with a fixed list of strengths,
+  // without ever reading the answer — so typing anything at all scored in the
+  // nineties and was praised for "quantification of impact". Someone preparing
+  // for a real interview was being told they were ready on the basis of a random
+  // number. It now goes through the same evaluator the voice sandbox uses, which
+  // declines to score rather than guess when no engine is configured.
+  const handleEvaluatePractice = async () => {
     if (!userPracticeAnswer.trim()) {
       onToast('error', 'Answer Required', 'Please enter your practice answer before evaluating.');
       return;
@@ -602,21 +604,46 @@ ${candidateEmail}`;
     setIsEvaluatingPractice(true);
     playSynthSound('click');
 
-    setTimeout(() => {
-      setIsEvaluatingPractice(false);
-      playSynthSound('success');
-      setPracticeFeedback({
-        score: Math.floor(Math.random() * 8) + 91, // 91-98%
-        strengths: [
-          'Strong quantification of impact (velocity & defect reduction)',
-          'Clear STAR framework structure (Situation -> Task -> Action -> Result)',
-          'Seamless integration of Playwright & k6 tooling references'
-        ],
-        improvement: 'Add a specific mention of CI/CD shard concurrency or CodeQL security gates for maximum recruiter impact.',
-        talkingPoint: `When speaking to ${companyName}, emphasize how your cherenkov-qa framework saved engineering hours and accelerated deployment cycles.`
+    try {
+      const res = await fetch('/api/interview/evaluate-answer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question: synthesizedData?.ats_answers[activeQuestionIdx]?.question ?? '',
+          userAnswer: userPracticeAnswer,
+          techTopic: jobTitle,
+          // ATSAnswer carries no rubric points of its own. The role's extracted
+          // requirements are the honest stand-in where a synthesis provides
+          // them; today's deterministic path does not, and the evaluator drops
+          // its "check against the points below" line when the list is empty
+          // rather than pointing at nothing.
+          expectedPoints: synthesizedData?.extractedRequirements ?? []
+        })
       });
-      onToast('success', 'Practice Evaluated', 'STAR response score and tactical feedback generated!');
-    }, 800);
+
+      const evaluation: AnswerEvaluation = res.ok
+        ? await res.json()
+        : {
+            scored: false,
+            reason: 'The evaluator could not be reached, so this answer was not assessed.',
+            expectedPoints: synthesizedData?.extractedRequirements ?? []
+          };
+
+      setPracticeFeedback(evaluation);
+
+      if (typeof evaluation.score === 'number') {
+        playSynthSound('success');
+        onToast('success', 'Practice Evaluated', `Scored ${evaluation.score}/100.`);
+      } else {
+        onToast('info', 'Not Assessed', evaluation.reason ?? 'This answer was not assessed.');
+      }
+    } catch (err) {
+      console.error('Practice evaluation error:', err);
+      setPracticeFeedback(null);
+      onToast('error', 'Evaluation Failed', 'Failed to score answer. Please try again.');
+    } finally {
+      setIsEvaluatingPractice(false);
+    }
   };
 
   // Generate full markdown dossier for export
@@ -1759,7 +1786,7 @@ ${qa.answer}
                       }}
                       className={`px-3 py-1.5 rounded-control text-xs font-bold transition-all shrink-0 cursor-pointer ${
                         activeQuestionIdx === i
-                          ? 'bg-positive text-ink'
+                          ? 'bg-positive-soft border border-positive-line text-positive-ink'
                           : 'bg-fill hover:bg-fill-strong text-ink-muted'
                       }`}
                     >
@@ -1808,7 +1835,7 @@ ${qa.answer}
                   <button
                     onClick={handleEvaluatePractice}
                     disabled={isEvaluatingPractice || !userPracticeAnswer.trim()}
-                    className="px-5 py-2.5 text-xs font-extrabold text-ink bg-positive hover:opacity-90 rounded-control transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+                    className="px-5 py-2.5 text-xs font-extrabold text-positive-ink bg-positive-soft border border-positive-line hover:bg-positive/20 rounded-control transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
                   >
                     {isEvaluatingPractice ? (
                       <>
@@ -1817,44 +1844,80 @@ ${qa.answer}
                       </>
                     ) : (
                       <>
-                        <Play className="w-3.5 h-3.5 text-ink" />
+                        <Play className="w-3.5 h-3.5 text-positive-ink" />
                         <span>Evaluate STAR Response</span>
                       </>
                     )}
                   </button>
                 </div>
 
-                {/* Evaluation Feedback Panel */}
-                {practiceFeedback && (
-                  <div className="p-4 rounded-card bg-positive border border-positive-line space-y-3 animate-fade-in">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4 text-positive-ink" />
-                        <span className="text-xs font-bold text-ink font-mono">
-                          STAR Score: {practiceFeedback.score}%
-                        </span>
+                {/* Not assessed — shown instead of a score when no engine ran. */}
+                {practiceFeedback && typeof practiceFeedback.score !== 'number' && (
+                  <div
+                    data-testid="practice-not-assessed"
+                    className="p-4 rounded-card bg-caution-soft border border-caution-line space-y-3 animate-fade-in"
+                  >
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="w-4 h-4 text-caution-ink shrink-0 mt-0.5" />
+                      <div className="min-w-0 space-y-1">
+                        <h4 className="text-xs font-bold text-caution-ink">Answer not assessed</h4>
+                        <p className="text-xs text-ink-muted leading-relaxed">
+                          {practiceFeedback.reason ?? 'This answer was not assessed.'}
+                        </p>
                       </div>
-                      <span className="text-2xs font-mono px-2 py-0.5 bg-positive-soft text-positive-ink font-bold rounded">
-                        RECRUITER READY
+                    </div>
+
+                    {(practiceFeedback.expectedPoints?.length ?? 0) > 0 && (
+                      <div className="p-2.5 rounded-control bg-sunken border border-line space-y-1.5">
+                        <span className="text-2xs font-mono text-ink-muted uppercase tracking-wider block font-bold">
+                          Check your answer against these points:
+                        </span>
+                        <ul className="space-y-1">
+                          {practiceFeedback.expectedPoints?.map((point) => (
+                            <li key={point} className="text-xs text-ink-muted leading-relaxed flex gap-2">
+                              <span className="text-caution-ink shrink-0">·</span>
+                              <span>{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Evaluation Feedback Panel — only when an engine actually scored. */}
+                {practiceFeedback && typeof practiceFeedback.score === 'number' && (
+                  <div
+                    data-testid="practice-scored"
+                    className="p-4 rounded-card bg-surface border border-positive-line space-y-3 animate-fade-in"
+                  >
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-positive-ink" />
+                      <span className="text-xs font-bold text-ink font-mono">
+                        STAR Score: {practiceFeedback.score} / 100
                       </span>
                     </div>
 
-                    <div className="space-y-1.5 text-xs">
-                      <div className="text-xs font-bold text-ink-muted font-mono">Key Strengths:</div>
-                      <ul className="space-y-1">
-                        {practiceFeedback.strengths.map((s, i) => (
-                          <li key={i} className="text-ink-muted flex items-center gap-1.5 text-xs">
-                            <span className="w-1.5 h-1.5 rounded-full bg-positive" />
-                            <span>{s}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                    {practiceFeedback.technicalAccuracy && (
+                      <div className="space-y-1 text-xs">
+                        <div className="text-xs font-bold text-ink-muted font-mono">Technical Accuracy:</div>
+                        <p className="text-ink-muted leading-relaxed">{practiceFeedback.technicalAccuracy}</p>
+                      </div>
+                    )}
 
-                    <div className="p-2.5 rounded-control bg-sunken border border-line text-xs text-ink-muted">
-                      <strong className="text-caution-ink font-mono block mb-0.5">Tactical Coaching Tip:</strong>
-                      {practiceFeedback.improvement}
-                    </div>
+                    {practiceFeedback.starStructure && (
+                      <div className="space-y-1 text-xs">
+                        <div className="text-xs font-bold text-ink-muted font-mono">STAR Structure:</div>
+                        <p className="text-ink-muted leading-relaxed">{practiceFeedback.starStructure}</p>
+                      </div>
+                    )}
+
+                    {practiceFeedback.improvements && (
+                      <div className="p-2.5 rounded-control bg-sunken border border-line text-xs text-ink-muted">
+                        <strong className="text-caution-ink font-mono block mb-0.5">Tactical Coaching Tip:</strong>
+                        {practiceFeedback.improvements}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

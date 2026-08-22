@@ -145,6 +145,27 @@ export interface LinkedInScoutResult {
   scoutNotes?: string;
 }
 
+/**
+ * The outcome of asking an engine to assess an answer. A score is present only
+ * when something actually assessed it; otherwise `scored` is false and `reason`
+ * says why. Both interview surfaces render off this, so neither can quietly
+ * fall back to inventing a number.
+ */
+export interface AnswerEvaluation {
+  /** Present only when an engine actually assessed the answer. */
+  score?: number; // 1-100
+  technicalAccuracy?: string;
+  starStructure?: string;
+  improvements?: string;
+  /** False when no assessment was made; `reason` says why. */
+  scored?: boolean;
+  reason?: string;
+  expectedPoints?: string[];
+  isDeterministicFallback?: boolean;
+  fallbackReason?: string;
+  inferenceEngine?: string;
+}
+
 export interface InterviewQuestionItem {
   id: string;
   question: string;
@@ -153,20 +174,7 @@ export interface InterviewQuestionItem {
   expectedStarPoints: string[];
   idealAnswer: string;
   userAnswer?: string;
-  feedback?: {
-    /** Present only when an engine actually assessed the answer. */
-    score?: number; // 1-100
-    technicalAccuracy?: string;
-    starStructure?: string;
-    improvements?: string;
-    /** False when no assessment was made; `reason` says why. */
-    scored?: boolean;
-    reason?: string;
-    expectedPoints?: string[];
-    isDeterministicFallback?: boolean;
-    fallbackReason?: string;
-    inferenceEngine?: string;
-  };
+  feedback?: AnswerEvaluation;
 }
 
 export interface TelemetryMetrics {
