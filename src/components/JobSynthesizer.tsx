@@ -431,6 +431,11 @@ export const JobSynthesizer: React.FC<JobSynthesizerProps> = ({
             jobTitle: jobTitle.trim() || 'Senior QA Role',
             provider: activeRouting.mode === 'local_only' ? 'local' : activeRouting.mode === 'cloud_only' ? 'gemini' : 'hybrid',
             useLocalModel: activeRouting.mode === 'local_only',
+            // The server routes PII to local inference when this is set. It was
+            // never sent, so that route was dead code and hybrid mode always
+            // resolved to cloud. In hybrid, PII protection is what decides.
+            containsSensitiveData:
+              activeRouting.mode !== 'cloud_only' && activeRouting.piiProtectionEnabled,
             localEndpoint: activeRouting.localEndpoint,
             localModel: activeRouting.localModel
           })

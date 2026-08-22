@@ -22,6 +22,7 @@ import { ToastContainer, ToastMessage, ToastFn } from './components/Toast';
 import { CommandPalette } from './components/CommandPalette';
 import { TelemetryModal } from './components/TelemetryModal';
 import { SystemTour } from './components/SystemTour';
+import { isSealed } from './lib/vault';
 import { OracleWorkbench } from './components/OracleWorkbench';
 import { WORKSPACES } from './navigation';
 import { cn, Modal } from './components/ui';
@@ -35,6 +36,9 @@ export default function App() {
       return EMPTY_MASTER_PROFILE;
     }
   });
+
+  // True while the profile exists only as ciphertext in this browser.
+  const [isVaultSealed, setIsVaultSealed] = useState(() => isSealed());
 
   const [applications, setApplications] = useState<ApplicationCard[]>(() => {
     try {
@@ -88,14 +92,19 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Persist masterProfile to localStorage
+  // Persist masterProfile to localStorage — unless the vault is sealed.
+  //
+  // Writing the plaintext back while a sealed envelope exists would undo the
+  // encryption on the next state change, which is exactly the kind of quiet
+  // contradiction the vault is meant to stop making.
   useEffect(() => {
+    if (isVaultSealed) return;
     try {
       localStorage.setItem('cherenkov_master_profile', JSON.stringify(masterProfile));
     } catch (e) {
       console.error('Failed to persist masterProfile to localStorage:', e);
     }
-  }, [masterProfile]);
+  }, [masterProfile, isVaultSealed]);
 
   // Persist applications to localStorage
   useEffect(() => {
@@ -524,6 +533,11 @@ export default function App() {
         onClose={() => setIsIdentityVaultOpen(false)}
         masterProfile={masterProfile}
         onToast={addToast}
+        onVaultSealed={() => setIsVaultSealed(true)}
+        onVaultOpened={(profile) => {
+          setIsVaultSealed(false);
+          setMasterProfile(profile);
+        }}
       />
 
       {/* Onboarding & 1-Click Deploy Modal */}

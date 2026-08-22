@@ -7,6 +7,7 @@ import { analyzeRepo } from "./src/server/githubAnalysis";
 import { fetchAtsJob } from "./src/server/integrations/atsConnector";
 import { executeServerlessScrape } from "./server/mcp/playwrightScraper";
 import { createOracleRouter } from "./src/oracle/routes";
+import { shouldRouteLocal, callLocalModel, stripJsonFence, isLocalFailure } from "./src/server/localInference";
 import { checkVisaSponsorship } from "./src/server/sponsorCheck";
 import { collectTelemetry } from "./src/server/telemetry";
 
@@ -497,7 +498,8 @@ app.post("/api/synthesize", async (req: Request, res: Response) => {
     // Determine company and visa sponsor check
     const visaCheck = await checkVisaSponsorship(companyName || "", jobDescription);
 
-    const isLocalRequested = provider === "local" || useLocalModel || (provider === "hybrid" && containsSensitiveData) || containsSensitiveData;
+    // Zero-trust routing decision. Shared with the tests that pin it open.
+    const isLocalRequested = shouldRouteLocal({ provider, useLocalModel, containsSensitiveData });
 
     const candName = masterProfile?.name || "the candidate";
     const candTitle = masterProfile?.title || jobTitle || "Senior Quality Assurance Lead";
@@ -511,58 +513,47 @@ app.post("/api/synthesize", async (req: Request, res: Response) => {
       try {
         console.log(`🔒 [Local LLM Router] Routing synthesis to local endpoint (${localEndpoint}) using model: ${localModelName}`);
         
-        const targetUrl = localEndpoint.includes("/chat/completions")
-          ? localEndpoint
-          : `${localEndpoint.replace(/\/$/, "")}/chat/completions`;
-
-        const localResponse = await fetch(targetUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(process.env.LOCAL_LLM_API_KEY ? { "Authorization": `Bearer ${process.env.LOCAL_LLM_API_KEY}` } : {})
-          },
-          body: JSON.stringify({
-            model: localModelName,
-            messages: [
-              {
-                role: "system",
-                content: `You are an elite Technical Career Strategist. Return a valid JSON object ONLY (no markdown, no backticks) aligning candidate ${candName} (${candTitle}) with the target job description. The JSON MUST have keys:
+        const local = await callLocalModel({
+          endpoint: localEndpoint,
+          model: localModelName,
+          apiKey: process.env.LOCAL_LLM_API_KEY,
+          systemPrompt: `You are an elite Technical Career Strategist. Return a valid JSON object ONLY (no markdown, no backticks) aligning candidate ${candName} (${candTitle}) with the target job description. The JSON MUST have keys:
 "visa_sponsorship_likely": boolean,
 "tailored_summary": string (3 crisp sentences emphasizing relevant architecture, core stack, and leadership),
 "identified_skill_gaps": string[],
 "upskilling_recommendation": string,
 "cold_email": string (high-conversion pitch),
-"ats_answers": array of { "question": string, "answer": string } with 4 STAR answers highlighting ${candName}'s background.`
-              },
-              {
-                role: "user",
-                content: `Master Profile: ${JSON.stringify(masterProfile)}\n\nCompany: ${companyName || 'Target Company'}\nJob Title: ${jobTitle || candTitle}\nJob Description:\n${jobDescription.slice(0, 8000)}`
-              }
-            ],
-            temperature: 0.2,
-            stream: false
-          })
+"ats_answers": array of { "question": string, "answer": string } with 4 STAR answers highlighting ${candName}'s background.`,
+          userPrompt: `Master Profile: ${JSON.stringify(masterProfile)}\n\nCompany: ${companyName || 'Target Company'}\nJob Title: ${jobTitle || candTitle}\nJob Description:\n${jobDescription.slice(0, 8000)}`
         });
 
-        if (localResponse.ok) {
-          const localData: any = await localResponse.json();
-          let rawText = localData.choices?.[0]?.message?.content || "{}";
-          rawText = rawText.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/, "").trim();
-          
+        // Fail closed. Every failure mode — unreachable host, non-2xx status,
+        // unparseable body, empty completion — lands here and returns a local
+        // scaffold. None of them may continue into the cloud branch below.
+        if (isLocalFailure(local)) {
+          throw new Error(local.reason);
+        }
+
+        {
+          const rawText = stripJsonFence(local.content);
+
           let parsedContent: any = {};
           try {
             parsedContent = JSON.parse(rawText);
           } catch {
             parsedContent = {
               visa_sponsorship_likely: visaCheck.isLicensedSponsor || visaCheck.postingClaimsSponsorship,
-              tailored_summary: rawText.slice(0, 350) || "Senior QA Lead specializing in resilient Playwright automation, k6 load testing, and local AI quality frameworks.",
+              tailored_summary:
+                rawText.slice(0, 350) ||
+                `${candTitle} working primarily with ${candStackText}. The local model returned a response this server could not parse, so this scaffold was assembled from your Master Profile — edit it before sending.`,
               identified_skill_gaps: extractLikelyGaps(jobDescription, masterProfile),
-              upskilling_recommendation: "AWS Cloud DevOps & Distributed Performance Architecture",
+              upskilling_recommendation:
+                "Retry the local model to receive a gap-specific upskilling recommendation.",
               cold_email: `Subject: ${jobTitle || "Application"} - ${candName}\n\nDear ${companyName} Team,\n\nI am writing regarding the ${jobTitle || "open role"} at ${companyName}. My background is in ${candTitle.toLowerCase()}, working primarily with ${candStackText}.\n\n[Draft scaffold — the local model returned no usable response, so this was assembled from your Master Profile rather than generated.]\n\nBest regards,\n${candName}\n${candTitle}\n${candEmail}`,
               ats_answers: [
                 {
-                  question: "Describe your test automation architecture experience.",
-                  answer: "I architected modular Playwright test suites and integrated k6 for distributed load testing, achieving 99.4% CI pass rates and reducing feedback cycles by 65%."
+                  question: "Describe your relevant experience for this role.",
+                  answer: `Draft scaffold from your Master Profile: ${candTitle}, working with ${candStackText}. Replace with a specific, evidenced example — this answer was not generated.`
                 }
               ]
             };
@@ -583,26 +574,23 @@ app.post("/api/synthesize", async (req: Request, res: Response) => {
         console.warn("Local LLM inference unreachable or error, falling back to deterministic local synthesis:", localErr);
         const localFallback = {
           visa_sponsorship_likely: visaCheck.isLicensedSponsor || visaCheck.postingClaimsSponsorship,
-          tailored_summary: `[Local Air-Gapped ${localModelName}] Senior QA Lead with extensive Playwright infrastructure, k6 load testing, and cherenkov-qa framework orchestration. Proven experience implementing local LLM test generators (Qwen, AnythingLLM) and CodeQL static security analysis gates. Fully prepared for UK/EU visa relocation or remote QA leadership.`,
+          tailored_summary: `${candTitle} working primarily with ${candStackText}. The local inference endpoint was unreachable, so this scaffold was assembled from your Master Profile rather than generated — edit it before sending. Nothing was sent to a cloud provider.`,
           identified_skill_gaps: extractLikelyGaps(jobDescription, masterProfile),
-          upskilling_recommendation: "AWS Certified DevOps / Cloud Security Specialty (Air-Gapped Sync)",
+          upskilling_recommendation:
+            "Bring the local endpoint up and retry to receive a gap-specific upskilling recommendation.",
           cold_email: `Subject: ${jobTitle || "Application"}${companyName ? ` - ${companyName}` : ""} - ${candName}\n\nDear ${companyName ? `${companyName} Hiring Team` : "Hiring Manager"},\n\nI am writing regarding the ${jobTitle || "open role"}. My background is in ${candTitle.toLowerCase()}, working primarily with ${candStackText}.\n\n[Draft scaffold — the local model was unreachable, so this was assembled from your Master Profile rather than generated.]\n\nBest regards,\n${candName}\n${candTitle}\n${candEmail}`,
           ats_answers: [
             {
-              question: "Describe your experience with automated test frameworks and QA architecture.",
-              answer: "I designed and deployed the cherenkov-qa framework, implemented modular Playwright suites, and integrated k6 for distributed load testing, achieving 99.4% CI pass rates."
+              question: "Describe your relevant experience for this role.",
+              answer: `Draft scaffold from your Master Profile: ${candTitle}, working with ${candStackText}. Replace with a specific, evidenced example — this answer was not generated.`
             },
             {
-              question: "How do you leverage local AI and LLMs in quality assurance workflows?",
-              answer: "I pioneer zero-trust agentic QA pipelines by integrating air-gapped local LLMs (Qwen 2.5, AnythingLLM) to autonomously synthesize boundary test cases and validate API contracts without external cloud egress."
+              question: "Why are you interested in this position?",
+              answer: `Draft scaffold: state what draws you to ${companyName || "this employer"} specifically — this answer was not generated.`
             },
             {
               question: "What is your work authorization status and relocation availability?",
               answer: `Draft scaffold: currently based in ${candLocation}. State your authorization status and relocation availability here — this answer was not generated.`
-            },
-            {
-              question: "How do you ensure security and performance testing in CI/CD pipelines?",
-              answer: "I embed automated CodeQL static analysis rules into GitHub Actions/GitLab CI pipelines to intercept vulnerabilities at pull-request time, paired with k6 baseline thresholds."
             }
           ]
         };
@@ -611,10 +599,22 @@ app.post("/api/synthesize", async (req: Request, res: Response) => {
           ...localFallback,
           isLicensedSponsor: visaCheck.isLicensedSponsor,
           matchedSponsor: visaCheck.matchedSponsor,
-          inferenceEngine: `Local Offline (${localModelName})`,
+          sponsorSource: visaCheck.sponsorSource,
+          registerAvailable: visaCheck.registerAvailable,
+          postingClaimsSponsorship: visaCheck.postingClaimsSponsorship,
+          inferenceEngine: `Local offline scaffold (${localModelName} unreachable)`,
+          localEndpointError: localErr instanceof Error ? localErr.message : String(localErr),
           provider: 'local'
         });
       }
+
+      // Unreachable: both paths above return. Kept as a hard stop so a future
+      // edit that introduces a path out of the try/catch fails loudly here
+      // rather than silently continuing into the cloud branch below.
+      return res.status(500).json({
+        error: "Local inference routing did not produce a response. Refusing to fall back to a cloud provider.",
+        provider: "local"
+      });
     }
 
     if (!apiKey) {
