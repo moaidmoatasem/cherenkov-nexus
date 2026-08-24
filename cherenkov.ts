@@ -23,6 +23,10 @@ if (!values.url) {
   process.exit(1);
 }
 
+// process.exit() does not narrow `values.url` for the rest of the module, so
+// bind the checked value once and use it from here.
+const targetUrl: string = values.url;
+
 // 1. Static State: Load the Master Profile
 let masterProfile = {};
 if (fs.existsSync(values.profile)) {
@@ -47,13 +51,13 @@ async function runPipeline() {
   let jobDescription = "";
   let companyName = "Unknown Company";
   try {
-    const response = await fetch(values.url);
+    const response = await fetch(targetUrl);
     const html = await response.text();
     const $ = cheerio.load(html);
     companyName = $("title").text().split("-")[0].trim() || companyName;
 
     console.log(`[EXTRACTION] 🎭 Launching Playwright to bypass ATS protections...`);
-    const tree = await executeServerlessScrape(values.url);
+    const tree = await executeServerlessScrape(targetUrl);
     jobDescription = JSON.stringify(tree, null, 2);
     
     console.log(`[EXTRACTION] ✅ Scraped ${jobDescription.length} characters of accessibility tree payload.`);

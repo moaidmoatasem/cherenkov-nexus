@@ -250,8 +250,8 @@ app.post("/api/webhooks/xapi", async (req: Request, res: Response) => {
           });
           const parsedSkills = (extractionResponse.text || "")
             .split(",")
-            .map(s => s.trim())
-            .filter(s => s.length > 1);
+            .map((s: string) => s.trim())
+            .filter((s: string) => s.length > 1);
           if (parsedSkills.length > 0) {
             extractedSkills = parsedSkills;
           }
@@ -1008,7 +1008,7 @@ app.post(["/api/mcp/linkedin-scout", "/api/linkedin/scout"], async (req: Request
     const nameFormatted = parsedName
       ? parsedName
           .split(/\s+/)
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
           .join(" ")
       : "Talent Partner";
 
