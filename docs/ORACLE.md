@@ -177,11 +177,23 @@ unreachable alternative is not a condition.
 2. **Solicitor review** of the disclaimer, the "not advice" framing, and the
    SOC-confirmation language (AC-9). UK immigration advice is regulated; one
    disclaimer paragraph is a note that you noticed, not a mitigation.
-3. **Build the ingestion pipeline** — `fetch → checksum → diff → validate →
+3. **Write the gov.uk parser.** The ingestion pipeline
+   (`src/oracle/pipeline.ts`) is built and tested; the one piece it does not
+   ship is a parser for Appendix Skilled Occupations, because gov.uk was not
+   reachable from the environment it was written in and a parser written
+   against a guessed page structure could not be validated. Supply a
+   `parse(source) => ParseResult` and the rest of the loop runs.
+
+   The gate around it is real: a material diff halts for human sign-off, the
+   golden set blocks a candidate that flips a known-good verdict, and nothing
+   the pipeline produces can mark itself `verified` — only an approver who
+   states they read the source tables can do that.
+
+4. **Build the ingestion pipeline** — `fetch → checksum → diff → validate →
    snapshot → version → publish → re-flag`, with a material diff halting for
    human sign-off. The diffing half exists (`diffSnapshots`, `codesAffectedBy`);
    the fetch and publish halves do not.
-4. **Golden-set expansion** to ~40 hand-verified scenarios. 13 are in place.
+5. **Golden-set expansion** to ~40 hand-verified scenarios. 13 are in place.
 
 ---
 
