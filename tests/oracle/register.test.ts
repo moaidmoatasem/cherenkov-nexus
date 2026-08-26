@@ -151,3 +151,49 @@ describe.skipIf(!HAS_DB)("lookup against the licensed-sponsor register", () => {
     }
   });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// An unseeded register is not evidence about an employer
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("empty register", () => {
+  /**
+   * Committing nexus.db to git hid this: a fresh clone that has not run the
+   * seed has an empty sponsors table, and the lookup would report
+   * "Monzo Bank isn't on the Register of Licensed Sponsors" — a false negative
+   * about someone's immigration prospects, stated as fact.
+   *
+   * The register is no longer tracked in git, so this path is now the default
+   * first-run experience and has to be honest about itself.
+   */
+  const emptyDb = {
+    execute: async (q: unknown) => {
+      const sql = typeof q === "string" ? q : (q as { sql: string }).sql;
+      if (/COUNT\(\*\)/i.test(sql)) return { rows: [{ n: 0 }] };
+      return { rows: [] };
+    },
+  } as unknown as Parameters<typeof lookupSponsor>[0];
+
+  it("reports an unseeded register rather than a failed match", async () => {
+    const result = await lookupSponsor(emptyDb, "Monzo Bank");
+    expect(result.registerEmpty).toBe(true);
+    expect(result.candidates).toHaveLength(0);
+    expect(result.confirmed).toBeNull();
+  });
+
+  it("still reports empty for queries too short to search", async () => {
+    expect((await lookupSponsor(emptyDb, "")).registerEmpty).toBe(true);
+    expect((await lookupSponsor(emptyDb, "a")).registerEmpty).toBe(true);
+  });
+
+  it("counts a populated register as not empty", async () => {
+    const seeded = {
+      execute: async (q: unknown) => {
+        const sql = typeof q === "string" ? q : (q as { sql: string }).sql;
+        if (/COUNT\(\*\)/i.test(sql)) return { rows: [{ n: 126998 }] };
+        return { rows: [] };
+      },
+    } as unknown as Parameters<typeof lookupSponsor>[0];
+    expect((await lookupSponsor(seeded, "Monzo Bank")).registerEmpty).toBe(false);
+  });
+});

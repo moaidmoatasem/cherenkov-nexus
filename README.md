@@ -182,8 +182,6 @@ LOCAL_LLM_MODEL_NAME="qwen2.5-coder:7b-instruct"
 Initialize the local SQLite / LibSQL database containing the UK Home Office Licensed Sponsors:
 ```powershell
 npx tsx seed-database.ts
-```
-
 ### 4. Launch the Development Server
 ```powershell
 npm run dev

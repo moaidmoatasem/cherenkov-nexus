@@ -41,8 +41,6 @@ LOCAL_LLM_URL="http://localhost:11434/v1"
 Initialize the embedded SQLite database (`nexus.db`) with pre-indexed UK Home Office and EU visa sponsors:
 ```powershell
 npx tsx seed-database.ts
-```
-
 ### Step 4: Boot the Application Hub
 ```powershell
 npm run dev
