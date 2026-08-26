@@ -158,8 +158,13 @@ export function createOracleRouter(deps: OracleDeps): Router {
         candidates: result.candidates,
         confirmed: result.confirmed,
         needsConfirmation: result.needsConfirmation,
-        message:
-          result.candidates.length === 0
+        registerEmpty: result.registerEmpty,
+        // Two very different situations, and conflating them would state a
+        // false negative as fact.
+        code: result.registerEmpty ? "REGISTER_EMPTY" : undefined,
+        message: result.registerEmpty
+          ? "The Register of Licensed Sponsors has not been seeded in this install, so no company can be matched. Run `npx tsx seed-database.ts` (or POST /api/onboarding/seed-visa-engine) to populate it. Until then this is not evidence about any employer."
+          : result.candidates.length === 0
             ? `${company || "That company"} isn't on the Register of Licensed Sponsors as at today's copy. It may be listed under a different legal name — try a variation.`
             : undefined,
       });
@@ -261,6 +266,19 @@ export function createOracleRouter(deps: OracleDeps): Router {
       } else {
         await ensureIndex();
         const lookup = await lookupSponsor(deps.getDb(), posting.company);
+
+        // An empty register cannot support a sponsor-licence finding either
+        // way. Issuing a verdict whose first constraint reads "could not be
+        // matched" would present a missing dataset as a fact about the
+        // employer. Refuse, and say what to run.
+        if (lookup.registerEmpty) {
+          return res.status(409).json({
+            error:
+              "The Register of Licensed Sponsors is empty in this install, so the sponsor-licence constraint cannot be evaluated. Seed it with `npx tsx seed-database.ts` and retry.",
+            code: "REGISTER_EMPTY",
+          });
+        }
+
         sponsor = lookup.confirmed;
         if (lookup.needsConfirmation && lookup.candidates.length > 0) {
           return res.status(422).json({

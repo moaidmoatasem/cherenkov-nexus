@@ -206,6 +206,23 @@ export async function ensureMatchIndex(db: Client): Promise<void> {
 // Lookup
 // ─────────────────────────────────────────────────────────────────────────────
 
+/**
+ * How many sponsors the register holds.
+ *
+ * Needed to tell "this company is not a licensed sponsor" apart from "nobody
+ * has seeded the register yet". Reporting the second as the first is a
+ * confident false negative about someone's immigration prospects, which is
+ * precisely what this module exists to prevent.
+ */
+export async function countSponsors(db: Client): Promise<number> {
+  try {
+    const result = await db.execute("SELECT COUNT(*) AS n FROM sponsors");
+    return Number(result.rows[0]?.n ?? 0);
+  } catch {
+    return 0;
+  }
+}
+
 export interface RegisterLookup {
   /** Ranked, best first. Empty when nothing scored above the floor. */
   candidates: RegisterCandidate[];
@@ -213,6 +230,8 @@ export interface RegisterLookup {
   confirmed: ConfirmedSponsor | null;
   /** True when a human must choose between candidates before a verdict runs. */
   needsConfirmation: boolean;
+  /** True when the register holds no rows at all — not seeded, not "no match". */
+  registerEmpty: boolean;
 }
 
 function toConfirmed(c: RegisterCandidate, basis: ConfirmedSponsor["matchBasis"]): ConfirmedSponsor {
@@ -240,16 +259,21 @@ export async function lookupSponsor(
 ): Promise<RegisterLookup> {
   const query = (company ?? "").trim();
 
+  // Ask once, up front. An unseeded register must never be reported as "this
+  // company is not a licensed sponsor" — that is a false negative about
+  // somebody's immigration prospects, stated as fact.
+  const registerEmpty = (await countSponsors(db)) === 0;
+
   // An empty company name previously matched `LIKE '%%'` and returned whatever
   // row came first — reporting "Google" as a verified sponsor for any posting.
   // There is no honest answer to an empty query.
   if (query.length < 2) {
-    return { candidates: [], confirmed: null, needsConfirmation: false };
+    return { candidates: [], confirmed: null, needsConfirmation: false, registerEmpty };
   }
 
   const core = coreName(query);
   if (core.length === 0) {
-    return { candidates: [], confirmed: null, needsConfirmation: false };
+    return { candidates: [], confirmed: null, needsConfirmation: false, registerEmpty };
   }
 
   const leadToken = core.split(" ")[0];
@@ -296,7 +320,7 @@ export async function lookupSponsor(
     .slice(0, limit);
 
   if (scored.length === 0) {
-    return { candidates: [], confirmed: null, needsConfirmation: false };
+    return { candidates: [], confirmed: null, needsConfirmation: false, registerEmpty };
   }
 
   const top = scored[0];
@@ -319,6 +343,7 @@ export async function lookupSponsor(
     candidates: scored,
     confirmed: decisive ? toConfirmed(top, top.basis === "exact" ? "exact" : "normalised") : null,
     needsConfirmation: !decisive,
+    registerEmpty,
   };
 }
 
