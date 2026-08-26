@@ -8,6 +8,7 @@ import { fetchAtsJob } from "./src/server/integrations/atsConnector";
 import { executeServerlessScrape } from "./server/mcp/playwrightScraper";
 import { createOracleRouter } from "./src/oracle/routes";
 import { shouldRouteLocal, callLocalModel, stripJsonFence, isLocalFailure } from "./src/server/localInference";
+import { checkUrl, isUrlAllowed } from "./src/server/urlGuard";
 import { checkVisaSponsorship } from "./src/server/sponsorCheck";
 import { collectTelemetry } from "./src/server/telemetry";
 
@@ -327,23 +328,15 @@ app.post("/api/scrape", async (req: Request, res: Response) => {
 
     let parsedUrl: URL;
     try {
-      parsedUrl = new URL(url.startsWith("http") ? url : `https://${url}`);
-      
-      // SSRF Validation
-      const hostname = parsedUrl.hostname;
-      if (
-        hostname === 'localhost' ||
-        hostname === '127.0.0.1' ||
-        hostname === '::1' ||
-        hostname === '169.254.169.254' ||
-        hostname.startsWith('10.') ||
-        hostname.startsWith('192.168.') ||
-        hostname.match(/^172\.(1[6-9]|2[0-9]|3[0-1])\./) ||
-        hostname.endsWith('.internal') ||
-        hostname.endsWith('.local')
-      ) {
-        return res.status(403).json({ error: "Access to internal networks is forbidden." });
+      // One shared guard: resolves DNS and checks every address, so a public
+      // hostname pointing at a private range is caught. See src/server/urlGuard.ts.
+      const guard = await checkUrl(url);
+      if (!isUrlAllowed(guard)) {
+        return res
+          .status(guard.reason === "private_address" ? 403 : 400)
+          .json({ error: guard.message, code: guard.reason });
       }
+      parsedUrl = guard.url;
     } catch {
       return res.status(400).json({ error: "Invalid URL format" });
     }
@@ -435,18 +428,15 @@ app.post("/api/ats/job", async (req: Request, res: Response) => {
 
     let parsedUrl: URL;
     try {
-      parsedUrl = new URL(url.startsWith("http") ? url : `https://${url}`);
-      const hostname = parsedUrl.hostname;
-      if (
-        hostname === "localhost" ||
-        hostname === "127.0.0.1" ||
-        hostname === "::1" ||
-        hostname === "169.254.169.254" ||
-        hostname.endsWith(".internal") ||
-        hostname.endsWith(".local")
-      ) {
-        return res.status(403).json({ error: "Access to internal networks is forbidden." });
+      // One shared guard: resolves DNS and checks every address, so a public
+      // hostname pointing at a private range is caught. See src/server/urlGuard.ts.
+      const guard = await checkUrl(url);
+      if (!isUrlAllowed(guard)) {
+        return res
+          .status(guard.reason === "private_address" ? 403 : 400)
+          .json({ error: guard.message, code: guard.reason });
       }
+      parsedUrl = guard.url;
     } catch {
       return res.status(400).json({ error: "Invalid URL format" });
     }

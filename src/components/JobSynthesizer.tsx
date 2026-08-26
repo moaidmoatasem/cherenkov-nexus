@@ -108,7 +108,6 @@ export const JobSynthesizer: React.FC<JobSynthesizerProps> = ({
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
   // Phase 1: Local In-Browser WebGPU LLM
-  const { engine: webLLMEngine, isReady: isWebLLMReady, loadingProgress: webLLMProgress, synthesizeLocally, error: webLLMError } = useWebLLM();
 
 
   // LinkedIn Scout & Interview Sandbox Modal states
@@ -125,6 +124,17 @@ export const JobSynthesizer: React.FC<JobSynthesizerProps> = ({
       return INITIAL_ROUTING_CONFIG;
     }
   });
+
+  // Only load the in-browser model once the user has actually switched to
+  // local-only inference. In hybrid and cloud modes the server does the work,
+  // so pulling gigabytes of weights would be pure cost to the visitor.
+  const {
+    engine: webLLMEngine,
+    isReady: isWebLLMReady,
+    loadingProgress: webLLMProgress,
+    synthesizeLocally,
+    error: webLLMError,
+  } = useWebLLM(undefined, { enabled: activeRouting.mode === 'local_only' });
 
   // Sync routing changes from storage and custom event
   useEffect(() => {
