@@ -1,6 +1,6 @@
 # Handover — data-honesty pass
 
-State as of `10678c9` (PR #17). Written for whoever picks this up next.
+State as of `409c972` (PR #22). Written for whoever picks this up next.
 
 ## What this pass was
 
@@ -34,26 +34,16 @@ equals what the API returned) rather than the wording, so it survives copy edits
 ## Still open
 
 Nothing here is urgent; none of it is a correctness bug in shipped behaviour.
+The two CI items and the telemetry locale mismatch that were listed here are
+fixed — see the commit that trimmed this section.
 
-1. **CI runs its checks twice.** `.github/workflows/main.yml` has discrete
-   `Typecheck` / `seal-check` / `Unit tests` steps, then a `Run tests and
-   linting` step invoking `npm run test:ci`, which is those same three. ~14s
-   wasted per run. Delete either the three steps or the `test:ci` step.
-2. **CI has no `push` trigger** — `on: pull_request` only. `main` itself is
-   never verified after a merge, so a bad squash-merge resolution would go
-   unnoticed. Adding `push: branches: [main]` is the fix.
-3. **`activeMcpPackages` is dead config.** Declared in
+1. **`activeMcpPackages` is dead config.** Declared in
    `UserWorkspaceConfig` (`src/types.ts`), set by all five archetype presets in
    `src/data/initialData.ts`, read by nothing. Either wire it to the Marketplace
    catalogue or delete it — as-is it implies a connection that does not exist.
-4. **Locale fragility in the telemetry panel.** `TelemetryModal.tsx` renders the
-   sponsor count with `toLocaleString()` (runtime default) while
-   `e2e/data-provenance.spec.ts` expects `toLocaleString('en-US')`. They agree
-   under en-US, which is what CI uses, so this is latent rather than live. Pin
-   the component to `'en-US'` to close it.
-5. **`/api/visa-check` has no UI caller.** Exercised only from
+2. **`/api/visa-check` has no UI caller.** Exercised only from
    `e2e/live-integrations-headed.spec.ts`. Works; just unreferenced.
-6. **`SPONSORS_DATABASE`** (32 entries, `src/server/sponsorCheck.ts`) is now
+3. **`SPONSORS_DATABASE`** (32 entries, `src/server/sponsorCheck.ts`) is now
    reachable only when the register is unreachable. Possibly worth deleting.
 
 ## Conventions worth keeping

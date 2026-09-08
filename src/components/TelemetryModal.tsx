@@ -171,7 +171,7 @@ export const TelemetryModal: React.FC<TelemetryModalProps> = ({ isOpen, onClose 
                   value={
                     snapshot.sponsorsIndexed.value === null
                       ? null
-                      : snapshot.sponsorsIndexed.value.toLocaleString()
+                      : snapshot.sponsorsIndexed.value.toLocaleString('en-US')
                   }
                   note={snapshot.sponsorsIndexed.reason ?? 'Rows in the register table'}
                 />
